@@ -4,3 +4,18 @@
 
 /.vs/BadmintonApp/v17
 /.vs/BadmintonApp/FileContentIndex
+/.vs/BadmintonApp/config
+/src/BadmintonApp.API/obj/Debug/net8.0
+/src/BadmintonApp.API/obj/Release/net8.0
+/src/BadmintonApp.Application/bin/Debug/net8.0
+/src/BadmintonApp.Domain/bin/Debug/net8.0
+/src/BadmintonApp.Infrastructure/bin/Debug/net8.0
+/src/BadmintonApp.Infrastructure/obj/Debug/net8.0
+/src/BadmintonApp.Infrastructure/obj/Release/net8.0
+/src/BadmintonApp.Web/bin/Debug/net8.0
+/src/BadmintonApp.Web/ClientApp/node_modules
+/src/BadmintonApp.Web/wwwroot/js
+/src/BadmintonApp.API/bin/Debug/net8.0
+/src/BadmintonApp.Application/obj/Debug/net8.0
+/src/BadmintonApp.Application/obj/Release/net8.0
+/src/BadmintonApp.Domain/obj

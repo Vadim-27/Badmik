@@ -8,9 +8,14 @@ export default defineConfig({
     outDir: '../wwwroot/js',
     emptyOutDir: true,
     rollupOptions: {
-      input: {
-        main: resolve(__dirname, 'src/main.jsx')
-      }
+        input: {
+            main: resolve(__dirname, 'src/entries/main.js')
+        },
+        output: {
+            assetFileNames: '[name][extname]',   // style.css
+            chunkFileNames: 'chunks/[name]-[hash].js', // shared stuff
+            entryFileNames: '[name].js'          // main.js
+        }
     }
   },
   server: {
