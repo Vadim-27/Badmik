@@ -9,4 +9,5 @@ var app = builder.Build();
 app.UseStaticFiles();
 app.UseRouting();
 app.MapRazorPages();
+app.MapFallbackToFile("/index.html");
 app.Run();

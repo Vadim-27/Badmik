@@ -13,7 +13,7 @@ function App() {
 
   return (
     <div>
-      <h2>Hello from React inside Razor!</h2>
+      <h2>Hello from React inside Razor 1!</h2>
       <h3>Players from API:</h3>
       <ul>
         {players.map((p, i) => <li key={i}>{p.name}</li>)}

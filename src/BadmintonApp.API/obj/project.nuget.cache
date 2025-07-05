@@ -1,17 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "v4N1OUIMKGA=",
-  "success": false,
+  "dgSpecHash": "Xvd3eUs8474=",
+  "success": true,
   "projectFilePath": "C:\\Users\\rmy\\Desktop\\Badminton\\Repos\\src\\BadmintonApp.API\\BadmintonApp.API.csproj",
   "expectedPackageFiles": [],
-  "logs": [
-    {
-      "code": "NU1105",
-      "level": "Error",
-      "message": "Unable to read project information for 'BadmintonApp.API': Invalid framework identifier ''.",
-      "projectPath": "C:\\Users\\rmy\\Desktop\\Badminton\\Repos\\src\\BadmintonApp.API\\BadmintonApp.API.csproj",
-      "filePath": "C:\\Users\\rmy\\Desktop\\Badminton\\Repos\\src\\BadmintonApp.API\\BadmintonApp.API.csproj",
-      "targetGraphs": []
-    }
-  ]
+  "logs": []
 }

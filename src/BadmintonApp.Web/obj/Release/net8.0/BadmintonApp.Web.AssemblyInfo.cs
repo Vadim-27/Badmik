@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BadmintonApp.Web")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0e023fe3cdfbe1c88568c075546ca86592d4f028")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7a7acc1f4ca7989ffe538324e8d9c15c72133631")]
 [assembly: System.Reflection.AssemblyProductAttribute("BadmintonApp.Web")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BadmintonApp.Web")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
