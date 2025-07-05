@@ -1,0 +1,72 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "build",
+        "${workspaceFolder}/BadmintonApp.Web.csproj"
+      ],
+      "problemMatcher": "$msCompile",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "react-build",
+      "type": "shell",
+      "command": "yarn",
+      "args": [
+        "build"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/ClientApp"
+      },
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "react-watch",
+      "type": "shell",
+      "command": "yarn",
+      "args": [
+        "dev"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/ClientApp"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "run-all-watch",
+      "dependsOn": [
+        "razor-watch",
+        "react-watch"
+      ],
+      "dependsOrder": "parallel",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      }
+    },
+    {
+      "label": "razor-watch",
+      "type": "shell",
+      "command": "dotnet",
+      "args": [
+        "watch",
+        "run"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    }
+  ]
+}

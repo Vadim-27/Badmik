@@ -1,2 +1,48 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
+VisualStudioVersion = 17.14.36221.1 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadmintonApp.API", "src\BadmintonApp.API\BadmintonApp.API.csproj", "{5F6EAF65-75F9-18D0-D86A-60A78D854300}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadmintonApp.Application", "src\BadmintonApp.Application\BadmintonApp.Application.csproj", "{C3D57E0F-9B46-BDE9-EC2D-303E3C383E13}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadmintonApp.Domain", "src\BadmintonApp.Domain\BadmintonApp.Domain.csproj", "{2CE34B58-4FFC-54A6-459E-42BF70EFE456}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadmintonApp.Infrastructure", "src\BadmintonApp.Infrastructure\BadmintonApp.Infrastructure.csproj", "{367DD35D-6D58-2240-CB9E-92E41AE50A72}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadmintonApp.Web", "src\BadmintonApp.Web\BadmintonApp.Web.csproj", "{F639F9B6-1F9F-FE65-2E9B-6D1A44F51A10}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5F6EAF65-75F9-18D0-D86A-60A78D854300}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F6EAF65-75F9-18D0-D86A-60A78D854300}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F6EAF65-75F9-18D0-D86A-60A78D854300}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F6EAF65-75F9-18D0-D86A-60A78D854300}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3D57E0F-9B46-BDE9-EC2D-303E3C383E13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3D57E0F-9B46-BDE9-EC2D-303E3C383E13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3D57E0F-9B46-BDE9-EC2D-303E3C383E13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3D57E0F-9B46-BDE9-EC2D-303E3C383E13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CE34B58-4FFC-54A6-459E-42BF70EFE456}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CE34B58-4FFC-54A6-459E-42BF70EFE456}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CE34B58-4FFC-54A6-459E-42BF70EFE456}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CE34B58-4FFC-54A6-459E-42BF70EFE456}.Release|Any CPU.Build.0 = Release|Any CPU
+		{367DD35D-6D58-2240-CB9E-92E41AE50A72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{367DD35D-6D58-2240-CB9E-92E41AE50A72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{367DD35D-6D58-2240-CB9E-92E41AE50A72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{367DD35D-6D58-2240-CB9E-92E41AE50A72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F639F9B6-1F9F-FE65-2E9B-6D1A44F51A10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F639F9B6-1F9F-FE65-2E9B-6D1A44F51A10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F639F9B6-1F9F-FE65-2E9B-6D1A44F51A10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F639F9B6-1F9F-FE65-2E9B-6D1A44F51A10}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {848B36F0-5157-4866-9F56-9FBE8E93C17F}
+	EndGlobalSection
+EndGlobal
