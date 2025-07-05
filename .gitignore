@@ -20,3 +20,25 @@
 /src/BadmintonApp.Application/obj/Release/net8.0
 /src/BadmintonApp.Domain/obj
 /.vs/BadmintonApp/CopilotIndices/17.14.794.21998
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# IDE cache
+.vscode/
+.vs/*
+
+# Build output
+bin/
+obj/
+Debug/
+Release/
+**/obj/
+**/bin/
+
+# Frontend
+node_modules/
+.yarn/
+.pnp.*
+wwwroot/js/
