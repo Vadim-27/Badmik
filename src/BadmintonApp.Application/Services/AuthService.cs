@@ -1,4 +1,5 @@
 ﻿using BadmintonApp.Application.DTOs.Auth;
+using BadmintonApp.Application.DTOs.Common;
 using BadmintonApp.Application.Interfaces;
 using BadmintonApp.Domain.Users;
 using Microsoft.AspNetCore.Identity;
@@ -29,11 +30,11 @@ namespace BadmintonApp.Application.Services
         {
             var user = await _userRepository.GetByEmailAsync(dto.Email);
             if (user == null)
-                return (LoginResultDto)LoginResultDto.Fail("Invalid credentials");
+                return ResultDto.Fail<LoginResultDto>("Invalid credentials");
 
             var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
             if (result != PasswordVerificationResult.Success)
-                return (LoginResultDto)LoginResultDto.Fail("Invalid credentials");
+                return ResultDto.Fail<LoginResultDto>("Invalid credentials");
 
             var token = _jwtTokenGenerator.GenerateToken(user);
 

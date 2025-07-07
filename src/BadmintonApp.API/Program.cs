@@ -1,4 +1,5 @@
-﻿using BadmintonApp.Infrastructure;
+﻿using BadmintonApp.Application;
+using BadmintonApp.Infrastructure;
 using BadmintonApp.Infrastructure.Persistence;
 using BadmintonApp.Infrastructure.Persistence.Seed;
 using Microsoft.AspNetCore.Builder;
@@ -21,6 +22,7 @@ builder.Services.AddSwaggerGen(opt =>
     });
 });
 
+builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 
 var app = builder.Build();

@@ -18,7 +18,7 @@ namespace BadmintonApp.Application
             services.AddScoped<IUsersService, UserService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
-            //services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>(); // твоя реалізація
+            
             return services;
         }
     }

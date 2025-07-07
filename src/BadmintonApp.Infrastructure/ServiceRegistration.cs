@@ -1,5 +1,7 @@
 ﻿using BadmintonApp.Application.Interfaces;
+using BadmintonApp.Application.Services;
 using BadmintonApp.Domain.Users;
+using BadmintonApp.Infrastructure.Auth;
 using BadmintonApp.Infrastructure.Persistence;
 using BadmintonApp.Infrastructure.Persistence.Repositories;
 using Microsoft.AspNetCore.Identity;
@@ -18,6 +20,7 @@ namespace BadmintonApp.Infrastructure
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+            services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>(); 
 
             return services;
         }

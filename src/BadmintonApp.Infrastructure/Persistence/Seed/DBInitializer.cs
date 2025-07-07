@@ -1,4 +1,5 @@
 ﻿using BadmintonApp.Domain.Users;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,13 +15,12 @@ namespace BadmintonApp.Infrastructure.Persistence.Seed
         {
             if (await context.Users.AnyAsync()) return;
 
-            var users = new List<User>
-        {
-            new User
+            var passwordHasher = new PasswordHasher<User>();
+
+            var user = new User
             {
                 Id = Guid.NewGuid().ToString(),
                 Email = "admin@badminton.ua",
-                PasswordHash = "adminpass", // замінити на хеш
                 FirstName = "Admin",
                 LastName = "User",
                 Role = "Admin",
@@ -30,10 +30,12 @@ namespace BadmintonApp.Infrastructure.Persistence.Seed
                 Rank = "Pro",
                 Level = "A",
                 ImageUrl = "https://example.com/image.jpg"
-            }
-        };
+            };
 
-            context.Users.AddRange(users);
+            
+            user.PasswordHash = passwordHasher.HashPassword(user, "admin123");
+
+            context.Users.AddRange(user);
             await context.SaveChangesAsync();
         }
     }
