@@ -26,7 +26,7 @@ namespace BadmintonApp.Application.Services
         {
             var existingUser = await _userRepository.GetByEmailAsync(dto.Email);
             if (existingUser != null)
-                return (UserResultDto)UserResultDto.Fail("Email already exists");
+                return ResultDto.Fail<UserResultDto>("Email already exists");
 
             var user = new User
             {
@@ -43,7 +43,7 @@ namespace BadmintonApp.Application.Services
             user.PasswordHash = _passwordHasher.HashPassword(user, dto.Password);
             await _userRepository.CreateAsync(user);
 
-            return (UserResultDto)UserResultDto.Success();
+            return ResultDto.Success<UserResultDto>();
         }
 
         public async Task<UserResultDto> GetByIdAsync(string userId)
@@ -67,23 +67,23 @@ namespace BadmintonApp.Application.Services
         public async Task<UserResultDto> UpdateAsync(string userId, UpdateUserDto dto)
         {
             var user = await _userRepository.GetByIdAsync(userId);
-            if (user == null) return (UserResultDto)UserResultDto.Fail("User not found");
+            if (user == null) return ResultDto.Fail<UserResultDto>("User not found");
 
             user.FirstName = dto.FirstName;
             user.LastName = dto.LastName;
             user.Role = dto.Role;
 
             await _userRepository.UpdateAsync(user);
-            return (UserResultDto)UserResultDto.Success();
+            return ResultDto.Success<UserResultDto>();
         }
 
         public async Task<ResultDto> DeleteAsync(string userId)
         {
             var user = await _userRepository.GetByIdAsync(userId);
-            if (user == null) return ResultDto.Fail("User not found");
+            if (user == null) return ResultDto.Fail<UserResultDto>("User not found");
 
             await _userRepository.DeleteAsync(user);
-            return ResultDto.Success();
+            return ResultDto.Success<UserResultDto>();
         }
 
         private UserResultDto MapToProfile(User user) => new UserResultDto

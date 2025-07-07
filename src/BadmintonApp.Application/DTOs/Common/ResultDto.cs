@@ -11,10 +11,22 @@ namespace BadmintonApp.Application.DTOs.Common
         public bool IsSuccess { get; set; }
         public string Message { get; set; } = string.Empty;
 
-        public static ResultDto Success(string message = "Success") =>
-            new ResultDto { IsSuccess = true, Message = message };
+        public static T Success<T>(string message = "Success") where T : ResultDto, new()
+        {
+            return new T
+            {
+                IsSuccess = true,
+                Message = message
+            };
+        }
 
-        public static ResultDto Fail(string message) =>
-            new ResultDto { IsSuccess = false, Message = message };
+        public static T Fail<T>(string message) where T : ResultDto, new()
+        {
+            return new T
+            {
+                IsSuccess = false,
+                Message = message
+            };
+        }
     }
 }
