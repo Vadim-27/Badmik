@@ -49,7 +49,7 @@ namespace BadmintonApp.Infrastructure.Persistence.Configurations
                 .IsRequired();
 
             builder.Property(u => u.ImageUrl)
-                .IsRequired()
+                //.IsRequired()
                 .HasMaxLength(300);
         }
     }
