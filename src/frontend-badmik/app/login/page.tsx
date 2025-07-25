@@ -4,7 +4,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Cookies from 'js-cookie';
+import Cookies from '@/node_modules/@types/js-cookie';
 import jwt from 'jwt-simple';
 
 const JWT_SECRET = 'your-secret'; 
