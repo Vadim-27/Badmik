@@ -1,13 +1,15 @@
 
 
+
 'use client';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Cookies from '@/node_modules/@types/js-cookie';
+import Cookies from 'js-cookie';
 import jwt from 'jwt-simple';
+import { authenticateAdmin } from '@/utils/authenticateAdmin';
 
-const JWT_SECRET = 'your-secret'; 
+const JWT_SECRET = 'your-secret';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -15,52 +17,48 @@ export default function LoginPage() {
   const router = useRouter();
   const [error, setError] = useState('');
 
-  
-  useEffect(() => {
+ useEffect(() => {
+  if (typeof window !== 'undefined') {
     const token = Cookies.get('token');
     if (token) {
       try {
         jwt.decode(token, JWT_SECRET);
-        router.replace('/'); 
+        window.location.href = '/admin'; 
       } catch {
-        
         Cookies.remove('token');
       }
     }
-  }, [router]);
+  }
+}, []);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
 
-    let payload;
+    const user = authenticateAdmin(email, password);
 
-    if (email === 'admin@example.com') {
-      payload = {
-        sub: 'user-id',
-        email,
-        role: 'admin',
-        accessLevel: 'full',
-        permissions: ['admin_dashboard','view_users', 'manage_settings'],
-        exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24,
-      };
-    } else if (email === 'admin2@example.com') {
-      payload = {
-        sub: 'user-id',
-        email,
-        role: 'admin2',
-        accessLevel: 'limited',
-        permissions: ['admin_dashboard', 'view_users'],
-        exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24,
-      };
-    } else {
-      setError('Unknown user');
+    if (!user) {
+      setError('Невірний email або пароль');
       return;
     }
 
-    const token = jwt.encode(payload, JWT_SECRET);
-    Cookies.set('token', token, { expires: 1, path: '/' });
+    const payload = {
+      sub: user.id,
+      email: user.email,
+      role: user.role,
+      permissions: user.permissions,
+      clubId: user.clubId ?? null,
+      exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24,
+    };
 
-    window.location.href = '/'; 
+    const token = jwt.encode(payload, JWT_SECRET);
+Cookies.set('token', token, { expires: 1, path: '/' });
+
+    
+   if (user.role === 'club_admin') {
+  window.location.href = `/admin/${user.clubId}`;
+} else {
+  window.location.href = '/admin';
+}
   };
 
   return (
@@ -88,3 +86,4 @@ export default function LoginPage() {
     </form>
   );
 }
+

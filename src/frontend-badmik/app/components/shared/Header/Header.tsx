@@ -10,9 +10,11 @@ const JWT_SECRET = 'your-secret';
 export default function Header() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+ 
 
   useEffect(() => {
     const token = Cookies.get('token');
+    
 
     if (token) {
       try {
@@ -20,7 +22,7 @@ export default function Header() {
         const role = decoded.role;
 
         setIsAuthenticated(true);
-        setIsAdmin(['admin', 'admin2', 'admin3'].includes(role));
+        setIsAdmin(['owner_admin', 'assistant', 'club_admin'].includes(role));
       } catch (err) {
         console.error('Invalid token:', err);
         Cookies.remove('token');
