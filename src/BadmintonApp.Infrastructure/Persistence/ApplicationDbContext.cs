@@ -1,11 +1,7 @@
-﻿using BadmintonApp.Domain.Users;
+﻿using BadmintonApp.Domain.Clubs;
+using BadmintonApp.Domain.Users;
 using BadmintonApp.Infrastructure.Persistence.Configurations;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BadmintonApp.Infrastructure.Persistence
 {
@@ -21,5 +17,9 @@ namespace BadmintonApp.Infrastructure.Persistence
         }
 
         public DbSet<User> Users => Set<User>();
+
+        public DbSet<Club> Clubs => Set<Club>();
+        public DbSet<UserClubRole> UserClubRoles => Set<UserClubRole>();
+        public DbSet<WorkingHour> WorkingHours => Set<WorkingHour>();
     }
 }
