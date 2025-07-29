@@ -1,4 +1,5 @@
-﻿using BadmintonApp.Application.DTOs.Clubs;
+﻿using BadmintonApp.API.Exceptions;
+using BadmintonApp.Application.DTOs.Clubs;
 using BadmintonApp.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -46,7 +47,7 @@ namespace BadmintonApp.API.Controllers
         {
             var deleted = await _clubsService.DeleteAsync(id);
             if (!deleted.IsSuccess)
-                return NotFound(deleted.Message);
+                return ExceptionFactory.NotFound("Клуб не знайдено");
 
             return NoContent(); // 204
         }
@@ -60,7 +61,5 @@ namespace BadmintonApp.API.Controllers
 
             return NoContent();
         }
-
-
     }
 }
