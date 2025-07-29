@@ -28,5 +28,12 @@ namespace BadmintonApp.Application.DTOs.Common
                 Message = message
             };
         }
+
+        public static T Success<T>(T result) where T : ResultDto
+        {
+            result.IsSuccess = true;
+            result.Message = "Success";
+            return result;
+        }
     }
 }

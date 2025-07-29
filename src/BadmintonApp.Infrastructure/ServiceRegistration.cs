@@ -20,7 +20,9 @@ namespace BadmintonApp.Infrastructure
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
-            services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>(); 
+            services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+            services.AddScoped<IClubsService, ClubsService>();
+            services.AddScoped<IClubsRepository, ClubRepository>();
 
             return services;
         }
