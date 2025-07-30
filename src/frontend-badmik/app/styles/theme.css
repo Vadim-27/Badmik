@@ -1,0 +1,11 @@
+@theme {
+  --color-primary-button: #1e3a8a;
+
+  --color-primary-button-hover: #172c6b;
+  --color-secondary-button: #f48b29;
+  --color-secondary-button-hover: #d97414;
+  --color-button-shadow-hover: 0 4px 10px rgba(0, 0, 0, 0.15);
+  --color-button-shadow-focus: 0 0 0 3px rgba(0, 0, 0, 0.1);
+   --font-geist-sans: 'Geist', ui-sans-serif, system-ui, sans-serif, 
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}

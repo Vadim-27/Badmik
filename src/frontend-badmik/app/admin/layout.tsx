@@ -7,11 +7,11 @@ import ClientOnly from '@/app/lib/client-only';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="admin-layout flex h-screen">
+    <div className=" flex ">
       <ClientOnly>
         <Sidebar />
       </ClientOnly>
-      <main>{children}</main>
+      <main className="w-full">{children}</main>
     </div>
   );
 }

@@ -1,6 +1,10 @@
 :root {
-    --primary-accent: #fb7500;
-    --primary-accent-border-color: #fed5b0;
-    --primary-bg-accordion: #fff9ec;
-    --secondary-bg-accordion: #fed5b0;
+    --primary-button: #1e3a8a;
+    --primary-button-hover: #172c6b;
+    --secondary-button: #f48b29;
+    --secondary-button-hover: #d97414;
+    --button-shadow-hover: 0 4px 10px rgba(0, 0, 0, 0.15);
+    --button-shadow-focus: 0 0 0 3px rgba(0, 0, 0, 0.1);
+    // --primary-bg-accordion: #fff9ec;
+    // --secondary-bg-accordion: #fed5b0;
 }
