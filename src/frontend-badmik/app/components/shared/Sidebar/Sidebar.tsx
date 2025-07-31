@@ -81,9 +81,14 @@ export default function Sidebar() {
           )}
 
           {effectiveClubId && (
+            <>
             <SidebarLink href={`/admin/${effectiveClubId}/bookings/`} open={open}>
               {open ? 'Bookings' : '🏟️'}
             </SidebarLink>
+            <SidebarLink href={`/admin/${effectiveClubId}/usersClub/`} open={open}>
+              {open ? 'UsersClub' : '👥🎾'}
+            </SidebarLink>
+            </>
           )}
         </div>
       </nav>
