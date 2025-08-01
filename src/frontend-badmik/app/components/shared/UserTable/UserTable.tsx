@@ -82,10 +82,27 @@ usersFromMok
 
   return (
     <Box 
-    sx={{ height: 800,
-        
-    width: '100%',
-    minWidth: 180,   }}
+        sx={{
+    height: 800,
+    width: '99%',
+    minWidth: 180,
+    '& .MuiDataGrid-root': {
+      fontFamily: 'var(--font-geist-sans)',
+    },
+     '& [class*="MuiDataGridVariables"]': {
+      '--DataGrid-t-header-background-base': '#f48b29',
+    },
+    '& .MuiDataGrid-root .MuiDataGrid-columnHeaders': {
+    //   backgroundColor: '#1e3a8a !important',
+      color: '#fff',
+      fontWeight: 'bold',
+      fontSize: '1rem',
+    },
+    '& .MuiDataGrid-row:hover': {
+    //   backgroundColor: '#1e3a8a',
+      cursor: 'pointer',
+    },
+  }}
     //  sx={{ display: 'inline-flex', alignItems: 'center', height: 48, pl: 2 }}
     >
       {/* <DataGrid
