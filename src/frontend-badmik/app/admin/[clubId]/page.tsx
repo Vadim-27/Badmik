@@ -1,5 +1,3 @@
-
-
 import { notFound } from 'next/navigation';
 import { clubs } from '@/data/clubs';
 
@@ -9,11 +7,18 @@ type Props = {
   };
 };
 
+
+export async function generateStaticParams() {
+  return clubs.map((club) => ({
+    clubId: club.id,
+  }));
+}
+
 export default async function ClubAdminPage({ params }: Props) {
-   const  club =   clubs.find((c) => c.id === params.clubId);
+  const club = clubs.find((c) => c.id === params.clubId);
 
   if (!club) {
-    notFound(); 
+    notFound();
   }
 
   return (

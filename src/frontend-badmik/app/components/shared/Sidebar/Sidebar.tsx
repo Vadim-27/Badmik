@@ -1,11 +1,10 @@
-
-
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
 import Cookies from 'js-cookie';
 import jwt from 'jwt-simple';
+import { useParams } from 'next/navigation';
+import SidebarLink from './SidebarLink/SidebarLink';
 
 const drawerWidthOpen = 240;
 const drawerWidthClosed = 60;
@@ -14,7 +13,8 @@ const JWT_SECRET = 'your-secret';
 export default function Sidebar() {
   const [open, setOpen] = useState(true);
   const [role, setRole] = useState<string | null>(null);
-  const [clubId, setClubId] = useState<string | null>(null);
+  const [clubIdFromToken, setClubIdFromToken] = useState<string | null>(null);
+  const params = useParams();
 
   const toggleDrawer = () => setOpen(!open);
 
@@ -24,12 +24,21 @@ export default function Sidebar() {
       try {
         const decoded = jwt.decode(token, JWT_SECRET);
         setRole(decoded.role || null);
-        setClubId(decoded.clubId || null);
+        setClubIdFromToken(decoded.clubId || null);
       } catch (err) {
         console.error('Invalid token');
       }
     }
   }, []);
+
+  const effectiveClubId =
+    role === 'club_admin'
+      ? clubIdFromToken
+      : typeof params.clubId === 'string'
+        ? params.clubId
+        : null;
+
+  if (role === null) return null;
 
   return (
     <div className="flex h-screen">
@@ -55,44 +64,34 @@ export default function Sidebar() {
         </button>
 
         <div className="flex flex-col mt-4 space-y-2 px-2">
-         
-         
-
-          
           {(role === 'owner_admin' || role === 'assistant') && (
-            <Link
-              href="/admin/settings"
-              className="block px-4 py-2 rounded cursor-pointer bg-gray-200 hover:bg-blue-500 hover:text-white transition"
-              title="Settings"
-            >
-              {open ? 'Settings' : '⚙️'}
-            </Link>
+            <>
+              <SidebarLink href="/admin/settings/" open={open}>
+                {open ? 'Settings' : '⚙️'}
+              </SidebarLink>
+
+              <SidebarLink href="/admin/users/" open={open}>
+                {open ? 'Users' : '👤'}
+              </SidebarLink>
+
+              <SidebarLink href="/admin/add-club/" open={open}>
+                {open ? 'Add Club' : '🏸➕'}
+              </SidebarLink>
+            </>
           )}
 
-        
-          {(role === 'owner_admin' || role === 'assistant') && (
-            <Link
-              href="/admin/users"
-              className="block px-4 py-2 rounded cursor-pointer bg-gray-200 hover:bg-blue-500 hover:text-white transition"
-              title="User"
-            >
-              {open ? 'Users' : '👤'}
-            </Link>
+          {effectiveClubId && (
+            <>
+            <SidebarLink href={`/admin/${effectiveClubId}/bookings/`} open={open}>
+              {open ? 'Bookings' : '🏟️'}
+            </SidebarLink>
+            <SidebarLink href={`/admin/${effectiveClubId}/usersClub/`} open={open}>
+              {open ? 'UsersClub' : '👥🎾'}
+            </SidebarLink>
+            </>
           )}
-
-           {/* {role === 'club_admin' && clubId && ( */}
-            <Link
-              href={`/admin/${clubId}`}
-              className="block px-4 py-2 rounded cursor-pointer bg-gray-200 hover:bg-blue-500 hover:text-white transition"
-              title="My club"
-            >
-              {open ? 'My club' : '🏟️'}
-            </Link>
-          {/* )} */}
         </div>
       </nav>
     </div>
   );
 }
-
-
