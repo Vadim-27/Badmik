@@ -74,9 +74,9 @@ export default function Sidebar() {
                 {open ? 'Users' : '👤'}
               </SidebarLink>
 
-              <SidebarLink href="/admin/add-club/" open={open}>
+              {/* <SidebarLink href="/admin/add-club/" open={open}>
                 {open ? 'Add Club' : '🏸➕'}
-              </SidebarLink>
+              </SidebarLink> */}
             </>
           )}
 

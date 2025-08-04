@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Клуби — Адмінка</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+  <!-- Command Bar -->
+  <div class="bg-white p-4 border-b flex flex-wrap items-center justify-between gap-2 sticky top-0 z-10">
+    <h2 class="text-lg font-semibold">Клуби</h2>
+    <div class="flex flex-wrap gap-2">
+      <button class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded">➕ Додати клуб</button>
+      <button class="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white text-sm rounded">✏️ Редагувати</button>
+      <button class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm rounded">🗑️ Видалити</button>
+      <button class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm rounded">⬇️ Експорт</button>
+      <button class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm rounded">🔄 Оновити</button>
+    </div>
+  </div>
+
+  <!-- Cards Grid -->
+  <div class="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    
+    <!-- Картка клубу -->
+    <div class="bg-white rounded-2xl shadow p-4 border border-gray-200">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-lg font-semibold">Energy Fit</h3>
+        <span class="text-sm px-2 py-1 bg-green-100 text-green-700 rounded-full">Активний</span>
+      </div>
+      <div class="text-sm text-gray-600 space-y-1 mb-3">
+        <p><strong>Місто:</strong> Київ</p>
+        <p><strong>Адреса:</strong> вул. Гімнастична, 12</p>
+        <p><strong>Менеджер:</strong> Олена Іваненко</p>
+        <p><strong>Кортів:</strong> 5</p>
+      </div>
+      <div class="flex gap-2">
+        <button class="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white text-sm rounded">Переглянути</button>
+        <button class="px-3 py-1 bg-orange-500 hover:bg-orange-600 text-white text-sm rounded">Редагувати</button>
+      </div>
+    </div>
+
+    <!-- Ще одна картка -->
+    <div class="bg-white rounded-2xl shadow p-4 border border-gray-200">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-lg font-semibold">FitZone</h3>
+        <span class="text-sm px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full">Очікує</span>
+      </div>
+      <div class="text-sm text-gray-600 space-y-1 mb-3">
+        <p><strong>Місто:</strong> Львів</p>
+        <p><strong>Адреса:</strong> просп. Шевченка, 45</p>
+        <p><strong>Менеджер:</strong> Андрій Коваль</p>
+        <p><strong>Кортів:</strong> 3</p>
+      </div>
+      <div class="flex gap-2">
+        <button class="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white text-sm rounded">Переглянути</button>
+        <button class="px-3 py-1 bg-orange-500 hover:bg-orange-600 text-white text-sm rounded">Редагувати</button>
+      </div>
+    </div>
+
+    <!-- Третя картка -->
+    <div class="bg-white rounded-2xl shadow p-4 border border-gray-200">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-lg font-semibold">Power Gym</h3>
+        <span class="text-sm px-2 py-1 bg-red-100 text-red-700 rounded-full">Заблокований</span>
+      </div>
+      <div class="text-sm text-gray-600 space-y-1 mb-3">
+        <p><strong>Місто:</strong> Дніпро</p>
+        <p><strong>Адреса:</strong> вул. Центральна, 101</p>
+        <p><strong>Менеджер:</strong> Марія Зоріна</p>
+        <p><strong>Кортів:</strong> 2</p>
+      </div>
+      <div class="flex gap-2">
+        <button class="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white text-sm rounded">Переглянути</button>
+        <button class="px-3 py-1 bg-orange-500 hover:bg-orange-600 text-white text-sm rounded">Редагувати</button>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
