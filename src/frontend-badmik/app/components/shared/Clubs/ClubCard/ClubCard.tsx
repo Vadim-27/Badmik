@@ -37,8 +37,8 @@ export const ClubCard = ({ club, onDeleteClick }: Props) => {
         <Link href={`/admin/${club.id}`} className="px-3 py-1 bg-primary-button hover:bg-primary-button-hover text-white text-sm rounded">
           Переглянути</Link>
         {/* <button className="px-3 py-1 bg-primary-button hover:bg-primary-button-hover text-white text-sm rounded">Переглянути</button> */}
-        <button className="px-3 py-1 bg-secondary-button hover:bg-secondary-button-hover text-white text-sm rounded">Редагувати</button>
-        <button className="px-3 py-1 bg-delete-button hover:bg-delete-button-hover text-white text-sm rounded" onClick={onDeleteClick}>Видалити</button>
+        <Link href={`/admin/${club.id}/edit`} className="px-3 py-1 bg-secondary-button hover:bg-secondary-button-hover text-white text-sm rounded">Редагувати</Link>
+        <button className="px-3 py-1 bg-delete-button hover:bg-delete-button-hover text-white text-sm rounded cursor-pointer" onClick={onDeleteClick}>Видалити</button>
       </div>
     </div>
   );
