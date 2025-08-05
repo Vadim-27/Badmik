@@ -11,7 +11,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <ClientOnly>
         <Sidebar />
       </ClientOnly>
-      <main className="w-full">{children}</main>
+      <main className="w-full font-geist-sans">{children}</main>
     </div>
   );
 }
