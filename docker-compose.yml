@@ -1,0 +1,29 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres-dev
+    restart: always
+    environment:
+      POSTGRES_USER: badmik_user
+      POSTGRES_PASSWORD: badmik_password
+      POSTGRES_DB: badmik_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: ./src
+      dockerfile: BadmintonApp.API/Dockerfile
+    container_name: badminton-api
+    ports:
+      - "5000:80"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: Host=postgres;Port=5432;Database=badmik_db;Username=badmik_user;Password=badmik_password
+    depends_on:
+      - postgres
+
+volumes:
+  pgdata:
