@@ -57,3 +57,4 @@ namespace BadmintonApp.Infrastructure.Persistence.Seed
             };
         }
     }
+}

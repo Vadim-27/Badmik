@@ -8,8 +8,10 @@ namespace BadmintonApp.Domain.Permissions
 {
     public class Role
     {
+        public Guid Id { get; set; }
         public RoleType Type { get; set; }
         public string Name { get; set; } = null!;
+
         public IReadOnlyList<PermissionType> Permissions { get; set; } = new List<PermissionType>();
     }
 }

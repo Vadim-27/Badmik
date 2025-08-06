@@ -1,10 +1,8 @@
-﻿using BadmintonApp.Domain.Users;
+﻿using BadmintonApp.Domain.Trainings.Enums;
+using BadmintonApp.Domain.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BadmintonApp.Infrastructure.Persistence.Seed
@@ -19,7 +17,7 @@ namespace BadmintonApp.Infrastructure.Persistence.Seed
 
             var user = new User
             {
-                Id = Guid.NewGuid().ToString(),
+                Id = Guid.NewGuid(),
                 Email = "admin@badminton.ua",
                 FirstName = "Admin",
                 LastName = "User",
@@ -28,11 +26,11 @@ namespace BadmintonApp.Infrastructure.Persistence.Seed
                 IsActive = true,
                 CreatedAt = DateTime.UtcNow,
                 Rank = "Pro",
-                Level = "A",
+                Level = PlayerLevel.A,
                 ImageUrl = "https://example.com/image.jpg"
             };
 
-            
+
             user.PasswordHash = passwordHasher.HashPassword(user, "admin123");
 
             context.Users.AddRange(user);

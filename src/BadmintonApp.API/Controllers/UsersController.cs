@@ -1,13 +1,10 @@
 ﻿using BadmintonApp.Application.DTOs.Users;
-using BadmintonApp.Application.Interfaces;
+using BadmintonApp.Application.Interfaces.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
 using System.Security.Claims;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BadmintonApp.API.Controllers
@@ -25,9 +22,9 @@ namespace BadmintonApp.API.Controllers
 
         // POST: /api/auth/register
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
+        public async Task<IActionResult> Register([FromBody] RegisterDto registerDto, CancellationToken cancellationToken)
         {
-            var result = await _usersService.RegisterAsync(registerDto);
+            var result = await _usersService.RegisterAsync(registerDto, cancellationToken);
             if (!result.IsSuccess)
                 return BadRequest(result.Message);
 
@@ -37,13 +34,13 @@ namespace BadmintonApp.API.Controllers
         // GET: /api/users/me
         [Authorize]
         [HttpGet("me")]
-        public async Task<IActionResult> GetProfile()
+        public async Task<IActionResult> GetProfile(CancellationToken cancellationToken)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userId))
                 return Unauthorized();
 
-            var user = await _usersService.GetByIdAsync(userId);
+            var user = await _usersService.GetByIdAsync(Guid.Parse(userId), cancellationToken);
             if (user == null)
                 return NotFound();
 

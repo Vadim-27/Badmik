@@ -5,12 +5,14 @@ using BadmintonApp.Infrastructure.Persistence.Seed;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using System.Text.Json.Serialization;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,8 +29,36 @@ builder.Services.AddSwaggerGen(opt =>
     {
         Title = "BadmintonApp API",
         Version = "v1"
+
+    });
+    opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme 
+    {
+        Name = "Authorisation",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        Description = "Input JwtToken in format: {token}" 
+    });
+    opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                     Type = ReferenceType.SecurityScheme,
+                     Id = "Bearer"
+                },
+            },
+            Array.Empty<string>()
+        }
     });
 });
+
+builder.Services
+    .AddControllers();
+
 
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);

@@ -1,4 +1,5 @@
-﻿using BadmintonApp.Application.Interfaces;
+﻿using BadmintonApp.Application.Interfaces.Permissions;
+using BadmintonApp.Application.Interfaces.Repositories;
 using BadmintonApp.Domain.Permissions;
 using System;
 using System.Collections.Generic;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BadmintonApp.Domain.Trainings.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace BadmintonApp.Domain.Users
 {
     public class User
     {
-        public string Id { get; set; } = Guid.NewGuid().ToString();
+        public Guid Id { get; set; } = Guid.NewGuid();
         public string Email { get; set; }
         public string PasswordHash { get; set; }
 
@@ -22,10 +23,10 @@ namespace BadmintonApp.Domain.Users
         public DateTime CreatedAt { get; set; }
 
         public string Rank { get; set; }
-        public string Level { get; set; }
+        public PlayerLevel Level { get; set; }
 
-        public int? ClubId { get; set; }
+        public Guid? ClubId { get; set; }
 
-        public string ImageUrl { get; set; }
+        public string ? ImageUrl { get; set; }
     }
 }
