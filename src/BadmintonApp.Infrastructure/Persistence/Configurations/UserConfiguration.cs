@@ -13,7 +13,7 @@ namespace BadmintonApp.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            //builder.ToTable("Users");
+            builder.ToTable("Users");
 
             builder.HasKey(u => u.Id);
 
