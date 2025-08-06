@@ -20,7 +20,7 @@ export interface Club {
 
 export const clubs: Club[] = [
   {
-    id: '1',
+    id: 'club-1',
     name: 'Energy Fit',
     status: 'Активний',
     statusColor: 'green',
@@ -30,7 +30,7 @@ export const clubs: Club[] = [
     courts: 5,
   },
   {
-    id: '2',
+    id: 'club-2',
     name: 'FitZone',
     status: 'Очікує',
     statusColor: 'yellow',
@@ -40,7 +40,7 @@ export const clubs: Club[] = [
     courts: 3,
   },
   {
-    id: '3',
+    id: 'club-3',
     name: 'Power Gym',
     status: 'Заблокований',
     statusColor: 'red',
@@ -50,7 +50,7 @@ export const clubs: Club[] = [
     courts: 2,
   },
   {
-    id: '4',
+    id: 'club-4',
     name: 'SportLife',
     status: 'Активний',
     statusColor: 'green',
@@ -60,7 +60,7 @@ export const clubs: Club[] = [
     courts: 4,
   },
   {
-    id: '5',
+    id: 'club-5',
     name: 'Urban Tennis Club',
     status: 'Активний',
     statusColor: 'green',
@@ -70,7 +70,7 @@ export const clubs: Club[] = [
     courts: 6,
   },
   {
-    id: '6',
+    id: 'club-6',
     name: 'Champion Arena',
     status: 'Очікує',
     statusColor: 'yellow',
