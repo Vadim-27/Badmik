@@ -11,13 +11,13 @@ type Props = {
 };
 
 
-export async function generateStaticParams() {
+export  function generateStaticParams() {
   return clubs.map((club) => ({
     clubId: club.id,
   }));
 }
 
-export default async function ClubAdminPage({ params }: Props) {
+export default  function ClubAdminPage({ params }: Props) {
   const club = clubs.find((c) => c.id === params.clubId);
 
   if (!club) {

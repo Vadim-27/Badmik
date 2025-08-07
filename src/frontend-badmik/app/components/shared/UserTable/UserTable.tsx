@@ -48,7 +48,7 @@ const UserTable: React.FC<UserTableProps> = () => {
 
 usersFromMok
  
-  const fetchUsers = async () => {
+  const fetchUsers =  () => {
     // const query = {
     //   page: paginationModel.page + 1, 
     //   limit: paginationModel.pageSize,
