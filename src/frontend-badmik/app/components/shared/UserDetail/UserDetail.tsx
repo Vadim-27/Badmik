@@ -5,6 +5,13 @@ import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 
+import ActionHeader from '@/app/components/ui/Layout/ActionHeader/ActionHeader';
+import BackButton from '@/app/components/ui/Buttons/BackButton/BackButton';
+import EditButton from '@/app/components/ui/Buttons/EditButton/EditButton';
+import DeleteButton from '@/app/components/ui/Buttons/DeleteButton/DeleteButton';
+import { ConfirmDialog } from '@/app/components/ui/DeleteModal/ConfirmDialog';
+import SaveButton from '@/app/components/ui/Buttons/SaveButton/SaveButton';
+
 type User = {
     id: string;
     firstName: string;
@@ -30,6 +37,41 @@ const UserDetail: React.FC<UserDetailProps> = ({ user }) => {
 
     const [editingField, setEditingField] = useState<string | null>(null);
     const readonlyFields: (keyof User)[] = ['createdAt', 'doB'];
+// ===========================================
+    const [openConfirm, setOpenConfirm] = useState(false);
+      const [selectedUser, setSelectedUser] = useState<string | null>(null);
+       const [form, setForm] = useState(user);
+        const [isChanged, setIsChanged] = useState(false);
+      
+        const handleChange = (key: keyof User, value: string | number) => {
+          setForm((prev) => ({
+            ...prev,
+            [key]: value,
+          }));
+      
+         
+          setIsChanged(true);
+        };
+      
+        const handleSave = () => {
+          console.log('Збережено:', form);
+      
+          
+          setIsChanged(false);
+        };
+    
+      const handleDeleteClick = () => {
+        setSelectedUser(user.id);
+        setOpenConfirm(true);
+      };
+    
+      const handleConfirmDelete = () => {
+        if (selectedUser) {
+          // API delete logic
+          console.log('User видалено:', selectedUser);
+          setOpenConfirm(false);
+        }
+      };
 
     const handleEditAllToggle = () => {
         setIsEditingAll(!isEditingAll);
@@ -64,6 +106,20 @@ const UserDetail: React.FC<UserDetailProps> = ({ user }) => {
     ];
 
     return (
+        <div>
+            <ActionHeader>
+                    <BackButton />
+                    <h2 className="text-lg font-semibold">{user.firstName}</h2>
+                    <div className="flex flex-wrap gap-2">
+                         <SaveButton
+                                    onClick={handleSave}
+                                    disabled={!isChanged}
+                                    label="Зберегти зміни"
+                                  />
+                      {/* <EditButton href={`/admin/${user.id}/edit`} label="Редагувати" /> */}
+                      <DeleteButton onClick={handleDeleteClick} label="Видалити" />
+                    </div>
+                  </ActionHeader>
         <Box
             sx={{
                 position: 'relative',
@@ -203,6 +259,14 @@ const UserDetail: React.FC<UserDetailProps> = ({ user }) => {
                 </Box>
             </Box>
         </Box>
+         <ConfirmDialog
+                open={openConfirm}
+                onClose={() => setOpenConfirm(false)}
+                onConfirm={handleConfirmDelete}
+                title="Видалити Юзера"
+                description="Ви дійсно хочете видалити цього Юзера? Цю дію неможливо скасувати."
+              />
+        </div>
     );
 };
 

@@ -2,8 +2,9 @@
 
 import { useState } from 'react';
 import { Club } from '@/data/clubs';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import ActionHeader from '@/app/components/ui/Layout/ActionHeader/ActionHeader';
+import BackButton from '@/app/components/ui/Buttons/BackButton/BackButton';
+import SaveButton from '@/app/components/ui/Buttons/SaveButton/SaveButton';
 
 type Props = {
   club: Club;
@@ -11,45 +12,38 @@ type Props = {
 
 export default function ClubEditForm({ club }: Props) {
   const [form, setForm] = useState(club);
-  const router = useRouter();
+  const [isChanged, setIsChanged] = useState(false);
 
   const handleChange = (key: keyof Club, value: string | number) => {
     setForm((prev) => ({
       ...prev,
       [key]: value,
     }));
+
+   
+    setIsChanged(true);
   };
 
   const handleSave = () => {
     console.log('Збережено:', form);
+
+    
+    setIsChanged(false);
   };
 
   return (
     <div>
-      <div className="bg-white mb-12 p-4 border-b flex flex-wrap items-center justify-between gap-2 rounded-2xl shadow border-gray-200">
-        <button
-            onClick={() => router.back()}
-            className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm rounded"
-          >
-            ← Назад
-          </button>
+      <ActionHeader>
+        <BackButton />
         <h2 className="text-lg font-semibold">Редагування клубу {club.name}</h2>
         <div className="flex flex-wrap gap-2">
-          <button
-            className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded"
-            onClick={() => setForm(club)}
-          >
-            Відмінити
-          </button>
-          <button
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded"
+          <SaveButton
             onClick={handleSave}
-          >
-            Зберегти
-          </button>
-          
+            disabled={!isChanged}
+            label="Зберегти зміни"
+          />
         </div>
-      </div>
+      </ActionHeader>
 
       <div className="max-w-xl mx-auto bg-white shadow p-6 rounded-xl space-y-4">
         <ul className="space-y-4">
@@ -112,21 +106,6 @@ export default function ClubEditForm({ club }: Props) {
             </select>
           </li>
         </ul>
-
-        <div className="flex justify-end gap-4 mt-6">
-          {/* <button
-          className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded"
-          onClick={() => setForm(club)}
-        >
-          Відмінити
-        </button>
-        <button
-          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded"
-          onClick={handleSave}
-        >
-          Зберегти
-        </button> */}
-        </div>
       </div>
     </div>
   );

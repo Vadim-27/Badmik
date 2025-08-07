@@ -20,7 +20,11 @@ const UserPage = async ({
  
   if (!user) return <div>User not found</div>;
 
-  return <UserDetail user={user} />;
+  return (
+    <div className="p-6 bg-gray-100 min-h-screen">
+  <UserDetail user={user} />
+  </div>
+);
 };
 
 export default UserPage;
