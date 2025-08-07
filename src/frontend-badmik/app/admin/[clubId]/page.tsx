@@ -4,21 +4,30 @@ import { ClubDetails } from '@/app/components/shared/Clubs/ClubDetails/ClubDetai
 import { ClubPageHeader } from '@/app/components/shared/Clubs/ClubPageHeader/ClubPageHeader';
 import Link from 'next/link';
 
-type Props = {
-  params: {
-    clubId: string;
-  };
+// type Props = {
+//   params: {
+//     clubId: string;
+//   };
+// };
+
+type Params = {
+  clubId: string;
 };
 
+// export  function generateStaticParams() {
+//   return clubs.map((club) => ({
+//     clubId: club.id,
+//   }));
+// }
 
-export  function generateStaticParams() {
-  return clubs.map((club) => ({
-    clubId: club.id,
-  }));
-}
-
-export default  function ClubAdminPage({ params }: Props) {
-  const club = clubs.find((c) => c.id === params.clubId);
+export default  async function ClubAdminPage({
+  params,
+}: {
+  params: Promise<Params>;
+}) {
+  // const club = clubs.find((c) => c.id === params.clubId);
+  const { clubId } = await params;
+  const club = clubs.find((c) => c.id === clubId);
 
   if (!club) {
     notFound();
