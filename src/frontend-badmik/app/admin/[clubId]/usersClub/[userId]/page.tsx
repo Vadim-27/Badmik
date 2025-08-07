@@ -2,10 +2,19 @@ import React from 'react';
 import UserDetail from '@/app/components/shared/UserDetail/UserDetail';
 import { usersFromMok } from '@/data/mockUsers';
 
-const UserPage = ({ params }: { params: { userId: string } }) => {
+type Params = {
+  userId: string;
+};
+
+const UserPage = async ({
+  params,
+}: {
+  params: Promise<Params>;
+}) => {
+  const { userId } = await params;
   const user = usersFromMok.find((u) => {
  
-  return u.id === params.userId;
+  return u.id === userId;
 });
  
  
