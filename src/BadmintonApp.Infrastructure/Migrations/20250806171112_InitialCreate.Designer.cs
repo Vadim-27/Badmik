@@ -11,14 +11,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BadmintonApp.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250729191335_Add_Club")]
-    partial class Add_Club
+    [Migration("20250806171112_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.6");
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.7");
 
             modelBuilder.Entity("BadmintonApp.Domain.Clubs.Club", b =>
                 {
@@ -56,16 +56,13 @@ namespace BadmintonApp.Infrastructure.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("UserId1")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClubId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserClubRoles");
                 });
@@ -95,14 +92,136 @@ namespace BadmintonApp.Infrastructure.Migrations
                     b.ToTable("WorkingHours");
                 });
 
-            modelBuilder.Entity("BadmintonApp.Domain.Users.User", b =>
+            modelBuilder.Entity("BadmintonApp.Domain.Permissions.Permission", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasMaxLength(36)
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Code")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Permissions");
+                });
+
+            modelBuilder.Entity("BadmintonApp.Domain.Permissions.Role", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("ClubId")
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.PrimitiveCollection<string>("Permissions")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Type")
                         .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("BadmintonApp.Domain.Trainings.Training", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.PrimitiveCollection<string>("AllowedLevels")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ClubId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("CourtsUsed")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("TEXT");
+
+                    b.Property<TimeOnly>("EndTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsRecurringWeekly")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid?>("LocationId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("MaxPlayers")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<TimeOnly>("StartTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("TrainerId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Trainings");
+                });
+
+            modelBuilder.Entity("BadmintonApp.Domain.Trainings.TrainingParticipant", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("RegisteredAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("TrainingId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TrainingId");
+
+                    b.ToTable("TrainingParticipants");
+                });
+
+            modelBuilder.Entity("BadmintonApp.Domain.Trainings.TrainingQueueEntry", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("QueuedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("TrainingId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TrainingId");
+
+                    b.ToTable("TrainingQueueEntries");
+                });
+
+            modelBuilder.Entity("BadmintonApp.Domain.Users.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ClubId")
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -132,8 +251,8 @@ namespace BadmintonApp.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Level")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Level")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
@@ -164,7 +283,9 @@ namespace BadmintonApp.Infrastructure.Migrations
 
                     b.HasOne("BadmintonApp.Domain.Users.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Club");
 
@@ -182,11 +303,32 @@ namespace BadmintonApp.Infrastructure.Migrations
                     b.Navigation("Club");
                 });
 
+            modelBuilder.Entity("BadmintonApp.Domain.Trainings.TrainingParticipant", b =>
+                {
+                    b.HasOne("BadmintonApp.Domain.Trainings.Training", null)
+                        .WithMany("Participants")
+                        .HasForeignKey("TrainingId");
+                });
+
+            modelBuilder.Entity("BadmintonApp.Domain.Trainings.TrainingQueueEntry", b =>
+                {
+                    b.HasOne("BadmintonApp.Domain.Trainings.Training", null)
+                        .WithMany("Queue")
+                        .HasForeignKey("TrainingId");
+                });
+
             modelBuilder.Entity("BadmintonApp.Domain.Clubs.Club", b =>
                 {
                     b.Navigation("UserRoles");
 
                     b.Navigation("WorkingHours");
+                });
+
+            modelBuilder.Entity("BadmintonApp.Domain.Trainings.Training", b =>
+                {
+                    b.Navigation("Participants");
+
+                    b.Navigation("Queue");
                 });
 #pragma warning restore 612, 618
         }

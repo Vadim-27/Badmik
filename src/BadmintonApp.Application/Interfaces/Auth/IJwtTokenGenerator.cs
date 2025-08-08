@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BadmintonApp.Application.Interfaces
+namespace BadmintonApp.Application.Interfaces.Auth
 {
     public interface IJwtTokenGenerator
     {

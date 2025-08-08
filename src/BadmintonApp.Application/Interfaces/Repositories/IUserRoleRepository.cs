@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BadmintonApp.Application.Interfaces
+namespace BadmintonApp.Application.Interfaces.Repositories
 {
     public interface IUserRoleRepository
     {
-        Task<Role?> GetUserRoleForClubAsync(Guid userId, Guid clubId);
+        Task<Role> GetUserRoleForClubAsync(Guid userId, Guid clubId);
     }
 }

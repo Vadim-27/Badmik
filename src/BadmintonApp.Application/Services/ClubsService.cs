@@ -1,6 +1,7 @@
 ﻿using BadmintonApp.Application.DTOs.Clubs;
 using BadmintonApp.Application.DTOs.Common;
-using BadmintonApp.Application.Interfaces;
+using BadmintonApp.Application.Interfaces.Clubs;
+using BadmintonApp.Application.Interfaces.Repositories;
 using BadmintonApp.Domain.Clubs;
 using System;
 using System.Collections.Generic;
@@ -20,9 +21,9 @@ public class ClubsService : IClubsService
         _clubsRepository = clubsRepository;
         _userRepository = userRepository;
     }
-    public async Task<ResultDto> AssignAdminAsync(Guid clubId, Guid userId)
+    public async Task<ResultDto> AssignAdminAsync(Guid clubId, Guid userId, CancellationToken cancellationToken)
     {
-        var club = await _clubsRepository.GetByIdAsync(clubId);
+        var club = await _clubsRepository.GetByIdAsync(clubId, cancellationToken);
         if (club == null)
             return new ResultDto()
             {
@@ -32,7 +33,7 @@ public class ClubsService : IClubsService
 
         //todo check user
         var user = await _userRepository
-            .GetByIdAsync(userId.ToString());
+            .GetByIdAsync(userId, cancellationToken);
         if (user == null)
             return new ResultDto()
             {
@@ -41,7 +42,7 @@ public class ClubsService : IClubsService
             };
 
 
-        await _clubsRepository.AssignAdminAsync(clubId, userId);
+        await _clubsRepository.AssignAdminAsync(clubId, userId, cancellationToken);
         return new ResultDto()
         {
             IsSuccess = true
@@ -49,7 +50,7 @@ public class ClubsService : IClubsService
 
     }
 
-    public async Task<ClubResultDto> CreateAsync(CreateClubDto dto)
+    public async Task<ClubResultDto> CreateAsync(CreateClubDto dto, CancellationToken cancellationToken)
     {
         var club = new Club
         {
@@ -70,13 +71,13 @@ public class ClubsService : IClubsService
             }.Where(x => x != null).ToList()
         };
 
-        var clubRes = await _clubsRepository.CreateAsync(club);
+        var clubRes = await _clubsRepository.CreateAsync(club, cancellationToken);
         return ResultDto.Success<ClubResultDto>(MapToClub(clubRes));
     }
 
-    public async Task<ResultDto> DeleteAsync(Guid id)
+    public async Task<ResultDto> DeleteAsync(Guid id,  CancellationToken cancellationToken)
     {
-        var club = await _clubsRepository.GetByIdAsync(id);
+        var club = await _clubsRepository.GetByIdAsync(id, cancellationToken);
         if (club is null)
             return new ResultDto
             {
@@ -84,7 +85,7 @@ public class ClubsService : IClubsService
                 Message = "Club not found"
             };
 
-        return await _clubsRepository.DeleteAsync(id)
+        return await _clubsRepository.DeleteAsync(id, cancellationToken)
             ? new ResultDto { IsSuccess = true }
             : new ResultDto { IsSuccess = false };
     }
@@ -92,13 +93,13 @@ public class ClubsService : IClubsService
     public async Task<List<ClubResultDto>> GetAllAsync(string filter = null, CancellationToken cancellationToken = default)
     {
 
-        var clubs = await _clubsRepository.GetAllAsync();
+        var clubs = await _clubsRepository.GetAllAsync(cancellationToken : cancellationToken);
         return clubs.Select(MapToClub).ToList();
     }
 
-    public async Task<ClubResultDto> UpdateAsync(Guid id, UpdateClubDto dto)
+    public async Task<ClubResultDto> UpdateAsync(Guid id, UpdateClubDto dto, CancellationToken cancellationToken)
     {
-        var club = await _clubsRepository.GetByIdAsync(id);
+        var club = await _clubsRepository.GetByIdAsync(id, cancellationToken);
         if (club == null)
             return new ClubResultDto
             {
@@ -121,7 +122,7 @@ public class ClubsService : IClubsService
         CreateWorkingHour(DayOfWeek.Sunday, dto.WorkingHours.Sunday),
     }.Where(x => x != null).ToList();
 
-        club = await _clubsRepository.UpdateAsync(club);
+        club = await _clubsRepository.UpdateAsync(club, cancellationToken);
         return MapToClub(club);
     }
 

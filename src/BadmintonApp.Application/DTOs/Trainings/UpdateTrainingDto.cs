@@ -1,0 +1,20 @@
+﻿using BadmintonApp.Domain.Trainings.Enums;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BadmintonApp.Application.DTOs.Trainings;
+
+public class UpdateTrainingDto
+{
+    public DateTime Date { get; set; }
+    public TimeSpan StartTime { get; set; }
+    public TimeSpan EndTime { get; set; }
+    public bool IsRecurringWeekly { get; set; }
+    public int CourtsUsed { get; set; }
+    public int MaxPlayers { get; set; }
+    public Guid? TrainerId { get; set; }
+    public List<PlayerLevel> AllowedLevels { get; set; } = new();
+}

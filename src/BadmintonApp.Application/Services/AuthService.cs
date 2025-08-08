@@ -1,12 +1,14 @@
 ﻿using BadmintonApp.Application.DTOs.Auth;
 using BadmintonApp.Application.DTOs.Common;
-using BadmintonApp.Application.Interfaces;
+using BadmintonApp.Application.Interfaces.Auth;
+using BadmintonApp.Application.Interfaces.Repositories;
 using BadmintonApp.Domain.Users;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BadmintonApp.Application.Services
@@ -26,9 +28,9 @@ namespace BadmintonApp.Application.Services
             _jwtTokenGenerator = jwtTokenGenerator;
         }
 
-        public async Task<LoginResultDto> LoginAsync(LoginDto dto)
+        public async Task<LoginResultDto> LoginAsync(LoginDto dto, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetByEmailAsync(dto.Email);
+            var user = await _userRepository.GetByEmailAsync(dto.Email, cancellationToken);
             if (user == null)
                 return ResultDto.Fail<LoginResultDto>("Invalid credentials");
 
@@ -42,13 +44,15 @@ namespace BadmintonApp.Application.Services
             {
                 IsSuccess = true,
                 Token = token,
-                UserId = user.Id,
+                UserId = user.Id.ToString(),
                 Email = user.Email,
                 Role = user.Role,
                 FullName = $"{user.FirstName} {user.LastName}",
                 ExpiresAt = DateTime.UtcNow.AddHours(2)
             };
         }
+
+        
 
         public Task LogoutAsync()
         {

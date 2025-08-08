@@ -1,11 +1,6 @@
 ﻿using BadmintonApp.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BadmintonApp.Infrastructure.Persistence.Configurations
 {
@@ -17,9 +12,12 @@ namespace BadmintonApp.Infrastructure.Persistence.Configurations
 
             builder.HasKey(u => u.Id);
 
+            //builder.Property(u => u.Id)
+            //    .IsRequired()
+            //    .HasMaxLength(36);
             builder.Property(u => u.Id)
-                .IsRequired()
-                .HasMaxLength(36);
+                 .IsRequired()
+                 .HasColumnType("uniqueidentifier");
 
             builder.Property(u => u.Email)
                 .IsRequired()

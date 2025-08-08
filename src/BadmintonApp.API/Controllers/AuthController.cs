@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 using BadmintonApp.Application.DTOs;
-using BadmintonApp.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.InteropServices;
 using BadmintonApp.Application.DTOs.Auth;
+using BadmintonApp.Application.Interfaces.Auth;
+using System.Threading;
 
 namespace BadmintonApp.API.Controllers
 {
@@ -27,9 +28,9 @@ namespace BadmintonApp.API.Controllers
 
         // POST: /api/auth/login
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
+        public async Task<IActionResult> Login([FromBody] LoginDto loginDto, CancellationToken cancellationToken)
         {
-            var result = await _authService.LoginAsync(loginDto);
+            var result = await _authService.LoginAsync(loginDto, cancellationToken);
             if (!result.IsSuccess)
                 return Unauthorized();
 

@@ -1,6 +1,6 @@
 ﻿using BadmintonApp.API.Exceptions;
 using BadmintonApp.Application.DTOs.Clubs;
-using BadmintonApp.Application.Interfaces;
+using BadmintonApp.Application.Interfaces.Clubs;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading;
@@ -22,7 +22,7 @@ namespace BadmintonApp.API.Controllers
         [HttpPost]
         public async Task<ActionResult> Create([FromBody] CreateClubDto create, CancellationToken cancellationToken)
         {
-            var result = await _clubsService.CreateAsync(create);
+            var result = await _clubsService.CreateAsync(create, cancellationToken);
 
             return Ok(result);
         }
@@ -38,14 +38,14 @@ namespace BadmintonApp.API.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> Update(Guid id, [FromBody] UpdateClubDto dto, CancellationToken cancellationToken)
         {
-            var result = await _clubsService.UpdateAsync(id, dto);
+            var result = await _clubsService.UpdateAsync(id, dto, cancellationToken);
             return Ok(result);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
         {
-            var deleted = await _clubsService.DeleteAsync(id);
+            var deleted = await _clubsService.DeleteAsync(id, cancellationToken);
             if (!deleted.IsSuccess)
                 return ExceptionFactory.NotFound("Клуб не знайдено");
 
@@ -55,7 +55,7 @@ namespace BadmintonApp.API.Controllers
         [HttpPut("{clubId}/assign-admin")]
         public async Task<IActionResult> AssignAdmin(Guid clubId, [FromBody] AssignAdminDto dto, CancellationToken cancellationToken)
         {
-            var result = await _clubsService.AssignAdminAsync(clubId, dto.UserId);
+            var result = await _clubsService.AssignAdminAsync(clubId, dto.UserId, cancellationToken);
             if (!result.IsSuccess)
                 return NotFound();
 
