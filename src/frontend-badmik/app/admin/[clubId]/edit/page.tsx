@@ -10,7 +10,7 @@ export default async function EditClubPage({
 }: {
   params: Promise<Params>;
 }) {
- const { clubId } = await params; // правильно чекаємо
+ const { clubId } = await params; 
   const club = clubs.find((c) => c.id === clubId);
 
   if (!club) {

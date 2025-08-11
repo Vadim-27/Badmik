@@ -33,10 +33,10 @@ export const ClubCard = ({ club, onDeleteClick }: Props) => {
         <p><strong>Менеджер:</strong> {club.manager}</p>
         <p><strong>Кортів:</strong> {club.courts}</p>
       </div>
-      <div className="flex gap-2">
+      <div className="flex gap-2 flex-wrap">
         <Link href={`/admin/${club.id}`} className="px-3 py-1 bg-primary-button hover:bg-primary-button-hover text-white text-sm rounded">
           Переглянути</Link>
-        {/* <button className="px-3 py-1 bg-primary-button hover:bg-primary-button-hover text-white text-sm rounded">Переглянути</button> */}
+       
         <Link href={`/admin/${club.id}/edit`} className="px-3 py-1 bg-secondary-button hover:bg-secondary-button-hover text-white text-sm rounded">Редагувати</Link>
         <button className="px-3 py-1 bg-delete-button hover:bg-delete-button-hover text-white text-sm rounded cursor-pointer" onClick={onDeleteClick}>Видалити</button>
       </div>

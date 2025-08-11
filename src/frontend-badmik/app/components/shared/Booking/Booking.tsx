@@ -18,7 +18,7 @@ const Booking = () => {
   return (
      <main className="p-6 max-w-6xl mx-auto">
     
-      <section className="font-geist-sans mb-10">
+      {/* <section className="font-geist-sans mb-10">
         <h2 className="font-geist-sans text-2xl font-semibold mb-4">2. Додати тренування</h2>
         <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <input
@@ -72,7 +72,7 @@ const Booking = () => {
             Створити тренування
           </button>
         </form>
-      </section>
+      </section> */}
 
      
       <section>
