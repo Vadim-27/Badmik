@@ -1,18 +1,19 @@
 ﻿using BadmintonApp.Application;
 using BadmintonApp.Infrastructure;
+using BadmintonApp.Infrastructure.Logger;
 using BadmintonApp.Infrastructure.Persistence;
 using BadmintonApp.Infrastructure.Persistence.Seed;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
-using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System;
 using System.Text;
 using System.Text.Json.Serialization;
-using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,14 +32,14 @@ builder.Services.AddSwaggerGen(opt =>
         Version = "v1"
 
     });
-    opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme 
+    opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorisation",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.Http,
         Scheme = "bearer",
         BearerFormat = "JWT",
-        Description = "Input JwtToken in format: {token}" 
+        Description = "Input JwtToken in format: {token}"
     });
     opt.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
@@ -78,6 +79,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 
+builder.Services.AddLogging(l =>
+{
+    l.ClearProviders();
+    l.AddConsole();
+    l.AddProvider(new DbLoggerProvider(builder.Services.BuildServiceProvider()
+                       .GetRequiredService<ApplicationDbContext>()));
+});
+
 var app = builder.Build();
 
 //Add initial data
@@ -96,6 +105,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
+
 app.UseAuthorization();
+
 app.MapControllers();
 app.Run();

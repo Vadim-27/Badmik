@@ -2,6 +2,8 @@
 using AutoMapper.QueryableExtensions;
 using BadmintonApp.Application.DTOs.Common;
 using BadmintonApp.Application.DTOs.Trainings;
+using BadmintonApp.Application.Errors;
+using BadmintonApp.Application.Exсeptions;
 using BadmintonApp.Application.Interfaces.Permissions;
 using BadmintonApp.Application.Interfaces.Repositories;
 using BadmintonApp.Application.Interfaces.Trainings;
@@ -47,14 +49,24 @@ public class TrainingsService : ITrainingsService
 
     public async Task<TrainingResultDto> CreateAsync(Guid adminId, CreateTrainingDto dto, CancellationToken cancellationToken)
     {
-
         if (dto.Type == TrainingType.CourtRental && dto.TrainerId != null)
-            throw new Exception("CourtRental must not have a trainer");
+            throw new BadRequestException("CourtRental must not have a trainer");
 
         if (dto.Type == TrainingType.Individual && dto.MaxPlayers != 2)
-            throw new Exception("Individual training must have exactly 2 players");
+            throw new BadRequestException("Individual training must have exactly 2 players");
+        //if (dto.Type == TrainingType.CourtRental && dto.TrainerId != null)
+        //    throw new ConflictException(ErrorCodes.Common.Conflict, "CourtRental must not have a trainer");
+
+        //if (dto.Type == TrainingType.Individual && dto.MaxPlayers != 2)
+        //    throw new ConflictException(ErrorCodes.Common.Conflict, "Individual training must have exactly 2 players");
 
         var user = await _userRepository.GetByIdAsync(adminId, cancellationToken);
+
+        //if (user == null)
+        //    throw new NotFoundException(ErrorCodes.Training.NotFound, "Admin user not found");
+
+        if (!user.ClubId.HasValue)
+            throw new Exception("User does not belong to any club");
 
         var training = _mapper.Map<Training>(dto);
         training.Id = Guid.NewGuid();

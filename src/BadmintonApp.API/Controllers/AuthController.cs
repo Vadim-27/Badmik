@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 using BadmintonApp.Application.DTOs.Auth;
 using BadmintonApp.Application.Interfaces.Auth;
 using System.Threading;
+using Microsoft.Extensions.Logging;
 
 namespace BadmintonApp.API.Controllers
 {
@@ -28,8 +29,9 @@ namespace BadmintonApp.API.Controllers
 
         // POST: /api/auth/login
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginDto loginDto, CancellationToken cancellationToken)
+        public async Task<IActionResult> Login([FromBody] LoginDto loginDto, [FromServices] ILogger<AuthController> logger, CancellationToken cancellationToken)
         {
+            logger.LogInformation("Hi!! Tests..");
             var result = await _authService.LoginAsync(loginDto, cancellationToken);
             if (!result.IsSuccess)
                 return Unauthorized();
