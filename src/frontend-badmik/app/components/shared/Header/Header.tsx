@@ -1,72 +1,63 @@
-'use client';
 
-import Link from 'next/link';
+"use client"
+
+import UserMenu from '@/app/components/ui/UserMenu/UserMenu';
 import Cookies from 'js-cookie';
-import { useEffect, useState } from 'react';
 import jwt from 'jwt-simple';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import styles from './Header.module.scss';
 
-const JWT_SECRET = 'your-secret'; 
+const JWT_SECRET = 'your-secret';
 
 export default function Header() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState<string | undefined>(undefined);
+
+  const router = useRouter();
+  const token = Cookies.get('token');
  
 
   useEffect(() => {
-    const token = Cookies.get('token');
     
-
     if (token) {
       try {
         const decoded = jwt.decode(token, JWT_SECRET);
         const role = decoded.role;
-
+        setAvatarUrl(decoded.avatarUrl); 
         setIsAuthenticated(true);
+        console.log("useEffect")
         setIsAdmin(['owner_admin', 'assistant', 'club_admin'].includes(role));
+        router.refresh();
       } catch (err) {
-        console.error('Invalid token:', err);
         Cookies.remove('token');
         setIsAuthenticated(false);
-        setIsAdmin(false);
       }
-    } else {
-      setIsAuthenticated(false);
-      setIsAdmin(false);
     }
-  }, []);
+  }, [token, router]);
 
   const handleLogout = () => {
     Cookies.remove('token');
-    window.location.reload();
+    // window.location.reload();
+    setIsAuthenticated(false); 
+  router.refresh(); 
+  router.push('/');
   };
 
   return (
-    <header className="flex justify-between items-center px-4 py-3 bg-gray-800 text-white">
-      <nav className="flex gap-4 items-center">
-        <Link href="/" className="hover:underline">
-          Home
-        </Link>
-
-        {isAdmin && (
-          <Link href="/admin" className="hover:underline">
-            Admin
-          </Link>
-        )}
+    <header className={styles.header}>
+      <nav className={styles.nav}>
+        <Link href="/">Home</Link>
+        {isAdmin && <Link href="/admin">Admin</Link>}
       </nav>
 
       <div>
         {isAuthenticated ? (
-          <button
-            onClick={handleLogout}
-            className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded"
-          >
-            Logout
-          </button>
+          <UserMenu avatarUrl={avatarUrl} onLogout={handleLogout} />
         ) : (
-          <Link
-            href="/login"
-            className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded"
-          >
+          <Link href="/login" className={styles.authButton}>
             Login
           </Link>
         )}
@@ -74,3 +65,4 @@ export default function Header() {
     </header>
   );
 }
+

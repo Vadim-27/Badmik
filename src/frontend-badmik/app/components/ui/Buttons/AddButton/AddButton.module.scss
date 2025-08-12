@@ -1,0 +1,37 @@
+@import '../../../../styles/mixins';
+
+.addButton {
+  background-color: #2563eb; // bg-blue-600
+  color: #ffffff;
+  border-radius: 0.375rem;
+  transition: all 150ms ease-in-out;
+  text-decoration: none;
+  display: inline-block;
+
+  padding: 0.5rem 1rem; 
+  font-size: 0.75rem;
+
+  &:hover {
+    background-color: #1d4ed8; // hover:bg-blue-700
+  }
+
+  @include media-rules(mobile) {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  @include media-rules(tablet) {
+    padding: 0.625rem 1.25rem;
+    font-size: 1rem;
+  }
+
+  @include media-rules(laptop) {
+    padding: 0.75rem 1.5rem;
+    font-size: 1.125rem;
+  }
+
+  @include media-rules(desktop) {
+    padding: 0.875rem 2rem;
+    font-size: 1.25rem;
+  }
+}

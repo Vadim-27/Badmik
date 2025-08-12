@@ -1,12 +1,17 @@
 import { clubs } from '@/data/clubs';
 import ClubEditForm from '@/app/components/shared/Clubs/ClubEditForm/ClubEditForm';
 
-type Props = {
-  params: { clubId: string };
+type Params = {
+  clubId: string;
 };
 
-export default function EditClubPage({ params }: Props) {
-  const club = clubs.find((c) => c.id === params.clubId);
+export default async function EditClubPage({
+  params,
+}: {
+  params: Promise<Params>;
+}) {
+ const { clubId } = await params; 
+  const club = clubs.find((c) => c.id === clubId);
 
   if (!club) {
     return <div>Клуб не знайдено</div>;

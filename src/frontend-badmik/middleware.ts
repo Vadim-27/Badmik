@@ -42,7 +42,7 @@ export async function middleware(request: NextRequest) {
         return NextResponse.next();
       }
 
-      return NextResponse.redirect(new URL('/admin', request.url));
+      return NextResponse.redirect(new URL(`/admin/${clubId}`, request.url));
     }
 
 
