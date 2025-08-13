@@ -1,5 +1,6 @@
 ﻿using BadmintonApp.Application.DTOs.Common;
 using BadmintonApp.Application.DTOs.Users;
+using BadmintonApp.Application.Exсeptions;
 using BadmintonApp.Application.Interfaces.Repositories;
 using BadmintonApp.Application.Interfaces.Users;
 using BadmintonApp.Domain.Users;
@@ -24,11 +25,11 @@ namespace BadmintonApp.Application.Services
             _passwordHasher = passwordHasher;
         }
 
-        public async Task<UserResultDto> RegisterAsync(RegisterDto dto, CancellationToken cancellationToken)
+        public async Task RegisterAsync(RegisterDto dto, CancellationToken cancellationToken)
         {
             var existingUser = await _userRepository.GetByEmailAsync(dto.Email, cancellationToken);
             if (existingUser != null)
-                return ResultDto.Fail<UserResultDto>("Email already exists");
+                throw new BadRequestException("Email already exists");
 
             var user = new User
             {
@@ -44,8 +45,7 @@ namespace BadmintonApp.Application.Services
 
             user.PasswordHash = _passwordHasher.HashPassword(user, dto.Password);
             await _userRepository.CreateAsync(user, cancellationToken);
-
-            return ResultDto.Success<UserResultDto>(); // ?? підчас реєстрації непотрібно нічого повертати. повернути код200 або якийсь інший, якщо щось пішло не так.
+           
         }
 
         public async Task<UserResultDto> GetByIdAsync(Guid userId, CancellationToken cancellationToken)

@@ -1,4 +1,5 @@
-﻿using BadmintonApp.Application;
+﻿using BadmintonApp.API.Middlewares;
+using BadmintonApp.Application;
 using BadmintonApp.Infrastructure;
 using BadmintonApp.Infrastructure.Logger;
 using BadmintonApp.Infrastructure.Persistence;
@@ -79,6 +80,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 
+builder.Logging.AddFilter<DbLoggerProvider>((category, level) =>
+{
+    if (category.StartsWith("Microsoft.") ||
+        category.StartsWith("System.") ||
+        category.StartsWith("Microsoft.EntityFrameworkCore") ||
+        category.StartsWith("Microsoft.AspNetCore"))
+        return false;
+
+    // за бажанням — поріг рівня:
+    return true;
+});
+
 builder.Services.AddLogging(l =>
 {
     l.ClearProviders();
@@ -89,14 +102,7 @@ builder.Services.AddLogging(l =>
 
 var app = builder.Build();
 
-//Add initial data
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    //dbContext.Database.EnsureCreated();
-    dbContext.Database.Migrate();
-    await DbInitializer.SeedAsync(dbContext);
-}
+app.UseMiddleware<ExceptionMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {
@@ -111,4 +117,13 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    //dbContext.Database.EnsureCreated();
+    dbContext.Database.Migrate();
+    await DbInitializer.SeedAsync(dbContext);
+}
+
 app.Run();

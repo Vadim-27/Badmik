@@ -1,13 +1,14 @@
 ﻿using BadmintonApp.Application.DTOs.ErrorDtos;
 using BadmintonApp.Application.Exсeptions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
 namespace BadmintonApp.API.Middlewares;
 
-public class ExceptionMiddleware /*: IMiddleware*/
+public class ExceptionMiddleware(RequestDelegate next) /*: IMiddleware*/
 {
-    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+    public async Task InvokeAsync(HttpContext context, ILogger<ExceptionMiddleware> logger)
     {
         try
         {
@@ -15,6 +16,7 @@ public class ExceptionMiddleware /*: IMiddleware*/
         }
         catch (System.Exception ex)
         {
+            logger.LogError(ex, "Error has happened with {RequestPath}, the message is: {Message}", context.Request.Path.Value, ex.Message);
             ErrorDto dto = new ErrorDto();
 
             switch (ex)
@@ -30,5 +32,6 @@ public class ExceptionMiddleware /*: IMiddleware*/
             }
             await context.Response.WriteAsJsonAsync(dto);
         }
+
     }
 }

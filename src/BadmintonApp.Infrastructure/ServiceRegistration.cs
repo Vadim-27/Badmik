@@ -19,7 +19,7 @@ namespace BadmintonApp.Infrastructure
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 //options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
-                options.UseSqlite(configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlite(configuration.GetConnectionString("DefaultConnection"), options => options.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
