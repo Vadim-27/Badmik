@@ -1,4 +1,4 @@
-@import '../../../../styles/mixins';
+@use '../../../../styles/mixins' as *;
 
 .deleteButton {
   background-color: var(--color-delete-button); 

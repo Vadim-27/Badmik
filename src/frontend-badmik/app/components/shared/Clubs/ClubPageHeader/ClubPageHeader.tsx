@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link';
+import {Link} from '@/i18n/navigation';
 import type { Club } from '@/data/clubs';
 import {ConfirmDialog} from '@/app/components/ui/DeleteModal/ConfirmDialog';
 import { useState } from 'react';

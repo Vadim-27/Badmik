@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import Link from 'next/link';
+import {Link} from '@/i18n/navigation';
 import styles from './UserMenu.module.scss';
 
 type UserMenuProps = {

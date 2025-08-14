@@ -1,0 +1,85 @@
+
+{
+  "ActionHeader": {
+    "title": {
+      "adminHeader":"Клуби",
+      "editClubHeader":"Редагування клубу",
+      "addClubHeader":"Додати клуб",
+      "addUserHeader":"Додати користувача",
+      "addTrainingHeader":"Додати тренування",
+      "usersHeader":"Користувачі клубу",
+      "trainingsHeader":"Тренування",
+      "editUserHeader":"Редагування користувача"
+    }
+  },
+"Bookings": {
+    "dateTime": "Дата/час",
+  "trainingName": "Назва тренування",
+  "type": "Тип",
+  "level": "Рівень",
+  "club": "Клуб",
+  "participantsLimit": "Записані / Ліміт",
+  "status": "Статус",
+  "actions": "Дії",
+  "today": "Сьогодні",
+  "tomorrow": "Завтра",
+ 
+  "view": "Перегляд",
+  "edit": "Редагування",
+  "delete": "Видалення",
+  "confirmDelete": "Ви впевнені, що хочете видалити це тренування?",
+    "clubs": {
+    "club-1": "Київ Клуб",
+  "club-2": "Львів Клуб",
+  "club-3": "Одеса Клуб",
+  "club-4": "Дніпро Клуб",
+  "club-5": "Харків Клуб",
+  "club-6": "Запоріжжя Клуб"
+  },
+  "addTraining": "Додати тренування"
+  },
+  "UI": {
+    "buttons": {
+      "addClub": "Додати клуб",
+      "addUser": "Додати користувача",
+      "addTraining": "Додати тренування",
+      "update": "Редагувати",
+      "back": "Назад",
+      "save": "Зберегти зміни",
+      "delete": "Видалити"
+    }
+  },
+  "ClubCard": {
+    "name": "Назва клубу",
+    "city": "Місто",
+    "address": "Адреса",
+    "manager": "Менеджер",
+    "courts": "Кількість кортів",
+    "status": "Статус",
+    "buttons": {
+      "view": "Переглянути",
+      "edit": "Редагувати",
+      "delete": "Видалити"
+    }
+  },
+  "AddClubForm": {
+    "name": "Назва залу",
+    "courts": "Кількість кортів",
+    "city": "Місто",
+    "address": "Адреса",
+    "submit": "Створити зал"
+  },
+  "UserFields": {
+    "email": "Електронна пошта",
+    "firstName": "Ім'я",
+    "lastName": "Прізвище",
+    "passwordHash": "Хеш паролю",
+    "role": "Роль",
+    "createdAt": "Дата створення",
+    "isActive": "Активний",
+    "doB": "Дата оновлення",
+    "rank": "Рейтинг",
+    "level": "Рівень",
+    "club": "Клуб"
+  }
+}

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import ActionHeader from '@/app/components/ui/Layout/ActionHeader/ActionHeader';
 import BackButton from '@/app/components/ui/Buttons/BackButton/BackButton';
 import SaveButton from '@/app/components/ui/Buttons/SaveButton/SaveButton';
+import { useTranslations } from 'next-intl';
 
 const TrainingForm: React.FC = () => {
   const [selectedHall, setSelectedHall] = useState('');
@@ -12,6 +13,8 @@ const TrainingForm: React.FC = () => {
   const [trainingDate, setTrainingDate] = useState('');
   const [trainingTime, setTrainingTime] = useState('');
   const [maxParticipants, setMaxParticipants] = useState('');
+
+  const t = useTranslations('ActionHeader.title');
 
   const [isChanged, setIsChanged] = useState(false);
 
@@ -42,19 +45,19 @@ const TrainingForm: React.FC = () => {
   return (
     <>
       <ActionHeader>
-        <BackButton />
-        <h1 className="text-3xl font-bold mb-6">Додати тренування</h1>
+        <BackButton label="buttons.back"/>
+        <h1 className="text-3xl font-bold mb-6">{t('addTrainingHeader')}</h1>
         <div className="flex flex-wrap gap-2">
           <SaveButton
             onClick={() => handleSubmit()}
             disabled={!isChanged}
-            label="Зберегти зміни"
+            label="buttons.save"
           />
         </div>
       </ActionHeader>
 
-      <section className="font-geist-sans mb-10">
-        <h2 className="font-geist-sans text-2xl font-semibold mb-4">2. Додати тренування</h2>
+      <section className="bg-white  p-4 border-b rounded-2xl shadow border-gray-200 font-geist-sans mb-10">
+      
         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <input
             type="text"

@@ -1,12 +1,14 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
+import {Link} from '@/i18n/navigation';
 import ActionHeader from '@/app/components/ui/Layout/ActionHeader/ActionHeader';
 import BackButton from '@/app/components/ui/Buttons/BackButton/BackButton';
 import AddButton from '@/app/components/ui/Buttons/AddButton/AddButton';
+import { useTranslations } from 'next-intl';
 
 const ClubListHeader: React.FC = () => {
+  const t = useTranslations('ActionHeader.title');
   return (
     <>
     <div className="bg-white mb-12 p-4 border-b flex flex-wrap items-center justify-between gap-2 sticky top-0 z-10">
@@ -35,9 +37,9 @@ const ClubListHeader: React.FC = () => {
           🔄 Оновити
         </button>
 
-        <h2 className="text-lg font-semibold">Клуби</h2>
+        <h2 className="text-lg font-semibold">{t('adminHeader')}</h2>
 
-        <AddButton href="/admin/add-club/" label="Додати клуб" />
+        <AddButton href="/admin/add-club/" label="buttons.addClub" />
 
     </ActionHeader>
     </>

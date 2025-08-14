@@ -9,6 +9,7 @@ import BackButton from '@/app/components/ui/Buttons/BackButton/BackButton';
 import EditButton from '@/app/components/ui/Buttons/EditButton/EditButton';
 import DeleteButton from '@/app/components/ui/Buttons/DeleteButton/DeleteButton';
 import { ConfirmDialog } from '@/app/components/ui/DeleteModal/ConfirmDialog';
+import { useTranslations } from 'next-intl';
 
 type Props = {
   club: Club;
@@ -17,6 +18,8 @@ type Props = {
 export const ClubDetails = ({ club }: Props) => {
   const [openConfirm, setOpenConfirm] = useState(false);
   const [selectedClubId, setSelectedClubId] = useState<string | null>(null);
+
+  const t = useTranslations('ClubCard');
 
   const handleDeleteClick = () => {
     setSelectedClubId(club.id);
@@ -34,11 +37,11 @@ export const ClubDetails = ({ club }: Props) => {
   return (
     <>
       <ActionHeader>
-        <BackButton />
+        <BackButton  label="buttons.back"/>
         <h2 className="text-lg font-semibold">{club.name}</h2>
         <div className="flex flex-wrap gap-2">
-          <EditButton href={`/admin/${club.id}/edit`} label="Редагувати" />
-          <DeleteButton onClick={handleDeleteClick} label="Видалити" />
+          <EditButton href={`/admin/${club.id}/edit`} label="buttons.update" />
+          <DeleteButton onClick={handleDeleteClick} label="buttons.delete" />
         </div>
       </ActionHeader>
 
@@ -53,10 +56,10 @@ export const ClubDetails = ({ club }: Props) => {
         </div>
 
         <div className="text-gray-700 text-sm space-y-2">
-          <p><strong>Місто:</strong> {club.city}</p>
-          <p><strong>Адреса:</strong> {club.address}</p>
-          <p><strong>Менеджер:</strong> {club.manager}</p>
-          <p><strong>Кількість кортів:</strong> {club.courts}</p>
+          <p><strong>{t('city')}:</strong> {club.city}</p>
+        <p><strong>{t('address')}:</strong> {club.address}</p>
+        <p><strong>{t('manager')}:</strong> {club.manager}</p>
+        <p><strong>{t('courts')}:</strong> {club.courts}</p>
         </div>
       </div>
 
