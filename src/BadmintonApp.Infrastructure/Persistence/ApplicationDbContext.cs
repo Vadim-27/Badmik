@@ -1,4 +1,5 @@
 ﻿using BadmintonApp.Domain.Clubs;
+using BadmintonApp.Domain.Logs;
 using BadmintonApp.Domain.Permissions;
 using BadmintonApp.Domain.Trainings;
 using BadmintonApp.Domain.Users;
@@ -15,6 +16,7 @@ namespace BadmintonApp.Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new UserConfiguration());
+            
             base.OnModelCreating(modelBuilder);
         }
 
@@ -23,9 +25,10 @@ namespace BadmintonApp.Infrastructure.Persistence
         public DbSet<UserClubRole> UserClubRoles => Set<UserClubRole>();
         public DbSet<WorkingHour> WorkingHours => Set<WorkingHour>();
         public DbSet<Training> Trainings => Set<Training>();
-        public DbSet<TrainingParticipant>  TrainingParticipants => Set<TrainingParticipant>();
+        public DbSet<TrainingParticipant> TrainingParticipants => Set<TrainingParticipant>();
         public DbSet<TrainingQueueEntry> TrainingQueueEntries => Set<TrainingQueueEntry>();
         public DbSet<Permission> Permissions => Set<Permission>();
         public DbSet<Role> Roles => Set<Role>();
+        public DbSet<Log> Logs => Set<Log>();
     }
 }

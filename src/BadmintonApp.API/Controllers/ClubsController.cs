@@ -1,5 +1,4 @@
-﻿using BadmintonApp.API.Exceptions;
-using BadmintonApp.Application.DTOs.Clubs;
+﻿using BadmintonApp.Application.DTOs.Clubs;
 using BadmintonApp.Application.Interfaces.Clubs;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -28,7 +27,7 @@ namespace BadmintonApp.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetAll ([FromQuery] string? filter, CancellationToken cancellationToken)
+        public async Task<ActionResult> GetAll([FromQuery] string? filter, CancellationToken cancellationToken)
         {
             var res = _clubsService.GetAllAsync(filter, cancellationToken); //?
 
@@ -47,7 +46,7 @@ namespace BadmintonApp.API.Controllers
         {
             var deleted = await _clubsService.DeleteAsync(id, cancellationToken);
             if (!deleted.IsSuccess)
-                return ExceptionFactory.NotFound("Клуб не знайдено");
+                return NotFound("Клуб не знайдено");
 
             return NoContent(); // 204
         }

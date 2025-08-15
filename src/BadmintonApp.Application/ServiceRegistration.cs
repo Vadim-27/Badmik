@@ -1,6 +1,5 @@
 ﻿using BadmintonApp.Application.Interfaces.Auth;
 using BadmintonApp.Application.Interfaces.Permissions;
-using BadmintonApp.Application.Interfaces.Repositories;
 using BadmintonApp.Application.Interfaces.Trainings;
 using BadmintonApp.Application.Interfaces.Users;
 using BadmintonApp.Application.Services;

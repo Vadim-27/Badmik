@@ -11,7 +11,7 @@ namespace BadmintonApp.Application.Interfaces.Users
 {
     public interface IUsersService
     {
-        Task<UserResultDto> RegisterAsync(RegisterDto dto, CancellationToken cancellationToken);                
+        Task RegisterAsync(RegisterDto dto, CancellationToken cancellationToken);                
         Task<UserResultDto> GetByIdAsync(Guid userId, CancellationToken cancellationToken);             
         Task<List<UserResultDto>> GetAllAsync(CancellationToken cancellationToken);                      
         Task<UserResultDto> UpdateAsync(Guid userId, UpdateUserDto dto, CancellationToken cancellationToken); 

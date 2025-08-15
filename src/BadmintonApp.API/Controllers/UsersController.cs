@@ -24,11 +24,10 @@ namespace BadmintonApp.API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto registerDto, CancellationToken cancellationToken)
         {
-            var result = await _usersService.RegisterAsync(registerDto, cancellationToken);
-            if (!result.IsSuccess)
-                return BadRequest(result.Message);
+            await _usersService.RegisterAsync(registerDto, cancellationToken);
+            
 
-            return Ok(result);
+            return Ok();
         }
 
         // GET: /api/users/me
