@@ -1,0 +1,112 @@
+{
+  "ActionHeader": {
+    "title": {
+      "adminHeader":"Clubs",
+      "editClubHeader":"Editing the club",
+      "addClubHeader":"Adding a club",
+      "addUserHeader":"Adding a user",
+      "addTrainingHeader":"Adding training",
+      "usersHeader":"Users club",
+      "trainingsHeader":"Trainings",
+      "editUserHeader":"Editing the User"
+    }
+  },
+  "Bookings": {
+    "dateTime": "Date/Time",
+    "trainingName": "Training Name",
+    "type": "Type",
+    "level": "Level",
+    "club": "Club",
+    "participantsLimit": "Registered / Limit",
+    "status": "Status",
+    "actions": "Actions",
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+
+    "view": "View",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirmDelete": "Are you sure you want to delete this training?",
+    "clubs": {
+      "club-1": "Kyiv Club",
+      "club-2": "Lviv Club",
+      "club-3": "Odesa Club",
+      "club-4": "Dnipro Club",
+      "club-5": "Kharkiv Club",
+      "club-6": "Zaporizhzhia Club"
+    },
+    "addTraining": "Add Training"
+  },
+  "UI": {
+    "buttons": {
+      "addClub": "Add club",
+      "addUser": "Add user",
+      "addTraining": "Add training",
+      "update": "Update",
+      "back": "Back",
+      "save": "Save changes",
+      "delete": "Delete"
+    }
+  },
+  "ClubCard": {
+    "name": "Club Name",
+  "city": "City",
+  "address": "Address",
+  "manager": "Manager",
+  "courts": "Number of courts",
+  "status": "Status",
+   
+  "buttons": {
+    "view": "View",
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+  "ConfirmDialog": {
+    "title": "Confirmation",
+    "description": "Are you sure you want to delete this club?"
+  }
+},
+"AddClubForm": {
+    "name": "Club name",
+    "courts": "Number of courts",
+    "city": "City",
+    "address": "Address",
+    "submit": "Create club"
+  },
+  "UserCard": {
+    "email": "Email",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "passwordHash": "Password hash",
+    "role": "Role",
+    "createdAt": "Created at",
+    "isActive": "Active",
+    "doB": "Date of update",
+    "rank": "Rank",
+    "level": "Level",
+    "club": "Club",
+    "ConfirmDialog": {
+    "title": "Confirmation",
+    "description": "Are you sure you want to delete this user?"
+  }
+  },
+  "UserTable": {
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "level": "Level",
+    "role": "Role",
+    "club": "Club"
+  },
+  "UserMenu": {
+    "profile": "My profile",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "ConfirmDialog": {
+    "title": "Confirmation",
+    "description": "Are you sure you want to delete?",
+    "confirm": "Yes",
+    "cancel": "No"
+  }
+
+}

@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import { clubs } from '@/data/clubs';
 import { ClubDetails } from '@/app/components/shared/Clubs/ClubDetails/ClubDetails';
 import { ClubPageHeader } from '@/app/components/shared/Clubs/ClubPageHeader/ClubPageHeader';
-import Link from 'next/link';
+import {Link} from '@/i18n/navigation';
 
 // type Props = {
 //   params: {
@@ -27,6 +27,7 @@ export default  async function ClubAdminPage({
 }) {
   // const club = clubs.find((c) => c.id === params.clubId);
   const { clubId } = await params;
+  
   const club = clubs.find((c) => c.id === clubId);
 
   if (!club) {

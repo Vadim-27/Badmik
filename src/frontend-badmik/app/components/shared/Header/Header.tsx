@@ -4,10 +4,11 @@
 import UserMenu from '@/app/components/ui/UserMenu/UserMenu';
 import Cookies from 'js-cookie';
 import jwt from 'jwt-simple';
-import Link from 'next/link';
+import {Link} from '@/i18n/navigation';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './Header.module.scss';
+import { LanguageSwitcher } from '@/app/components/shared/Header/LangSwitcher/LanguageSwitcher';
 
 const JWT_SECRET = 'your-secret';
 
@@ -28,7 +29,7 @@ export default function Header() {
         const role = decoded.role;
         setAvatarUrl(decoded.avatarUrl); 
         setIsAuthenticated(true);
-        console.log("useEffect")
+       
         setIsAdmin(['owner_admin', 'assistant', 'club_admin'].includes(role));
         router.refresh();
       } catch (err) {
@@ -53,7 +54,8 @@ export default function Header() {
         {isAdmin && <Link href="/admin">Admin</Link>}
       </nav>
 
-      <div>
+      <div className={styles.actions}>
+        <LanguageSwitcher />
         {isAuthenticated ? (
           <UserMenu avatarUrl={avatarUrl} onLogout={handleLogout} />
         ) : (

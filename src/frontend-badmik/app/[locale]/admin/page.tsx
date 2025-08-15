@@ -1,7 +1,7 @@
-import Link from 'next/link';
+import {Link} from '@/i18n/navigation';
 import { clubs } from '@/data/clubs'; 
-import { ClubList } from '../components/shared/Clubs/ClubList/ClubList';
-import ClubListHeader from '../components/shared/Clubs/ClubListHeader/ClubListHeader';
+import { ClubList } from '../../components/shared/Clubs/ClubList/ClubList';
+import ClubListHeader from '../../components/shared/Clubs/ClubListHeader/ClubListHeader';
 import React from 'react';
 
 

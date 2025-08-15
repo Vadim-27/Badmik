@@ -12,6 +12,7 @@ import EditButton from '@/app/components/ui/Buttons/EditButton/EditButton';
 import DeleteButton from '@/app/components/ui/Buttons/DeleteButton/DeleteButton';
 import { ConfirmDialog } from '@/app/components/ui/DeleteModal/ConfirmDialog';
 import SaveButton from '@/app/components/ui/Buttons/SaveButton/SaveButton';
+import { useTranslations } from 'next-intl';
 
 type User = {
   id: string;
@@ -41,6 +42,9 @@ const UserDetail: React.FC<UserDetailProps> = ({ user }) => {
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
   const [form, setForm] = useState(user);
   const [isChanged, setIsChanged] = useState(false);
+
+  const tAH = useTranslations('ActionHeader');
+  const t = useTranslations('UserCard');
 
   const handleChange = (key: keyof User, value: string | number) => {
     setForm((prev) => ({
@@ -105,194 +109,55 @@ const UserDetail: React.FC<UserDetailProps> = ({ user }) => {
   return (
     <div>
       <ActionHeader>
-        <BackButton />
-        <h2 className="text-lg font-semibold">Редагування користувача</h2>
+        <BackButton label="buttons.back" />
+        <h2 className="text-lg font-semibold">{tAH('title.editUserHeader')}</h2>
         <div className="flex flex-wrap gap-2">
-          <SaveButton onClick={handleSave} disabled={!isChanged} label="Зберегти зміни" />
+          <SaveButton onClick={handleSave} disabled={!isChanged} label="buttons.save" />
           {/* <EditButton href={`/admin/${user.id}/edit`} label="Редагувати" /> */}
-          <DeleteButton onClick={handleDeleteClick} label="Видалити" />
+          <DeleteButton onClick={handleDeleteClick} label="buttons.delete" />
         </div>
       </ActionHeader>
 
       <div className="max-w-xl mx-auto bg-white shadow p-6 rounded-xl space-y-4">
-  <ul className="space-y-4">
-    {fields.map((field) => (
-      <li key={field} className="flex justify-between items-center">
-        <span className="font-medium w-1/3">
-          {field.charAt(0).toUpperCase() + field.slice(1)}
-        </span>
+        <ul className="space-y-4">
+          {fields.map((field) => (
+            <li key={field} className="flex justify-between items-center">
+              <span className="font-medium w-1/3">
+                {t(field)}
+              </span>
 
-        {field === 'level' ? (
-          <Select
-            value={form.level}
-            onChange={(e) => handleChange(field, e.target.value)}
-            className="w-2/3 bg-white"
-            size="small"
-          >
-            <MenuItem value="Beginner">Beginner</MenuItem>
-            <MenuItem value="Intermediate">Intermediate</MenuItem>
-            <MenuItem value="Advanced">Advanced</MenuItem>
-          </Select>
-        ) : field === 'createdAt' || field === 'doB' ? (
-          <span className="w-2/3 p-2">{form[field]}</span>
-        ) : (
-          <input
-            type="text"
-            value={form[field]}
-            onChange={(e) => handleChange(field, e.target.value)}
-            className="w-2/3 p-2 border rounded"
-          />
-        )}
-      </li>
-    ))}
-  </ul>
-</div>
+              {field === 'level' ? (
+                <Select
+                  value={form.level}
+                  onChange={(e) => handleChange(field, e.target.value)}
+                  className="w-2/3 bg-white"
+                  size="small"
+                >
+                  <MenuItem value="Beginner">Beginner</MenuItem>
+                  <MenuItem value="Intermediate">Intermediate</MenuItem>
+                  <MenuItem value="Advanced">Advanced</MenuItem>
+                </Select>
+              ) : field === 'createdAt' || field === 'doB' ? (
+                <span className="w-2/3 p-2">{form[field]}</span>
+              ) : (
+                <input
+                  type="text"
+                  value={form[field]}
+                  onChange={(e) => handleChange(field, e.target.value)}
+                  className="w-2/3 p-2 border rounded"
+                />
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
 
-      {/* <Box
-            sx={{
-                position: 'relative',
-
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                margin: '40px auto 0',
-                maxWidth: 700,
-                border: '1px solid #ccc',
-                borderRadius: 2,
-                p: 3,
-            }}
-        >
-            <Box sx={{ position: 'absolute', top: 5, right: 5 }}>
-                {isEditingAll ? (
-                    <>
-                        <Button size="small" onClick={handleSaveAll} variant="contained" sx={{ mr: 1 }}>
-                            Зберегти
-                        </Button>
-                        <Button size="small" onClick={handleEditAllToggle} variant="outlined">
-                            Відмінити
-                        </Button>
-                    </>
-                ) : (
-                    <Button size="small" onClick={handleEditAllToggle} startIcon={<EditIcon />}>
-                        Редагувати
-                    </Button>
-                )}
-            </Box>
-            <Box
-                sx={{
-                    display: 'flex',
-                    flex: 1,
-                    minHeight: 400,
-                    p: 3,
-                }}
-            >
-               
-
-                <Box sx={{ flex: 1 }}>
-                    {fields.map((field) => {
-                        const isFieldEditing = isEditingAll || editingField === field;
-                        const isReadonly = readonlyFields.includes(field);
-
-                        return (
-                            <Box
-                            key={field} 
-                            
-                            sx={{
-                                display: 'flex', border:
-                                    !isEditingAll && editingField === field
-                                        ? '2px solid var(--color-primary-border)'
-                                        : 'none',
-                                borderRadius: 1,
-                                transition: 'border 0.2s',
-                                px: 3
-                            }}
-                            
-                            >
-
-                                <Box
-                                    // key={field}
-                                    sx={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        width: '40%',
-                                        height: 56,
-                                    }}
-                                >
-                                    <Typography sx={{ fontWeight: 'bold' }}>
-                                        {field.charAt(0).toUpperCase() + field.slice(1)}
-                                    </Typography>
-                                </Box>
-
-
-
-                                <Box
-                                    // key={field}
-                                    sx={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        width: '100%',
-                                        height: 56,
-                                        py: 1,
-                                        px: 1,
-
-                                    }}
-                                >
-                                    {isFieldEditing && !isReadonly ? (
-                                        <>
-                                            <TextField
-                                                size="small"
-                                                value={editedUser[field]}
-                                                onChange={(e) => handleFieldChange(field, e.target.value)}
-                                                sx={{ flex: 1 }}
-                                            />
-                                            {!isEditingAll && (
-                                                <Box sx={{ display: 'flex', ml: 'auto' }}>
-                                                    <IconButton
-                                                        color="primary"
-                                                        onClick={() => handleSaveField(field)}
-                                                        aria-label="save"
-                                                    >
-                                                        <SaveIcon />
-                                                    </IconButton>
-                                                    <IconButton
-                                                        color="inherit"
-                                                        onClick={() => setEditingField(null)}
-                                                        aria-label="cancel"
-                                                    >
-                                                        <CancelIcon />
-                                                    </IconButton>
-                                                </Box>
-                                            )}
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Typography sx={{ flex: 1 }}>{editedUser[field]}</Typography>
-                                            {!isEditingAll && !isReadonly && (
-                                                <Box sx={{ display: 'flex', ml: 'auto' }}>
-                                                    <IconButton
-                                                        size="small"
-                                                        onClick={() => setEditingField(field)}
-                                                        aria-label="edit-field"
-                                                    >
-                                                        <EditIcon fontSize="small" />
-                                                    </IconButton>
-                                                </Box>
-                                            )}
-                                        </>
-                                    )}
-                                </Box>
-                            </Box>
-                        );
-                    })}
-                </Box>
-            </Box>
-        </Box> */}
       <ConfirmDialog
         open={openConfirm}
         onClose={() => setOpenConfirm(false)}
         onConfirm={handleConfirmDelete}
-        title="Видалити Юзера"
-        description="Ви дійсно хочете видалити цього Юзера? Цю дію неможливо скасувати."
+        title={t('ConfirmDialog.title')}
+        description={t('ConfirmDialog.description')}
       />
     </div>
   );

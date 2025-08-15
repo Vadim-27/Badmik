@@ -60,6 +60,11 @@
   }
 }
 
+.actions{
+  display: flex;
+  gap: 2rem;
+}
+
 .authButton {
   background-color: #2563eb; // bg-blue-600
   color: #ffffff;

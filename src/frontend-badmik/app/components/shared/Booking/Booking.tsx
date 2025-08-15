@@ -1,106 +1,120 @@
-'use client';
+import Link from 'next/link';
+import { mockBookings } from '@/data/mockBookings';
 
-import React, { useState } from 'react';
-import { useParams } from 'next/navigation';
-import {mockBookings} from '@/data/mockBookings'; 
-
-const Booking = () => {
-     const [selectedHall, setSelectedHall] = useState('');
-  const [selectedCourts, setSelectedCourts] = useState<string[]>([]);
-
-  const { clubId } = useParams();
+export default function Booking({ clubId, t }: { clubId: string; t: (key: string, values?: any) => string }) {
   const bookings = mockBookings[clubId as keyof typeof mockBookings] || [];
 
-  const handleCourtsChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const options = Array.from(e.target.selectedOptions, (opt) => opt.value);
-    setSelectedCourts(options);
+  const availabilityIcon = {
+    free: '🟢',
+    queue: '🟡',
+    full: '🔴',
   };
+
+  // const statusLabel = {
+  //   active: t('status.active'),
+  //   cancelled: t('status.cancelled'),
+  //   finished: t('status.finished'),
+  // };
+
   return (
-     <main className="p-6 max-w-6xl mx-auto">
-    
-      {/* <section className="font-geist-sans mb-10">
-        <h2 className="font-geist-sans text-2xl font-semibold mb-4">2. Додати тренування</h2>
-        <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <input
-            type="text"
-            placeholder="Назва тренування"
-            className="font-geist-sans border p-3 rounded-md"
-          />
-          <input type="date" className="border p-3 rounded-md" />
-
-          <select
-            value={selectedHall}
-            onChange={(e) => setSelectedHall(e.target.value)}
-            className="font-geist-sans border p-3 rounded-md"
-          >
-            <option value="" disabled>
-              Оберіть зал
-            </option>
-            <option value="hall1">Зал 1 (10 кортів)</option>
-            <option value="hall2">Зал 2 (5 кортів)</option>
-          </select>
-
-          <input type="time" className="border p-3 rounded-md" />
-          <input type="number" placeholder="Макс. учасників" className="border p-3 rounded-md" />
-
-          <select
-            multiple
-            value={selectedCourts}
-            onChange={handleCourtsChange}
-            className="border p-3 rounded-md md:col-span-2"
-          >
-            <option value="court1">Корт 1</option>
-            <option value="court2">Корт 2</option>
-            <option value="court3">Корт 3</option>
-            <option value="court4">Корт 4</option>
-          </select>
-
-          <button
-            type="submit"
-            className="bg-primary-button
-            font-geist-sans 
-            text-white 
-            py-2 
-            rounded-md 
-            md:col-span-2 
-            hover:bg-primary-button-hover 
-            focus:bg-primary-button-focus 
-            hover:shadow-[var(--button-shadow-hover)] 
-            focus:shadow-[var(--button-shadow-focus)]
-            transition-all duration-150"
-          >
-            Створити тренування
-          </button>
-        </form>
-      </section> */}
-
-     
-      <section>
-      <h2 className="text-2xl font-semibold mb-4">Існуючі тренування ({clubId})</h2>
-      <table className="w-full table-auto border bg-white rounded-md overflow-hidden">
+    <section>
+      <table className="w-full border bg-white rounded-md overflow-hidden text-left">
         <thead className="bg-gray-200">
           <tr>
-            <th className="p-3 text-left">Дата</th>
-            <th className="p-3 text-left">Назва</th>
-            <th className="p-3 text-left">Зал</th>
-            <th className="p-3 text-left">Корт(и)</th>
-            <th className="p-3 text-left">Учасники</th>
+            <th className="p-3">{t('dateTime')}</th>
+            <th className="p-3">{t('trainingName')}</th>
+            <th className="p-3">{t('type')}</th>
+            <th className="p-3">{t('level')}</th>
+            {clubId === 'superadmin' && <th className="p-3">{t('club')}</th>}
+            <th className="p-3">{t('participantsLimit')}</th>
+            <th className="p-3">{t('status')}</th>
+            <th className="p-3">{t('actions')}</th>
           </tr>
         </thead>
         <tbody>
           {bookings.map((b, i) => (
             <tr key={i} className="border-t">
-              <td className="p-3">{b.date}</td>
-              <td className="p-3">{b.title}</td>
-              <td className="p-3">{b.hall}</td>
-              <td className="p-3">{b.courts.join(', ')}</td>
-              <td className="p-3">{b.participants}</td>
+              <td className="p-3">
+                {new Date(b.date).toLocaleDateString('uk-UA', { day: '2-digit', month: '2-digit' })}, {b.startTime}–{b.endTime}
+                {b.isToday && <span className="ml-2 text-xs bg-green-100 text-green-800 px-2 py-1 rounded">{t('today')}</span>}
+                {b.isTomorrow && <span className="ml-2 text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">{t('tomorrow')}</span>}
+                <span className="ml-1">{availabilityIcon[b.availability]}</span>
+              </td>
+              <td className="p-3">
+                <Link href={`/trainings/${b.title}`} className="text-blue-600 hover:underline">
+                  {b.title}
+                </Link>
+                <div className="text-xs text-gray-500">{b.hall}</div>
+              </td>
+              <td className="p-3">{b.type}</td>
+              <td className="p-3">{b.level}</td>
+              {clubId === 'superadmin' && <td className="p-3">{b.club}</td>}
+              <td className="p-3">
+                {b.participants}/{b.limit}
+                <div className="h-2 bg-gray-200 rounded mt-1">
+                  <div
+                    className="h-full bg-blue-500 rounded"
+                    style={{ width: `${(b.participants / b.limit) * 100}%` }}
+                  ></div>
+                </div>
+              </td>
+              <td className="p-3">{b.status}</td>
+              <td className="p-3 space-x-2">
+                <button title={t('view')} className="hover:underline">👁</button>
+                <button title={t('edit')} className="hover:underline">✏</button>
+                <button
+                  title={t('delete')}
+                  // onClick={() => confirm(t('confirmDelete')) && console.log('deleted')}
+                  className="hover:underline"
+                >
+                  🗑
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
     </section>
-    </main>
   );
 }
-export default Booking;
+
+
+
+//==========================
+
+// app/[locale]/admin/[clubId]/bookings/page.tsx
+// import { mockBookings } from '@/data/mockBookings';
+
+
+
+// export default function Booking({ clubId, t }: { clubId: string; t: (key: string, values?: any) => string }) {
+//   const bookings = mockBookings[clubId as keyof typeof mockBookings] || [];
+
+//   return (
+//     <section >
+//     <table className="w-full  border bg-white rounded-md overflow-hidden">
+//       <thead className="bg-gray-200">
+//         <tr>
+//           <th className="p-3 text-left">{t('date')}</th>
+//           <th className="p-3 text-left">{t('name')}</th>
+//           <th className="p-3 text-left">{t('hall')}</th>
+//           <th className="p-3 text-left">{t('courts')}</th>
+//           <th className="p-3 text-left">{t('participants')}</th>
+//         </tr>
+//       </thead>
+//       <tbody>
+//         {bookings.map((b, i) => (
+//           <tr key={i} className="border-t">
+//             <td className="p-3">{b.date}</td>
+//             <td className="p-3">{b.title}</td>
+//             <td className="p-3">{b.hall}</td>
+//             <td className="p-3">{b.courts.join(', ')}</td>
+//             <td className="p-3">{b.participants}</td>
+//           </tr>
+//         ))}
+//       </tbody>
+//     </table>
+//     </section>
+//   );
+// }
+

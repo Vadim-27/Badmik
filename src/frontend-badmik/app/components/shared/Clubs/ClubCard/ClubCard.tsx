@@ -1,7 +1,9 @@
 'use client';
 
 import { Club } from '@/data/clubs';
-import Link from 'next/link';
+import {Link} from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
+
 
 type Props = {
   club: Club;
@@ -10,13 +12,11 @@ type Props = {
   message?: string;
 };
 
-const statusStyles = {
-  active: 'bg-green-100 text-green-700',
-  pending: 'bg-yellow-100 text-yellow-700',
-  blocked: 'bg-red-100 text-red-700',
-};
+
 
 export const ClubCard = ({ club, onDeleteClick }: Props) => {
+  const t = useTranslations('ClubCard');
+
   return (
     <div className="bg-white rounded-2xl shadow p-4 border border-gray-200">
       <div className="flex items-center justify-between mb-2">
@@ -28,17 +28,17 @@ export const ClubCard = ({ club, onDeleteClick }: Props) => {
 </span>
       </div>
       <div className="text-sm text-gray-600 space-y-1 mb-3">
-        <p><strong>Місто:</strong> {club.city}</p>
-        <p><strong>Адреса:</strong> {club.address}</p>
-        <p><strong>Менеджер:</strong> {club.manager}</p>
-        <p><strong>Кортів:</strong> {club.courts}</p>
+        <p><strong>{t('city')}:</strong> {club.city}</p>
+        <p><strong>{t('address')}:</strong> {club.address}</p>
+        <p><strong>{t('manager')}:</strong> {club.manager}</p>
+        <p><strong>{t('courts')}:</strong> {club.courts}</p>
       </div>
       <div className="flex gap-2 flex-wrap">
         <Link href={`/admin/${club.id}`} className="px-3 py-1 bg-primary-button hover:bg-primary-button-hover text-white text-sm rounded">
-          Переглянути</Link>
+           {t('buttons.view')}</Link>
        
-        <Link href={`/admin/${club.id}/edit`} className="px-3 py-1 bg-secondary-button hover:bg-secondary-button-hover text-white text-sm rounded">Редагувати</Link>
-        <button className="px-3 py-1 bg-delete-button hover:bg-delete-button-hover text-white text-sm rounded cursor-pointer" onClick={onDeleteClick}>Видалити</button>
+        <Link href={`/admin/${club.id}/edit`} className="px-3 py-1 bg-secondary-button hover:bg-secondary-button-hover text-white text-sm rounded">{t('buttons.edit')}</Link>
+        <button className="px-3 py-1 bg-delete-button hover:bg-delete-button-hover text-white text-sm rounded cursor-pointer" onClick={onDeleteClick}>{t('buttons.delete')}</button>
       </div>
     </div>
   );
