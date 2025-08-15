@@ -44,7 +44,7 @@ const UserDetail: React.FC<UserDetailProps> = ({ user }) => {
   const [isChanged, setIsChanged] = useState(false);
 
   const tAH = useTranslations('ActionHeader');
-  const t = useTranslations('UserFields');
+  const t = useTranslations('UserCard');
 
   const handleChange = (key: keyof User, value: string | number) => {
     setForm((prev) => ({
@@ -156,8 +156,8 @@ const UserDetail: React.FC<UserDetailProps> = ({ user }) => {
         open={openConfirm}
         onClose={() => setOpenConfirm(false)}
         onConfirm={handleConfirmDelete}
-        title="Видалити Юзера"
-        description="Ви дійсно хочете видалити цього Юзера? Цю дію неможливо скасувати."
+        title={t('ConfirmDialog.title')}
+        description={t('ConfirmDialog.description')}
       />
     </div>
   );

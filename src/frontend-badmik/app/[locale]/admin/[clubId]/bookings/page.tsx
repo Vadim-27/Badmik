@@ -24,7 +24,7 @@ export default async function BookingPage({
 }) {
   const { clubId, locale } = await params;
   const t = await getTranslations({ locale, namespace: 'Bookings' });
-  console.log('Translations:', t);
+
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">

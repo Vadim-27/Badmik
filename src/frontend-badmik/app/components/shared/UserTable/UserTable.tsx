@@ -153,7 +153,9 @@ import {
 } from '@mui/x-data-grid';
 import { Box } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import { usersFromMok } from '@/data/mockUsers'; // mock data
+import { usersFromMok } from '@/data/mockUsers';
+import { ukUA, enUS } from '@mui/x-data-grid/locales';
+import { useTranslations, useLocale } from 'next-intl';
 
 type User = {
   id: string;
@@ -179,7 +181,10 @@ const UserTable: React.FC = () => {
   });
 
   const [mounted, setMounted] = React.useState(false);
+
   const router = useRouter();
+  const locale = useLocale();
+  const t = useTranslations('UserTable');
 
   React.useEffect(() => {
     setMounted(true);
@@ -191,18 +196,22 @@ const UserTable: React.FC = () => {
 
   const handleRowClick = (params: any) => {
     const userId = params.id;
-    router.push(`/admin/club-6/usersClub/${userId}`);
+    router.push(`/${locale}/admin/club-6/usersClub/${userId}`);
   };
 
-  const columns: GridColDef[] = [
-    { field: 'firstName', headerName: 'First Name', flex: 0.5, minWidth: 80 },
-    { field: 'lastName', headerName: 'Last Name', flex: 0.5, minWidth: 80 },
-    { field: 'level', headerName: 'Level', flex: 0.4, minWidth: 60 },
-    { field: 'role', headerName: 'Role', flex: 0.3, minWidth: 60 },
-    { field: 'club', headerName: 'Club', flex: 0.3, minWidth: 60 },
+   const columns: GridColDef[] = [
+    { field: 'firstName', headerName: t('firstName'), flex: 0.5, minWidth: 80 },
+    { field: 'lastName', headerName: t('lastName'), flex: 0.5, minWidth: 80 },
+    { field: 'level', headerName: t('level'), flex: 0.4, minWidth: 60 },
+    { field: 'role', headerName: t('role'), flex: 0.3, minWidth: 60 },
+    { field: 'club', headerName: t('club'), flex: 0.3, minWidth: 60 },
   ];
 
-  if (!mounted) return null; // Поки не зрендерено на клієнті
+  const localeText = locale === 'uk'
+    ? ukUA.components.MuiDataGrid.defaultProps.localeText
+    : enUS.components.MuiDataGrid.defaultProps.localeText;
+
+  if (!mounted) return null; 
 
   return (
     <Box
@@ -241,6 +250,7 @@ const UserTable: React.FC = () => {
         filterModel={filterModel}
         onFilterModelChange={setFilterModel}
         onRowClick={handleRowClick}
+        localeText={localeText}
       />
     </Box>
   );

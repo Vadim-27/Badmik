@@ -60,6 +60,10 @@
     "view": "View",
     "edit": "Edit",
     "delete": "Delete"
+  },
+  "ConfirmDialog": {
+    "title": "Confirmation",
+    "description": "Are you sure you want to delete this club?"
   }
 },
 "AddClubForm": {
@@ -69,7 +73,7 @@
     "address": "Address",
     "submit": "Create club"
   },
-  "UserFields": {
+  "UserCard": {
     "email": "Email",
     "firstName": "First name",
     "lastName": "Last name",
@@ -80,7 +84,29 @@
     "doB": "Date of update",
     "rank": "Rank",
     "level": "Level",
+    "club": "Club",
+    "ConfirmDialog": {
+    "title": "Confirmation",
+    "description": "Are you sure you want to delete this user?"
+  }
+  },
+  "UserTable": {
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "level": "Level",
+    "role": "Role",
     "club": "Club"
+  },
+  "UserMenu": {
+    "profile": "My profile",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "ConfirmDialog": {
+    "title": "Confirmation",
+    "description": "Are you sure you want to delete?",
+    "confirm": "Yes",
+    "cancel": "No"
   }
 
 }

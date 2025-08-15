@@ -29,7 +29,7 @@ export default function Header() {
         const role = decoded.role;
         setAvatarUrl(decoded.avatarUrl); 
         setIsAuthenticated(true);
-        console.log("useEffect")
+       
         setIsAdmin(['owner_admin', 'assistant', 'club_admin'].includes(role));
         router.refresh();
       } catch (err) {

@@ -27,7 +27,7 @@ export default  async function ClubAdminPage({
 }) {
   // const club = clubs.find((c) => c.id === params.clubId);
   const { clubId } = await params;
-  console.log('clubId:', clubId);
+  
   const club = clubs.find((c) => c.id === clubId);
 
   if (!club) {

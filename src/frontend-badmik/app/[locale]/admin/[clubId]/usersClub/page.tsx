@@ -11,7 +11,7 @@ const UsersClub = async ({
 }) => {
   const {  locale } = await params;
   const t = await getTranslations({locale, namespace: 'ActionHeader.title'});
-  console.log('Translations:', t);
+  
 
   return (
     <div className="p-4 w-full h-screen">

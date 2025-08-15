@@ -67,8 +67,8 @@ export const ClubDetails = ({ club }: Props) => {
         open={openConfirm}
         onClose={() => setOpenConfirm(false)}
         onConfirm={handleConfirmDelete}
-        title="Видалити клуб"
-        description="Ви дійсно хочете видалити цей клуб? Цю дію неможливо скасувати."
+        title={t('ConfirmDialog.title')}
+        description={t('ConfirmDialog.description')}
       />
     </>
   );
