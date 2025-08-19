@@ -6,6 +6,7 @@ import AddButton from '@/app/components/ui/Buttons/AddButton/AddButton';
 
 type Params = {
   clubId: string;
+  
 };
 
 // const BookingPage = async ({

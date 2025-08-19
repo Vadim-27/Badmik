@@ -1,19 +1,17 @@
-@use '../../../../styles/mixins' as *;
+@use '../../../../styles/mixins' as * ;
 
-.saveButton {
+.draftButton {
   // background-color: #2563eb; 
   // color: #ffffff;
   // border-radius: 0.375rem;
   // transition: all 150ms ease-in-out;
-  // cursor: pointer;
-  // border: none;
+  // text-decoration: none;
+  // display: inline-block;
 
   // padding: 0.5rem 1rem; 
   // font-size: 0.75rem;
 
-  // &:hover {
-  //   background-color: #1d4ed8; 
-  // }
+  //===================
   appearance: none;
   border: 1px solid transparent;
   border-radius: 12px;
@@ -37,11 +35,6 @@
     // background-color: #1d4ed8; 
     background-color: var(--btn-secondary-bg-active);
 
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
   }
 
   @include media-rules(mobile) {
