@@ -347,15 +347,18 @@ export default function CreateTraining({ clubId }: { clubId: string }) {
                   <label className={styles.label}>{t('courtsCount')}</label>
                   <input
                     type="number"
+                     min="1"
+                     max={club?.courts || 1}
                     className={`${styles.input} ${errors.courtsCount ? styles.errorInput : ''}`}
                     {...register('courtsCount', {
                       required: `${t('courtsCountRequired')}`,
                       min: { value: 1, message: `${t('courtsCountMin')}` },
                       max: {
                         value: club?.courts || 1,
-                        message: `Максимум ${club?.courts} кортів`,
+                        message: `${t('courtsCountMax', { count: club?.courts ?? 1 })}`,
+                        // message: `Максимум ${club?.courts} кортів`,
                       },
-                      validate: (value) => Number.isInteger(Number(value)) || 'Має бути ціле число',
+                      validate: (value) => Number.isInteger(Number(value)) || `${t('validationInteger')}`,
                       onChange: (e) => {
                         setIsChanged(true);
                         
@@ -370,18 +373,21 @@ export default function CreateTraining({ clubId }: { clubId: string }) {
                 </div>
 
                 <div>
-                  <label className={styles.label}>Макс. учасників</label>
+                  <label className={styles.label}>{t('participantsCount')}</label>
                   <input
                     type="number"
+                     min="1"
+                     max={watch('courtsCount') * 6 || 1}
                     className={`${styles.input} ${errors.participantsCount ? styles.errorInput : ''}`}
                     {...register('participantsCount', {
-                      required: 'Вкажіть кількість учасників',
-                      min: { value: 1, message: 'Мінімум 1 учасник' },
+                      required: `${t('participantsCountRequired')}`,
+                      min: { value: 1, message: `${t('participantsCountMin')}` },
                       validate: (value, formValues) => {
-                        if (!formValues.courtsCount) return 'Спочатку оберіть кількість кортів';
-                        if (!Number.isInteger(Number(value))) return 'Має бути ціле число';
-                        if (Number(value) > Number(formValues.courtsCount) * 2)
-                          return `Максимум ${formValues.courtsCount * 2} учасників`;
+                        if (!formValues.courtsCount) return `${t('selectCourtsCount')}`;
+                        if (!Number.isInteger(Number(value))) return `${t('validationInteger')}`;
+                        if (Number(value) > Number(formValues.courtsCount) * 6)
+                          return `${t('participantsCountMax', { count: formValues.courtsCount * 6 })}`;
+                      
                         return true;
                       },
                       onChange: () => setIsChanged(true),
@@ -395,22 +401,22 @@ export default function CreateTraining({ clubId }: { clubId: string }) {
                 </div>
 
                 <div>
-                  <label className={styles.label}>Тренер (необов.)</label>
+                  <label className={styles.label}>{t('coach')}</label>
                   <input type="text" className={styles.input} {...register('coach',{onChange: () => setIsChanged(true),})}
  />
                 </div>
               </div>
 
               <div className={styles.divider}></div>
-              <h2 className={styles.sectionTitle}>Додатково</h2>
-              <textarea rows={4} placeholder="Додайте деталі..." className={styles.textarea} {...register('notes',{onChange: () => setIsChanged(true),})}
+              <h2 className={styles.sectionTitle}>{t('additional')}</h2>
+              <textarea rows={4} placeholder={t('addDetails')} className={styles.textarea} {...register('notes',{onChange: () => setIsChanged(true),})}
  />
             </section>
 
             {/* RIGHT */}
             <aside className={styles.grid}>
               <section className={`${styles.grid} ${styles.card}`}>
-                <h3 className={styles.sectionTitle}>Рівні гравців</h3>
+                <h3 className={styles.sectionTitle}>{t('playerLevels')}</h3>
                 
                 <div className={styles.levelGroup}>
                   {(['A', 'B', 'C', 'D', 'Meister'] as const).map((lvl) => (
@@ -427,7 +433,7 @@ export default function CreateTraining({ clubId }: { clubId: string }) {
                         className={styles.hiddenCheckbox} 
                         {...register('levels', {
                           validate: (val) =>
-                            val && val.length > 0 ? true : 'Оберіть рівень гравця',
+                            val && val.length > 0 ? true : `${t('selectLevel')}`,
                           onChange: () => setIsChanged(true),
                         })}
                        
@@ -438,24 +444,24 @@ export default function CreateTraining({ clubId }: { clubId: string }) {
                 </div>
                 {errors.levels && <p className={styles.errorText}>{errors.levels.message}</p>}
                 <p className={styles.note}>
-                  Порада: залишайте 1–2 рівні, щоб уникнути великої різниці у грі.
+                  {t('levelTip')}
                 </p>
               </section>
 
               <section className={`${styles.grid} ${styles.card}`}>
-                <h3 className={styles.sectionTitle}>Повторення</h3>
+                <h3 className={styles.sectionTitle}>{t('recurring')}</h3>
 
                 <div className={styles.row}>
                   <label className={styles.switch}>
                     <input type="checkbox" id="recurring" {...register('recurring',{onChange: () => setIsChanged(true),})} />
                   </label>
-                  <label htmlFor="recurring">Повторювати щотижня</label>
+                  <label htmlFor="recurring">{t('repeatWeekly')}</label>
                 </div>
 
                 <div className={`${styles.grid} ${styles.gridCols2}`}>
                   <div>
                     <label htmlFor="repeatCount" className={styles.label}>
-                      К-ть повторів
+                      {t('repeatCount')}
                     </label>
                     <input
                       id="repeatCount"
@@ -467,9 +473,9 @@ export default function CreateTraining({ clubId }: { clubId: string }) {
                       {...register('repeatCount', {
                         validate: (value) => {
                           if (!isRecurring) return true; 
-                          if (!value) return 'Вкажіть кількість повторів';
-                          if (value < 1) return 'Мінімум 1';
-                          if (value > 8) return 'Максимум 8';
+                          if (!value) return `${t('repeatCountRequired')}`;
+                          if (value < 1) return `${t('repeatCountMin')}`;
+                          if (value > 8) return `${t('repeatCountMax')}`;
                           return true;
                         }, 
                         onChange: () => setIsChanged(true),
@@ -482,7 +488,7 @@ export default function CreateTraining({ clubId }: { clubId: string }) {
 
                   <div>
                     <label htmlFor="weekday" className={styles.label}>
-                      День тижня
+                      {t('weekday')}
                     </label>
                     <select
                       id="weekday"
@@ -491,44 +497,43 @@ export default function CreateTraining({ clubId }: { clubId: string }) {
                       {...register('weekday', {
                         validate: (value) => {
                           if (!isRecurring) return true;
-                          if (!value) return 'Оберіть день тижня';
+                          if (!value) return `${t('weekdayRequired')}`;
                           return true;
                         },
                         onChange: () => setIsChanged(true),
                       })}
                     >
-                      <option value="">-- Оберіть --</option>
-                      <option>Понеділок</option>
-                      <option>Вівторок</option>
-                      <option>Середа</option>
-                      <option>Четвер</option>
-                      <option>П'ятниця</option>
-                      <option>Субота</option>
-                      <option>Неділя</option>
+                      <option value="">{t('selectDays.select')}</option>
+                      <option>{t('selectDays.monday')}</option>
+                      <option>{t('selectDays.tuesday')}</option>
+                      <option>{t('selectDays.wednesday')}</option>
+                      <option>{t('selectDays.thursday')}</option>
+                      <option>{t('selectDays.friday')}</option>
+                      <option>{t('selectDays.saturday')}</option>
+                      <option>{t('selectDays.sunday')}</option>
                     </select>
                     {errors.weekday && <p className={styles.errorText}>{errors.weekday.message}</p>}
                   </div>
                 </div>
 
                 <p className={styles.note}>
-                  При публікації створюються лише найближчі заняття (напр., на 14 днів). Решта
-                  додаються автоматично до досягнення ліміту повторів.
+                  {t('repeatTip')}
                 </p>
               </section>
 
               <section className={styles.card}>
-                <h3 className={styles.sectionTitle}>Правила запису</h3>
+                <h3 className={styles.sectionTitle}>{t('bookingRules')}</h3>
                 <div className={`${styles.grid} ${styles.gridCols2}`}>
                   <div>
-                    <label className={styles.label}>Відміна можлива за</label>
+                    <label className={styles.label}>{t('cancelValue')}</label>
                     <input type="number" defaultValue={2} className={styles.input} {...register('cancelValue', {onChange: () => setIsChanged(true),})} />
                   </div>
                   <div>
-                    <label className={styles.label}>Одиниця</label>
+                    <label className={styles.label}>{t('cancelUnit')}</label>
                     <select defaultValue="hours" className={styles.select} {...register('cancelUnit', {onChange: () => setIsChanged(true),})}>
-                      <option value="minutes">хв</option>
-                      <option value="hours">год</option>
-                      <option value="days">днів</option>
+                      <option value="minutes">{t('minutes')}</option>
+                      <option value="hours">{t('hours')}</option>
+                      <option value="days">{t('days')}</option>
                     </select>
                   </div>
                 </div>
