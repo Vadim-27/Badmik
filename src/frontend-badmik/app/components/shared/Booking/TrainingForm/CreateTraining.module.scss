@@ -1,0 +1,350 @@
+@use '../../../../styles/mixins' as * ;
+
+$primary-accent: var(--primary-accent-color);
+$delete-btn: var(--delete-button);
+
+
+.container {
+//   max-width: 1100px;
+//   margin-inline: auto;
+//   padding: 32px 20px 96px;
+}
+
+.title {
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  margin: 0 0 16px;
+  transition: all 150ms ease-in-out;
+
+  font-size: 18px; // базовий розмір для desktop
+
+  @include media-rules(mobile) {
+    font-size: 20px;
+    margin: 0 0 18px;
+  }
+
+  @include media-rules(tablet) {
+    font-size: 24px;
+    margin: 0 0 20px;
+  }
+
+  @include media-rules(laptop) {
+    font-size: 26px;
+    margin: 0 0 24px;
+  }
+
+  @include media-rules(desktop) {
+    font-size: 28px;
+    margin: 0 0 28px;
+  }
+}
+
+.subtitle {
+  color: var(--muted);
+  margin: 0 0 16px;
+}
+
+.context {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 0 0 20px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: #f8fafc;
+  color: #334155;
+  font-size: 12px;
+  @include media-rules(mobile) { /* невеликий смартфон/портрет */
+    padding: 8px 12px;
+    gap: 10px;
+    font-size: 13px;
+  }
+
+  @include media-rules(tablet) { /* планшет */
+    padding: 10px 16px;
+    gap: 12px;
+    font-size: 14px;
+  }
+
+  @include media-rules(laptop) { /* ноутбук */
+    padding: 11px 18px;
+    gap: 14px;
+    font-size: 15px;
+  }
+
+  @include media-rules(desktop) { /* десктоп */
+    padding: 12px 20px;
+    gap: 16px;
+    font-size: 16px;
+  }
+}
+
+.chipBlue{ 
+  background:#eaf1ff; 
+  border-color:#c7d2fe; 
+  color:#0b3b8c; 
+}
+
+.layout {
+  display: grid;
+  gap: 20px;
+//   background: var(--card);
+}
+
+@media (min-width: 980px) {
+  .layout {
+    grid-template-columns: 1.8fr 1fr;
+  }
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.grid {
+  display: grid;
+  gap: 10px;
+}
+
+.gridCols2 {
+  grid-template-columns: 1fr 1fr;
+}
+
+.gridCols3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.sectionTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 4px 0 8px;
+}
+
+.label {
+  display: block;
+  font-size: 14px;
+  color: var(--muted);
+  margin: 0 0 6px;
+}
+
+.input,
+.select,
+.textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--text);
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  border-color: var(--focus);
+  box-shadow: 0 0 0 4px rgba(147, 197, 253, 0.35);
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.note {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.switch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+
+  input {
+    appearance: none;
+    width: 44px;
+    height: 24px;
+    border-radius: 999px;
+    background: #e5e7eb;
+    position: relative;
+    border: 1px solid #d1d5db;
+    transition: background .2s;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 1px 2px rgba(0,0,0,.08);
+      transition: transform .2s;
+    }
+
+    &:checked {
+      background: #93c5fd;
+      border-color: #93c5fd;
+
+      &::after {
+        transform: translateX(20px);
+      }
+    }
+  }
+}
+
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 8px 0 8px;
+  border-radius: 1px;
+}
+
+.btn {
+  appearance: none;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: transform 0.02s ease, background 0.2s ease,
+    border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btnPrimary {
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  border-color: var(--btn-primary-border);
+}
+
+.btnSecondary {
+  background: var(--btn-secondary-bg);
+  color: var(--btn-secondary-text);
+  border-color: var(--border);
+}
+
+.btnOutline {
+  background: transparent;
+  color: var(--btn-outline-text);
+  border-color: var(--border);
+}
+
+.levelGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.levelBtn {
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  color: #334155;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.levelBtnActive {
+  background: #e9f1ff;
+  border-color: #c7d2fe;
+  color: #0b3b8c;
+}
+
+.switch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.actionbar {
+  position: sticky;
+  bottom: 12px;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px 16px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+
+//================
+
+.errorInput {
+  border: 1px solid #e63946 !important; // червона рамка
+  background-color: #fff5f5;
+  transition: all 150ms ease-in-out;
+
+  &:focus {
+    box-shadow: 0 0 0 4px rgba(230, 57, 70, 0.2);
+  }
+}
+
+.errorText {
+  color: #e63946;
+  font-weight: 500;
+  margin: 4px 0 0;
+  transition: all 150ms ease-in-out;
+
+  font-size: 12px; // базовий розмір
+
+  @include media-rules(mobile) {
+    font-size: 13px;
+  }
+
+  @include media-rules(tablet) {
+    font-size: 14px;
+  }
+
+  @include media-rules(laptop) {
+    font-size: 15px;
+  }
+
+  @include media-rules(desktop) {
+    font-size: 16px;
+  }
+}
+.hiddenCheckbox {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+}

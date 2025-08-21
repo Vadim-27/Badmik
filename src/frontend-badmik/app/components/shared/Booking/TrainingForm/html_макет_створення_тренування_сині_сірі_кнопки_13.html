@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Створення тренування — макет (Адмін клубу)</title>
+  <style>
+    :root{
+      --bg:#f6f7fb;            /* світлий фон */
+      --card:#ffffff;           /* картки */
+      --text:#0f172a;           /* основний текст */
+      --muted:#64748b;          /* вторинний текст */
+      --border:#e5e7eb;         /* бордери */
+      --focus:#93c5fd;          /* focus ring */
+
+      /* Кнопки — контрастні, але не яскраві */
+      --btn-primary-bg:#e6efff;
+      --btn-primary-bg-hover:#dde8ff;
+      --btn-primary-bg-active:#d2e0ff;
+      --btn-primary-text:#0b3b8c;
+      --btn-primary-border:#9bb8ff;
+
+      --btn-secondary-bg:#f3f6fb;
+      --btn-secondary-bg-hover:#eef2f7;
+      --btn-secondary-bg-active:#e2e8f0;
+      --btn-secondary-text:#0f172a;
+      --btn-outline-text:#334155;
+
+      --radius:16px;
+      --gap:16px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial;
+      background:linear-gradient(180deg, #f8fafc, #f3f4f6 50%, #eef2f7 100%);
+      color:var(--text);
+    }
+
+    .container{ max-width:1100px; margin-inline:auto; padding:32px 20px 96px; }
+    .title{ font-size:28px; font-weight:700; letter-spacing:0.2px; margin:0 0 6px; }
+    .subtitle{ color:var(--muted); margin:0 0 16px; }
+
+    .context{ display:flex; gap:10px; flex-wrap:wrap; margin:0 0 20px; }
+    .chip{ display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; border:1px solid var(--border); background:#f8fafc; color:#334155; font-size:12px; }
+    .chip-blue{ background:#eaf1ff; border-color:#c7d2fe; color:#0b3b8c; }
+
+    /* Дві колонки */
+    .layout{ display:grid; gap:20px; }
+    @media (min-width: 980px){ .layout{ grid-template-columns: 1.8fr 1fr; } }
+
+    .card{ background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:20px; box-shadow:0 8px 24px rgba(15, 23, 42, .06); }
+
+    .grid{ display:grid; gap:var(--gap); }
+    @media (min-width: 900px){
+      .grid-cols-2{ grid-template-columns: 1fr 1fr; }
+      .grid-cols-3{ grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .section-title{ font-size:16px; font-weight:700; color:#1f2937; margin:4px 0 8px; }
+
+    label{ display:block; font-size:14px; color:var(--muted); margin:0 0 6px; }
+    input, select, textarea{
+      width:100%; padding:12px 14px; border-radius:12px; border:1px solid var(--border); background:#fff; color:var(--text);
+      outline:none; transition:border .2s, box-shadow .2s, background .2s;
+    }
+    input:focus, select:focus, textarea:focus{ border-color:var(--focus); box-shadow:0 0 0 4px rgba(147,197,253,.35); }
+
+    .row{ display:flex; gap:12px; align-items:center; }
+    .note{ font-size:12px; color:var(--muted); }
+    .divider{ height:1px; background:var(--border); margin:8px 0 8px; border-radius:1px; }
+
+    /* Кнопки */
+    .btn{ appearance:none; border:1px solid transparent; border-radius:12px; padding:12px 16px; font-weight:700; letter-spacing:.2px; cursor:pointer; display:inline-flex; align-items:center; gap:10px; transition:transform .02s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease; }
+    .btn:active{ transform:translateY(1px); }
+    .btn:focus-visible{ outline:none; box-shadow:0 0 0 4px rgba(147,197,253,.35); }
+
+    .btn-primary{ background:var(--btn-primary-bg); color:var(--btn-primary-text); border-color:var(--btn-primary-border); box-shadow:0 1px 1px rgba(2,6,23,.06), 0 2px 6px rgba(2,6,23,.06); }
+    .btn-primary:hover{ background:var(--btn-primary-bg-hover); border-color:#7ea6ff; box-shadow:0 2px 8px rgba(2,6,23,.08); }
+    .btn-primary:active{ background:var(--btn-primary-bg-active); }
+
+    .btn-secondary{ background:var(--btn-secondary-bg); color:var(--btn-secondary-text); border-color:var(--border); }
+    .btn-secondary:hover{ background:var(--btn-secondary-bg-hover); }
+    .btn-secondary:active{ background:var(--btn-secondary-bg-active); }
+
+    .btn-outline{ background:transparent; color:var(--btn-outline-text); border-color:var(--border); }
+    .btn-outline:hover{ border-color:#cbd5e1; background:#f8fafc; }
+
+    .btn-sm{ padding:8px 12px; border-radius:10px; font-weight:600; }
+
+    /* Тогл-рівні */
+    .level-group{ display:flex; flex-wrap:wrap; gap:8px; }
+    .level-btn{ padding:10px 14px; border-radius:999px; border:1px solid #e2e8f0; background:#f8fafc; color:#334155; cursor:pointer; font-weight:700; }
+    .level-btn[aria-pressed="true"]{ background:#e9f1ff; border-color:#c7d2fe; color:#0b3b8c; }
+
+    /* Свіч */
+    .switch{ display:flex; align-items:center; gap:10px; cursor:pointer; }
+    .switch input{ appearance:none; width:44px; height:24px; border-radius:999px; background:#e5e7eb; position:relative; border:1px solid #d1d5db; transition:background .2s; }
+    .switch input:after{ content:""; position:absolute; top:2px; left:2px; width:18px; height:18px; border-radius:50%; background:#ffffff; box-shadow:0 1px 2px rgba(0,0,0,.08); transition:transform .2s; }
+    .switch input:checked{ background:#93c5fd; border-color:#93c5fd; }
+    .switch input:checked:after{ transform:translateX(20px); }
+
+    /* Ховаємо секунди у WebKit */
+    input[type=time]::-webkit-datetime-edit-second-field,
+    input[type=time]::-webkit-datetime-edit-millisecond-field{ display:none; }
+
+    /* Нижня панель дій (sticky) */
+    .actionbar{ position: sticky; bottom: 12px; z-index: 50; background: rgba(255,255,255,.94); backdrop-filter: blur(6px); border:1px solid var(--border); border-radius:14px; padding:12px 16px; box-shadow:0 8px 24px rgba(15,23,42,.12); }
+    .actionbar .actions{ display:flex; gap:12px; align-items:center; }
+    .actionbar .actions .spacer{ flex:1 1 auto; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">Створення тренування</h1>
+    <p class="subtitle">Синя — публікація. Сірі — чернетка та назад. Світла, спокійна палітра.</p>
+
+    <!-- Контекст для адміна клубу -->
+    <div class="context">
+      <span class="chip chip-blue">Клуб: Badmik Arena</span>
+      <span class="chip">Роль: Адмін клубу</span>
+    </div>
+
+    <div class="layout">
+      <!-- LEFT: Основні поля -->
+      <section class="card grid" aria-label="Основні налаштування">
+        <h2 class="section-title">Тип тренування</h2>
+        <select id="type" name="type">
+          <option value="regular">Звичайне</option>
+          <option value="individual">Індивідуальне</option>
+          <option value="group">Групове</option>
+          <option value="learning">Навчальне</option>
+          <option value="rental">Оренда кортів</option>
+        </select>
+        <p class="note">Порада: «Групове» — відкритий набір; «Оренда» — коли місця не бронюються по-іменно.</p>
+
+        <div class="divider"></div>
+        <h2 class="section-title">Час і ресурси</h2>
+        <div class="grid grid-cols-3">
+          <div>
+            <label for="date">Дата</label>
+            <input id="date" type="date" />
+          </div>
+          <div>
+            <label for="start">Початок</label>
+            <input id="start" type="time" step="60" />
+          </div>
+          <div>
+            <label for="end">Завершення</label>
+            <input id="end" type="time" step="60" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3">
+          <div>
+            <label for="courts">Кількість кортів</label>
+            <input id="courts" type="number" min="1" placeholder="напр. 2" />
+          </div>
+          <div>
+            <label for="capacity">Макс. учасників</label>
+            <input id="capacity" type="number" min="1" placeholder="напр. 12" />
+          </div>
+          <div>
+            <label for="coach">Тренер (необов.)</label>
+            <input id="coach" type="text" placeholder="Ім'я тренера" />
+          </div>
+        </div>
+
+        <div class="divider"></div>
+        <h2 class="section-title">Додатково</h2>
+        <div>
+          <label for="notes">Примітки</label>
+          <textarea id="notes" rows="4" placeholder="Додайте деталі: інвентар, оплата, особливі умови тощо"></textarea>
+        </div>
+      </section>
+
+      <!-- RIGHT: Серія, рівні, правила -->
+      <aside class="grid" aria-label="Параметри серії та дії">
+        <section class="card">
+          <h3 class="section-title">Рівні гравців</h3>
+          <div class="level-group" role="group" aria-label="Обрати рівні">
+            <button type="button" class="level-btn" aria-pressed="false">A</button>
+            <button type="button" class="level-btn" aria-pressed="true">B</button>
+            <button type="button" class="level-btn" aria-pressed="true">C</button>
+            <button type="button" class="level-btn" aria-pressed="false">D</button>
+            <button type="button" class="level-btn" aria-pressed="false">Meister</button>
+          </div>
+          <p class="note">Порада: залишайте 1–2 рівні, щоб уникнути великої різниці у грі.</p>
+        </section>
+
+        <section class="card">
+          <h3 class="section-title">Повторення</h3>
+          <div class="row" style="margin-bottom:8px">
+            <label class="switch">
+              <input type="checkbox" id="recurring" />
+            </label>
+            <label for="recurring">Повторювати щотижня</label>
+          </div>
+          <div class="grid grid-cols-2">
+            <div>
+              <label for="repeatCount">К-ть повторів</label>
+              <input id="repeatCount" type="number" min="1" value="8" />
+            </div>
+            <div>
+              <label for="weekday">День тижня</label>
+              <select id="weekday">
+                <option>Понеділок</option>
+                <option>Вівторок</option>
+                <option>Середа</option>
+                <option>Четвер</option>
+                <option>П'ятниця</option>
+                <option>Субота</option>
+                <option>Неділя</option>
+              </select>
+            </div>
+          </div>
+          <p class="note">При публікації створюються лише найближчі заняття (напр., на 14 днів). Решта додаються автоматично до досягнення ліміту повторів.</p>
+        </section>
+
+        <section class="card">
+          <h3 class="section-title">Правила запису</h3>
+          <div class="grid grid-cols-2">
+            <div>
+              <label for="cancelWindowValue">Відміна можлива за</label>
+              <input id="cancelWindowValue" type="number" min="0" value="2" />
+            </div>
+            <div>
+              <label for="cancelWindowUnit">Одиниця</label>
+              <select id="cancelWindowUnit">
+                <option value="minutes">хв</option>
+                <option value="hours" selected>год</option>
+                <option value="days">днів</option>
+              </select>
+            </div>
+          </div>
+          <p class="note">0 = можна відмінитись до старту без обмежень. Впливає на доступність кнопки "Відмінити запис" у гравця.</p>
+        </section>
+      </aside>
+    </div>
+
+    <!-- Нижня панель дій (sticky) -->
+    <section class="actionbar" aria-label="Дії зі створення тренування">
+      <div class="actions">
+        <button class="btn btn-outline" type="button" id="btnBack">Назад</button>
+        <span class="spacer"></span>
+        <button class="btn btn-secondary" type="button">Зберегти як чернетку</button>
+        <button class="btn btn-primary" type="submit">Опублікувати тренування</button>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // Тогл рівнів
+    document.querySelectorAll('.level-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const on = btn.getAttribute('aria-pressed') === 'true';
+        btn.setAttribute('aria-pressed', String(!on));
+      });
+    });
+
+    // Кнопка "Назад": якщо є історія — повертаємось, інакше до списку тренувань
+    (function(){
+      var backBtn = document.getElementById('btnBack');
+      if(backBtn){
+        backBtn.addEventListener('click', function(){
+          if (window.history.length > 1) {
+            window.history.back();
+          } else {
+            window.location.href = '/admin/trainings';
+          }
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
