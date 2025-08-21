@@ -136,14 +136,14 @@ $delete-btn: var(--delete-button);
   display: block;
   font-size: 14px;
   color: var(--muted);
-  margin: 0 0 6px;
+  margin: 0 0 12px;
 }
 
 .input,
 .select,
 .textarea {
   width: 100%;
-  padding: 12px 14px;
+  padding: 18px 14px;
   border-radius: 12px;
   border: 1px solid var(--border);
   background: #fff;
@@ -348,3 +348,41 @@ $delete-btn: var(--delete-button);
   width: 0;
   height: 0;
 }
+
+//================
+
+.daysGroup {
+  display: flex;
+  gap: 8px;
+}
+
+.dayBtn {
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  color: #334155;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.dayBtnActive {
+  background: #e9f1ff;
+  border-color: #c7d2fe;
+  color: #0b3b8c;
+}
+
+.hiddenCheckbox {
+  display: none;
+}
+
+.errorInput {
+  border-color: red;
+}
+
+.errorText {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+}
+

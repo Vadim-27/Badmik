@@ -45,6 +45,7 @@
     "selectCourtsCount": "Спочатку оберіть кількість кортів",
     "participantsCountMax": "Максимум {count} учасників",
     "coach": "Тренер (необов.)",
+    "selectTrainer": "Оберіть тренера",
     "additional": "Додатково",
     "addDetails": "Додайте деталі...",
     "playerLevels": "Рівні гравців",
@@ -57,6 +58,15 @@
     "repeatCountMin": "Мінімум 1",
     "repeatCountMax": "Максимум 8",
     "weekday": "День тижня",
+    "daysShort": {
+    "monday": "Пн",
+    "tuesday": "Вт",
+    "wednesday": "Ср",
+    "thursday": "Чт",
+    "friday": "Пт",
+    "saturday": "Сб",
+    "sunday": "Нд"
+  },
     "selectDays": {
     "monday": "Понеділок",
     "tuesday": "Вівторок",
@@ -70,11 +80,14 @@
     "weekdayRequired": "Оберіть день тижня",
     "repeatTip": "При публікації створюються лише найближчі заняття (напр., на 14 днів). Решта додаються автоматично до досягнення ліміту повторів.",
     "bookingRules": "Правила запису",
-    "cancelValue": "Відміна можлива за",
+    "cancelValue": "Відміна можлива за (год)",
     "cancelUnit": "Одиниця",
     "minutes": "хв",
     "hours": "год",
-    "days": "днів"
+    "days": "днів",
+    "priceValue": "Ціна (грн)",
+    "priceMinError": "ціна не може бути менешою 1 грн",
+    "priceRequiredError": "Вкажіть ціну"
   },
 "Bookings": {
     "dateTime": "Дата/час",

@@ -44,6 +44,7 @@
     "selectCourtsCount": "Please select the number of courts first",
     "participantsCountMax": "Maximum {count} participants",
     "coach": "Coach (optional)",
+    "selectTrainer": "Select Trainer",
     "additional": "Additional",
     "addDetails": "Add details...",
     "playerLevels": "Player levels",
@@ -56,6 +57,15 @@
     "repeatCountMin": "Minimum 1",
     "repeatCountMax": "Maximum 8",
     "weekday": "Weekday",
+    "daysShort": {
+    "monday": "Mon",
+    "tuesday": "Tue",
+    "wednesday": "Wed",
+    "thursday": "Thu",
+    "friday": "Fri",
+    "saturday": "Sat",
+    "sunday": "Sun"
+  },
     "selectDays": {
     "monday": "Monday",
     "tuesday": "Tuesday",
@@ -69,11 +79,14 @@
     "weekdayRequired": "Select weekday",
     "repeatTip": "Only upcoming sessions are created initially (e.g., for 14 days). Others are added automatically up to repetition limit.",
     "bookingRules": "Booking rules",
-    "cancelValue": "Cancellation possible before",
+    "cancelValue": "Cancellation possible before (hours)",
     "cancelUnit": "Unit",
     "minutes": "minutes",
     "hours": "hours",
-    "days": "days"
+    "days": "days",
+    "priceValue": "Price (UAH)",
+    "priceMinError": "The price cannot be less than 1 UAH",
+    "priceRequiredError": "Please enter the price"
   },
   "Bookings": {
     "dateTime": "Date/Time",
