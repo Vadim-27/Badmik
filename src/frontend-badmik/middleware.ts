@@ -94,11 +94,26 @@ export async function middleware(request: NextRequest) {
     return intlResponse; // редірект локалізації
   }
 
+  // if (pathname === '/') {
+  //   if (!payload) return NextResponse.redirect(new URL('/login', request.url));
+
+  //   const { role, clubId } = payload;
+  //   if (role === 'owner_admin' || role === 'assistant') {
+  //     return NextResponse.redirect(new URL('/admin', request.url));
+  //   }
+  //   if (role === 'club_admin') {
+  //     return NextResponse.redirect(new URL(`/admin/${clubId}`, request.url));
+  //   }
+  // }
+  if (pathname === '/') {
+  return NextResponse.redirect(new URL('/admin', request.url));
+}
+
   // Авторизація тільки для /admin
   if (pathname.startsWith('/admin')) {
     const token = request.cookies.get('token')?.value;
     if (!token) {
-      return NextResponse.redirect(new URL('/', request.url));
+      return NextResponse.redirect(new URL('/login', request.url));
     }
 
     try {
@@ -106,7 +121,12 @@ export async function middleware(request: NextRequest) {
       const role = payload.role as string;
       const clubId = payload.clubId as string | undefined;
 
-      if (role === 'owner_admin') return NextResponse.next();
+      if (role === 'owner_admin') {
+        if (pathname === '/') {
+          return NextResponse.redirect(new URL('/admin/', request.url));
+        }
+        return NextResponse.next();
+      };
 
       if (role === 'assistant') {
         if (pathname.startsWith('/admin/settings')) {
@@ -116,6 +136,10 @@ export async function middleware(request: NextRequest) {
       }
 
       if (role === 'club_admin') {
+        console.log('pathname', pathname);
+         if (pathname === '/') {
+          return NextResponse.redirect(new URL(`/admin/${clubId}`, request.url));
+        }
         if (pathname === '/admin') {
           return NextResponse.redirect(new URL(`/admin/${clubId}`, request.url));
         }
@@ -125,9 +149,9 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL(`/admin/${clubId}`, request.url));
       }
 
-      return NextResponse.redirect(new URL('/', request.url));
+      return NextResponse.redirect(new URL('/login', request.url));
     } catch {
-      return NextResponse.redirect(new URL('/', request.url));
+      return NextResponse.redirect(new URL('/login', request.url));
     }
   }
 

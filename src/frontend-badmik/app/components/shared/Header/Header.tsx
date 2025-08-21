@@ -50,8 +50,8 @@ export default function Header() {
   return (
     <header className={styles.header}>
       <nav className={styles.nav}>
-        <Link href="/">Home</Link>
-        {isAdmin && <Link href="/admin">Admin</Link>}
+        <Link href="/">Logo</Link>
+        {/* {isAdmin && <Link href="/admin">Admin</Link>} */}
       </nav>
 
       <div className={styles.actions}>
