@@ -1,4 +1,5 @@
-﻿using BadmintonApp.Domain.Permissions;
+﻿using BadmintonApp.Domain.Clubs;
+using BadmintonApp.Domain.Permissions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

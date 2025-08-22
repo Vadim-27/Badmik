@@ -9,8 +9,8 @@ public class TrainingResultDto
     public Guid Id { get; set; }
     public TrainingType Type { get; set; }
     public DateTime Date { get; set; }
-    public TimeSpan StartTime { get; set; }
-    public TimeSpan EndTime { get; set; }
+    public TimeOnly StartTime { get; set; }
+    public TimeOnly EndTime { get; set; }
     public bool IsRecurringWeekly { get; set; }
     public int CourtsUsed { get; set; }
     public int MaxPlayers { get; set; }
