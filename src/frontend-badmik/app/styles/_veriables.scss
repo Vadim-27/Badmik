@@ -6,15 +6,13 @@
     --secondary-button: #f48b29;
     --secondary-button-hover: #d97414;
     --color-primary-light-color: #fff;
-    --button-shadow-hover: 0 4px 10px rgba(0, 0, 0, 0.15);
-    --button-shadow-focus: 0 0 0 3px rgba(0, 0, 0, 0.1);
-    // --primary-bg-accordion: #fff9ec;
-    // --secondary-bg-accordion: #fed5b0;
 
 
-    --bg: #f6f7fb;
+
+   --bg: #f6f7fb;
   --card: #ffffff;
   --text: #0f172a;
+  --text-gray: #4B5563;
   --muted: #64748b;
   --border: #e5e7eb;
   --focus: #93c5fd;
@@ -32,5 +30,11 @@
   --btn-outline-text: #334155;
 
   --radius: 16px;
-  --gap: 16px;
+  --gap: 16px; --button-shadow-hover: 0 4px 10px rgba(0, 0, 0, 0.15);
+    --button-shadow-focus: 0 0 0 3px rgba(0, 0, 0, 0.1);
+    // --primary-bg-accordion: #fff9ec;
+    // --secondary-bg-accordion: #fed5b0;
+
+
+    
 }

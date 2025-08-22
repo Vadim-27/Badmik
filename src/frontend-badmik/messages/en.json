@@ -11,6 +11,18 @@
       "editUserHeader":"Editing the User"
     }
   },
+  "Sidebar": {
+    "DashboardMain": "Dashboard",
+    "bookings": "Bookings",
+    "UsersClub": "Club players",
+    "Players": "Players",
+    "Settings": "Налаштування",
+    "AccessControl": "Access control",
+    "Messages": "Messages",
+    "News": "News",
+    "Analytics": "Analytics",
+    "Log": "Log"
+  },
   "AddTraining": {
     "Club": "Club",
     "Role": "Role",

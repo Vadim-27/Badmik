@@ -1,4 +1,4 @@
-@import 'breakpoints';
+@use 'breakpoints' as *;
 
 @mixin media-rules($screen) {
     @if $screen == mobile {

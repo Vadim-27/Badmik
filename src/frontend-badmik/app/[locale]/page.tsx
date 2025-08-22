@@ -3,11 +3,11 @@ import {getTranslations} from 'next-intl/server';
 import Link from 'next/link';
 
 export default async function Home() {
-    // const t = await getTranslations('HomePage');
+   
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <h1 className="text-4xl font-bold">Welcome to Badmik!</h1>
-      {/* <h1>{t('title')}</h1> */}
+     
       <p>
        
       </p>

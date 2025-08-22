@@ -12,6 +12,18 @@
       "editUserHeader":"Редагування користувача"
     }
   },
+  "Sidebar": {
+    "DashboardMain": "Дашбоард",
+    "Bookings": "Бронювання",
+    "UsersClub": "Гравці клубу",
+    "Players": "Гравці",
+    "Settings": "Налаштування",
+    "AccessControl": "Управління доступом",
+    "Messages": "Повідомлення",
+    "News": "Новини",
+    "Analytics": "Аналітика",
+    "Log": "Логи"
+  },
   "AddTraining": {
     "Club": "Клуб",
     "Role": "Роль",

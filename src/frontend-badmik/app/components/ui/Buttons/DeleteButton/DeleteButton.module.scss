@@ -1,15 +1,39 @@
 @use '../../../../styles/mixins' as *;
 
 .deleteButton {
-  background-color: var(--color-delete-button); 
-  color: white;
-  border-radius: 0.375rem;
-  border: none;
-  cursor: pointer;
-  transition: background-color 150ms ease-in-out;
+  // background-color: var(--color-delete-button); 
+  // color: white;
+  // border-radius: 0.375rem;
+  // border: none;
+  // cursor: pointer;
+  // transition: background-color 150ms ease-in-out;
 
-  padding: 0.375rem 0.75rem;
-  font-size: 0.75rem;
+  // padding: 0.375rem 0.75rem;
+  // font-size: 0.75rem;
+  appearance: none;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: transform 0.02s ease, background 0.2s ease,
+    border-color 0.2s ease, box-shadow 0.2s ease;
+    background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  border-color: var(--btn-primary-border);
+
+  &:active {
+  transform: translateY(1px);
+}
+
+  &:hover {
+    // background-color: #1d4ed8; 
+    background-color: var(--btn-secondary-bg-active);
+
+  }
 
   &:hover:not(:disabled) {
     background-color: var(--color-delete-button-hover); 
