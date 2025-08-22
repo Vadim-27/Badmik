@@ -1,0 +1,45 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--card); 
+//   border: 1px solid #d1d5db;
+  border-radius: 12px; 
+  transition: width 0.3s;
+  overflow: hidden;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.08);
+}
+.buttonToggleMenu {
+    background-color: #f8f8fc; 
+
+  padding: 0.5rem; 
+//   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08);
+
+  outline: none;
+
+  &:hover {
+    background-color: #d1d5db;
+  }
+
+  &:focus {
+    outline: none; 
+  }
+}
+.wrapperButtonToggleMenu{
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+.role{
+    font-size: 1.125rem; // 18px
+  line-height: 1.75rem; // 28px
+  font-weight: 700;
+}
+.nameNavBlock{
+   padding-left: 1rem;
+    
+    margin-top: 1.25rem;
+     font-size: 1.125rem; 
+  line-height: 1.75rem; 
+  font-weight: 600;
+  color: var(--text-gray);
+}

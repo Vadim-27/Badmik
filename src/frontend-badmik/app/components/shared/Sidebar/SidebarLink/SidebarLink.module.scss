@@ -1,6 +1,6 @@
 
   .link {
-    background-color: var(--color-primary-button);
+    // background-color: var(--color-primary-button);
     display: block;
     padding-left: 1rem;
     padding-right: 1rem;
@@ -8,15 +8,18 @@
     padding-bottom: 0.5rem;
     border-radius: 0.25rem;
     cursor: pointer;
-    color: #fff;
+    font-size: 1.125rem; // 18px
+  line-height: 1.75rem; // 28px
+  font-weight: 600;
+    color: var(--text);
     transition: all 0.2s;
     &:hover {
-      background-color: var(--color-primary-button-hover);
+      background: var(--btn-primary-bg);
     }
 
   }
 
   .active {
-  background-color: var(--color-secondary-button); 
+  background-color: var(--btn-primary-bg); 
   color: #fff;
 }

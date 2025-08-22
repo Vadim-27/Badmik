@@ -5,6 +5,8 @@ import Cookies from 'js-cookie';
 import jwt from 'jwt-simple';
 import { useParams } from 'next/navigation';
 import SidebarLink from './SidebarLink/SidebarLink';
+import { useTranslations } from 'next-intl';
+import styles from './Sidebar.module.scss';
 
 const drawerWidthOpen = 240;
 const drawerWidthClosed = 60;
@@ -15,6 +17,8 @@ export default function Sidebar() {
   const [role, setRole] = useState<string | null>(null);
   const [clubIdFromToken, setClubIdFromToken] = useState<string | null>(null);
   const params = useParams();
+
+  const t = useTranslations('Sidebar');
 
   const toggleDrawer = () => setOpen(!open);
 
@@ -44,14 +48,16 @@ export default function Sidebar() {
     <div className="flex h-screen">
       <nav
         style={{ width: open ? drawerWidthOpen : drawerWidthClosed }}
-        className="flex flex-col bg-gray-100 border-r border-gray-300 transition-[width] duration-300 overflow-hidden"
+        // className="flex flex-col bg-gray-100 border-r border-gray-300 transition-[width] duration-300 overflow-hidden"
+        className={styles.sidebar}
         aria-label="Sidebar navigation"
       >
         <button
           onClick={toggleDrawer}
-          className="m-2 p-2 rounded hover:bg-gray-300 focus:outline-none"
+          className={styles.buttonToggleMenu}
           aria-label={open ? 'Закрити меню' : 'Відкрити меню'}
         >
+          {open ? <div className={styles.wrapperButtonToggleMenu}>
           <svg
             className="w-6 h-6"
             fill="none"
@@ -60,18 +66,64 @@ export default function Sidebar() {
             viewBox="0 0 24 24"
           >
             <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
+          </svg> 
+          <p className ={styles.role}>Admin</p>
+          </div> : <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>}
         </button>
+
+        <p className={styles.nameNavBlock}>Основне</p>
 
         <div className="flex flex-col mt-4 space-y-2 px-2">
           {(role === 'owner_admin' || role === 'assistant') && (
             <>
+              <SidebarLink href="/admin/dashboar" open={open}>
+                {open ? t('DashboardMain') : '🏠'}
+              </SidebarLink>
               <SidebarLink href="/admin/settings/" open={open}>
-                {open ? 'Settings' : '⚙️'}
+                {open ? t('Settings') : '⚙️'}
               </SidebarLink>
 
+
               <SidebarLink href="/admin/users/" open={open}>
-                {open ? 'Users' : '👤'}
+                {open ? t('Players') : '👤'}
+              </SidebarLink>
+
+              
+               {effectiveClubId && (
+            <div className="px-4">
+            <SidebarLink href={`/admin/${effectiveClubId}/bookings/`} open={open}>
+              {open ? t('Bookings') : '🏟️'}
+            </SidebarLink>
+            <SidebarLink href={`/admin/${effectiveClubId}/usersClub/`} open={open}>
+              {open ? t('UsersClub') : '👥🎾'}
+            </SidebarLink>
+            </div>
+          )}
+
+
+
+              <SidebarLink href="/admin/access-control/" open={open}>
+                {open ? t('AccessControl') : '🔐'}
+              </SidebarLink>
+              <SidebarLink href="/admin/messages/" open={open}>
+                {open ? t('Messages') : '💬'}
+              </SidebarLink>
+              <SidebarLink href="/admin/news/" open={open}>
+                {open ? t('News') : '📰'}
+              </SidebarLink>
+              <SidebarLink href="/admin/analytics/" open={open}>
+                {open ? t('Analytics') : '📊'}
+              </SidebarLink>
+              <SidebarLink href="/admin/logs/" open={open}>
+                {open ? t('Log') : '📜'}
               </SidebarLink>
 
               {/* <SidebarLink href="/admin/add-club/" open={open}>
@@ -80,16 +132,16 @@ export default function Sidebar() {
             </>
           )}
 
-          {effectiveClubId && (
+          {/* {effectiveClubId && (
             <>
             <SidebarLink href={`/admin/${effectiveClubId}/bookings/`} open={open}>
-              {open ? 'Bookings' : '🏟️'}
+              {open ? t('Bookings') : '🏟️'}
             </SidebarLink>
             <SidebarLink href={`/admin/${effectiveClubId}/usersClub/`} open={open}>
-              {open ? 'UsersClub' : '👥🎾'}
+              {open ? t('UsersClub') : '👥🎾'}
             </SidebarLink>
             </>
-          )}
+          )} */}
         </div>
       </nav>
     </div>
