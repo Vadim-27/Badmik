@@ -2,6 +2,7 @@
 using BadmintonApp.Application.Interfaces.Permissions;
 using BadmintonApp.Application.Interfaces.Trainings;
 using BadmintonApp.Application.Interfaces.Users;
+using BadmintonApp.Application.Mappings;
 using BadmintonApp.Application.Services;
 using BadmintonApp.Domain.Users;
 using FluentValidation;
@@ -20,7 +21,7 @@ namespace BadmintonApp.Application
             services.AddScoped<ITrainingsService, TrainingsService>();
             services.AddValidatorsFromAssemblyContaining<UserService>(includeInternalTypes: true);
             //services.AddScoped<IUserRoleRepository, UserRoleRepository>()
-            services.AddAutoMapper(conf => conf.AddMaps(Assembly.GetExecutingAssembly()));
+            services.AddAutoMapper(conf => conf.AddMaps(Assembly.GetAssembly(typeof(TrainingMappingProfile))));
             services.AddScoped<IPermissionService, PermissionService>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 

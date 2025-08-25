@@ -36,7 +36,10 @@ public class DbLogger : ILogger
             CreatedAt = DateTime.UtcNow,
             Level = logLevel,
             Message = formatter(state, exception),
-            ExceptionJson = JsonConvert.SerializeObject(exception)
+            ExceptionJson = JsonConvert.SerializeObject(exception, new JsonSerializerSettings 
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+            })
         };
 
         _dbContext.Logs.Add(log);

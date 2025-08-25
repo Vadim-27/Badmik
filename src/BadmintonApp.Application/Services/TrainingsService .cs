@@ -72,6 +72,8 @@ public class TrainingsService : ITrainingsService
         training.Id = Guid.NewGuid();
         training.ClubId = user.ClubId.Value;
 
+        
+
         var result = await _repository.CreateAsync(training, cancellationToken);
 
         return _mapper.Map<TrainingResultDto>(result);
@@ -165,13 +167,13 @@ public class TrainingsService : ITrainingsService
         return training.AllowedLevels.Contains(userLevel);
     }
 
-    public async Task<TrainingResultDto> UpdateAsync(Guid id, UpdateTrainingDto dto, CancellationToken cancellationToken)
+    public async Task<TrainingResultDto> UpdateAsync(Guid id, Guid userId, UpdateTrainingDto dto, CancellationToken cancellationToken)
     {
         var existing = await _repository.GetByIdAsync(id, cancellationToken);
         if (existing == null)
             throw new Exception("Training not found");
 
-        var hasAccess = await _permission.HasPermission(id, existing.ClubId, PermissionType.TrainingsManage);
+        var hasAccess = await _permission.HasPermission(userId, existing.ClubId, PermissionType.TrainingsManage);
         if (!hasAccess)
             throw new UnauthorizedAccessException("You do not have permission to modify this training");
 
@@ -181,18 +183,19 @@ public class TrainingsService : ITrainingsService
         if (existing.Type == TrainingType.Individual && dto.MaxPlayers != 2)
             throw new Exception("Individual training must have exactly 2 players");
 
-        _mapper.Map(dto, existing);
+        existing =  _mapper.Map<Training>(dto);
+
         var updated = await _repository.UpdateAsync(existing, cancellationToken);
         return _mapper.Map<TrainingResultDto>(updated);
     }
 
-    public async Task<ResultDto> DeleteAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<ResultDto> DeleteAsync(Guid id, Guid userId, CancellationToken cancellationToken)
     {
         var training = await _repository.GetByIdAsync(id, cancellationToken);
         if (training == null)
             return ResultDto.Fail<ResultDto>("Training not found");
 
-        var hasAccess = await _permission.HasPermission(id, training.ClubId, PermissionType.TrainingsManage);
+        var hasAccess = await _permission.HasPermission(userId, training.ClubId, PermissionType.TrainingsManage);
         if (!hasAccess)
             return ResultDto.Fail<ResultDto>("Access denied");
 

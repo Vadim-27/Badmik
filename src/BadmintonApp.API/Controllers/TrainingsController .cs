@@ -55,14 +55,18 @@ namespace BadmintonApp.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(Guid id, [FromBody] UpdateTrainingDto dto, CancellationToken cancellationToken)
         {
-            var updated = await _trainingsService.UpdateAsync(id, dto, cancellationToken);
+            var userId = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            var updated = await _trainingsService.UpdateAsync(id, userId, dto, cancellationToken);
             return Ok(updated);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
         {
-            var result = await _trainingsService.DeleteAsync(id, cancellationToken);
+            var userId = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            var result = await _trainingsService.DeleteAsync(id, userId, cancellationToken);
             if (!result.IsSuccess)
                 return BadRequest(result.Message);
 
@@ -140,4 +144,14 @@ namespace BadmintonApp.API.Controllers
 //  "allowedLevels": [
 //    "D"
 //  ]
+//}
+
+
+//{
+//    "email": "string",
+//  "password": "string",
+//  "firstName": "string",
+//  "lastName": "string",
+//  "role": "string",
+//  "doB": "2025-08-13T17:46:36.685Z"
 //}
