@@ -2,7 +2,9 @@ import Link from 'next/link';
 import { mockBookings } from '@/data/mockBookings';
 
 export default function Booking({ clubId, t }: { clubId: string; t: (key: string, values?: any) => string }) {
-  const bookings = mockBookings[clubId as keyof typeof mockBookings] || [];
+  // const bookings = mockBookings || [];
+  const bookings = Object.values(mockBookings).flat();
+  
 
   const availabilityIcon = {
     free: '🟢',
