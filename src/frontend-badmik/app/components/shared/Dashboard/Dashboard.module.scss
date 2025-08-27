@@ -1,0 +1,186 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.breadcrumbs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  font-size: 12.5px;
+  color: var(--muted);
+
+  a {
+    color: #355aa8;
+    text-decoration: none;
+  }
+
+  .sep {
+    opacity: 0.6;
+  }
+}
+
+.kpiStrip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.kpi {
+  background: #fff;
+  border: 1px solid var(--border-2);
+  border-radius: 12px;
+  padding: 14px;
+
+  .label {
+    font-size: 12px;
+    color: #64748b;
+  }
+
+  .value {
+    font-size: 22px;
+    font-weight: 800;
+    margin-top: 4px;
+  }
+
+  .sub {
+    font-size: 12px;
+    color: #73819b;
+  }
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+
+  h3 {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+  }
+}
+
+.list {
+  display: grid;
+  gap: 10px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+
+  .left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1 1 auto;
+    min-width: 0;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+
+    > * {
+      flex: 0 0 auto;
+    }
+  }
+
+  .right {
+    flex: 0 0 260px;
+    max-width: 100%;
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 700px) {
+  .row {
+    align-items: flex-start;
+
+    .right {
+      flex: 1 1 100%;
+      margin-left: 0;
+      margin-top: 6px;
+    }
+  }
+}
+
+.chip {
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border-2);
+  background: #f8fafc;
+  font-size: 12px;
+  color: #475569;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+}
+
+.chipType {
+  background: #f1f5ff;
+  border-color: #d6e2ff;
+  color: #1a2a5a;
+}
+
+.chipLevel {
+  background: #eef4ff;
+  border-color: #c8d8ff;
+  color: #163169;
+  font-weight: 600;
+}
+
+.chipPrice {
+  background: linear-gradient(180deg, #2f6fe6, #255dc1);
+  border-color: transparent;
+  color: #fff;
+  font-weight: 700;
+}
+
+.chipStatus {
+  background: #eef2f6;
+  border-color: #dbe3ee;
+  color: #3b4a5e;
+  font-weight: 600;
+}
+
+.chipCancel {
+  background: #ffecec;
+  border-color: #ffd2d2;
+  color: #9b1c1c;
+  font-weight: 700;
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #64748b;
+  margin-bottom: 6px;
+}
+
+.progress {
+  height: 8px;
+  border-radius: 5px;
+  background: #eef2f7;
+  overflow: hidden;
+
+  > span {
+    display: block;
+    height: 100%;
+    background: var(--blue-600);
+  }
+}

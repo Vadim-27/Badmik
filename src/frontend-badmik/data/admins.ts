@@ -19,7 +19,7 @@ export const admins = [
     email: 'club1admin@example.com',
     password: 'clubpass1',
     role: 'club_admin',
-    clubId: 'club-1',
+    clubId: 'FC Kyiv',
     permissions: ['club_dashboard', 'manage_bookings'],
   },
   {

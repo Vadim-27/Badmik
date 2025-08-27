@@ -20,7 +20,7 @@ export interface Club {
 
 export const clubs: Club[] = [
   {
-    id: 'club-1',
+    id: 'fc-kyiv',
     name: 'Energy Fit',
     status: 'Активний',
     statusColor: 'green',

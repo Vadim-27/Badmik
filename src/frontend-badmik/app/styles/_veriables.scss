@@ -15,6 +15,7 @@
   --text-gray: #4B5563;
   --muted: #64748b;
   --border: #e5e7eb;
+  --border-2:#cfd7e3;
   --focus: #93c5fd;
 
   --btn-primary-bg: #e6efff;
@@ -22,6 +23,7 @@
   --btn-primary-bg-active: #d2e0ff;
   --btn-primary-text: #0b3b8c;
   --btn-primary-border: #9bb8ff;
+  --btn-primary-focus-border: #2f6fe6;
 
   --btn-secondary-bg: #f3f6fb;
   --btn-secondary-bg-hover: #eef2f7;
@@ -34,7 +36,14 @@
     --button-shadow-focus: 0 0 0 3px rgba(0, 0, 0, 0.1);
     // --primary-bg-accordion: #fff9ec;
     // --secondary-bg-accordion: #fed5b0;
-
+ --nav:#12326b;
+    --blue-50:#eef4ff; 
+    --blue-200:#bfd7ff; 
+    --blue-600:#2f6fe6; 
+    --blue-700:#255dc1;
+    // --border:#e5eaf1; 
+    --border-2:#cfd7e3; 
+    --ring:rgba(47,111,230,.14);
 
     
 }

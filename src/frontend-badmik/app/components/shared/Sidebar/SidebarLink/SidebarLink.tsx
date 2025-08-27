@@ -9,9 +9,11 @@ type Props = {
   href: string;
   children: React.ReactNode;
   open: boolean;
+  count?: number;
+
 };
 
-const SidebarLink = ({ href, children, open }: Props) => {
+const SidebarLink = ({ href, children, open,  count}: Props) => {
   const pathname = usePathname();
   console.log("href", href);
   console.log("pathname", pathname);
@@ -23,9 +25,14 @@ const SidebarLink = ({ href, children, open }: Props) => {
   return (
     <Link
       href={href}
-      className={classNames(css.link, { [css.active]: isActive })}
+      className={classNames(css.navItem, { [css.active]: isActive })}
     >
-      {open ? children : <span>{children}</span>}
+      {/* {open && ( */}
+        <>
+      {open ? children : <span >{children}</span>}
+      {/* {open && count !== undefined && <span className={css.count}>{count}</span>} */}
+      </>
+    {/* )} */}
     </Link>
   );
 };

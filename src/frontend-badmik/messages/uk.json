@@ -13,15 +13,17 @@
     }
   },
   "Sidebar": {
+    "Admin": "Адмін",
     "DashboardMain": "Дашбоард",
-    "Bookings": "Бронювання",
+    "Workout": "Тренування",
+    "Clubs":"Клуби",
     "UsersClub": "Гравці клубу",
     "Players": "Гравці",
     "Settings": "Налаштування",
     "AccessControl": "Управління доступом",
     "Messages": "Повідомлення",
     "News": "Новини",
-    "Analytics": "Аналітика",
+    "Analytics": "Звіти",
     "Log": "Логи"
   },
   "AddTraining": {

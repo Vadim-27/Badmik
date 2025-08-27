@@ -12,15 +12,17 @@
     }
   },
   "Sidebar": {
+    "Admin": "Admin",
     "DashboardMain": "Dashboard",
-    "bookings": "Bookings",
+    "Clubs":"Clubs",
+    "Workout": "Workout",
     "UsersClub": "Club players",
     "Players": "Players",
-    "Settings": "Налаштування",
+    "Settings": "Settings",
     "AccessControl": "Access control",
     "Messages": "Messages",
     "News": "News",
-    "Analytics": "Analytics",
+    "Analytics": "Reports",
     "Log": "Log"
   },
   "AddTraining": {
