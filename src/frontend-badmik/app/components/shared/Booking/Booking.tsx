@@ -1,9 +1,11 @@
 import Link from 'next/link';
 import { mockBookings } from '@/data/mockBookings';
 
-export default function Booking({ clubId, t }: { clubId: string; t: (key: string, values?: any) => string }) {
+
+export default function Booking({role, clubId, t }: { clubId: string; t: (key: string, values?: any) => string }) {
   // const bookings = mockBookings || [];
   const bookings = Object.values(mockBookings).flat();
+
   
 
   const availabilityIcon = {
@@ -27,7 +29,7 @@ export default function Booking({ clubId, t }: { clubId: string; t: (key: string
             <th className="p-3">{t('trainingName')}</th>
             <th className="p-3">{t('type')}</th>
             <th className="p-3">{t('level')}</th>
-            {clubId === 'superadmin' && <th className="p-3">{t('club')}</th>}
+            {role === 'owner_admin' && <th className="p-3">{t('club')}</th>}
             <th className="p-3">{t('participantsLimit')}</th>
             <th className="p-3">{t('status')}</th>
             <th className="p-3">{t('actions')}</th>
@@ -50,7 +52,7 @@ export default function Booking({ clubId, t }: { clubId: string; t: (key: string
               </td>
               <td className="p-3">{b.type}</td>
               <td className="p-3">{b.level}</td>
-              {clubId === 'superadmin' && <td className="p-3">{b.club}</td>}
+              {role === 'owner_admin' && <td className="p-3">{b.club}</td>}
               <td className="p-3">
                 {b.participants}/{b.limit}
                 <div className="h-2 bg-gray-200 rounded mt-1">
