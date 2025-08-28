@@ -563,79 +563,86 @@ export default function BookingTable({ role, userClub }: BookingTableProps) {
       </div>
 
       {/* table */}
-      <table className="w-full border-collapse text-left">
-        <thead>
-          <tr className="bg-gray-200">
-            <th className="p-2 border" />
-            <th className="p-2 border cursor-pointer" onClick={() => toggleSort('date')}>
-              Дата {sortField === 'date' && (sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />)}
-            </th>
-            <th className="p-2 border cursor-pointer">Час{sortField === 'startTime' && (sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />)}</th>
-            <th className="p-2 border cursor-pointer" onClick={() => toggleSort('title')}>
-              Назва {sortField === 'title' && (sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />)}
-            </th>
-            <th className="p-2 border cursor-pointer" onClick={() => toggleSort('type')}>
-              Тип {sortField === 'type' && (sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />)}
-            </th>
-            <th className="p-2 border cursor-pointer" onClick={() => toggleSort('level')}>
-              Рівень {sortField === 'level' && (sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />)}
-            </th>
-            {role === 'owner_admin' && (
-              <th className="p-2 border cursor-pointer" onClick={() => toggleSort('club')}>
-                Клуб {sortField === 'club' && (sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />)}
-              </th>
-            )}
-            <th className="p-2 border cursor-pointer" onClick={() => toggleSort('participants')}>
-              Заповненість {sortField === 'participants' && (sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />)}
-            </th>
-            <th className="p-2 border cursor-pointer" onClick={() => toggleSort('status')}>
-              Статус {sortField === 'status' && (sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />)}
-            </th>
-            <th className="p-2 border">Дії</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredBookings.map((b) => (
-            <tr key={b.id} className="border-t hover:bg-gray-50">
-              <td className="p-2 border">
-                <input
-                  type="checkbox"
-                  checked={selectedRows.includes(b.id)}
-                  onChange={() => toggleRowSelection(b.id)}
-                />
-              </td>
-              <td className="p-2 border">
-                {new Date(b.date).toLocaleDateString('uk-UA', { day: '2-digit', month: '2-digit', year: 'numeric' })}
-              </td>
-              <td className="p-2 border">
-                 {b.startTime}–{b.endTime}
-              </td>
-              <td className="p-2 border">
-                {b.title}
-                <div className="text-xs text-gray-500">{b.hall}</div>
-              </td>
-              <td className="p-2 border">{b.type}</td>
-              <td className="p-2 border">{b.level}</td>
-              {role === 'owner_admin' && <td className="p-2 border">{b.club}</td>}
-              <td className="p-2 border">
-                {b.participants}/{b.limit}
-                <div className="h-2 bg-gray-200 rounded mt-1">
-                  <div
-                    className="h-full bg-blue-500 rounded"
-                    style={{ width: `${(b.participants / b.limit) * 100}%` }}
-                  />
-                </div>
-              </td>
-              <td className="p-2 border">{statusLabel(b.status)}</td>
-              <td className="p-2 border space-x-1">
-                <button title="Переглянути">👁</button>
-                <button title="Редагувати">✏</button>
-                <button title="Видалити">🗑</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <table className="w-full border-collapse border border-gray-300 text-left">
+  <thead>
+    <tr className="bg-gray-200 border-b">
+      <th className="p-2" />
+      <th className="p-2 cursor-pointer" onClick={() => toggleSort('date')}>
+        Дата {sortField === 'date' && (sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />)}
+      </th>
+      <th className="p-2 cursor-pointer" onClick={() => toggleSort('startTime')}>
+        Час {sortField === 'startTime' && (sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />)}
+      </th>
+      <th className="p-2 cursor-pointer" onClick={() => toggleSort('title')}>
+        Назва {sortField === 'title' && (sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />)}
+      </th>
+      <th className="p-2 cursor-pointer" onClick={() => toggleSort('type')}>
+        Тип {sortField === 'type' && (sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />)}
+      </th>
+      <th className="p-2 cursor-pointer" onClick={() => toggleSort('level')}>
+        Рівень {sortField === 'level' && (sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />)}
+      </th>
+      {role === 'owner_admin' && (
+        <th className="p-2 cursor-pointer" onClick={() => toggleSort('club')}>
+          Клуб {sortField === 'club' && (sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />)}
+        </th>
+      )}
+      <th className="p-2 cursor-pointer" onClick={() => toggleSort('participants')}>
+        Заповненість {sortField === 'participants' && (sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />)}
+      </th>
+      <th className="p-2 cursor-pointer" onClick={() => toggleSort('status')}>
+        Статус {sortField === 'status' && (sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />)}
+      </th>
+      <th className="p-2">Дії</th>
+    </tr>
+  </thead>
+  <tbody>
+    {filteredBookings.map((b) => (
+      <tr key={b.id} className="border-t hover:bg-gray-50">
+        <td className="p-2">
+          <input
+            type="checkbox"
+            checked={selectedRows.includes(b.id)}
+            onChange={() => toggleRowSelection(b.id)}
+          />
+        </td>
+        <td className="p-2">
+          {new Date(b.date).toLocaleDateString('uk-UA', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+          })}
+        </td>
+        <td className="p-2">
+          {b.startTime}–{b.endTime}
+        </td>
+        <td className="p-2">
+          {b.title}
+          <div className="text-xs text-gray-500">{b.hall}</div>
+        </td>
+        <td className="p-2">{b.type}</td>
+        <td className="p-2">{b.level}</td>
+        {role === 'owner_admin' && <td className="p-2">{b.club}</td>}
+        <td className="p-2">
+          {b.participants}/{b.limit}
+          <div className="h-2 bg-gray-200 rounded mt-1">
+            <div
+              className="h-full bg-blue-500 rounded"
+              style={{ width: `${(b.participants / b.limit) * 100}%` }}
+            />
+          </div>
+        </td>
+        <td className="p-2">{statusLabel(b.status)}</td>
+        <td className="p-2 space-x-1">
+          <button title="Переглянути">👁</button>
+          <button title="Редагувати">✏</button>
+          <button title="Видалити">🗑</button>
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
     </div>
   );
 }
