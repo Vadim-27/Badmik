@@ -199,6 +199,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { mockBookings } from '@/data/mockBookings';
 import { Chip, Button, Menu, MenuItem, Checkbox } from '@mui/material';
 import { ArrowUpward, ArrowDownward } from '@mui/icons-material';
+import { isWithinInterval, parseISO, isToday, isTomorrow, startOfWeek, endOfWeek, addWeeks } from 'date-fns';
 
 type Booking = {
   id: string;
@@ -328,25 +329,36 @@ export default function BookingTable({ role, userClub }: BookingTableProps) {
       data = data.filter((b) => selectedStatuses.includes(b.status));
     }
 
-    // дата
-      if (dateRange.from || dateRange.to) {
-        const bookingDate = parseISO(b.date); // припускаю b.date = "2025-08-28"
-        const from = dateRange.from ? parseISO(dateRange.from) : null;
-        const to = dateRange.to ? parseISO(dateRange.to) : null;
-        if (from && to && !isWithinInterval(bookingDate, { start: from, end: to })) return false;
-        if (from && !to && bookingDate < from) return false;
-        if (to && !from && bookingDate > to) return false;
-      }
+    // Дата
+if (dateRange.from || dateRange.to) {
+  data = data.filter((b) => {
+    const bookingDate = parseISO(b.date);
+    const from = dateRange.from ? parseISO(dateRange.from) : null;
+    const to = dateRange.to ? parseISO(dateRange.to) : null;
 
-      // час
-      if (timeRange.from || timeRange.to) {
-        const [h, m] = b.time.split(':').map(Number);
-        const bookingMinutes = h * 60 + m;
-        const fromMin = timeRange.from ? (() => { const [hh, mm] = timeRange.from!.split(':').map(Number); return hh * 60 + mm; })() : null;
-        const toMin = timeRange.to ? (() => { const [hh, mm] = timeRange.to!.split(':').map(Number); return hh * 60 + mm; })() : null;
-        if (fromMin !== null && bookingMinutes < fromMin) return false;
-        if (toMin !== null && bookingMinutes > toMin) return false;
-      }
+    if (from && to && !isWithinInterval(bookingDate, { start: from, end: to })) return false;
+    if (from && !to && bookingDate < from) return false;
+    if (to && !from && bookingDate > to) return false;
+
+    return true;
+  });
+}
+
+// Час (брати `startTime`, бо в Booking немає `time`)
+if (timeRange.from || timeRange.to) {
+  data = data.filter((b) => {
+    const [h, m] = b.startTime.split(':').map(Number);
+    const bookingMinutes = h * 60 + m;
+
+    const fromMin = timeRange.from ? (() => { const [hh, mm] = timeRange.from!.split(':').map(Number); return hh * 60 + mm; })() : null;
+    const toMin = timeRange.to ? (() => { const [hh, mm] = timeRange.to!.split(':').map(Number); return hh * 60 + mm; })() : null;
+
+    if (fromMin !== null && bookingMinutes < fromMin) return false;
+    if (toMin !== null && bookingMinutes > toMin) return false;
+
+    return true;
+  });
+}
 
     // quick chips
     if (activeFilters.includes('today')) {
@@ -370,7 +382,7 @@ export default function BookingTable({ role, userClub }: BookingTableProps) {
     });
 
     return data;
-  }, [bookings, selectedClub, selectedTypes, selectedLevels, selectedStatuses, activeFilters, sortField, sortOrder]);
+  }, [bookings, selectedClub, selectedTypes, selectedLevels, selectedStatuses, activeFilters, sortField, sortOrder, dateRange, timeRange  ]);
 
   // toggles
   const toggleChip = (filter: string) =>
@@ -407,6 +419,14 @@ export default function BookingTable({ role, userClub }: BookingTableProps) {
             onClick={(e) => setAnchorElDate(e.currentTarget)}
           />
           <Menu anchorEl={anchorElDate} open={Boolean(anchorElDate)} onClose={() => setAnchorElDate(null)}>
+            <MenuItem
+    onClick={() => {
+      setDateRange({ from: null, to: null });
+      setAnchorElDate(null);
+    }}
+  >
+    Скинути фільтр
+  </MenuItem>
             <MenuItem onClick={() => setDatePreset('today')}>Сьогодні</MenuItem>
             <MenuItem onClick={() => setDatePreset('tomorrow')}>Завтра</MenuItem>
             <MenuItem onClick={() => setDatePreset('thisWeek')}>Цього тижня</MenuItem>
@@ -427,6 +447,14 @@ export default function BookingTable({ role, userClub }: BookingTableProps) {
             onClick={(e) => setAnchorElTime(e.currentTarget)}
           />
           <Menu anchorEl={anchorElTime} open={Boolean(anchorElTime)} onClose={() => setAnchorElTime(null)}>
+            <MenuItem
+    onClick={() => {
+      setTimeRange({ from: null, to: null });
+      setAnchorElTime(null);
+    }}
+  >
+    Скинути фільтр
+  </MenuItem>
             <MenuItem>
               <input type="time" value={timeRange.from ?? ''} onChange={(e) => setTimeRange((prev) => ({ ...prev, from: e.target.value }))} />
               <span className="mx-2">—</span>
