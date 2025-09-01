@@ -15,12 +15,11 @@ type Props = {
 
 const SidebarLink = ({ href, children, open,  count}: Props) => {
   const pathname = usePathname();
-  console.log("href", href);
-  console.log("pathname", pathname);
+ 
   // const isActive = pathname === href;
   const pathnameWithoutLocale = pathname.replace(/^\/(uk|en)/, '');
   const isActive = pathnameWithoutLocale.startsWith(href);
-  console.log("isActive", isActive);
+  
 
   return (
     <Link

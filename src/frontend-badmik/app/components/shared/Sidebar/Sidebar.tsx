@@ -475,7 +475,7 @@ export default function Sidebar() {
               )}
             </SidebarLink>
             <SidebarLink  href="/admin/analytics/" open={open} >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
             <path d="M3 3h18v18H3z"/><path d="M7 13h3v6H7zM12 5h3v14h-3zM17 10h3v9h-3z"/>
           </svg>
               {open && (<span>{t('Analytics')}</span>

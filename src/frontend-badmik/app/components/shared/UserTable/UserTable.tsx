@@ -84,10 +84,10 @@ const UserTable: React.FC = () => {
           fontFamily: 'var(--font-geist-sans)',
         },
         '& [class*="MuiDataGridVariables"]': {
-          '--DataGrid-t-header-background-base': '#f48b29',
+          '--DataGrid-t-header-background-base': '#D1D5DB',
         },
         '& .MuiDataGrid-columnHeaders': {
-          color: '#fff',
+          color: '#000000',
           fontWeight: 'bold',
           fontSize: '1rem',
         },
