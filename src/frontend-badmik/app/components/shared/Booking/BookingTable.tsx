@@ -2,16 +2,29 @@
 
 // import * as React from 'react';
 // import { DataGrid, GridColDef, GridPaginationModel, GridSortModel } from '@mui/x-data-grid';
-// import { Box, Chip, Button } from '@mui/material';
+// import { Box, Chip, Button, Menu, MenuItem, Checkbox } from '@mui/material';
 // import { useTranslations, useLocale } from 'next-intl';
 // import { ukUA, enUS } from '@mui/x-data-grid/locales';
 // import { mockBookings } from '@/data/mockBookings';
 
+// import { useState, useEffect, useMemo } from 'react';
+
+// import { ArrowUpward, ArrowDownward } from '@mui/icons-material';
+// import {
+//   isWithinInterval,
+//   parseISO,
+//   isToday,
+//   isTomorrow,
+//   startOfWeek,
+//   endOfWeek,
+//   addWeeks,
+// } from 'date-fns';
+
 // type Booking = {
 //   id: string;
-//   date: string;
-//   startTime: string;
-//   endTime: string;
+//   date: string; // 'yyyy-MM-dd'
+//   startTime: string; // 'HH:mm'
+//   endTime: string; // 'HH:mm'
 //   title: string;
 //   hall: string;
 //   type: string;
@@ -19,85 +32,253 @@
 //   club: string;
 //   participants: number;
 //   limit: number;
-//   status: string;
+//   status: string; // internal values like 'active' | 'cancelled' | 'finished'
 //   availability: 'free' | 'queue' | 'full';
 // };
 
 // interface BookingTableProps {
 //   role: 'owner_admin' | 'club_admin';
-//   userClub?: string; // для club_admin
+//   userClub?: string;
 // }
+
+// const STATUS_OPTIONS = [
+//   { value: 'active', label: 'Активне' },
+//   { value: 'cancelled', label: 'Відмінене' },
+//   { value: 'finished', label: 'Завершене' },
+// ];
 
 // export default function BookingTable({ role, userClub }: BookingTableProps) {
 //   const locale = useLocale();
 //   const t = useTranslations('Bookings');
-  
+//   const [mounted, setMounted] = React.useState(false);
+// const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
+//   page: 0,
+//   pageSize: 10,
+// });
+// const [sortModel, setSortModel] = useState<GridSortModel>([]);
+// const [rowCount, setRowCount] = useState(0);
+// const [loading, setLoading] = useState(false);
 
-//   const [bookings, setBookings] = React.useState<Booking[]>([]);
-//   const [rowCount, setRowCount] = React.useState(0);
-//   const [paginationModel, setPaginationModel] = React.useState<GridPaginationModel>({ page: 0, pageSize: 10 });
-//   const [sortModel, setSortModel] = React.useState<GridSortModel>([{ field: 'date', sort: 'desc' }]);
-//   const [loading, setLoading] = React.useState(false);
-//   const [selectedRows, setSelectedRows] = React.useState<string[]>([]);
-//   const [activeFilters, setActiveFilters] = React.useState<string[]>([]);// швидкі чипи
-//   const [mounted, setMounted] = React.useState(false); 
+//   const [bookings, setBookings] = useState<Booking[]>([]);
+//   const [selectedRows, setSelectedRows] = useState<string[]>([]);
+//   const [activeFilters, setActiveFilters] = useState<string[]>([]); // quick chips: today, free, queue
+//   const [sortField, setSortField] = useState<keyof Booking>('date');
+//   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
-//   // швидкі чипи
+//   // club/type/level/status menus + selections
+//   const [anchorElClub, setAnchorElClub] = useState<null | HTMLElement>(null);
+//   const [anchorElType, setAnchorElType] = useState<null | HTMLElement>(null);
+//   const [anchorElLevel, setAnchorElLevel] = useState<null | HTMLElement>(null);
+//   const [anchorElStatus, setAnchorElStatus] = useState<null | HTMLElement>(null);
 
-//   const fetchBookings = React.useCallback(async () => {
-//   setLoading(true);
-//   try {
-//     // беремо мокові дані
-//     let data: Booking[] = Object.values(mockBookings).flat();
-//     console.log("data", data)
+//   const [selectedClub, setSelectedClub] = useState<string | null>(null);
+//   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+//   const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
+//   const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]); // <- новий state
 
-//     // фільтр по клубу для club_admin
+//   // дата
+//   const [anchorElDate, setAnchorElDate] = useState<null | HTMLElement>(null);
+//   const [dateRange, setDateRange] = useState<{ from: string | null; to: string | null }>({
+//     from: null,
+//     to: null,
+//   });
+
+//   // час
+//   const [anchorElTime, setAnchorElTime] = useState<null | HTMLElement>(null);
+//   const [timeRange, setTimeRange] = useState<{ from: string | null; to: string | null }>({
+//     from: null,
+//     to: null,
+//   });
+
+//   // init data
+//   useEffect(() => {
+//     const base = Object.values(mockBookings).flat() as Booking[];
+//     let data = base;
+
 //     if (role === 'club_admin' && userClub) {
 //       data = data.filter((b) => b.club === userClub);
+//       setSelectedClub(userClub);
 //     }
 
-//     // застосування "швидких чипів"
-//     if (activeFilters.length) {
-//       data = data.filter(
-//         (b) => activeFilters.includes(b.status) || activeFilters.includes(b.availability)
-//       );
-//       if (activeFilters.includes('today')) {
-//         const today = new Date().toISOString().split('T')[0];
-//         data = data.filter((b) => b.date === today);
-//       }
+//     setBookings(data);
+//     setMounted(true);
+//   }, [role, userClub]);
+
+//   // compute uniques
+//   const uniqueClubs = useMemo(() => {
+//     const base = Object.values(mockBookings).flat() as Booking[];
+//     return Array.from(new Set(base.map((b) => b.club)));
+//   }, []);
+
+//   const uniqueTypes = useMemo(() => {
+//     const base = Object.values(mockBookings).flat() as Booking[];
+//     return Array.from(new Set(base.map((b) => b.type)));
+//   }, []);
+
+//   const levelOptions = ['A', 'B', 'C', 'D', 'Meister'];
+
+//   // пресети для дати
+//   const setDatePreset = (preset: 'today' | 'tomorrow' | 'thisWeek' | 'nextWeek') => {
+//     const today = new Date();
+//     if (preset === 'today') {
+//       setDateRange({
+//         from: today.toISOString().slice(0, 10),
+//         to: today.toISOString().slice(0, 10),
+//       });
+//     } else if (preset === 'tomorrow') {
+//       const t = new Date();
+//       t.setDate(today.getDate() + 1);
+//       setDateRange({ from: t.toISOString().slice(0, 10), to: t.toISOString().slice(0, 10) });
+//     } else if (preset === 'thisWeek') {
+//       setDateRange({
+//         from: startOfWeek(today, { weekStartsOn: 1 }).toISOString().slice(0, 10),
+//         to: endOfWeek(today, { weekStartsOn: 1 }).toISOString().slice(0, 10),
+//       });
+//     } else if (preset === 'nextWeek') {
+//       const start = addWeeks(startOfWeek(today, { weekStartsOn: 1 }), 1);
+//       const end = addWeeks(endOfWeek(today, { weekStartsOn: 1 }), 1);
+//       setDateRange({ from: start.toISOString().slice(0, 10), to: end.toISOString().slice(0, 10) });
+//     }
+//     setAnchorElDate(null);
+//   };
+
+//   // helper: toggle item in array state
+//   const toggleInArray = (
+//     arr: string[],
+//     setArr: (v: string[] | ((prev: string[]) => string[])) => void,
+//     value: string
+//   ) => {
+//     setArr((prev) => (prev.includes(value) ? prev.filter((x) => x !== value) : [...prev, value]));
+//   };
+
+//   // filtered + sorted data
+//   const filteredBookings = useMemo(() => {
+//     let data = [...bookings];
+
+//     // CLUB filter
+//     if (selectedClub) {
+//       data = data.filter((b) => b.club === selectedClub);
 //     }
 
-//     // сортування
-//     if (sortModel.length) {
-//       const { field, sort } = sortModel[0];
-//       data = [...data].sort((a, b) => {
-//         if (a[field as keyof Booking] < b[field as keyof Booking]) return sort === 'asc' ? -1 : 1;
-//         if (a[field as keyof Booking] > b[field as keyof Booking]) return sort === 'asc' ? 1 : -1;
-//         return 0;
+//     // TYPE filter (multi)
+//     if (selectedTypes.length) {
+//       data = data.filter((b) => selectedTypes.includes(b.type));
+//     }
+
+//     // LEVEL filter (multi)
+//     if (selectedLevels.length) {
+//       data = data.filter((b) => selectedLevels.includes(b.level));
+//     }
+
+//     // STATUS filter (multi)
+//     if (selectedStatuses.length) {
+//       data = data.filter((b) => selectedStatuses.includes(b.status));
+//     }
+
+//     // Дата
+//     if (dateRange.from || dateRange.to) {
+//       data = data.filter((b) => {
+//         const bookingDate = parseISO(b.date);
+//         const from = dateRange.from ? parseISO(dateRange.from) : null;
+//         const to = dateRange.to ? parseISO(dateRange.to) : null;
+
+//         if (from && to && !isWithinInterval(bookingDate, { start: from, end: to })) return false;
+//         if (from && !to && bookingDate < from) return false;
+//         if (to && !from && bookingDate > to) return false;
+
+//         return true;
 //       });
 //     }
 
-//     // пагінація
-//     const start = paginationModel.page * paginationModel.pageSize;
-//     const end = start + paginationModel.pageSize;
-//     const pagedData = data.slice(start, end);
+//     // Час (брати `startTime`, бо в Booking немає `time`)
+//     if (timeRange.from || timeRange.to) {
+//       data = data.filter((b) => {
+//         const [h, m] = b.startTime.split(':').map(Number);
+//         const bookingMinutes = h * 60 + m;
 
-//     setBookings(pagedData);   // <-- використовуємо стейт
-//     setRowCount(data.length);
-//   } catch (err) {
-//     console.error(err);
-//   } finally {
-//     setLoading(false);
-//   }
-// }, [paginationModel, sortModel, activeFilters, role, userClub]);
+//         const fromMin = timeRange.from
+//           ? (() => {
+//               const [hh, mm] = timeRange.from!.split(':').map(Number);
+//               return hh * 60 + mm;
+//             })()
+//           : null;
+//         const toMin = timeRange.to
+//           ? (() => {
+//               const [hh, mm] = timeRange.to!.split(':').map(Number);
+//               return hh * 60 + mm;
+//             })()
+//           : null;
 
-//   React.useEffect(() => {
-//     fetchBookings();
-//     setMounted(true);
-//   }, [fetchBookings]);
+//         if (fromMin !== null && bookingMinutes < fromMin) return false;
+//         if (toMin !== null && bookingMinutes > toMin) return false;
+
+//         return true;
+//       });
+//     }
+
+//     // quick chips
+//     if (activeFilters.includes('today')) {
+//       const today = new Date().toISOString().split('T')[0];
+//       data = data.filter((b) => b.date === today);
+//     }
+//     if (activeFilters.includes('free')) {
+//       data = data.filter((b) => b.availability === 'free');
+//     }
+//     if (activeFilters.includes('queue')) {
+//       data = data.filter((b) => b.availability === 'queue');
+//     }
+
+//     // sorting
+//     data.sort((a, b) => {
+//       const av: any = a[sortField];
+//       const bv: any = b[sortField];
+//       if (av < bv) return sortOrder === 'asc' ? -1 : 1;
+//       if (av > bv) return sortOrder === 'asc' ? 1 : -1;
+//       return 0;
+//     });
+
+//     return data;
+//   }, [
+//     bookings,
+//     selectedClub,
+//     selectedTypes,
+//     selectedLevels,
+//     selectedStatuses,
+//     activeFilters,
+//     sortField,
+//     sortOrder,
+//     dateRange,
+//     timeRange,
+//   ]);
+
+//   // toggles
+//   const toggleChip = (filter: string) =>
+//     setActiveFilters((prev) =>
+//       prev.includes(filter) ? prev.filter((f) => f !== filter) : [...prev, filter]
+//     );
+
+//   const toggleSort = (field: keyof Booking) => {
+//     if (sortField === field) setSortOrder((o) => (o === 'asc' ? 'desc' : 'asc'));
+//     else {
+//       setSortField(field);
+//       setSortOrder('asc');
+//     }
+//   };
+
+//   const toggleRowSelection = (id: string) =>
+//     setSelectedRows((prev) => (prev.includes(id) ? prev.filter((r) => r !== id) : [...prev, id]));
+
+//   // menus handlers (club/type/level/status)
+//   const openMenu = (setter: typeof setAnchorElClub) => (e: React.MouseEvent<HTMLElement>) =>
+//     setter(e.currentTarget);
+//   const closeMenu = (setter: typeof setAnchorElClub) => () => setter(null);
+
+//   // map status value -> label
+//   const statusLabel = (val: string) => STATUS_OPTIONS.find((s) => s.value === val)?.label ?? val;
 
 //   const columns: GridColDef[] = [
-//     { field: 'date', headerName: t('dateTime'), flex: 0.8, minWidth: 120 },
+//     { field: 'date', headerName: t('date'), flex: 0.8, minWidth: 120 },
+//     { field: 'time', headerName: t('time'), flex: 0.8, minWidth: 120 },
 //     { field: 'title', headerName: t('trainingName'), flex: 1, minWidth: 150 },
 //     { field: 'type', headerName: t('type'), flex: 0.5, minWidth: 100 },
 //     { field: 'level', headerName: t('level'), flex: 0.4, minWidth: 80 },
@@ -107,25 +288,27 @@
 //     { field: 'actions', headerName: t('actions'), flex: 0.4, minWidth: 100, sortable: false },
 //   ].filter(Boolean) as GridColDef[];
 
-//   const toggleChip = (filter: string) => {
-//     setActiveFilters((prev) =>
-//       prev.includes(filter) ? prev.filter((f) => f !== filter) : [...prev, filter]
-//     );
-//   };
+//   // const toggleChip = (filter: string) => {
+//   //   setActiveFilters((prev) =>
+//   //     prev.includes(filter) ? prev.filter((f) => f !== filter) : [...prev, filter]
+//   //   );
+//   // };
 
 //   const handleBatchAction = (action: string) => {
 //     console.log('Batch action', action, selectedRows);
 //     // тут виклик API для масової зміни
 //   };
 
-//   const localeText = locale === 'uk'
+//   const localeText =
+//     locale === 'uk'
 //       ? ukUA.components.MuiDataGrid.defaultProps.localeText
 //       : enUS.components.MuiDataGrid.defaultProps.localeText;
-  
-//     if (!mounted) return null;
-// console.log("bookings", bookings)
+
+//   if (!mounted) return null;
+//   console.log('bookings', bookings);
 //   return (
-//     <Box sx={{
+//     <Box
+//       sx={{
 //         height: 600,
 //         width: '99%',
 //         minWidth: 180,
@@ -133,65 +316,282 @@
 //           fontFamily: 'var(--font-geist-sans)',
 //         },
 //         '& [class*="MuiDataGridVariables"]': {
-//           '--DataGrid-t-header-background-base': '#f48b29',
+//           '--DataGrid-t-header-background-base': '#e5e7eb',
 //         },
 //         '& .MuiDataGrid-columnHeaders': {
-//           color: '#fff',
+//           color: '#374151',
 //           fontWeight: 'bold',
 //           fontSize: '1rem',
 //         },
 //         '& .MuiDataGrid-row:hover': {
 //           cursor: 'pointer',
 //         },
-//       }}>
+//       }}
+//     >
 //       <Box sx={{ mb: 1 }}>
 //         {/* швидкі чипи */}
-//         {['active', 'free', 'queue', 'today'].map((f) => (
-//           <Chip
-//             key={f}
-//             label={f}
-//             color={activeFilters.includes(f) ? 'primary' : 'default'}
-//             onClick={() => toggleChip(f)}
-//             sx={{ mr: 1 }}
-//           />
-//         ))}
+//         <div className="flex flex-wrap gap-2 items-center">
+//           {/* Дата */}
+//           <>
+//             <Chip
+//               label={
+//                 dateRange.from || dateRange.to
+//                   ? `Дата: ${dateRange.from ?? ''} - ${dateRange.to ?? ''}`
+//                   : 'Дата'
+//               }
+//               color={dateRange.from || dateRange.to ? 'primary' : 'default'}
+//               onClick={(e) => setAnchorElDate(e.currentTarget)}
+//             />
+//             <Menu
+//               anchorEl={anchorElDate}
+//               open={Boolean(anchorElDate)}
+//               onClose={() => setAnchorElDate(null)}
+//             >
+//               <MenuItem
+//                 onClick={() => {
+//                   setDateRange({ from: null, to: null });
+//                   setAnchorElDate(null);
+//                 }}
+//               >
+//                 Скинути фільтр
+//               </MenuItem>
+//               <MenuItem onClick={() => setDatePreset('today')}>Сьогодні</MenuItem>
+//               <MenuItem onClick={() => setDatePreset('tomorrow')}>Завтра</MenuItem>
+//               <MenuItem onClick={() => setDatePreset('thisWeek')}>Цього тижня</MenuItem>
+//               <MenuItem onClick={() => setDatePreset('nextWeek')}>Наступного тижня</MenuItem>
+//               <MenuItem>
+//                 <input
+//                   type="date"
+//                   value={dateRange.from ?? ''}
+//                   onChange={(e) => setDateRange((prev) => ({ ...prev, from: e.target.value }))}
+//                 />
+//                 <span className="mx-2">—</span>
+//                 <input
+//                   type="date"
+//                   value={dateRange.to ?? ''}
+//                   onChange={(e) => setDateRange((prev) => ({ ...prev, to: e.target.value }))}
+//                 />
+//               </MenuItem>
+//             </Menu>
+//           </>
 
-//         {/* масові дії */}
-//         <Button onClick={() => handleBatchAction('changeStatus')} disabled={!selectedRows.length}>
-//           {/* {t('changeStatus')} */}
-//           changeStatus
-//         </Button>
-//         <Button onClick={() => handleBatchAction('export')} disabled={!selectedRows.length}>
-//           {/* {t('export')} */}
-//           export
-//         </Button>
+//           {/* Час */}
+//           <>
+//             <Chip
+//               label={
+//                 timeRange.from || timeRange.to
+//                   ? `Час: ${timeRange.from ?? ''} - ${timeRange.to ?? ''}`
+//                   : 'Час'
+//               }
+//               color={timeRange.from || timeRange.to ? 'primary' : 'default'}
+//               onClick={(e) => setAnchorElTime(e.currentTarget)}
+//             />
+//             <Menu
+//               anchorEl={anchorElTime}
+//               open={Boolean(anchorElTime)}
+//               onClose={() => setAnchorElTime(null)}
+//             >
+//               <MenuItem
+//                 onClick={() => {
+//                   setTimeRange({ from: null, to: null });
+//                   setAnchorElTime(null);
+//                 }}
+//               >
+//                 Скинути фільтр
+//               </MenuItem>
+//               <MenuItem>
+//                 <input
+//                   type="time"
+//                   value={timeRange.from ?? ''}
+//                   onChange={(e) => setTimeRange((prev) => ({ ...prev, from: e.target.value }))}
+//                 />
+//                 <span className="mx-2">—</span>
+//                 <input
+//                   type="time"
+//                   value={timeRange.to ?? ''}
+//                   onChange={(e) => setTimeRange((prev) => ({ ...prev, to: e.target.value }))}
+//                 />
+//               </MenuItem>
+//             </Menu>
+//           </>
+//           {/* simple text chips */}
+//           {['зал', 'заповненість'].map((f) => (
+//             <Chip
+//               key={f}
+//               label={f}
+//               variant="outlined"
+//               color={activeFilters.includes(f) ? 'primary' : 'default'}
+//               onClick={() => toggleChip(f)}
+//             />
+//           ))}
+
+//           {/* quick filters */}
+//           {['free', 'queue', 'today'].map((f) => (
+//             <Chip
+//               key={f}
+//               label={f}
+//               color={activeFilters.includes(f) ? 'primary' : 'default'}
+//               onClick={() => toggleChip(f)}
+//             />
+//           ))}
+
+//           {/* CLUB chip */}
+//           {role === 'owner_admin' ? (
+//             <>
+//               <Chip
+//                 label={selectedClub ? `Клуб: ${selectedClub}` : 'Клуб'}
+//                 color={selectedClub ? 'primary' : 'default'}
+//                 onClick={openMenu(setAnchorElClub)}
+//               />
+//               <Menu
+//                 anchorEl={anchorElClub}
+//                 open={Boolean(anchorElClub)}
+//                 onClose={closeMenu(setAnchorElClub)}
+//               >
+//                 <MenuItem
+//                   onClick={() => {
+//                     setSelectedClub(null);
+//                     closeMenu(setAnchorElClub)();
+//                   }}
+//                 >
+//                   Усі
+//                 </MenuItem>
+//                 {uniqueClubs.map((c) => (
+//                   <MenuItem
+//                     key={c}
+//                     onClick={() => {
+//                       setSelectedClub(c);
+//                       closeMenu(setAnchorElClub)();
+//                     }}
+//                   >
+//                     {c}
+//                   </MenuItem>
+//                 ))}
+//               </Menu>
+//             </>
+//           ) : (
+//             <Chip label={`Клуб: ${userClub ?? '—'}`} color="primary" variant="outlined" />
+//           )}
+
+//           {/* TYPE chip (multi) */}
+//           <>
+//             <Chip
+//               label={selectedTypes.length ? `Тип: ${selectedTypes.join(', ')}` : 'Тип'}
+//               color={selectedTypes.length ? 'primary' : 'default'}
+//               onClick={openMenu(setAnchorElType)}
+//             />
+//             <Menu
+//               anchorEl={anchorElType}
+//               open={Boolean(anchorElType)}
+//               onClose={closeMenu(setAnchorElType)}
+//             >
+//               {uniqueTypes.map((t) => (
+//                 <MenuItem key={t} onClick={() => toggleInArray(selectedTypes, setSelectedTypes, t)}>
+//                   <Checkbox checked={selectedTypes.includes(t)} />
+//                   {t}
+//                 </MenuItem>
+//               ))}
+//             </Menu>
+//           </>
+
+//           {/* LEVEL chip (multi) */}
+//           <>
+//             <Chip
+//               label={selectedLevels.length ? `Рівень: ${selectedLevels.join(', ')}` : 'Рівень'}
+//               color={selectedLevels.length ? 'primary' : 'default'}
+//               onClick={openMenu(setAnchorElLevel)}
+//             />
+//             <Menu
+//               anchorEl={anchorElLevel}
+//               open={Boolean(anchorElLevel)}
+//               onClose={closeMenu(setAnchorElLevel)}
+//             >
+//               {levelOptions.map((lvl) => (
+//                 <MenuItem
+//                   key={lvl}
+//                   onClick={() => toggleInArray(selectedLevels, setSelectedLevels, lvl)}
+//                 >
+//                   <Checkbox checked={selectedLevels.includes(lvl)} />
+//                   {lvl}
+//                 </MenuItem>
+//               ))}
+//             </Menu>
+//           </>
+
+//           {/* STATUS chip (multi) */}
+//           <>
+//             <Chip
+//               label={
+//                 selectedStatuses.length
+//                   ? `Статус: ${selectedStatuses.map(statusLabel).join(', ')}`
+//                   : 'Статус'
+//               }
+//               color={selectedStatuses.length ? 'primary' : 'default'}
+//               onClick={openMenu(setAnchorElStatus)}
+//             />
+//             <Menu
+//               anchorEl={anchorElStatus}
+//               open={Boolean(anchorElStatus)}
+//               onClose={closeMenu(setAnchorElStatus)}
+//             >
+//               <MenuItem
+//                 onClick={() => {
+//                   setSelectedStatuses([]);
+//                   closeMenu(setAnchorElStatus)();
+//                 }}
+//               >
+//                 Усі
+//               </MenuItem>
+//               {STATUS_OPTIONS.map((s) => (
+//                 <MenuItem
+//                   key={s.value}
+//                   onClick={() => toggleInArray(selectedStatuses, setSelectedStatuses, s.value)}
+//                 >
+//                   <Checkbox checked={selectedStatuses.includes(s.value)} />
+//                   {s.label}
+//                 </MenuItem>
+//               ))}
+//             </Menu>
+//           </>
+//         </div>
+
+//         {/* bulk actions */}
+//         <div className="flex gap-2">
+//           <Button
+//             disabled={!selectedRows.length}
+//             onClick={() => console.log('Change status', selectedRows)}
+//           >
+//             Змінити статус
+//           </Button>
+//           <Button
+//             disabled={!selectedRows.length}
+//             onClick={() => console.log('Export', selectedRows)}
+//           >
+//             Експорт CSV
+//           </Button>
+//         </div>
 //       </Box>
 
 //       <DataGrid
-//         rows={bookings}
-//         columns={columns}
-//         rowCount={rowCount}
-//         pagination
-//         paginationMode="server"
-//         paginationModel={paginationModel}
-//         onPaginationModelChange={setPaginationModel}
-//         // sortingMode="server"
-//         sortModel={sortModel}
-//         onSortModelChange={setSortModel}
-//         checkboxSelection
-//         onRowSelectionModelChange={(ids) => setSelectedRows(ids as string[])}
-//         localeText={localeText}
-//         loading={loading}
-//       />
+//   rows={filteredBookings}
+//   columns={columns}
+//   rowCount={rowCount}
+//   paginationMode="server"
+//   paginationModel={paginationModel}
+//   onPaginationModelChange={setPaginationModel}
+//   // sortingMode="server"
+//   sortModel={sortModel}
+//   onSortModelChange={setSortModel}
+//   checkboxSelection
+//   onRowSelectionModelChange={(ids) => setSelectedRows(ids as string[])}
+//   localeText={localeText}
+//   loading={loading}
+// />
 //     </Box>
 //   );
 // }
 
-
-
 //======================================================
-
-
 
 'use client';
 
@@ -199,13 +599,23 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { mockBookings } from '@/data/mockBookings';
 import { Chip, Button, Menu, MenuItem, Checkbox } from '@mui/material';
 import { ArrowUpward, ArrowDownward } from '@mui/icons-material';
-import { isWithinInterval, parseISO, isToday, isTomorrow, startOfWeek, endOfWeek, addWeeks } from 'date-fns';
+import {
+  isWithinInterval,
+  parseISO,
+  isToday,
+  isTomorrow,
+  startOfWeek,
+  endOfWeek,
+  addWeeks,
+} from 'date-fns';
+import SortableHeaderTable from './SortableHeaderTable/SortableHeaderTable';
+import { useTranslations } from 'next-intl';
 
 type Booking = {
   id: string;
-  date: string;       // 'yyyy-MM-dd'
-  startTime: string;  // 'HH:mm'
-  endTime: string;    // 'HH:mm'
+  date: string; // 'yyyy-MM-dd'
+  startTime: string; // 'HH:mm'
+  endTime: string; // 'HH:mm'
   title: string;
   hall: string;
   type: string;
@@ -213,12 +623,12 @@ type Booking = {
   club: string;
   participants: number;
   limit: number;
-  status: string;     // internal values like 'active' | 'cancelled' | 'finished'
+  status: string; // internal values like 'active' | 'cancelled' | 'finished'
   availability: 'free' | 'queue' | 'full';
 };
 
 interface BookingTableProps {
-  role: 'owner_admin' | 'club_admin';
+  role: string | null;
   userClub?: string;
 }
 
@@ -229,6 +639,8 @@ const STATUS_OPTIONS = [
 ];
 
 export default function BookingTable({ role, userClub }: BookingTableProps) {
+const t = useTranslations('Bookings');
+
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [activeFilters, setActiveFilters] = useState<string[]>([]); // quick chips: today, free, queue
@@ -246,14 +658,19 @@ export default function BookingTable({ role, userClub }: BookingTableProps) {
   const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
   const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]); // <- новий state
 
-   // дата
+  // дата
   const [anchorElDate, setAnchorElDate] = useState<null | HTMLElement>(null);
-  const [dateRange, setDateRange] = useState<{ from: string | null; to: string | null }>({ from: null, to: null });
+  const [dateRange, setDateRange] = useState<{ from: string | null; to: string | null }>({
+    from: null,
+    to: null,
+  });
 
   // час
   const [anchorElTime, setAnchorElTime] = useState<null | HTMLElement>(null);
-  const [timeRange, setTimeRange] = useState<{ from: string | null; to: string | null }>({ from: null, to: null });
-
+  const [timeRange, setTimeRange] = useState<{ from: string | null; to: string | null }>({
+    from: null,
+    to: null,
+  });
 
   // init data
   useEffect(() => {
@@ -281,17 +698,23 @@ export default function BookingTable({ role, userClub }: BookingTableProps) {
 
   const levelOptions = ['A', 'B', 'C', 'D', 'Meister'];
 
-    // пресети для дати
+  // пресети для дати
   const setDatePreset = (preset: 'today' | 'tomorrow' | 'thisWeek' | 'nextWeek') => {
     const today = new Date();
     if (preset === 'today') {
-      setDateRange({ from: today.toISOString().slice(0, 10), to: today.toISOString().slice(0, 10) });
+      setDateRange({
+        from: today.toISOString().slice(0, 10),
+        to: today.toISOString().slice(0, 10),
+      });
     } else if (preset === 'tomorrow') {
       const t = new Date();
       t.setDate(today.getDate() + 1);
       setDateRange({ from: t.toISOString().slice(0, 10), to: t.toISOString().slice(0, 10) });
     } else if (preset === 'thisWeek') {
-      setDateRange({ from: startOfWeek(today, { weekStartsOn: 1 }).toISOString().slice(0, 10), to: endOfWeek(today, { weekStartsOn: 1 }).toISOString().slice(0, 10) });
+      setDateRange({
+        from: startOfWeek(today, { weekStartsOn: 1 }).toISOString().slice(0, 10),
+        to: endOfWeek(today, { weekStartsOn: 1 }).toISOString().slice(0, 10),
+      });
     } else if (preset === 'nextWeek') {
       const start = addWeeks(startOfWeek(today, { weekStartsOn: 1 }), 1);
       const end = addWeeks(endOfWeek(today, { weekStartsOn: 1 }), 1);
@@ -301,7 +724,11 @@ export default function BookingTable({ role, userClub }: BookingTableProps) {
   };
 
   // helper: toggle item in array state
-  const toggleInArray = (arr: string[], setArr: (v: string[] | ((prev: string[]) => string[])) => void, value: string) => {
+  const toggleInArray = (
+    arr: string[],
+    setArr: (v: string[] | ((prev: string[]) => string[])) => void,
+    value: string
+  ) => {
     setArr((prev) => (prev.includes(value) ? prev.filter((x) => x !== value) : [...prev, value]));
   };
 
@@ -316,49 +743,68 @@ export default function BookingTable({ role, userClub }: BookingTableProps) {
 
     // TYPE filter (multi)
     if (selectedTypes.length) {
+       console.log('filtered by start', data);
       data = data.filter((b) => selectedTypes.includes(b.type));
+      console.log('selectedStatuses', selectedTypes);
+      console.log('filtered ', data);
     }
 
     // LEVEL filter (multi)
     if (selectedLevels.length) {
+     
       data = data.filter((b) => selectedLevels.includes(b.level));
+     
+      
     }
 
     // STATUS filter (multi)
     if (selectedStatuses.length) {
+      
       data = data.filter((b) => selectedStatuses.includes(b.status));
+      console.log('selectedStatuses', selectedStatuses);
+
     }
 
     // Дата
-if (dateRange.from || dateRange.to) {
-  data = data.filter((b) => {
-    const bookingDate = parseISO(b.date);
-    const from = dateRange.from ? parseISO(dateRange.from) : null;
-    const to = dateRange.to ? parseISO(dateRange.to) : null;
+    if (dateRange.from || dateRange.to) {
+      data = data.filter((b) => {
+        const bookingDate = parseISO(b.date);
+        const from = dateRange.from ? parseISO(dateRange.from) : null;
+        const to = dateRange.to ? parseISO(dateRange.to) : null;
 
-    if (from && to && !isWithinInterval(bookingDate, { start: from, end: to })) return false;
-    if (from && !to && bookingDate < from) return false;
-    if (to && !from && bookingDate > to) return false;
+        if (from && to && !isWithinInterval(bookingDate, { start: from, end: to })) return false;
+        if (from && !to && bookingDate < from) return false;
+        if (to && !from && bookingDate > to) return false;
 
-    return true;
-  });
-}
+        return true;
+      });
+    }
 
-// Час (брати `startTime`, бо в Booking немає `time`)
-if (timeRange.from || timeRange.to) {
-  data = data.filter((b) => {
-    const [h, m] = b.startTime.split(':').map(Number);
-    const bookingMinutes = h * 60 + m;
+    // Час (брати `startTime`, бо в Booking немає `time`)
+    if (timeRange.from || timeRange.to) {
+      data = data.filter((b) => {
+        const [h, m] = b.startTime.split(':').map(Number);
+        const bookingMinutes = h * 60 + m;
 
-    const fromMin = timeRange.from ? (() => { const [hh, mm] = timeRange.from!.split(':').map(Number); return hh * 60 + mm; })() : null;
-    const toMin = timeRange.to ? (() => { const [hh, mm] = timeRange.to!.split(':').map(Number); return hh * 60 + mm; })() : null;
+        const fromMin = timeRange.from
+          ? (() => {
+              const [hh, mm] = timeRange.from!.split(':').map(Number);
+              return hh * 60 + mm;
+            })()
+          : null;
+        const toMin = timeRange.to
+          ? (() => {
+              const [hh, mm] = timeRange.to!.split(':').map(Number);
+              return hh * 60 + mm;
+            })()
+          : null;
 
-    if (fromMin !== null && bookingMinutes < fromMin) return false;
-    if (toMin !== null && bookingMinutes > toMin) return false;
+        if (fromMin !== null && bookingMinutes < fromMin) return false;
+        if (toMin !== null && bookingMinutes > toMin) return false;
 
-    return true;
-  });
-}
+        return true;
+      });
+    }
 
     // quick chips
     if (activeFilters.includes('today')) {
@@ -382,11 +828,24 @@ if (timeRange.from || timeRange.to) {
     });
 
     return data;
-  }, [bookings, selectedClub, selectedTypes, selectedLevels, selectedStatuses, activeFilters, sortField, sortOrder, dateRange, timeRange  ]);
+  }, [
+    bookings,
+    selectedClub,
+    selectedTypes,
+    selectedLevels,
+    selectedStatuses,
+    activeFilters,
+    sortField,
+    sortOrder,
+    dateRange,
+    timeRange,
+  ]);
 
   // toggles
   const toggleChip = (filter: string) =>
-    setActiveFilters((prev) => (prev.includes(filter) ? prev.filter((f) => f !== filter) : [...prev, filter]));
+    setActiveFilters((prev) =>
+      prev.includes(filter) ? prev.filter((f) => f !== filter) : [...prev, filter]
+    );
 
   const toggleSort = (field: keyof Booking) => {
     if (sortField === field) setSortOrder((o) => (o === 'asc' ? 'desc' : 'asc'));
@@ -400,7 +859,8 @@ if (timeRange.from || timeRange.to) {
     setSelectedRows((prev) => (prev.includes(id) ? prev.filter((r) => r !== id) : [...prev, id]));
 
   // menus handlers (club/type/level/status)
-  const openMenu = (setter: typeof setAnchorElClub) => (e: React.MouseEvent<HTMLElement>) => setter(e.currentTarget);
+  const openMenu = (setter: typeof setAnchorElClub) => (e: React.MouseEvent<HTMLElement>) =>
+    setter(e.currentTarget);
   const closeMenu = (setter: typeof setAnchorElClub) => () => setter(null);
 
   // map status value -> label
@@ -411,30 +871,46 @@ if (timeRange.from || timeRange.to) {
     <div className="space-y-4">
       {/* CHIPS */}
       <div className="flex flex-wrap gap-2 items-center">
-         {/* Дата */}
+        {/* Дата */}
         <>
           <Chip
-            label={dateRange.from || dateRange.to ? `Дата: ${dateRange.from ?? ''} - ${dateRange.to ?? ''}` : 'Дата'}
+            label={
+              dateRange.from || dateRange.to
+                 ? `${t('date')}: ${dateRange.from ?? ''} - ${dateRange.to ?? ''}`
+                : t('date')
+            }
             color={dateRange.from || dateRange.to ? 'primary' : 'default'}
             onClick={(e) => setAnchorElDate(e.currentTarget)}
           />
-          <Menu anchorEl={anchorElDate} open={Boolean(anchorElDate)} onClose={() => setAnchorElDate(null)}>
+          <Menu
+            anchorEl={anchorElDate}
+            open={Boolean(anchorElDate)}
+            onClose={() => setAnchorElDate(null)}
+          >
             <MenuItem
-    onClick={() => {
-      setDateRange({ from: null, to: null });
-      setAnchorElDate(null);
-    }}
-  >
-    Скинути фільтр
-  </MenuItem>
-            <MenuItem onClick={() => setDatePreset('today')}>Сьогодні</MenuItem>
-            <MenuItem onClick={() => setDatePreset('tomorrow')}>Завтра</MenuItem>
-            <MenuItem onClick={() => setDatePreset('thisWeek')}>Цього тижня</MenuItem>
-            <MenuItem onClick={() => setDatePreset('nextWeek')}>Наступного тижня</MenuItem>
+              onClick={() => {
+                setDateRange({ from: null, to: null });
+                setAnchorElDate(null);
+              }}
+            >
+              {t('resetFilter')}
+            </MenuItem>
+            <MenuItem onClick={() => setDatePreset('today')}>{t('today')}</MenuItem>
+            <MenuItem onClick={() => setDatePreset('tomorrow')}>{t('tomorrow')}</MenuItem>
+            <MenuItem onClick={() => setDatePreset('thisWeek')}>{t('thisWeek')}</MenuItem>
+            <MenuItem onClick={() => setDatePreset('nextWeek')}>{t('nextWeek')}</MenuItem>
             <MenuItem>
-              <input type="date" value={dateRange.from ?? ''} onChange={(e) => setDateRange((prev) => ({ ...prev, from: e.target.value }))} />
+              <input
+                type="date"
+                value={dateRange.from ?? ''}
+                onChange={(e) => setDateRange((prev) => ({ ...prev, from: e.target.value }))}
+              />
               <span className="mx-2">—</span>
-              <input type="date" value={dateRange.to ?? ''} onChange={(e) => setDateRange((prev) => ({ ...prev, to: e.target.value }))} />
+              <input
+                type="date"
+                value={dateRange.to ?? ''}
+                onChange={(e) => setDateRange((prev) => ({ ...prev, to: e.target.value }))}
+              />
             </MenuItem>
           </Menu>
         </>
@@ -442,28 +918,40 @@ if (timeRange.from || timeRange.to) {
         {/* Час */}
         <>
           <Chip
-            label={timeRange.from || timeRange.to ? `Час: ${timeRange.from ?? ''} - ${timeRange.to ?? ''}` : 'Час'}
+            label={
+              timeRange.from || timeRange.to
+                ? `${t('time')}: ${timeRange.from ?? ''} - ${timeRange.to ?? ''}`
+                : t('time')
+            }
             color={timeRange.from || timeRange.to ? 'primary' : 'default'}
             onClick={(e) => setAnchorElTime(e.currentTarget)}
           />
           <Menu anchorEl={anchorElTime} open={Boolean(anchorElTime)} onClose={() => setAnchorElTime(null)}>
             <MenuItem
-    onClick={() => {
-      setTimeRange({ from: null, to: null });
-      setAnchorElTime(null);
-    }}
-  >
-    Скинути фільтр
-  </MenuItem>
+              onClick={() => {
+                setTimeRange({ from: null, to: null });
+                setAnchorElTime(null);
+              }}
+            >
+              {t('resetFilter')}
+            </MenuItem>
             <MenuItem>
-              <input type="time" value={timeRange.from ?? ''} onChange={(e) => setTimeRange((prev) => ({ ...prev, from: e.target.value }))} />
+              <input
+                type="time"
+                value={timeRange.from ?? ''}
+                onChange={(e) => setTimeRange((prev) => ({ ...prev, from: e.target.value }))}
+              />
               <span className="mx-2">—</span>
-              <input type="time" value={timeRange.to ?? ''} onChange={(e) => setTimeRange((prev) => ({ ...prev, to: e.target.value }))} />
+              <input
+                type="time"
+                value={timeRange.to ?? ''}
+                onChange={(e) => setTimeRange((prev) => ({ ...prev, to: e.target.value }))}
+              />
             </MenuItem>
           </Menu>
         </>
         {/* simple text chips */}
-        {[ 'зал', 'заповненість'].map((f) => (
+        {/* {['зал', 'заповненість'].map((f) => (
           <Chip
             key={f}
             label={f}
@@ -471,7 +959,7 @@ if (timeRange.from || timeRange.to) {
             color={activeFilters.includes(f) ? 'primary' : 'default'}
             onClick={() => toggleChip(f)}
           />
-        ))}
+        ))} */}
 
         {/* quick filters */}
         {['free', 'queue', 'today'].map((f) => (
@@ -484,202 +972,266 @@ if (timeRange.from || timeRange.to) {
         ))}
 
         {/* CLUB chip */}
-        {role === 'owner_admin' ? (
-          <>
-            <Chip
-              label={selectedClub ? `Клуб: ${selectedClub}` : 'Клуб'}
-              color={selectedClub ? 'primary' : 'default'}
-              onClick={openMenu(setAnchorElClub)}
-            />
-            <Menu anchorEl={anchorElClub} open={Boolean(anchorElClub)} onClose={closeMenu(setAnchorElClub)}>
-              <MenuItem
-                onClick={() => {
-                  setSelectedClub(null);
-                  closeMenu(setAnchorElClub)();
-                }}
-              >
-                Усі
-              </MenuItem>
-              {uniqueClubs.map((c) => (
-                <MenuItem
-                  key={c}
-                  onClick={() => {
-                    setSelectedClub(c);
-                    closeMenu(setAnchorElClub)();
-                  }}
-                >
-                  {c}
-                </MenuItem>
-              ))}
-            </Menu>
-          </>
-        ) : (
-          <Chip label={`Клуб: ${userClub ?? '—'}`} color="primary" variant="outlined" />
-        )}
+{role === 'owner_admin' ? (
+  <>
+    <Chip
+      label={selectedClub ? `${t('club')}: ${selectedClub}` : t('club')}
+      color={selectedClub ? 'primary' : 'default'}
+      onClick={openMenu(setAnchorElClub)}
+    />
+    <Menu
+      anchorEl={anchorElClub}
+      open={Boolean(anchorElClub)}
+      onClose={closeMenu(setAnchorElClub)}
+    >
+      <MenuItem
+        onClick={() => {
+          setSelectedClub(null);
+          closeMenu(setAnchorElClub)();
+        }}
+      >
+        {t('resetFilter')}
+      </MenuItem>
+      {uniqueClubs.map((c) => (
+        <MenuItem
+          key={c}
+          onClick={() => {
+            setSelectedClub(c);
+            closeMenu(setAnchorElClub)();
+          }}
+        >
+          {c}
+        </MenuItem>
+      ))}
+    </Menu>
+  </>
+) : (
+  <Chip label={`${t('club')}: ${userClub ?? '—'}`} color="primary" variant="outlined" />
+)}
 
-        {/* TYPE chip (multi) */}
-        <>
-          <Chip
-            label={selectedTypes.length ? `Тип: ${selectedTypes.join(', ')}` : 'Тип'}
-            color={selectedTypes.length ? 'primary' : 'default'}
-            onClick={openMenu(setAnchorElType)}
-          />
-          <Menu anchorEl={anchorElType} open={Boolean(anchorElType)} onClose={closeMenu(setAnchorElType)}>
-            {uniqueTypes.map((t) => (
-              <MenuItem
-                key={t}
-                onClick={() => toggleInArray(selectedTypes, setSelectedTypes, t)}
-              >
-                <Checkbox checked={selectedTypes.includes(t)} />
-                {t}
-              </MenuItem>
-            ))}
-          </Menu>
-        </>
+{/* TYPE chip (multi) */}
+<>
+  <Chip
+    label={selectedTypes.length ? `${t('types.type')}: ${selectedTypes.map((val) => t(`types.${val}`)).join(', ')}` : t('types.type')}
+    color={selectedTypes.length ? 'primary' : 'default'}
+    onClick={openMenu(setAnchorElType)}
+  />
+  <Menu
+    anchorEl={anchorElType}
+    open={Boolean(anchorElType)}
+    onClose={closeMenu(setAnchorElType)}
+  >
+    {uniqueTypes.map((tItem) => (
+      <MenuItem key={tItem} onClick={() => toggleInArray(selectedTypes, setSelectedTypes, tItem)}>
+        <Checkbox checked={selectedTypes.includes(tItem)} />
+        {tItem}
+      </MenuItem>
+    ))}
+  </Menu>
+</>
 
-        {/* LEVEL chip (multi) */}
-        <>
-          <Chip
-            label={selectedLevels.length ? `Рівень: ${selectedLevels.join(', ')}` : 'Рівень'}
-            color={selectedLevels.length ? 'primary' : 'default'}
-            onClick={openMenu(setAnchorElLevel)}
-          />
-          <Menu anchorEl={anchorElLevel} open={Boolean(anchorElLevel)} onClose={closeMenu(setAnchorElLevel)}>
-            {levelOptions.map((lvl) => (
-              <MenuItem key={lvl} onClick={() => toggleInArray(selectedLevels, setSelectedLevels, lvl)}>
-                <Checkbox checked={selectedLevels.includes(lvl)} />
-                {lvl}
-              </MenuItem>
-            ))}
-          </Menu>
-        </>
+{/* LEVEL chip (multi) */}
+<>
+  <Chip
+    label={selectedLevels.length ? `${t('level')}: ${selectedLevels.join(', ')}` : t('level')}
+    color={selectedLevels.length ? 'primary' : 'default'}
+    onClick={openMenu(setAnchorElLevel)}
+  />
+  <Menu
+    anchorEl={anchorElLevel}
+    open={Boolean(anchorElLevel)}
+    onClose={closeMenu(setAnchorElLevel)}
+  >
+    {levelOptions.map((lvl) => (
+      <MenuItem key={lvl} onClick={() => toggleInArray(selectedLevels, setSelectedLevels, lvl)}>
+        <Checkbox checked={selectedLevels.includes(lvl)} />
+        {lvl}
+      </MenuItem>
+    ))}
+  </Menu>
+</>
 
-        {/* STATUS chip (multi) */}
-        <>
-          <Chip
-            label={selectedStatuses.length ? `Статус: ${selectedStatuses.map(statusLabel).join(', ')}` : 'Статус'}
-            color={selectedStatuses.length ? 'primary' : 'default'}
-            onClick={openMenu(setAnchorElStatus)}
-          />
-          <Menu anchorEl={anchorElStatus} open={Boolean(anchorElStatus)} onClose={closeMenu(setAnchorElStatus)}>
-            <MenuItem
-              onClick={() => {
-                setSelectedStatuses([]);
-                closeMenu(setAnchorElStatus)();
-              }}
-            >
-              Усі
-            </MenuItem>
-            {STATUS_OPTIONS.map((s) => (
-              <MenuItem key={s.value} onClick={() => toggleInArray(selectedStatuses, setSelectedStatuses, s.value)}>
-                <Checkbox checked={selectedStatuses.includes(s.value)} />
-                {s.label}
-              </MenuItem>
-            ))}
-          </Menu>
-        </>
+{/* STATUS chip (multi) */}
+<>
+  <Chip
+    label={
+      selectedStatuses.length
+        ? `${t('status')}: ${selectedStatuses.map((val) => t(`statuses.${val}`)).join(', ')}`
+        : t('status')
+    }
+    color={selectedStatuses.length ? 'primary' : 'default'}
+    onClick={openMenu(setAnchorElStatus)}
+  />
+  <Menu
+    anchorEl={anchorElStatus}
+    open={Boolean(anchorElStatus)}
+    onClose={closeMenu(setAnchorElStatus)}
+  >
+    <MenuItem
+      onClick={() => {
+        setSelectedStatuses([]);
+        closeMenu(setAnchorElStatus)();
+      }}
+    >
+      {t('resetFilter')}
+    </MenuItem>
+    {STATUS_OPTIONS.map((s) => (
+      <MenuItem
+        key={s.value}
+        onClick={() => toggleInArray(selectedStatuses, setSelectedStatuses, s.value)}
+      >
+        <Checkbox checked={selectedStatuses.includes(s.value)} />
+        {t(`statuses.${s.value}`)}
+      </MenuItem>
+    ))}
+  </Menu>
+</>
+
       </div>
 
       {/* bulk actions */}
-      <div className="flex gap-2">
+     <div className="flex gap-2">
         <Button disabled={!selectedRows.length} onClick={() => console.log('Change status', selectedRows)}>
-          Змінити статус
+          {t('bulkActions.changeStatus')}
         </Button>
         <Button disabled={!selectedRows.length} onClick={() => console.log('Export', selectedRows)}>
-          Експорт CSV
+          {t('bulkActions.exportCSV')}
         </Button>
       </div>
 
       {/* table */}
       <table className="w-full border-collapse border border-gray-300 text-left">
-  <thead>
-    <tr className="bg-gray-200 border-b">
-      <th className="p-2" />
-      <th className="p-2 cursor-pointer" onClick={() => toggleSort('date')}>
-        Дата {sortField === 'date' && (sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />)}
-      </th>
-      <th className="p-2 cursor-pointer" onClick={() => toggleSort('startTime')}>
-        Час {sortField === 'startTime' && (sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />)}
-      </th>
-      <th className="p-2 cursor-pointer" onClick={() => toggleSort('title')}>
-        Назва {sortField === 'title' && (sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />)}
-      </th>
-      <th className="p-2 cursor-pointer" onClick={() => toggleSort('type')}>
-        Тип {sortField === 'type' && (sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />)}
-      </th>
-      <th className="p-2 cursor-pointer" onClick={() => toggleSort('level')}>
-        Рівень {sortField === 'level' && (sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />)}
-      </th>
-      {role === 'owner_admin' && (
-        <th className="p-2 cursor-pointer" onClick={() => toggleSort('club')}>
-          Клуб {sortField === 'club' && (sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />)}
-        </th>
-      )}
-      <th className="p-2 cursor-pointer" onClick={() => toggleSort('participants')}>
-        Заповненість {sortField === 'participants' && (sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />)}
-      </th>
-      <th className="p-2 cursor-pointer" onClick={() => toggleSort('status')}>
-        Статус {sortField === 'status' && (sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />)}
-      </th>
-      <th className="p-2">Дії</th>
-    </tr>
-  </thead>
-  <tbody>
-    {filteredBookings.map((b) => (
-      <tr key={b.id} className="border-t hover:bg-gray-50">
-        <td className="p-2">
-          <input
-            type="checkbox"
-            checked={selectedRows.includes(b.id)}
-            onChange={() => toggleRowSelection(b.id)}
-          />
-        </td>
-        <td className="p-2">
-          {new Date(b.date).toLocaleDateString('uk-UA', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-          })}
-        </td>
-        <td className="p-2">
-          {b.startTime}–{b.endTime}
-        </td>
-        <td className="p-2">
-          {b.title}
-          <div className="text-xs text-gray-500">{b.hall}</div>
-        </td>
-        <td className="p-2">{b.type}</td>
-        <td className="p-2">{b.level}</td>
-        {role === 'owner_admin' && <td className="p-2">{b.club}</td>}
-        <td className="p-2">
-          {b.participants}/{b.limit}
-          <div className="h-2 bg-gray-200 rounded mt-1">
-            <div
-              className="h-full bg-blue-500 rounded"
-              style={{ width: `${(b.participants / b.limit) * 100}%` }}
-            />
-          </div>
-        </td>
-        <td className="p-2">{statusLabel(b.status)}</td>
-        <td className="p-2 space-x-1">
-          <button title="Переглянути">👁</button>
-          <button title="Редагувати">✏</button>
-          <button title="Видалити">🗑</button>
-        </td>
-      </tr>
-    ))}
-  </tbody>
-</table>
-
+         <thead>
+          <tr className="bg-gray-200 border-b">
+            <th className="p-2" />
+            <th className="p-2">
+              <SortableHeaderTable<Booking>
+                field="date"
+                label={t('date')}
+                sortField={sortField}
+                sortOrder={sortOrder}
+                onToggle={toggleSort}
+              />
+            </th>
+            <th className="p-2">
+              <SortableHeaderTable<Booking>
+                field="startTime"
+                label={t('time')}
+                sortField={sortField}
+                sortOrder={sortOrder}
+                onToggle={toggleSort}
+              />
+            </th>
+            <th className="p-2">
+              <SortableHeaderTable<Booking>
+                field="title"
+                label={t('trainingName')}
+                sortField={sortField}
+                sortOrder={sortOrder}
+                onToggle={toggleSort}
+              />
+            </th>
+            <th className="p-2">
+              <SortableHeaderTable<Booking>
+                field="type"
+                label={t('types.type')}
+                sortField={sortField}
+                sortOrder={sortOrder}
+                onToggle={toggleSort}
+              />
+            </th>
+            <th className="p-2">
+              <SortableHeaderTable<Booking>
+                field="level"
+                label={t('level')}
+                sortField={sortField}
+                sortOrder={sortOrder}
+                onToggle={toggleSort}
+              />
+            </th>
+            {role === 'owner_admin' && (
+              <th className="p-2">
+                <SortableHeaderTable<Booking>
+                  field="club"
+                  label={t('club')}
+                  sortField={sortField}
+                  sortOrder={sortOrder}
+                  onToggle={toggleSort}
+                />
+              </th>
+            )}
+            <th className="p-2">
+              <SortableHeaderTable<Booking>
+                field="participants"
+                label={t('participantsLimit')}
+                sortField={sortField}
+                sortOrder={sortOrder}
+                onToggle={toggleSort}
+              />
+            </th>
+            <th className="p-2">
+              <SortableHeaderTable<Booking>
+                field="status"
+                label={t('status')}
+                sortField={sortField}
+                sortOrder={sortOrder}
+                onToggle={toggleSort}
+              />
+            </th>
+            <th className="p-2">{t('actions')}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredBookings.map((b) => (
+            <tr key={b.id} className="border-t hover:bg-gray-50">
+              <td className="p-2">
+                <input
+                  type="checkbox"
+                  checked={selectedRows.includes(b.id)}
+                  onChange={() => toggleRowSelection(b.id)}
+                />
+              </td>
+              <td className="p-2">
+                {new Date(b.date).toLocaleDateString('uk-UA', {
+                  day: '2-digit',
+                  month: '2-digit',
+                  year: 'numeric',
+                })}
+              </td>
+              <td className="p-2">
+                {b.startTime}–{b.endTime}
+              </td>
+              <td className="p-2">
+                {b.title}
+                <div className="text-xs text-gray-500">{b.hall}</div>
+              </td>
+              <td className="p-2">{b.type}</td>
+              <td className="p-2">{b.level}</td>
+              {role === 'owner_admin' && <td className="p-2">{b.club}</td>}
+              <td className="p-2">
+                {b.participants}/{b.limit}
+                <div className="h-2 bg-gray-200 rounded mt-1">
+                  <div
+                    className="h-full bg-blue-500 rounded"
+                    style={{ width: `${(b.participants / b.limit) * 100}%` }}
+                  />
+                </div>
+              </td>
+              <td className="p-2">{statusLabel(b.status)}</td>
+              <td className="p-2 space-x-1">
+                <button title="Переглянути">👁</button>
+                <button title="Редагувати">✏</button>
+                <button title="Видалити">🗑</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
 
-
-
 //====================
-
-
 
 // 'use client';
 
@@ -714,7 +1266,7 @@ if (timeRange.from || timeRange.to) {
 // export default function BookingTable({ role, userClub }: BookingTableProps) {
 //   const [bookings, setBookings] = useState<Booking[]>([]);
 //   const [selectedRows, setSelectedRows] = useState<string[]>([]);
-//   const [activeFilters, setActiveFilters] = useState<string[]>([]); 
+//   const [activeFilters, setActiveFilters] = useState<string[]>([]);
 //   const [sortField, setSortField] = useState<keyof Booking>('date');
 //   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
@@ -888,5 +1440,3 @@ if (timeRange.from || timeRange.to) {
 //     </div>
 //   );
 // }
-
-

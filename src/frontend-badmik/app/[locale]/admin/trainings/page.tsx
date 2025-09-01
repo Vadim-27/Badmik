@@ -34,20 +34,19 @@ export default async function TrainingsPage({
   const t = await getTranslations({ locale, namespace: 'Bookings' });
 
   // const token = cookies().get('token')?.value;
-  const token = cookies().get('token')?.value; 
+  const cookieStore = await cookies();
+  const token = cookieStore.get('token'); 
   let role: string | null = null;
   // let clubId: string | null = null;
   
 
   if (token) {
-    const { payload } = await jwtVerify(token, JWT_SECRET);
+    const { payload } = await jwtVerify(token.value, JWT_SECRET);
     role = payload.role as string;
     // clubId = payload.clubId as string;
   }
 
-  console.log("role", role);
-  console.log("clubId", clubId);
-  console.log("token", token);
+
 
 
   return (
@@ -58,7 +57,7 @@ export default async function TrainingsPage({
         <AddButton href={`/admin/${clubId}/bookings/add-training`} label="buttons.addTraining" />
       </ActionHeader>
       {/* <Booking clubId={clubId} t={t} role={role} /> */}
-      <BookingTable clubId={clubId}  role={role} />
+      <BookingTable  role={role} />
     </div>
   );
 }

@@ -13,7 +13,7 @@ export interface Booking {
   club: string;
   participants: number;
   limit: number;
-  status: 'active' | 'відмінене' | 'завершене';
+  status: 'active' | 'cancelled' | 'finished';
 }
 
 export const mockBookings: Booking[] = [
@@ -32,11 +32,11 @@ export const mockBookings: Booking[] = [
     club: 'Kyiv Club',
     participants: 8,
     limit: 12,
-    status: 'завершене',
+    status: 'finished',
   },
   {
     id: 'club-1-1',
-    date: '2025-08-14',
+    date: '2025-09-01',
     startTime: '14:00',
     endTime: '15:00',
     isTomorrow: true,
@@ -48,7 +48,7 @@ export const mockBookings: Booking[] = [
     club: 'Kyiv Club',
     participants: 1,
     limit: 1,
-    status: 'відмінене',
+    status: 'cancelled',
   },
 
   // club-2
