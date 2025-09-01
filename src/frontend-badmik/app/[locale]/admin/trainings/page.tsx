@@ -1,5 +1,5 @@
 import React from 'react';
-import Booking from '@/app/components/shared/Booking/Booking';
+// import Booking from '@/app/components/shared/Booking/Booking';
 import ActionHeader from '@/app/components/ui/Layout/ActionHeader/ActionHeader';
 import BackButton from '@/app/components/ui/Buttons/BackButton/BackButton';
 import AddButton from '@/app/components/ui/Buttons/AddButton/AddButton';
