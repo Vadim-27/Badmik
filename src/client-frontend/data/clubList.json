@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "title": "Фітнес центр “5 елемент”",
+    "address": "вулиця Електриків, 29а, Київ",
+    "description": "Звичайне тренування з тренером",
+    "price": "500 ₴",
+    "image": "/clubs/club1.jpg"
+  },
+  {
+    "id": 2,
+    "title": "Sport Life Позняки",
+    "address": "вулиця Миколи Бажана, 40Г",
+    "description": "Звичайне тренування з тренером",
+    "price": "500 ₴",
+    "image": "/clubs/club2.jpg"
+  },
+  {
+    "id": 3,
+    "title": "Фітнес-клуб “Sport Life”",
+    "address": "проспект Степана Бандери, 20Б",
+    "description": "Звичайне тренування з тренером",
+    "price": "500 ₴",
+    "image": "/clubs/club3.jpg"
+  },
+  {
+    "id": 4,
+    "title": "Kyiv Badminton Club",
+    "address": "вулиця Братиславська, 5, Київ",
+    "description": "Звичайне тренування з тренером",
+    "price": "500 ₴",
+    "image": "/clubs/club4.jpg"
+  },
+  {
+    "id": 5,
+    "title": "Фітнес-клуб “Гран-Прі”",
+    "address": "вулиця Володимирська, 101",
+    "description": "Звичайне тренування з тренером",
+    "price": "500 ₴",
+    "image": "/clubs/club5.jpg"
+  },
+  {
+    "id": 6,
+    "title": "Спорт-Ресурс",
+    "address": "Патріса Лумумби, 14/21",
+    "description": "Звичайне тренування з тренером",
+    "price": "500 ₴",
+    "image": "/clubs/club6.jpg"
+  }
+]
