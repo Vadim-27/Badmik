@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace BadmintonApp.Application.Exсeptions;
+namespace BadmintonApp.Application.Exceptions;
 
-public class ForbiddenException : AppException
+public class ForbiddenException(string message) : AppException(StatusCodes.Status403Forbidden, message)
 {
-    public ForbiddenException(string message) : base(StatusCodes.Status403Forbidden, message)
-    {
-
-    }
 }

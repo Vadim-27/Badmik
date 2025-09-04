@@ -1,13 +1,8 @@
-﻿using BadmintonApp.Application.DTOs.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 
 namespace BadmintonApp.Application.DTOs.Users
 {
-    public class UserResultDto: ResultDto
+    public class UserResultDto 
     {
         public string Id { get; set; }
         public string Email { get; set; }

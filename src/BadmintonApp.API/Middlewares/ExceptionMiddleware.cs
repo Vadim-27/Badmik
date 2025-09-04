@@ -1,5 +1,5 @@
 ﻿using BadmintonApp.Application.DTOs.ErrorDtos;
-using BadmintonApp.Application.Exсeptions;
+using BadmintonApp.Application.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
@@ -21,7 +21,7 @@ public class ExceptionMiddleware(RequestDelegate next) /*: IMiddleware*/
 
             switch (ex)
             {
-                case AppException appException: 
+                case AppException appException:
                     context.Response.StatusCode = appException.Code;
                     dto.Message = ex.Message;
                     break;

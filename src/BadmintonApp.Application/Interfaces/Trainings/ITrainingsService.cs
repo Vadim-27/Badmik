@@ -1,5 +1,4 @@
-﻿using BadmintonApp.Application.DTOs.Common;
-using BadmintonApp.Application.DTOs.Trainings;
+﻿using BadmintonApp.Application.DTOs.Trainings;
 using BadmintonApp.Domain.Trainings.Enums;
 using System;
 using System.Collections.Generic;
@@ -14,14 +13,14 @@ public interface ITrainingsService
     Task<TrainingResultDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
     Task<TrainingResultDto> CreateAsync(Guid adminId, CreateTrainingDto dto, CancellationToken cancellationToken);
     Task<TrainingResultDto> UpdateAsync(Guid id, Guid userId, UpdateTrainingDto dto, CancellationToken cancellationToken);
-    Task<ResultDto> DeleteAsync(Guid id, Guid userId, CancellationToken cancellationToken);
+    Task DeleteAsync(Guid id, Guid userId, CancellationToken cancellationToken);
 
-    Task<ResultDto> RegisterAsync(Guid trainingId, Guid userId, PlayerLevel userLevel, CancellationToken cancellationToken);
-    Task<ResultDto> CancelAsync(Guid trainingId, Guid userId, CancellationToken cancellationToken);
+    Task RegisterAsync(Guid trainingId, Guid userId, PlayerLevel userLevel, CancellationToken cancellationToken);
+    Task CancelAsync(Guid trainingId, Guid userId, CancellationToken cancellationToken);
 
 
     Task<List<Guid>> GetParticipantsAsync(Guid trainingId, CancellationToken cancellationToken);
     Task<List<Guid>> GetQueueAsync(Guid trainingId, CancellationToken cancellationToken);
-    Task<ResultDto> JoinQueueAsync(Guid trainingId, Guid userId, CancellationToken cancellationToken);
-    Task<ResultDto> LeaveQueueAsync(Guid trainingId, Guid userId, CancellationToken cancellationToken);
+    Task JoinQueueAsync(Guid trainingId, Guid userId, CancellationToken cancellationToken);
+    Task LeaveQueueAsync(Guid trainingId, Guid userId, CancellationToken cancellationToken);
 }

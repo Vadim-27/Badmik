@@ -1,14 +1,9 @@
-﻿using BadmintonApp.Application.DTOs.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 
 namespace BadmintonApp.Application.DTOs.Clubs;
 
-public class ClubResultDto : ResultDto
-{    
+public class ClubResultDto
+{
     public Guid Id { get; set; }
     public string Name { get; set; }
     public string City { get; set; }

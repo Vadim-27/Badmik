@@ -1,15 +1,14 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using BadmintonApp.Application.DTOs.Common;
 using BadmintonApp.Application.DTOs.Trainings;
-using BadmintonApp.Application.Errors;
-using BadmintonApp.Application.Exсeptions;
+using BadmintonApp.Application.Exceptions;
 using BadmintonApp.Application.Interfaces.Permissions;
 using BadmintonApp.Application.Interfaces.Repositories;
 using BadmintonApp.Application.Interfaces.Trainings;
 using BadmintonApp.Domain.Permissions;
 using BadmintonApp.Domain.Trainings;
 using BadmintonApp.Domain.Trainings.Enums;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,13 +23,17 @@ public class TrainingsService : ITrainingsService
     private readonly IMapper _mapper;
     private readonly IPermissionService _permission;
     private readonly IUserRepository _userRepository;
+    private readonly IValidator<CreateTrainingDto> _createTrainingValidation;
+    private readonly IValidator<UpdateTrainingDto> _updateTrainingValidation;
 
-    public TrainingsService(ITrainingsRepository trainingsRepository, IMapper mapper, IPermissionService permission, IUserRepository userRepository)
+    public TrainingsService(ITrainingsRepository trainingsRepository, IMapper mapper, IPermissionService permission, IUserRepository userRepository, IValidator<CreateTrainingDto> createTrainingValidation, IValidator<UpdateTrainingDto> updateTrainingValidation)
     {
         _repository = trainingsRepository;
         _mapper = mapper;
         _permission = permission;
         _userRepository = userRepository;
+        _createTrainingValidation = createTrainingValidation;
+        _updateTrainingValidation = updateTrainingValidation;
     }
 
     public async Task<List<TrainingResultDto>> GetAllAsync(Guid clubId, DateTime? date = null, TrainingType? type = null, PlayerLevel? level = null, CancellationToken cancellationToken = default)
@@ -41,55 +44,40 @@ public class TrainingsService : ITrainingsService
 
     }
 
-    public async Task<TrainingResultDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<TrainingResultDto> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var training = await _repository.GetByIdAsync(id, cancellationToken);
-        return training == null ? null : _mapper.Map<TrainingResultDto>(training);
+        var training = await _repository.GetByIdAsync(id, cancellationToken) ?? throw new NotFoundException("Training not found");
+
+        return _mapper.Map<TrainingResultDto>(training);
     }
 
     public async Task<TrainingResultDto> CreateAsync(Guid adminId, CreateTrainingDto dto, CancellationToken cancellationToken)
     {
-        if (dto.Type == TrainingType.CourtRental && dto.TrainerId != null)
-            throw new BadRequestException("CourtRental must not have a trainer");
+        await _createTrainingValidation.ValidateAndThrowAsync(dto, cancellationToken);               
 
-        if (dto.Type == TrainingType.Individual && dto.MaxPlayers != 2)
-            throw new BadRequestException("Individual training must have exactly 2 players");
-        //if (dto.Type == TrainingType.CourtRental && dto.TrainerId != null)
-        //    throw new ConflictException(ErrorCodes.Common.Conflict, "CourtRental must not have a trainer");
-
-        //if (dto.Type == TrainingType.Individual && dto.MaxPlayers != 2)
-        //    throw new ConflictException(ErrorCodes.Common.Conflict, "Individual training must have exactly 2 players");
-
-        var user = await _userRepository.GetByIdAsync(adminId, cancellationToken);
-
-        //if (user == null)
-        //    throw new NotFoundException(ErrorCodes.Training.NotFound, "Admin user not found");
+        var user = await _userRepository.GetByIdAsync(adminId, cancellationToken);        
 
         if (!user.ClubId.HasValue)
-            throw new Exception("User does not belong to any club");
+            throw new BadRequestException("User does not belong to any club");
 
         var training = _mapper.Map<Training>(dto);
         training.Id = Guid.NewGuid();
         training.ClubId = user.ClubId.Value;
-
-        
 
         var result = await _repository.CreateAsync(training, cancellationToken);
 
         return _mapper.Map<TrainingResultDto>(result);
     }
 
-    public async Task<ResultDto> CancelAsync(Guid trainingId, Guid userId, CancellationToken cancellationToken)
+    public async Task CancelAsync(Guid trainingId, Guid userId, CancellationToken cancellationToken)
     {
         var training = await _repository.GetByIdAsync(trainingId, cancellationToken);
         if (training == null)
-            return ResultDto.Fail<ResultDto>("Training not found");
-
+            throw new NotFoundException("Training not found");
 
         var participant = training.Participants.FirstOrDefault(p => p.UserId == userId);
         if (participant == null)
-            return ResultDto.Fail<ResultDto>("You are not registered for this training");
-
+            throw new BadRequestException("You are not registered for this training");
 
         training.Participants.Remove(participant);
 
@@ -106,17 +94,16 @@ public class TrainingsService : ITrainingsService
         }
 
         await _repository.UpdateAsync(training, cancellationToken);
-        return ResultDto.Success<ResultDto>("Canceled successfully");
     }
 
-    public async Task<ResultDto> JoinQueueAsync(Guid trainingId, Guid userId, CancellationToken cancellationToken)
+    public async Task JoinQueueAsync(Guid trainingId, Guid userId, CancellationToken cancellationToken)
     {
         var training = await _repository.GetByIdAsync(trainingId, cancellationToken);
         if (training == null)
-            return ResultDto.Fail<ResultDto>("Training not found");
+            throw new NotFoundException("Training not found");
 
         if (training.Queue.Any(q => q.UserId == userId))
-            return ResultDto.Fail<ResultDto>("You are already in queue");
+            throw new BadRequestException("You are already in queue");
 
         training.Queue.Add(new TrainingQueueEntry
         {
@@ -125,99 +112,88 @@ public class TrainingsService : ITrainingsService
         });
 
         await _repository.UpdateAsync(training, cancellationToken);
-        return ResultDto.Success<ResultDto>("Added to queue");
     }
 
-    public async Task<ResultDto> LeaveQueueAsync(Guid trainingId, Guid userId, CancellationToken cancellationToken)
+    public async Task LeaveQueueAsync(Guid trainingId, Guid userId, CancellationToken cancellationToken)
     {
         var training = await _repository.GetByIdAsync(trainingId, cancellationToken);
         if (training == null)
-            return ResultDto.Fail<ResultDto>("Training not found");
+            throw new NotFoundException("Training not found");
 
         var queueEntry = training.Queue.FirstOrDefault(q => q.UserId == userId);
         if (queueEntry == null)
-            return ResultDto.Fail<ResultDto>("You are not in queue");
+            throw new BadRequestException("You are not in queue");
 
         training.Queue.Remove(queueEntry);
         await _repository.UpdateAsync(training, cancellationToken);
-
-        return ResultDto.Success<ResultDto>("Removed from queue");
     }
 
     public async Task<List<Guid>> GetParticipantsAsync(Guid trainingId, CancellationToken cancellationToken)
     {
         var training = await _repository.GetByIdAsync(trainingId, cancellationToken);
         return training?.Participants.Select(p => p.UserId).ToList() ?? new();
+
+        // чи потрібно повертати об'єкти учасників/юзерів, чи залишити повернення гуід (узгодити з фронтом та бізнесом)
     }
 
     public async Task<List<Guid>> GetQueueAsync(Guid trainingId, CancellationToken cancellationToken)
     {
         var training = await _repository.GetByIdAsync(trainingId, cancellationToken);
         return training?.Queue.OrderBy(q => q.QueuedAt).Select(q => q.UserId).ToList() ?? new();
+
+        // чи потрібно повертати об'єкти учасників/юзерів, чи залишити повернення гуід (узгодити з фронтом та бізнесом)
     }
 
     private bool IsLevelAllowed(Training training, PlayerLevel userLevel)
     {
         if (training.Type == TrainingType.CourtRental)
-            return true;
+            return true;        
 
-        if (training.AllowedLevels == null || training.AllowedLevels.Count == 0)
-            return false;
-
-        return training.AllowedLevels.Contains(userLevel);
+        return training.AllowedLevels?.Contains(userLevel) ?? false;
     }
 
     public async Task<TrainingResultDto> UpdateAsync(Guid id, Guid userId, UpdateTrainingDto dto, CancellationToken cancellationToken)
     {
         var existing = await _repository.GetByIdAsync(id, cancellationToken);
         if (existing == null)
-            throw new Exception("Training not found");
+            throw new NotFoundException("Training not found");
 
         var hasAccess = await _permission.HasPermission(userId, existing.ClubId, PermissionType.TrainingsManage);
         if (!hasAccess)
-            throw new UnauthorizedAccessException("You do not have permission to modify this training");
+            throw new ForbiddenException("You do not have permission to modify this training");
 
-        if (existing.Type == TrainingType.CourtRental && dto.TrainerId != null)
-            throw new Exception("CourtRental must not have a trainer");
+        await _updateTrainingValidation.ValidateAndThrowAsync(dto, cancellationToken);
 
-        if (existing.Type == TrainingType.Individual && dto.MaxPlayers != 2)
-            throw new Exception("Individual training must have exactly 2 players");
-
-        existing =  _mapper.Map<Training>(dto);
+        existing = _mapper.Map<Training>(dto);
 
         var updated = await _repository.UpdateAsync(existing, cancellationToken);
         return _mapper.Map<TrainingResultDto>(updated);
     }
 
-    public async Task<ResultDto> DeleteAsync(Guid id, Guid userId, CancellationToken cancellationToken)
+    public async Task DeleteAsync(Guid id, Guid userId, CancellationToken cancellationToken)
     {
         var training = await _repository.GetByIdAsync(id, cancellationToken);
-        if (training == null)
-            return ResultDto.Fail<ResultDto>("Training not found");
+        if (training == null) throw new NotFoundException("Training not found");            
 
         var hasAccess = await _permission.HasPermission(userId, training.ClubId, PermissionType.TrainingsManage);
-        if (!hasAccess)
-            return ResultDto.Fail<ResultDto>("Access denied");
+        if (!hasAccess) throw new ForbiddenException("Access denied");
 
-        var success = await _repository.DeleteAsync(id, cancellationToken);
-        return success
-            ? ResultDto.Success<ResultDto>()
-            : ResultDto.Fail<ResultDto>("Delete failed");
+        await _repository.DeleteAsync(id, cancellationToken); 
     }
 
-    public async Task<ResultDto> RegisterAsync(Guid trainingId, Guid userId, PlayerLevel userLevel, CancellationToken cancellationToken)
+    public async Task RegisterAsync(Guid trainingId, Guid userId, PlayerLevel userLevel, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
 
         var training = await _repository.GetByIdAsync(trainingId, cancellationToken);
-        if (training == null)
-            return ResultDto.Fail<ResultDto>("Training not found");
+
+        if (training == null) throw new NotFoundException("Training not found");
 
         if (!IsLevelAllowed(training, user.Level))
-            return ResultDto.Fail<ResultDto>("Your level is not allowed");
+            throw new BadRequestException("Your level is not allowed");
 
         if (training.Participants.Any(p => p.UserId == userId))
-            return ResultDto.Fail<ResultDto>("Already registered");
+            throw new BadRequestException("Already registered");
 
         var userTrainings = await _repository.GetTrainingsByUserAsync(userId, cancellationToken);
 
@@ -227,7 +203,7 @@ public class TrainingsService : ITrainingsService
              (training.StartTime <= t.StartTime && t.StartTime < training.EndTime)));
 
         if (hasTimeConflict)
-            return ResultDto.Fail<ResultDto>("You already have another training at this time");
+            throw new BadRequestException("You already have another training at this time");
 
         if (training.Participants.Count >= training.MaxPlayers)
         {
@@ -240,8 +216,7 @@ public class TrainingsService : ITrainingsService
                 });
             }
 
-            await _repository.UpdateAsync(training, cancellationToken);
-            return ResultDto.Success<ResultDto>("Added to queue");
+            await _repository.UpdateAsync(training, cancellationToken);   
         }
 
         training.Participants.Add(new TrainingParticipant
@@ -251,6 +226,5 @@ public class TrainingsService : ITrainingsService
         });
 
         await _repository.UpdateAsync(training, cancellationToken);
-        return ResultDto.Success<ResultDto>("Registered successfully");
     }
 }

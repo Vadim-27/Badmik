@@ -1,14 +1,14 @@
-﻿using BadmintonApp.Application.DTOs.Common;
+﻿using AutoMapper;
 using BadmintonApp.Application.DTOs.Users;
-using BadmintonApp.Application.Exсeptions;
+using BadmintonApp.Application.Exceptions;
 using BadmintonApp.Application.Interfaces.Repositories;
 using BadmintonApp.Application.Interfaces.Users;
 using BadmintonApp.Domain.Users;
+using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,18 +18,22 @@ namespace BadmintonApp.Application.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IPasswordHasher<User> _passwordHasher;
+        private readonly IValidator<RegisterDto> _userRegisterValidation;
+        private readonly IValidator<UpdateUserDto> _updateUserValidation;
+        private readonly IMapper _mapper;
 
-        public UserService(IUserRepository userRepository, IPasswordHasher<User> passwordHasher)
+        public UserService(IUserRepository userRepository, IPasswordHasher<User> passwordHasher, IValidator<RegisterDto> userRegisterValidation, IValidator<UpdateUserDto> updateUserValidation, IMapper mapper)
         {
             _userRepository = userRepository;
             _passwordHasher = passwordHasher;
+            _userRegisterValidation = userRegisterValidation;
+            _updateUserValidation = updateUserValidation;
+            _mapper = mapper;
         }
 
         public async Task RegisterAsync(RegisterDto dto, CancellationToken cancellationToken)
         {
-            var existingUser = await _userRepository.GetByEmailAsync(dto.Email, cancellationToken);
-            if (existingUser != null)
-                throw new BadRequestException("Email already exists");
+            await _userRegisterValidation.ValidateAndThrowAsync(dto, cancellationToken);
 
             var user = new User
             {
@@ -38,23 +42,25 @@ namespace BadmintonApp.Application.Services
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
                 DoB = dto.DoB,
-                Role = dto.Role,
+                Role = dto.Role, // роль при створенні ми не маємо права вибирати, таке право має надавати адмін, або якась базова роль присвоюється.. (!!!)
                 CreatedAt = DateTime.UtcNow,
                 IsActive = true
             };
 
             user.PasswordHash = _passwordHasher.HashPassword(user, dto.Password);
             await _userRepository.CreateAsync(user, cancellationToken);
-           
+
         }
 
         public async Task<UserResultDto> GetByIdAsync(Guid userId, CancellationToken cancellationToken)
         {
             var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
-            return user == null ? null : MapToProfile(user);
+            if (user == null) throw new NotFoundException("User not found.");
+            
+            return MapToProfile(user); // використати автомапер.
         }
 
-        public async Task<UserResultDto> GetProfileAsync(Guid currentUserId, CancellationToken cancellationToken)
+        public async Task<UserResultDto> GetProfileAsync(Guid currentUserId, CancellationToken cancellationToken) // два однакових методи, чи э в них обох неохыднысть?
         {
             var user = await _userRepository.GetByIdAsync(currentUserId, cancellationToken);
             return user == null ? null : MapToProfile(user);
@@ -68,24 +74,27 @@ namespace BadmintonApp.Application.Services
 
         public async Task<UserResultDto> UpdateAsync(Guid userId, UpdateUserDto dto, CancellationToken cancellationToken)
         {
+
             var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
-            if (user == null) return ResultDto.Fail<UserResultDto>("User not found");
+            if (user == null) throw new NotFoundException("User not found.");
+
+            await _updateUserValidation.ValidateAndThrowAsync(dto, cancellationToken);
 
             user.FirstName = dto.FirstName;
             user.LastName = dto.LastName;
             user.Role = dto.Role;
 
             await _userRepository.UpdateAsync(user, cancellationToken);
-            return ResultDto.Success<UserResultDto>();
+
+            return _mapper.Map<UserResultDto>(user);            
         }
 
-        public async Task<ResultDto> DeleteAsync(Guid userId, CancellationToken cancellationToken)
+        public async Task DeleteAsync(Guid userId, CancellationToken cancellationToken)
         {
             var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
-            if (user == null) return ResultDto.Fail<UserResultDto>("User not found");
+            if (user == null) throw new NotFoundException("User not found");
 
             await _userRepository.DeleteAsync(user, cancellationToken);
-            return ResultDto.Success<UserResultDto>();
         }
 
         private UserResultDto MapToProfile(User user) => new UserResultDto
