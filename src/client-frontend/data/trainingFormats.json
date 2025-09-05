@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "title": "Навчальний",
+    "image": "/TrainingFormats/TTr1.jpg"
+  },
+  {
+    "id": 2,
+    "title": "Ігровий",
+    "image": "/TrainingFormats/TTr2.jpg"
+  },
+  {
+    "id": 3,
+    "title": "Аренда",
+    "image": "/TrainingFormats/TTr3.jpg"
+  },
+  {
+    "id": 4,
+    "title": "Дитячий",
+    "image": "/TrainingFormats/TTr4.jpg"
+  }
+]
