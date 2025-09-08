@@ -1,4 +1,5 @@
-﻿using BadmintonApp.Application.Interfaces.Repositories;
+﻿using BadmintonApp.Application.Exceptions;
+using BadmintonApp.Application.Interfaces.Repositories;
 using BadmintonApp.Domain.Trainings;
 using BadmintonApp.Domain.Trainings.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -27,8 +28,7 @@ public class TrainingsRepository : ITrainingsRepository
 
     public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
-        var entity = await _dbContext.Set<Training>().FindAsync(id, cancellationToken);
-        if (entity == null) return false;
+        var entity = await _dbContext.Set<Training>().FindAsync(id, cancellationToken);       
 
         _dbContext.Remove(entity);
         return await _dbContext.SaveChangesAsync() > 0;

@@ -9,8 +9,7 @@ public class CreateClubDto
     public Location Location { get; set; }
     
     public int CourtCount { get; set; }
-
-    //public List<WorkingHourDto> WorkingHours { get; set; } = new();
+    
     public WorkingHourDto WorkingHours { get; set; } = new();
 }
 

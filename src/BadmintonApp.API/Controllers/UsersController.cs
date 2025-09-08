@@ -1,5 +1,7 @@
 ﻿using BadmintonApp.Application.DTOs.Users;
 using BadmintonApp.Application.Interfaces.Users;
+using BadmintonApp.Application.Validation;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -14,19 +16,24 @@ namespace BadmintonApp.API.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUsersService _usersService;
+        private readonly IValidator<RegisterDto> _registerDtoValidator;
+        
 
-        public UsersController(IUsersService usersService)
+        public UsersController(IUsersService usersService, IValidator<RegisterDto> registerDtoValidator )
         {
             _usersService = usersService;
+            _registerDtoValidator = registerDtoValidator;
+            
         }
 
         // POST: /api/auth/register
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto registerDto, CancellationToken cancellationToken)
         {
+            await _registerDtoValidator.ValidateAndThrowAsync(registerDto, cancellationToken);
+
             await _usersService.RegisterAsync(registerDto, cancellationToken);
             
-
             return Ok();
         }
 

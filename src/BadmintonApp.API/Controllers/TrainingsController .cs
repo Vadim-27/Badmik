@@ -1,6 +1,8 @@
 ﻿using BadmintonApp.Application.DTOs.Trainings;
 using BadmintonApp.Application.Interfaces.Trainings;
+using BadmintonApp.Application.Validation;
 using BadmintonApp.Domain.Trainings.Enums;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -15,10 +17,17 @@ namespace BadmintonApp.API.Controllers
     public class TrainingsController : ControllerBase
     {
         private readonly ITrainingsService _trainingsService;
+        private readonly IValidator<CreateTrainingDto> _createTrainingValidator;
+        private readonly IValidator<UpdateTrainingDto> _updateTrainingValidator;
+        private readonly WorkingHourDtoValidator _workingHourValidator;
 
-        public TrainingsController(ITrainingsService trainingsService)
+        public TrainingsController(ITrainingsService trainingsService,
+            IValidator<CreateTrainingDto> createTrainingValidator, IValidator<UpdateTrainingDto> updateTrainingValidator, WorkingHourDtoValidator workingHourValidator)
         {
             _trainingsService = trainingsService;
+            _createTrainingValidator = createTrainingValidator;
+            _updateTrainingValidator = updateTrainingValidator;
+            _workingHourValidator = workingHourValidator;
         }
 
         [HttpGet]
@@ -46,6 +55,8 @@ namespace BadmintonApp.API.Controllers
         [Authorize]
         public async Task<IActionResult> Create([FromBody] CreateTrainingDto dto, CancellationToken cancellationToken)
         {
+            await _createTrainingValidator.ValidateAndThrowAsync(dto, cancellationToken);                        
+
             var userId = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
             var created = await _trainingsService.CreateAsync(userId, dto, cancellationToken);
@@ -55,9 +66,12 @@ namespace BadmintonApp.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(Guid id, [FromBody] UpdateTrainingDto dto, CancellationToken cancellationToken)
         {
+            await _updateTrainingValidator.ValidateAndThrowAsync(dto, cancellationToken);
+
             var userId = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
             var updated = await _trainingsService.UpdateAsync(id, userId, dto, cancellationToken);
+
             return Ok(updated);
         }
 
@@ -66,11 +80,9 @@ namespace BadmintonApp.API.Controllers
         {
             var userId = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-            var result = await _trainingsService.DeleteAsync(id, userId, cancellationToken);
-            if (!result.IsSuccess)
-                return BadRequest(result.Message);
+           await _trainingsService.DeleteAsync(id, userId, cancellationToken);
 
-            return NoContent();
+            return Ok();
         }
 
         [HttpPost("{id}/cancel")]
@@ -80,11 +92,9 @@ namespace BadmintonApp.API.Controllers
             if (string.IsNullOrEmpty(userId))
                 return Unauthorized();
 
-            var result = await _trainingsService.CancelAsync(id, Guid.Parse(userId), cancellationToken);
-            if (!result.IsSuccess)
-                return BadRequest(result.Message);
+            await _trainingsService.CancelAsync(id, Guid.Parse(userId), cancellationToken);
 
-            return Ok(result);
+            return Ok();
         }
 
         [HttpPost("{id}/queue")]
@@ -94,11 +104,9 @@ namespace BadmintonApp.API.Controllers
             if (string.IsNullOrEmpty(userId))
                 return Unauthorized();
 
-            var result = await _trainingsService.JoinQueueAsync(id, Guid.Parse(userId), cancellationToken);
-            if (!result.IsSuccess)
-                return BadRequest(result.Message);
+           await _trainingsService.JoinQueueAsync(id, Guid.Parse(userId), cancellationToken);
 
-            return Ok(result);
+            return Ok();
         }
 
         [HttpDelete("{id}/queue")]
@@ -108,11 +116,9 @@ namespace BadmintonApp.API.Controllers
             if (string.IsNullOrEmpty(userId))
                 return Unauthorized();
 
-            var result = await _trainingsService.LeaveQueueAsync(id, Guid.Parse(userId), cancellationToken);
-            if (!result.IsSuccess)
-                return BadRequest(result.Message);
+            await _trainingsService.LeaveQueueAsync(id, Guid.Parse(userId), cancellationToken);
 
-            return Ok(result);
+            return Ok();
         }
 
         [HttpGet("{id}/participants")]

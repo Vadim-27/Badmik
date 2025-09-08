@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BadmintonApp.Application.Exсeptions;
+namespace BadmintonApp.Application.Exceptions;
 
 public abstract class AppException : Exception
 {

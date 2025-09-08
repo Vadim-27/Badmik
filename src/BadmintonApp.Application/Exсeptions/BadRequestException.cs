@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace BadmintonApp.Application.Exсeptions;
+namespace BadmintonApp.Application.Exceptions;
 
 public class BadRequestException : AppException
 {

@@ -1,8 +1,9 @@
 ﻿using BadmintonApp.Application.DTOs.Clubs;
-using BadmintonApp.Application.DTOs.Common;
+using BadmintonApp.Application.Exceptions;
 using BadmintonApp.Application.Interfaces.Clubs;
 using BadmintonApp.Application.Interfaces.Repositories;
 using BadmintonApp.Domain.Clubs;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,43 +16,37 @@ public class ClubsService : IClubsService
 {
     private readonly IClubsRepository _clubsRepository;
     private readonly IUserRepository _userRepository;
+    private readonly IValidator<CreateClubDto> _createClubValidation;
+    private readonly IValidator<WorkingHourDto> _workingHourValidation;
+    private readonly IValidator<UpdateClubDto> _updateClubValidation;
 
-    public ClubsService(IClubsRepository clubsRepository, IUserRepository userRepository)
+    public ClubsService(IClubsRepository clubsRepository, IUserRepository userRepository, IValidator<CreateClubDto> createClubValidation, IValidator<WorkingHourDto> workingHourValidation, IValidator<UpdateClubDto> updateClubValidation)
     {
         _clubsRepository = clubsRepository;
         _userRepository = userRepository;
+        _createClubValidation = createClubValidation;
+        _workingHourValidation = workingHourValidation;
+        _updateClubValidation = updateClubValidation;
     }
-    public async Task<ResultDto> AssignAdminAsync(Guid clubId, Guid userId, CancellationToken cancellationToken)
+    public async Task AssignAdminAsync(Guid clubId, Guid userId, CancellationToken cancellationToken)
     {
         var club = await _clubsRepository.GetByIdAsync(clubId, cancellationToken);
-        if (club == null)
-            return new ResultDto()
-            {
-                IsSuccess = false,
-                Message = "Club not found"
-            };
-
-        //todo check user
+        if (club == null) throw new BadRequestException("Club not found");
+        
         var user = await _userRepository
             .GetByIdAsync(userId, cancellationToken);
-        if (user == null)
-            return new ResultDto()
-            {
-                IsSuccess = false,
-                Message = "User not found"
-            };
+        if (user == null) throw new BadRequestException("User not found");            
 
-
-        await _clubsRepository.AssignAdminAsync(clubId, userId, cancellationToken);
-        return new ResultDto()
-        {
-            IsSuccess = true
-        };
-
+        await _clubsRepository.AssignAdminAsync(clubId, userId, cancellationToken);        
     }
 
     public async Task<ClubResultDto> CreateAsync(CreateClubDto dto, CancellationToken cancellationToken)
     {
+        await _createClubValidation.ValidateAndThrowAsync(dto, cancellationToken);
+
+        await _workingHourValidation.ValidateAndThrowAsync(dto.WorkingHours, cancellationToken);
+
+
         var club = new Club
         {
             Id = Guid.NewGuid(), //?
@@ -72,40 +67,31 @@ public class ClubsService : IClubsService
         };
 
         var clubRes = await _clubsRepository.CreateAsync(club, cancellationToken);
-        return ResultDto.Success<ClubResultDto>(MapToClub(clubRes));
+
+        return MapToClub(clubRes);
     }
 
-    public async Task<ResultDto> DeleteAsync(Guid id,  CancellationToken cancellationToken)
+    public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
         var club = await _clubsRepository.GetByIdAsync(id, cancellationToken);
-        if (club is null)
-            return new ResultDto
-            {
-                IsSuccess = false,
-                Message = "Club not found"
-            };
+        if (club is null) throw new BadRequestException("Club not found");
 
-        return await _clubsRepository.DeleteAsync(id, cancellationToken)
-            ? new ResultDto { IsSuccess = true }
-            : new ResultDto { IsSuccess = false };
+        await _clubsRepository.DeleteAsync(id, cancellationToken);
     }
 
     public async Task<List<ClubResultDto>> GetAllAsync(string filter = null, CancellationToken cancellationToken = default)
     {
 
-        var clubs = await _clubsRepository.GetAllAsync(cancellationToken : cancellationToken);
-        return clubs.Select(MapToClub).ToList();
+        var clubs = await _clubsRepository.GetAllAsync(cancellationToken: cancellationToken);
+        return clubs.Select(MapToClub).ToList(); // переробити на автомапер (!!!)
     }
 
     public async Task<ClubResultDto> UpdateAsync(Guid id, UpdateClubDto dto, CancellationToken cancellationToken)
     {
-        var club = await _clubsRepository.GetByIdAsync(id, cancellationToken);
-        if (club == null)
-            return new ClubResultDto
-            {
-                IsSuccess = false,
-                Message = "Club not found"
-            };
+        await _updateClubValidation.ValidateAndThrowAsync(dto, cancellationToken);
+        await _workingHourValidation.ValidateAndThrowAsync(dto.WorkingHours, cancellationToken);
+
+        var club = await _clubsRepository.GetByIdAsync(id, cancellationToken) ?? throw new BadRequestException("Club not found");        
 
         club.Name = dto.Name;
         club.Address = dto.Address;
@@ -123,7 +109,7 @@ public class ClubsService : IClubsService
     }.Where(x => x != null).ToList();
 
         club = await _clubsRepository.UpdateAsync(club, cancellationToken);
-        return MapToClub(club);
+        return MapToClub(club); // Переробити на автомапер (!!!)
     }
 
 
@@ -195,7 +181,7 @@ public class ClubsService : IClubsService
     : null,
     };
 
-    private WorkingHour? CreateWorkingHour(DayOfWeek day, TimeRangeDto time)
+    private WorkingHour CreateWorkingHour(DayOfWeek day, TimeRangeDto time)
     {
         if (time == null) return null;
 

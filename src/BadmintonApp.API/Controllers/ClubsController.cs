@@ -1,5 +1,7 @@
 ﻿using BadmintonApp.Application.DTOs.Clubs;
 using BadmintonApp.Application.Interfaces.Clubs;
+using BadmintonApp.Application.Validation;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading;
@@ -12,15 +14,26 @@ namespace BadmintonApp.API.Controllers
     public class ClubsController : ControllerBase
     {
         private readonly IClubsService _clubsService;
+        private readonly IValidator<CreateClubDto> _createClubValidation;
+        private readonly IValidator<UpdateClubDto> _updateClubValidation;
+        private readonly IValidator<WorkingHourDto> _workingHourDtoValidator;
 
-        public ClubsController(IClubsService clubsService)
+        public ClubsController(IClubsService clubsService, IValidator<CreateClubDto> createClubValidation, IValidator<UpdateClubDto> updateClubValidation, IValidator<WorkingHourDto> workingHourDtoValidator
+            )
         {
             _clubsService = clubsService;
+            _createClubValidation = createClubValidation;
+            _updateClubValidation = updateClubValidation;
+            _workingHourDtoValidator = workingHourDtoValidator;
         }
 
         [HttpPost]
         public async Task<ActionResult> Create([FromBody] CreateClubDto create, CancellationToken cancellationToken)
         {
+            await _createClubValidation.ValidateAndThrowAsync(create, cancellationToken);
+
+            await _workingHourDtoValidator.ValidateAndThrowAsync(create.WorkingHours, cancellationToken);
+
             var result = await _clubsService.CreateAsync(create, cancellationToken);
 
             return Ok(result);
@@ -37,6 +50,10 @@ namespace BadmintonApp.API.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> Update(Guid id, [FromBody] UpdateClubDto dto, CancellationToken cancellationToken)
         {
+            await _updateClubValidation.ValidateAndThrowAsync(dto, cancellationToken);
+
+            await _workingHourDtoValidator.ValidateAndThrowAsync(dto.WorkingHours, cancellationToken);
+            
             var result = await _clubsService.UpdateAsync(id, dto, cancellationToken);
             return Ok(result);
         }
@@ -44,21 +61,17 @@ namespace BadmintonApp.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
         {
-            var deleted = await _clubsService.DeleteAsync(id, cancellationToken);
-            if (!deleted.IsSuccess)
-                return NotFound("Клуб не знайдено");
+            await _clubsService.DeleteAsync(id, cancellationToken);
 
-            return NoContent(); // 204
+            return Ok(); // 204
         }
 
         [HttpPut("{clubId}/assign-admin")]
         public async Task<IActionResult> AssignAdmin(Guid clubId, [FromBody] AssignAdminDto dto, CancellationToken cancellationToken)
         {
-            var result = await _clubsService.AssignAdminAsync(clubId, dto.UserId, cancellationToken);
-            if (!result.IsSuccess)
-                return NotFound();
-
-            return NoContent();
+           await _clubsService.AssignAdminAsync(clubId, dto.UserId, cancellationToken);
+            
+            return Ok();
         }
     }
 }
