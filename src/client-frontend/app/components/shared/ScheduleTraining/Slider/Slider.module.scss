@@ -1,0 +1,125 @@
+// @import '@/app/styles/common/mixins';
+
+// .embla {
+//     @apply relative overflow-hidden;
+// }
+
+// .embla__container {
+//     @apply flex;
+// }
+
+// .dots {
+//     @apply absolute left-1/2 mt-12 flex -translate-x-1/2 justify-center;
+// }
+
+// .dot {
+//     @apply mx-[5px] h-4 w-4 -rotate-180 cursor-pointer rounded-full bg-black-25%;
+//     transition:
+//         transform 300ms linear,
+//         background-color 300ms linear;
+
+//     &:hover {
+//         @apply bg-button;
+//     }
+// }
+
+// .dot.active {
+//     @apply w-[76px] rotate-180 bg-button;
+// }
+.embla {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 54px;
+}
+.embla__container {
+//   --gap: 10px;                /* один проміжок між слайдами */
+  display: grid;
+  grid-auto-flow: column;
+//   gap: var(--gap);
+
+  /* 1 слайд на екрані — віднімати нічого */
+  grid-auto-columns: 100%;
+
+  @media (min-width: 834px) {
+    /* 2 слайди → 1 проміжок між ними */
+    grid-auto-columns: calc((100% ) / 2);
+  }
+
+  @media (min-width: 1440px) {
+    /* 3 слайди → 2 проміжки між ними */
+    grid-auto-columns: calc((100% ) / 3);
+  }
+  @media (min-width: 1920px) {
+    /* 3 слайди → 2 проміжки між ними */
+    grid-auto-columns: calc((100% ) / 4);
+  }
+}
+
+.arrows{
+    display: flex;
+    justify-content: end;
+    gap: 20px;
+}
+.arrow{
+    
+   position: relative;
+width: 72px;
+height: 72px;
+padding: 30px 34px;
+justify-content: center;
+align-items: center;
+gap: 20px;
+aspect-ratio: 1/1;
+border-radius: 40px;
+background: #E2E8F0;
+}
+.iconLeft{
+    position: absolute;
+    width: 24px;
+    height: 19px;
+    fill: currentColor; // щоб колір спадкував від тексту
+  left: 50%;          // відступ від лівого краю
+  top: 50%;            // ставимо по центру контейнера
+  transform: translate(-50%, -50%);
+}
+.iconRight{
+    position: absolute;
+    width: 24px;
+    height: 19px;
+    fill: currentColor; // щоб колір спадкував від тексту
+  left: 50%;          // відступ від лівого краю
+  top: 50%;            // ставимо по центру контейнера
+  transform: translate(-50%, -50%);
+}
+
+
+// .dots {
+//     position: absolute;
+//     left: 50%;
+//     margin-top: 1.5rem; /* mt-12 -> 3rem */
+//     display: flex;
+//     transform: translateX(-50%);
+//     justify-content: center;
+// }
+
+// .dot {
+//     margin-left: 5px;
+//     margin-right: 5px;
+//     height: 1rem; /* h-4 -> 1rem */
+//     width: 1rem; /* w-4 -> 1rem */
+//     transform: rotate(-180deg); /* -rotate-180 */
+//     cursor: pointer;
+//     border-radius: 9999px; /* rounded-full */
+//     background-color: rgba(0, 0, 0, 0.25); /* bg-black-25% */
+//     transition: transform 300ms linear, background-color 300ms linear;
+
+//     &:hover {
+//         background-color: var(--primary-accent); /* bg-button */
+//     }
+// }
+
+// .dot.active {
+//     width: 4.75rem; /* w-[76px] */
+//     transform: rotate(180deg); /* rotate-180 */
+//     background-color: var(--primary-accent); /* bg-button */
+// }

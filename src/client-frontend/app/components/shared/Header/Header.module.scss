@@ -1,0 +1,88 @@
+.wrapperHeader{
+    margin: 0 auto;
+    width: 1720;
+height: 100;
+border-radius: 1.5em;
+display: flex;
+justify-content: space-between;
+opacity: 1;
+padding: 1.5em;
+background: var(--color-secondary-dark-bg);
+ }
+ .logo{
+    width: 120;
+
+height: 52;
+color: white;
+ };
+ .authLinks{
+    display: flex;
+    gap: 16px;
+ }
+
+  .loginIcon{
+    width: 1.5em;
+    height: 1.5em;
+    fill: currentColor; // щоб колір спадкував від тексту
+ }
+
+ .loginLink{
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--text-color-primary-light);
+width: 135;
+height: 52;
+border-radius: 16px;
+padding-top: 10px;
+padding-right: 24px;
+padding-bottom: 10px;
+padding-left: 24px;
+gap: 10px;
+opacity: 1;
+
+
+opacity: 1;
+// background: var(--primary-button);
+font-family: var(--font-display-Manrope);    
+font-weight: 700;
+font-style: Bold;
+font-size: 18px;
+line-height: 32px;
+letter-spacing: 0%;
+text-align: center;
+ }
+
+ .registerLink{
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--text-color-primary-light);
+    min-width: 231;
+height: 52;
+border-radius: 16px;
+padding-top: 10px;
+padding-right: 24px;
+padding-bottom: 10px;
+padding-left: 24px;
+gap: 10px;
+
+opacity: 1;
+background: var(--primary-button);
+font-family: var(--font-display-Manrope);    
+font-weight: 700;
+font-style: Bold;
+font-size: 18px;
+line-height: 32px;
+letter-spacing: 0%;
+text-align: center;
+ }
+
+
+
+ .userIcon {
+  width: 1.5em;
+  height: 1.5em;
+  fill: currentColor; // щоб колір спадкував від тексту
+}
+     

@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "date": "21 Серп",
+    "title": "Sport Life Позняки",
+    "address": "вулиця Михайло Драгоманова, 40Г",
+    "description": "Звичайне тренування з тренером",
+    "time": "18:00 — 20:00",
+    "level": "Рівень A",
+    "image": "/ScheduleTraining/ShD1.jpg"
+  },
+  {
+    "id": 2,
+    "date": "22 Серп",
+    "title": "Фітнес центр “5 елемент”",
+    "address": "вулиця Електриків, 29а, Київ",
+    "description": "Звичайне тренування з тренером",
+    "time": "18:00 — 20:00",
+    "level": "Рівень B",
+    "image": "/ScheduleTraining/ShD2.jpg"
+  },
+  {
+    "id": 3,
+    "date": "22 Серп",
+    "title": "Клуб “Sport Life”",
+    "address": "проспект Степана Бандери, 20Б",
+    "description": "Звичайне тренування з тренером",
+    "time": "18:00 — 20:00",
+    "level": "Рівень A",
+    "image": "/ScheduleTraining/ShD3.jpg"
+  },
+  {
+    "id": 4,
+    "date": "23 Серп",
+    "title": "Kyiv Badminton Club",
+    "address": "вулиця Братиславська, 5, Київ",
+    "description": "Звичайне тренування з тренером",
+    "time": "18:00 — 20:00",
+    "level": "Рівень A",
+    "image": "/ScheduleTraining/ShD4.jpg"
+  },
+   {
+    "id": 5,
+    "date": "22 Серп",
+    "title": "Клуб “Sport Life”",
+    "address": "проспект Степана Бандери, 20Б",
+    "description": "Звичайне тренування з тренером",
+    "time": "18:00 — 20:00",
+    "level": "Рівень A",
+    "image": "/ScheduleTraining/ShD3.jpg"
+  },
+  {
+    "id": 6,
+    "date": "23 Серп",
+    "title": "Kyiv Badminton Club",
+    "address": "вулиця Братиславська, 5, Київ",
+    "description": "Звичайне тренування з тренером",
+    "time": "18:00 — 20:00",
+    "level": "Рівень A",
+    "image": "/ScheduleTraining/ShD4.jpg"
+  }
+]

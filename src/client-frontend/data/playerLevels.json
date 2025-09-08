@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "title": "Рівень A",
+    "description": "Гравці міжнародного, національного або рівня штату, а також гравці кращих клубів.",
+    "image": "/PlayerLevels/PL1.jpg"
+  },
+  {
+    "id": 2,
+    "title": "Рівень B",
+    "description": "Хороші конкурентоспроможні гравці.",
+    "image": "/PlayerLevels/PL2.jpg"
+  },
+  {
+    "id": 3,
+    "title": "Рівень C",
+    "description": "Товариські та конкурентоспроможні гравці кращих клубів.",
+    "image": "/PlayerLevels/PL3.jpg"
+  },
+  {
+    "id": 4,
+    "title": "Рівень D",
+    "description": "Дорослі товариські гравці початкового рівня.",
+    "image": "/PlayerLevels/PL4.jpg"
+  },
+  {
+    "id": 5,
+    "title": "Master",
+    "description": "Це досвідчений гравець.",
+    "image": "/PlayerLevels/PL5.jpg"
+  }
+]
