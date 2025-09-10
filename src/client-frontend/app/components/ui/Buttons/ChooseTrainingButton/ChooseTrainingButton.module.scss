@@ -1,6 +1,9 @@
 .button {
-  display: flex;
-  width: 183px;
+  display: inline-flex;
+  width: auto;      /* ширина за вмістом */
+  flex: 0 0 auto;
+  align-self: flex-start;
+//   width: 183px;
   padding: 14px 24px;
   justify-content: center;
   align-items: center;

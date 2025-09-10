@@ -1,0 +1,344 @@
+/* FiltersBar.module.scss */
+
+.bar {
+//   display: grid;
+//   grid-template-columns: 1.2fr 1.2fr auto auto;
+//   gap: 20px;
+//   align-items: end;
+
+//   padding: 16px;
+
+ 
+
+//   @media (max-width: 1200px) {
+//     grid-template-columns: 1fr 1fr;
+//   }
+//   @media (max-width: 640px) {
+//     grid-template-columns: 1fr;
+//   }
+    display: flex;
+    gap: 20px;
+    align-items: end;
+    
+    padding: 16px;
+    
+    flex-wrap: wrap;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+}
+
+.label {
+    // margin-bottom: 0.5em;
+  font-family: var(--font-display-Manrope);
+  font-size: 1.125em;
+  font-weight: 700;
+  color: var(--text-color-primary-dark, #161616);
+
+
+
+font-style: normal;
+
+line-height: 1.77; 
+}
+
+/* спільний інпут-стиль */
+.input {
+  width: 450px;
+//   height: 48px;
+padding: 16px;
+
+  border-radius: 16px;
+  border: 1px solid #e3e7ee;
+  background: #fff;
+  padding: 16px 56px 16px 56px; /* місце під іконки */
+  color: var(--text-color-primary-dark, #161616);
+font-family: var(--font-display-Manrope);
+font-size: 1.125em;
+font-style: normal;
+font-weight: 400;
+line-height: 1.77; /* 177.778% */
+  text-align: left;
+  transition: border-color .2s, box-shadow .2s;
+  &::placeholder {
+    color: inherit;       // свій колір
+    font-family: inherit; // підхопити той самий шрифт
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    opacity: 1;           // Safari/Firefox роблять плейсхолдер напівпрозорим
+  }
+
+  &:hover {
+    border-color: #d6dbe5;
+  }
+  &:focus {
+    outline: none;
+    border-color: #0d74cf;
+    box-shadow: 0 0 0 3px rgba(13, 116, 207, .15);
+  }
+}
+
+.inputBox,
+.dateBox {
+  position: relative;
+}
+
+.leftIcon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  fill: var(--color-primary-dark-bg);
+  pointer-events: none;
+}
+
+.rightBtn {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 32px;
+  min-width: 32px;
+  padding: 0 6px;
+  border: 1px solid #e3e7ee;
+  border-radius: 8px;
+  background: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chev {
+  font-size: 14px;
+  color: #667085;
+}
+
+/* Combobox options */
+.options {
+  position: absolute;
+  z-index: 20;
+  left: 0;
+  right: 0;
+  top: calc(100% + 6px);
+  max-height: 320px;
+  overflow: auto;
+  background: #fff;
+  border: 1px solid #e3e7ee;
+  border-radius: 12px;
+  padding: 6px;
+  box-shadow: 0 12px 28px rgba(16, 24, 40, 0.12);
+}
+
+.option {
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #161616;
+}
+
+.optionActive {
+  @extend .option;
+  background: #f4f7fb;
+}
+
+/* Календар (popover) */
+.popContent {
+  position: absolute;
+  z-index: 30;
+  right: 0;
+  top: calc(100% + 8px);
+  background: #fff;
+  border: 1px solid #e3e7ee;
+  border-radius: 12px;
+  box-shadow: 0 12px 28px rgba(16, 24, 40, 0.12);
+  padding: 8px;
+}
+
+/* react-day-picker базові правки (не перевантажуємо) */
+.popContent .rdp {
+  --rdp-accent-color: #0d74cf;
+  --rdp-accent-background-color: rgba(13, 116, 207, 0.1);
+  --rdp-outline: 2px solid var(--rdp-accent-color);
+
+  font-family: var(--font-display-Manrope);
+}
+
+.popContent .rdp-button[aria-selected="true"] {
+  background: var(--rdp-accent-color);
+  color: #fff;
+}
+
+.popContent .rdp-day:hover {
+  background: var(--rdp-accent-background-color);
+}
+
+/* Рівні */
+.levels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.levelBtn {
+  height: 64px;
+  min-width: 64px;
+  padding: 16px;
+    border-radius: 999px;
+  border: 1px solid #e3e7ee;
+  background: #fff;
+   color: var(--text-color-primary-dark, #161616);
+font-family: var(--font-display-Manrope);
+font-size: 1.125em;
+font-style: normal;
+font-weight: 400;
+line-height: 1.77;
+  transition: background .2s, border-color .2s, color .2s;
+
+  &:hover {
+    border-color: #cfd6e2;
+  }
+}
+
+.levelActive {
+  background: #0d74cf;
+  color: #fff;
+  border-color: #0d74cf;
+}
+
+/* Submit */
+.submit {
+  align-self: end;
+//   width: 205px;
+//   height: 48px;
+  padding: 16px 44px;
+  border-radius: 12px;
+  background: #0d74cf;
+  color: #fff;
+
+  border: none;
+  font-family: var(--font-display-Manrope);
+font-size: 1.125em;
+font-style: normal;
+font-weight: 700;
+line-height: 1.77;
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  transition: background .2s;
+
+  &:hover {
+    background: #0b63b3;
+  }
+}
+
+.submitIcon {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+/* Адаптив дрібниці */
+@media (max-width: 640px) {
+  .submit {
+    width: 100%;
+  }
+}
+
+
+//===============================
+
+/* --- Календар (popover) контейнер --- */
+/* Обгортка, яку ти передаєш через className (styles.dateBox) */
+.dateBox {
+  position: relative;
+  width: 450px;     /* або 100% під лейаут */
+}
+
+/* Кнопка-тригер, візуально як інпут. Текст зліва */
+.dateTrigger {
+  width: 100%;
+  height: 56px;
+  padding: 0 52px 0 16px;   /* місце справа під іконку */
+  border-radius: 16px;
+  border: 1px solid #e3e7ee;
+  background: #fff;
+  text-align: left;
+  cursor: pointer;
+
+  color: var(--text-color-primary-dark, #161616);
+  font-family: var(--font-display-Manrope);
+  font-size: 1.125em;
+  font-weight: 400;
+  line-height: 1.77;
+
+  transition: border-color .2s, box-shadow .2s;
+  &:hover { border-color: #d6dbe5; }
+  &:focus-visible {
+    outline: none;
+    border-color: #0d74cf;
+    box-shadow: 0 0 0 3px rgba(13,116,207,.15);
+  }
+}
+
+/* Іконка календаря ПРАВОРУЧ */
+.calendarIconRight {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 22px;
+  height: 22px;
+  color: #98a2b3;      /* SVG з fill: currentColor */
+  pointer-events: none;
+}
+
+/* Поповер з календарем */
+.popContent {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;             /* якщо треба по правому краю: right:0; left:auto; */
+  z-index: 1000;
+  background: #fff;
+  border: 1px solid #e3e7ee;
+  border-radius: 12px;
+  box-shadow: 0 12px 28px rgba(16,24,40,.12);
+  padding: 12px;
+}
+
+/* Легка стилізація react-day-picker */
+.popContent .rdp {
+  --rdp-cell-size: 36px;
+  --rdp-accent-color: #0d74cf;
+  font-family: var(--font-display-Manrope);
+  font-size: 14px;
+}
+
+.popContent .rdp-caption_label { font-weight: 700; }
+.popContent .rdp-nav_button { color: var(--rdp-accent-color); border-radius: 8px; }
+.popContent .rdp-weekday { color: #667085; font-weight: 600; }
+
+.popContent .rdp-day {
+  width: var(--rdp-cell-size);
+  height: var(--rdp-cell-size);
+  margin: 2px;
+  border-radius: 8px;
+}
+
+.popContent .rdp-day_selected,
+.popContent .rdp-day_selected:focus-visible {
+  background: var(--rdp-accent-color);
+  color: #fff;
+  font-weight: 700;
+}
+
+.popContent .rdp-day:not(.rdp-day_selected):not(.rdp-day_outside):hover {
+  background: #f4f7fb;
+}
+
+.popContent .rdp-day_outside { color: #98a2b3; }

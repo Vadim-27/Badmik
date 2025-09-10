@@ -49,18 +49,7 @@
 
 .img { object-fit: cover; }
 
-// .overlay {
-//   position: absolute; inset: 0;
-//   background: linear-gradient(180deg, rgba(0,0,0,.15) 0%, rgba(0,0,0,.6) 70%, rgba(0,0,0,.8) 100%);
-//   pointer-events: none;
-// }
 
-// .topRow {
-//   position: absolute;
-//   top: 16px; right: 16px; left: 16px;
-//   display: flex; justify-content: flex-end; gap: 8px;
-//   z-index: 1;
-// }
 
 .favBtn {
     position: absolute;
@@ -171,26 +160,7 @@ line-height: 1.55;
   display: flex; justify-content: space-between; align-items: center;
 }
 
-.cta {
-  appearance: none;
-  border: 0; cursor: pointer;
-  padding: 10px 16px;
-  border-radius: 12px;
-  background: #0d74cf; color: #fff;
-  font-weight: 700; line-height: 1;
-  transition: background .2s;
 
-  &:hover { background: #0b63b3; }
-}
-
-.ctaSuccess {
-  background: #dff5e3; color: #2e7d32;
-  &:hover { background: #c9eccf; }
-}
-
-.ctaDisabled {
-  background: #e9ebf0; color: #868ea2; cursor: not-allowed;
-}
 
 .participants {
   display: flex; align-items: center; gap: 8px;
@@ -211,7 +181,7 @@ line-height: 1.71;
   min-width: 44px;
   padding: 1em;
   border-radius: 12px;
-  background: #f0f2f6;
+  background: var(--color-secondary-light-bg);
   color: var(--text-color-primary-dark, #161616);
 font-family: var(--font-display-Manrope);
 font-size: 1.125em;

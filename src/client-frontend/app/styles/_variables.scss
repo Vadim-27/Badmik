@@ -2,10 +2,11 @@
 
   --color-primary-bg: #1e3a8a;
   --color-secondary-bg: #f48b29;
-  --color-primary-dark-bg: #1e3a8a;
+  --color-primary-dark-bg: #161616;
   --color-secondary-dark-bg: #1C1C1C;
   --color-third-dark-bg: #615E60;
   --color-primary-light-color-bg: #fff;
+  --color-secondary-light-bg:#E2E8F0;
   --text-color-primary-light: #F0F0F0;
   --text-color-secondary-light: #FFFFFF;
   --text-color-primary-dark: #161616;
@@ -15,6 +16,8 @@
   --accent-color-primary: #0D74CF;
  
   --border-primary-color: #E2E8F0;
+  --button-checked-color: #7BA049;
+  --secondary-button-bg: #242323;
 
   /* Базовий текстовий шрифт (Manrope) */
   --font-display-Manrope: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI',
@@ -28,13 +31,18 @@
     system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
     'Segoe UI Symbol', 'Noto Color Emoji';
 
+    --font-display-Inter: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', Arial, ui-sans-serif,
+    system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol', 'Noto Color Emoji';
+
 
 
     --color-secondary-bg: #ff0606;
   --color-primary-light-color: #fff;
     --primary-button: #0D74CF;
     --primary-button-hover: #172c6b;
-    --secondary-button: #f48b29;
+    
     --secondary-button-hover: #d97414;
     --color-primary-light-color: #fff;
 
