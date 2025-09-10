@@ -1,30 +1,44 @@
-.sliderWrapper {
-    position: relative;
-    width: 100%;
-    overflow: hidden;
-    // padding-bottom: 127px;
-    // z-index: 100;
-      
-}
+// @import '@/app/styles/common/mixins';
+
+// .embla {
+//     @apply relative overflow-hidden;
+// }
+
+// .embla__container {
+//     @apply flex;
+// }
+
+// .dots {
+//     @apply absolute left-1/2 mt-12 flex -translate-x-1/2 justify-center;
+// }
+
+// .dot {
+//     @apply mx-[5px] h-4 w-4 -rotate-180 cursor-pointer rounded-full bg-black-25%;
+//     transition:
+//         transform 300ms linear,
+//         background-color 300ms linear;
+
+//     &:hover {
+//         @apply bg-button;
+//     }
+// }
+
+// .dot.active {
+//     @apply w-[76px] rotate-180 bg-button;
+// }
 .embla {
     position: relative;
-    // overflow: hidden;
-    // overflow-x: hidden;  /* по осі X — обрізаємо */
-//   overflow-y: visible; 
-    padding-bottom: 64px;
-    // z-index: 100;
-      
+    overflow: hidden;
+    margin-bottom: 54px;
+      .containerPage & {
+    margin-left: calc(-1 * var(--container-padding)); // витягуємо слайдер ліворуч
+    padding-left: var(--container-padding);           // зберігаємо внутрішній відступ
+  }
 }
-// .embla__viewport {
-//   overflow-x: hidden;  /* по осі X — обрізаємо */
-//   overflow-y: visible;   /* обрізає тільки слайди */
-//   width: 100%;
-// }
 .embla__container {
 //   --gap: 10px;                /* один проміжок між слайдами */
   display: grid;
   grid-auto-flow: column;
-  
 //   gap: var(--gap);
 
   /* 1 слайд на екрані — віднімати нічого */
@@ -46,9 +60,6 @@
 }
 
 .arrows{
-    // position: absolute;
-    // right: 0;
-    z-index: 2;
     display: flex;
     justify-content: end;
     gap: 20px;
@@ -85,6 +96,35 @@ background: #E2E8F0;
   transform: translate(-50%, -50%);
 }
 
+.controls {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dots {
+  display: flex;
+  gap: 8px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #cbd5e0;
+  border: none;
+  cursor: pointer;
+
+  &.active {
+    background: #0d74cf;
+  }
+}
+
+.pages {
+  font-size: 14px;
+  color: #4a5568;
+}
 
 // .dots {
 //     position: absolute;

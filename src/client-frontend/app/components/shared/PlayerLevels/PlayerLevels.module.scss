@@ -14,20 +14,19 @@
   display: grid;
   gap: 24px;
 
-  /* mobile (до tablet) */
+  
   grid-template-columns: 1fr;
 
-  /* tablet */
+ 
   @include media-rules(tablet) {
     grid-template-columns: repeat(2, minmax(260px, 1fr));
   }
 
-  /* laptop */
+  
   @include media-rules(laptop) {
     grid-template-columns: repeat(3, minmax(260px, 1fr));
   }
 
-  /* desktop */
   @include media-rules(desktop) {
     grid-template-columns: repeat(5, minmax(220px, 1fr));
   }
@@ -36,12 +35,12 @@
 .card {
   display: grid;
   grid-template-rows: auto auto 1fr;
-//   gap: 12px;
+
   padding: 0 0 16px;
-//   border: 1px solid var(--border-primary-color, #e9eaee);
+
   border-radius: 12px;
   background: var(--color-primary-light-color-bg);
-//   box-shadow: 0 4px 12px rgba(0,0,0,.04);
+
 }
 
 .thumb {
@@ -68,10 +67,7 @@ line-height: 1.41; /* 141.667% */
 }
 
 .description {
-//   padding: 0 16px 8px 16px;
-//   color: var(--text-color-secondary, #5b6472);
-//   font-size: 0.9375rem; /* 15px */
-//   line-height: 1.55;
+
 color: var(--text-color-primary-dark, #161616);
 font-family: var(--font-display-Manrope);
 font-size: 1.125em;

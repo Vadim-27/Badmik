@@ -2,12 +2,13 @@
 
 import Image from "next/image";
 import Slider from "@/app/components/shared/Tournaments/Slider";
-import ClubListButton from "@/app/components/ui/Buttons/ClubListButton/ClubListButton"; 
+import TournamentsButtons from "@/app/components/ui/Buttons/TournamentsButtons/TournamentsButtons"; 
 import tournaments from "@/data/tournaments.json";
 import MapIcon from "@/app/assets/icons/Map.svg";
 import TimerIcon from "@/app/assets/icons/Timer.svg";
 import HeartIcon from "@/app/assets/icons/heart.svg";
 import WalletIcon from "@/app/assets/icons/Wallet.svg";
+import TabsSortBar from "./TabsSortBar/TabsSortBar";
 import styles from "./Tournaments.module.scss";
 
 type Tournament = {
@@ -19,7 +20,7 @@ type Tournament = {
   club: string;
   address: string;
   price: number;
-  status: "Вільні місця" | "Приєднався" | "Закінчився";
+  status: "Free" | "Joined" | "Closed";
   participantsJoined: number;
   participantsLimit: number;
   image: string;
@@ -79,26 +80,10 @@ export default function Tournaments() {
         </div>
 
         <div className={styles.bottomRow}>
-            <ClubListButton href={`/clubs/${item.id}`}>
-                                    Детальніше
-                                  </ClubListButton>
-          {/* <button
-            type="button"
-            className={`${styles.cta} ${
-              item.status === "Закінчився"
-                ? styles.ctaDisabled
-                : item.status === "Приєднався"
-                ? styles.ctaSuccess
-                : ""
-            }`}
-            disabled={item.status === "Закінчився"}
-          >
-            {item.status === "Вільні місця"
-              ? "Приєднатися"
-              : item.status === "Приєднався"
-              ? "Приєднався"
-              : "Закінчився"}
-          </button> */}
+            <TournamentsButtons status={item.status}>
+                {item.status === "Free" ? "Приєднатися" : item.status === "Joined" ? "Приєднався" : "Закінчився"}
+                                  </TournamentsButtons>
+        
 
           <div className={styles.participants}>
             <span className={styles.participantsLabel}>Учасники приєдналися</span>
@@ -114,6 +99,7 @@ export default function Tournaments() {
   return (
     <section className="containerPage">
       <h2 className={styles.heading}>Турніри</h2>
+        <TabsSortBar />
 
       {items.length > 4 ? (
         <Slider className={styles.slider}>

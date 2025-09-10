@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { Manrope, Unbounded } from "next/font/google";
-import Header from "./components/shared/Header/Header";
+import { Manrope, Unbounded, Inter } from "next/font/google";
+// import Header from "./components/shared/Header/Header";
+import Footer from "./components/shared/Footer/Footer";
 import "./styles/globals.scss";
 
 const manrope = Manrope({
@@ -17,6 +18,12 @@ const unbounded = Unbounded({
   variable: "--font-display",
   display: "swap",
 });
+const inter = Inter({
+  subsets: ["latin", "cyrillic"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-inter",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -30,9 +37,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-     <body className={`${manrope.variable} ${unbounded.variable} antialiased`}>
-        <Header />
+     <body className={`${manrope.variable} ${unbounded.variable} ${inter.variable} antialiased`}>
+        {/* <Header /> */}
         {children}
+        <Footer />
       </body>
     </html>
   );

@@ -8,7 +8,7 @@
     "club": "Фітнес центр “5 елемент”",
     "address": "вулиця Електриків, 29а, Київ",
     "price": 500,
-    "status": "Вільні місця",
+    "status": "Free",
     "participantsJoined": 5,
     "participantsLimit": 10,
     "image": "/Tournaments/Tourn1.jpg"
@@ -22,7 +22,7 @@
     "club": "Sport Life Позняки",
     "address": "вулиця Миколи Бажана, 40Г",
     "price": 500,
-    "status": "Приєднався",
+    "status": "Joined",
     "participantsJoined": 8,
     "participantsLimit": 16,
     "image": "/Tournaments/Tourn2.jpg"
@@ -36,7 +36,7 @@
     "club": "Спорт-Ресурс",
     "address": "Патріса Лумумби, 14/21",
     "price": 500,
-    "status": "Закінчився",
+    "status": "Closed",
     "participantsJoined": 3,
     "participantsLimit": 10,
     "image": "/Tournaments/Tourn3.jpg"
@@ -50,7 +50,7 @@
     "club": "Фітнес центр “5 елемент”",
     "address": "вулиця Електриків, 29а, Київ",
     "price": 500,
-    "status": "Вільні місця",
+    "status": "Free",
     "participantsJoined": 9,
     "participantsLimit": 10,
     "image": "/Tournaments/Tourn4.jpg"
@@ -64,7 +64,7 @@
     "club": "Спорт-Ресурс",
     "address": "Патріса Лумумби, 14/21",
     "price": 500,
-    "status": "Закінчився",
+    "status": "Closed",
     "participantsJoined": 3,
     "participantsLimit": 10,
     "image": "/Tournaments/Tourn3.jpg"
@@ -78,7 +78,7 @@
     "club": "Фітнес центр “5 елемент”",
     "address": "вулиця Електриків, 29а, Київ",
     "price": 500,
-    "status": "Вільні місця",
+    "status": "Free",
     "participantsJoined": 9,
     "participantsLimit": 10,
     "image": "/Tournaments/Tourn4.jpg"
