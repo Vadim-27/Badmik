@@ -9,9 +9,8 @@ using System.Threading.Tasks;
 namespace BadmintonApp.Application.Interfaces.Repositories;
 
 public interface ITrainingsRepository
-{
-    //Task<IQueryable<Training>> GetAllAsync(Guid clubId, DateTime? date = null, TrainingType? type = null, PlayerLevel? level = null, CancellationToken cancellationToken = default);
-    Task<IQueryable<Training>> GetAllAsync(Guid clubId, DateTime? date = null, TrainingType? type = null, PlayerLevel? level = null, CancellationToken cancellationToken = default);
+{    
+    IQueryable<Training> GetAllAsync(Guid clubId, DateTime? date = null, TrainingType? type = null, PlayerLevel? level = null);
     Task<Training?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
     Task<Training> CreateAsync(Training training, CancellationToken cancellationToken);
     Task<Training> UpdateAsync(Training training, CancellationToken cancellationToken);

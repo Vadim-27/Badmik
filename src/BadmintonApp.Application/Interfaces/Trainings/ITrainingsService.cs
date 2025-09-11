@@ -9,7 +9,7 @@ namespace BadmintonApp.Application.Interfaces.Trainings;
 
 public interface ITrainingsService
 {
-    Task<List<TrainingResultDto>> GetAllAsync(Guid clubId, DateTime? date = null, TrainingType? type = null, PlayerLevel? level = null, CancellationToken cancellationToken = default);
+    List<TrainingResultDto> GetAllAsync(Guid clubId, DateTime? date = null, TrainingType? type = null, PlayerLevel? level = null);
     Task<TrainingResultDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
     Task<TrainingResultDto> CreateAsync(Guid adminId, CreateTrainingDto dto, CancellationToken cancellationToken);
     Task<TrainingResultDto> UpdateAsync(Guid id, Guid userId, UpdateTrainingDto dto, CancellationToken cancellationToken);

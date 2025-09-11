@@ -36,10 +36,10 @@ public class TrainingsService : ITrainingsService
         _updateTrainingValidation = updateTrainingValidation;
     }
 
-    public async Task<List<TrainingResultDto>> GetAllAsync(Guid clubId, DateTime? date = null, TrainingType? type = null, PlayerLevel? level = null, CancellationToken cancellationToken = default)
+    public  List<TrainingResultDto> GetAllAsync(Guid clubId, DateTime? date = null, TrainingType? type = null, PlayerLevel? level = null)
     { // Pagination ??
 
-        var trainings = await _repository.GetAllAsync(clubId, date, type, level, cancellationToken);
+        var trainings =  _repository.GetAllAsync(clubId, date, type, level);
         return trainings.ProjectTo<TrainingResultDto>(_mapper.ConfigurationProvider).ToList();
 
     }

@@ -19,15 +19,14 @@ namespace BadmintonApp.Application.Services
         private readonly IUserRepository _userRepository;
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly IValidator<RegisterDto> _userRegisterValidation;
-        private readonly IValidator<UpdateUserDto> _updateUserValidation;
+        
         private readonly IMapper _mapper;
 
-        public UserService(IUserRepository userRepository, IPasswordHasher<User> passwordHasher, IValidator<RegisterDto> userRegisterValidation, IValidator<UpdateUserDto> updateUserValidation, IMapper mapper)
+        public UserService(IUserRepository userRepository, IPasswordHasher<User> passwordHasher, IValidator<RegisterDto> userRegisterValidation,  IMapper mapper)
         {
             _userRepository = userRepository;
             _passwordHasher = passwordHasher;
-            _userRegisterValidation = userRegisterValidation;
-            _updateUserValidation = updateUserValidation;
+            _userRegisterValidation = userRegisterValidation;            
             _mapper = mapper;
         }
 
@@ -78,7 +77,7 @@ namespace BadmintonApp.Application.Services
             var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
             if (user == null) throw new NotFoundException("User not found.");
 
-            await _updateUserValidation.ValidateAndThrowAsync(dto, cancellationToken);
+            //await _updateUserValidation.ValidateAndThrowAsync(dto, cancellationToken);
 
             user.FirstName = dto.FirstName;
             user.LastName = dto.LastName;

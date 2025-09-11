@@ -31,13 +31,13 @@ namespace BadmintonApp.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetAll(
+        public ActionResult GetAll(
             [FromQuery] Guid clubId,
             [FromQuery] DateTime? date,
             [FromQuery] TrainingType? type,
             [FromQuery] PlayerLevel? level)
         {
-            var trainings = await _trainingsService.GetAllAsync(clubId, date, type, level);
+            var trainings = _trainingsService.GetAllAsync(clubId, date, type, level);
             return Ok(trainings);
         }
 
