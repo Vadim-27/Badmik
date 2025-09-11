@@ -1,6 +1,8 @@
 ﻿using BadmintonApp.Application.Interfaces.Auth;
 using BadmintonApp.Application.Interfaces.Clubs;
+using BadmintonApp.Application.Interfaces.Logs;
 using BadmintonApp.Application.Interfaces.Repositories;
+using BadmintonApp.Application.Interfaces.Users;
 using BadmintonApp.Application.Services;
 using BadmintonApp.Domain.Users;
 using BadmintonApp.Infrastructure.Auth;
@@ -20,13 +22,13 @@ namespace BadmintonApp.Infrastructure
             services.AddDbContext<ApplicationDbContext>(options =>
                 //options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
                 options.UseSqlite(configuration.GetConnectionString("DefaultConnection"), options => options.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
-
+            
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
-            services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
-            services.AddScoped<IClubsService, ClubsService>();
+            services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();           
             services.AddScoped<IClubsRepository, ClubRepository>();
-            services.AddScoped<IUserRoleRepository, UserRoleRepository>();
+            services.AddScoped<IUserRoleRepository, UserRoleRepository>();            
+            services.AddScoped<ILogRepository, LogRepository>();
             
             services.AddScoped<ITrainingsRepository, TrainingsRepository>();
 

@@ -56,7 +56,7 @@ public class TrainingsRepository : ITrainingsRepository
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<IQueryable<Training>> GetAllAsync(Guid clubId, DateTime? date, TrainingType? type, PlayerLevel? level, CancellationToken cancellationToken)
+    public IQueryable<Training> GetAllAsync(Guid clubId, DateTime? date, TrainingType? type, PlayerLevel? level)
     {
         var query = _dbContext.Trainings.AsNoTracking();
 

@@ -1,4 +1,6 @@
 ﻿using BadmintonApp.Application.Interfaces.Auth;
+using BadmintonApp.Application.Interfaces.Clubs;
+using BadmintonApp.Application.Interfaces.Logs;
 using BadmintonApp.Application.Interfaces.Permissions;
 using BadmintonApp.Application.Interfaces.Trainings;
 using BadmintonApp.Application.Interfaces.Users;
@@ -19,11 +21,12 @@ namespace BadmintonApp.Application
             services.AddScoped<IUsersService, UserService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ITrainingsService, TrainingsService>();
-            services.AddValidatorsFromAssemblyContaining<UserService>(includeInternalTypes: true);
-            //services.AddScoped<IUserRoleRepository, UserRoleRepository>()
+            services.AddValidatorsFromAssemblyContaining<UserService>(includeInternalTypes: true);            
             services.AddAutoMapper(conf => conf.AddMaps(Assembly.GetAssembly(typeof(TrainingMappingProfile))));
             services.AddScoped<IPermissionService, PermissionService>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+            services.AddScoped<ILogService, LogService>();
+            services.AddScoped<IClubsService, ClubsService>();
 
             return services;
         }
