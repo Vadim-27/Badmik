@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Header from "../../Header/Header";
-import FiltersBarSection from "../../FiltersBar/FiltersBarSection";
+import FiltersBarSection from "../../FiltersBar/HomePageFiltersBar/FiltersBarSection";
 import ChooseTrainingButton from "@/app/components/ui/Buttons/ChooseTrainingButton/ChooseTrainingButton";
 import styles from "./HeroHomePage.module.scss";
 

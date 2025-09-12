@@ -1,0 +1,175 @@
+{
+  "clubs": [
+    {
+      "id": "club1",
+      "name": "Sport Life Позняки",
+      "badge": "Топ",
+      "city": "Київ",
+      "address": "вулиця Михайла Драгоманова, 40Г, Київ",
+      "description": "Сучасний простір для тренувань та активного відпочинку. Створені комфортні умови для занять.",
+      "features": {
+        "courts": 2,
+        "flooring": "Вінілове покриття",
+        "parking": true,
+        "water": true,
+        "airConditioning": true
+      },
+      "priceFrom": 500,
+      "currency": "UAH",
+      "image": "/clubs/club1.jpg",
+      "detailsUrl": "/clubs/club1"
+    },
+    {
+      "id": "club2",
+      "name": "Фітнес центр “5 елемент”",
+      "badge": "Новий",
+      "city": "Київ",
+      "address": "вулиця Електриків, 29А, Київ",
+      "description": "Сучасний простір для тренувань та активного відпочинку. Створені комфортні умови для занять.",
+      "features": {
+        "courts": 2,
+        "flooring": "Вінілове покриття",
+        "parking": true,
+        "water": true,
+        "airConditioning": true
+      },
+      "priceFrom": 500,
+      "currency": "UAH",
+      "image": "/clubs/club2.jpg",
+      "detailsUrl": "/clubs/club2"
+    },
+    {
+      "id": "club3",
+      "name": "Клуб “Sport Life”",
+      "badge": "Рекомендовано",
+      "city": "Київ",
+      "address": "проспект Степана Бандери, 20Б, Київ",
+      "description": "Сучасний простір для тренувань та активного відпочинку. Створені комфортні умови для занять.",
+      "features": {
+        "courts": 2,
+        "flooring": "Вінілове покриття",
+        "parking": true,
+        "water": true,
+        "airConditioning": true
+      },
+      "priceFrom": 500,
+      "currency": "UAH",
+      "image": "/clubs/club3.jpg",
+      "detailsUrl": "/clubs/club3"
+    },
+    {
+      "id": "club4",
+      "name": "Kyiv Badminton Club",
+      "badge": "",
+      "city": "Київ",
+      "address": "вулиця Брест-Литовська, 5, Київ",
+      "description": "Сучасний простір для тренувань та активного відпочинку. Створені комфортні умови для занять.",
+      "features": {
+        "courts": 2,
+        "flooring": "Вінілове покриття",
+        "parking": true,
+        "water": true,
+        "airConditioning": true
+      },
+      "priceFrom": 500,
+      "currency": "UAH",
+      "image": "/clubs/club4.jpg",
+      "detailsUrl": "/clubs/club4"
+    },
+    {
+      "id": "club5",
+      "name": "Apollo next",
+      "badge": "Топ",
+      "city": "Київ",
+      "address": "Оболонський проспект, 16, Київ",
+      "description": "Сучасний простір для тренувань та активного відпочинку. Створені комфортні умови для занять.",
+      "features": {
+        "courts": 2,
+        "flooring": "Вінілове покриття",
+        "parking": true,
+        "water": true,
+        "airConditioning": true
+      },
+      "priceFrom": 500,
+      "currency": "UAH",
+      "image": "/clubs/club5.jpg",
+      "detailsUrl": "/clubs/club5"
+    },
+    {
+      "id": "club6",
+      "name": "Фітнес клуб Steel Gym",
+      "badge": "Новий",
+      "city": "Київ",
+      "address": "вулиця Борщагівська, 17/8, Київ",
+      "description": "Сучасний простір для тренувань та активного відпочинку. Створені комфортні умови для занять.",
+      "features": {
+        "courts": 2,
+        "flooring": "Вінілове покриття",
+        "parking": true,
+        "water": true,
+        "airConditioning": true
+      },
+      "priceFrom": 500,
+      "currency": "UAH",
+      "image": "/clubs/club6.jpg",
+      "detailsUrl": "/clubs/club6"
+    },
+    {
+      "id": "club7",
+      "name": "Apollo next",
+      "badge": "Топ",
+      "city": "Київ",
+      "address": "Оболонський проспект, 16, Київ",
+      "description": "Сучасний простір для тренувань та активного відпочинку. Створені комфортні умови для занять.",
+      "features": {
+        "courts": 2,
+        "flooring": "Вінілове покриття",
+        "parking": true,
+        "water": true,
+        "airConditioning": true
+      },
+      "priceFrom": 500,
+      "currency": "UAH",
+      "image": "/clubs/club5.jpg",
+      "detailsUrl": "/clubs/club5"
+    },
+    {
+      "id": "club8",
+      "name": "Фітнес клуб Steel Gym",
+      "badge": "Новий",
+      "city": "Київ",
+      "address": "вулиця Борщагівська, 17/8, Київ",
+      "description": "Сучасний простір для тренувань та активного відпочинку. Створені комфортні умови для занять.",
+      "features": {
+        "courts": 2,
+        "flooring": "Вінілове покриття",
+        "parking": true,
+        "water": true,
+        "airConditioning": true
+      },
+      "priceFrom": 500,
+      "currency": "UAH",
+      "image": "/clubs/club6.jpg",
+      "detailsUrl": "/clubs/club6"
+    },
+    {
+      "id": "club9",
+      "name": "Kyiv Badminton Club",
+      "badge": "Топ",
+      "city": "Київ",
+      "address": "вулиця Брест-Литовська, 5, Київ",
+      "description": "Сучасний простір для тренувань та активного відпочинку. Створені комфортні умови для занять.",
+      "features": {
+        "courts": 2,
+        "flooring": "Вінілове покриття",
+        "parking": true,
+        "water": true,
+        "airConditioning": true
+      },
+      "priceFrom": 500,
+      "currency": "UAH",
+      "image": "/clubs/club4.jpg",
+      "detailsUrl": "/clubs/club4"
+    }
+  ]
+}

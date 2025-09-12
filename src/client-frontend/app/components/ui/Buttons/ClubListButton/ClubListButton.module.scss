@@ -1,31 +1,37 @@
 .button {
   display: flex;
-  width: 183px;
+  // width: 193px;
   padding: 14px 24px;
   justify-content: center;
   align-items: center;
   gap: 10px;
 
   border-radius: 16px;
-  background: var(--accent-color-primary);
-  color: var(--text-color-secondary-light);
+  background: var(--color-secondary-light-bg);
+  color: var(--text-color-primary-dark);
 
   font-family:  var(--font-display-Inter);
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 32px; 
-  letter-spacing: 0.36px;
+  
+font-size: 1.25em;
+font-style: normal;
+font-weight: 700;
+line-height: 1.77; /* 177.778% */
+letter-spacing: 0.36px;
 
   text-decoration: none; /* бо це <a> */
-  transition: background 0.2s ease;
+  transition: background 0.15s ease, transform 0.05s ease;
 
   &:hover {
-    background: #0b63b3;
+    background: var(--accent-color-primary);
+    color: var(--text-color-secondary-light);
   }
 
   &:active {
     background: #094f8d;
   }
+}
+.medium{
+  min-width: 297px;
 }
 
 // .icon {
@@ -40,5 +46,10 @@
 .iconSvg {
   width: 14px;
   height: 14px;
-  fill: currentColor;
+  color: var(--text-color-primary-dark);
+  .button:hover & {
+    
+ 
+    color: var(--text-color-secondary-light);
+  }
 }
