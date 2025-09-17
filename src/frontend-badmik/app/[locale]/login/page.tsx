@@ -212,7 +212,7 @@ export default function LoginPage() {
     e.preventDefault();
     setPending(true);
     setError(null);
-console.log("PAYLOAD:", { email, password });
+
 
 const r = await fetch("/api/auth/login", {
   method: "POST",
@@ -233,7 +233,7 @@ if (!r.ok) {
 
 
 const data = await r.json();
-console.log("PARSED JSON:", data);
+
 
     setPending(false);
 
