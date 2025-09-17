@@ -19,6 +19,7 @@ export async function serverFetch(path: string, init: RequestInit = {}) {
   // простий хендл 401 (тут же можна викликати refresh)
   if (res.status === 401) {
     throw new Error("UNAUTHORIZED");
+    
   }
   if (!res.ok) throw new Error(`API ${res.status}: ${path}`);
   return res;
