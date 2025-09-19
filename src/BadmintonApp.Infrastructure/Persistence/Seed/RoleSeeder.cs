@@ -33,8 +33,8 @@ namespace BadmintonApp.Infrastructure.Persistence.Seed
                 },
                 new Role
                 {
-                    Type = RoleType.ClubAdmin,
-                    Name = "Club Admin",
+                    Type = RoleType.ClubAdmin,//ClubAdmin
+                    Name = "Club Admin", // Club Admin
                     Permissions = new List<PermissionType>
                     {
                         PermissionType.ClubsView,

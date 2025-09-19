@@ -35,10 +35,7 @@ namespace BadmintonApp.Infrastructure.Persistence.Configurations
 
             builder.Property(u => u.LastName)
                 .IsRequired()
-                .HasMaxLength(50);
-
-            builder.Property(u => u.Role)
-                .IsRequired();
+                .HasMaxLength(50);            
 
             builder.Property(u => u.IsActive)
                 .IsRequired();

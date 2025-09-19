@@ -1,7 +1,9 @@
 ﻿using BadmintonApp.Application.DTOs.ErrorDtos;
 using BadmintonApp.Application.Exceptions;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+
 using System.Threading.Tasks;
 
 namespace BadmintonApp.API.Middlewares;
@@ -25,6 +27,14 @@ public class ExceptionMiddleware(RequestDelegate next) /*: IMiddleware*/
                     context.Response.StatusCode = appException.Code;
                     dto.Message = ex.Message;
                     break;
+                case ValidationException validationException:
+                    context.Response.StatusCode = 400;
+                    foreach (var item in validationException.Errors)
+                    {
+                        dto.Message += $"{item.PropertyName}:{item.ErrorMessage}\n";
+                    }
+                    break;
+
                 default:
                     context.Response.StatusCode = 500;
                     dto.Message = "Internal Server Error..";

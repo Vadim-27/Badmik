@@ -14,9 +14,7 @@ namespace BadmintonApp.Domain.Users
         public string PasswordHash { get; set; }
 
         public string FirstName { get; set; }
-        public string LastName { get; set; }
-
-        public string Role { get; set; } 
+        public string LastName { get; set; }      
 
         public DateTime DoB { get; set; }
         public bool IsActive { get; set; }
