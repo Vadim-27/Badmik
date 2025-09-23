@@ -15,26 +15,7 @@ public class ClubRepository : IClubsRepository
     public ClubRepository(ApplicationDbContext context)
     {
         _context = context;
-    }
-    public async Task<bool> AssignAdminAsync(Guid clubId, Guid userId, CancellationToken cancellationToken)
-    {
-        if (await _context.UserClubRoles
-            .AnyAsync(x => x.ClubId == clubId &&
-                           x.UserId == userId &&
-                           x.Role == RoleType.ClubAdmin))
-        {
-            return true;
-        }
-
-        await _context.UserClubRoles.AddAsync(new UserClubRole
-        {
-            ClubId = clubId,
-            UserId = userId,
-            Role = RoleType.ClubAdmin
-        }, cancellationToken);
-
-        return await _context.SaveChangesAsync(cancellationToken) > 0;
-    }
+    }    
 
     public async Task<Club> CreateAsync(Club club, CancellationToken cancellationToken)
     {

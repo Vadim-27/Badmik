@@ -27,18 +27,7 @@ public class ClubsService : IClubsService
         _createClubValidation = createClubValidation;
         _workingHourValidation = workingHourValidation;
         _updateClubValidation = updateClubValidation;
-    }
-    public async Task AssignAdminAsync(Guid clubId, Guid userId, CancellationToken cancellationToken)
-    {
-        var club = await _clubsRepository.GetByIdAsync(clubId, cancellationToken);
-        if (club == null) throw new BadRequestException("Club not found");
-        
-        var user = await _userRepository
-            .GetByIdAsync(userId, cancellationToken);
-        if (user == null) throw new BadRequestException("User not found");            
-
-        await _clubsRepository.AssignAdminAsync(clubId, userId, cancellationToken);        
-    }
+    }    
 
     public async Task<ClubResultDto> CreateAsync(CreateClubDto dto, CancellationToken cancellationToken)
     {

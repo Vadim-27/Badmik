@@ -1,4 +1,4 @@
-﻿using BadmintonApp.Domain.Users;
+﻿using BadmintonApp.Domain.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

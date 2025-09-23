@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BadmintonApp.Domain.Permissions
+namespace BadmintonApp.Domain.Core
 {
     public enum PermissionType
     {
         ClubsView = 1,
-        PlayesManage = 2,
+        PlayersManage = 2,
         ClubsAssignAdmin = 3,
         ClubsManageAll = 4,
         TrainingsManage = 5,

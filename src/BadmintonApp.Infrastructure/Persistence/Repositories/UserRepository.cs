@@ -1,5 +1,5 @@
 ﻿using BadmintonApp.Application.Interfaces.Repositories;
-using BadmintonApp.Domain.Users;
+using BadmintonApp.Domain.Core;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

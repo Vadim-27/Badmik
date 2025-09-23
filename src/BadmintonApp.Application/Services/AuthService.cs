@@ -2,7 +2,7 @@
 using BadmintonApp.Application.Exceptions;
 using BadmintonApp.Application.Interfaces.Auth;
 using BadmintonApp.Application.Interfaces.Repositories;
-using BadmintonApp.Domain.Users;
+using BadmintonApp.Domain.Core;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Linq;
@@ -21,7 +21,7 @@ public class AuthService : IAuthService
     public AuthService(IUserRepository userRepository,
                        IPasswordHasher<User> passwordHasher,
                        IJwtTokenGenerator jwtTokenGenerator
-                       ,IUserRoleRepository userRoleRepository)
+                       , IUserRoleRepository userRoleRepository)
     {
         _userRepository = userRepository;
         _passwordHasher = passwordHasher;
@@ -32,23 +32,23 @@ public class AuthService : IAuthService
     public async Task<LoginResultDto> LoginAsync(LoginDto dto, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetByEmailAsync(dto.Email, cancellationToken);
-        if (user == null) throw new BadRequestException("Invalid credentials");           
+        if (user == null) throw new BadRequestException("Invalid credentials");
 
         var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
 
-        if (result != PasswordVerificationResult.Success) throw new BadRequestException("Invalid credentials");            
+        if (result != PasswordVerificationResult.Success) throw new BadRequestException("Invalid credentials");
 
-        var role = await _userRoleRepository.GetUserRoleForClubAsync(user.Id, user.ClubId.Value);
+        var roles = await _userRoleRepository.GetUserRoleForClubAsync(user.Id, user.ClubId.Value, cancellationToken);
 
-        var token = _jwtTokenGenerator.GenerateToken(user, role?.Name);
+        var token = _jwtTokenGenerator.GenerateToken(user, roles.Select(x => x.Name).ToArray());
 
         return new LoginResultDto
         {
             Token = token,
             UserId = user.Id.ToString(),
             Email = user.Email,
-            Role = role?.Name,
-            Permissions = role?.Permissions.Select(x => x.ToString()) ?? [],
+            Roles = roles.Select(x => x.Name).ToArray(),
+            Permissions = roles.SelectMany(x => x.RolePermissions.Select(x => x.Permission.Name)),
             FullName = $"{user.FirstName} {user.LastName}",
             ExpiresAt = DateTime.UtcNow.AddHours(2)
         };

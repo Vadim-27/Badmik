@@ -5,7 +5,7 @@ using BadmintonApp.Application.Exceptions;
 using BadmintonApp.Application.Interfaces.Permissions;
 using BadmintonApp.Application.Interfaces.Repositories;
 using BadmintonApp.Application.Interfaces.Trainings;
-using BadmintonApp.Domain.Permissions;
+using BadmintonApp.Domain.Core;
 using BadmintonApp.Domain.Trainings;
 using BadmintonApp.Domain.Trainings.Enums;
 using FluentValidation;
@@ -158,7 +158,7 @@ public class TrainingsService : ITrainingsService
         if (existing == null)
             throw new NotFoundException("Training not found");
 
-        var hasAccess = await _permission.HasPermission(userId, existing.ClubId, PermissionType.TrainingsManage);
+        var hasAccess = await _permission.HasPermission(userId, existing.ClubId, PermissionType.TrainingsManage, cancellationToken);
         if (!hasAccess)
             throw new ForbiddenException("You do not have permission to modify this training");
 
@@ -175,7 +175,7 @@ public class TrainingsService : ITrainingsService
         var training = await _repository.GetByIdAsync(id, cancellationToken);
         if (training == null) throw new NotFoundException("Training not found");            
 
-        var hasAccess = await _permission.HasPermission(userId, training.ClubId, PermissionType.TrainingsManage);
+        var hasAccess = await _permission.HasPermission(userId, training.ClubId, PermissionType.TrainingsManage, cancellationToken);
         if (!hasAccess) throw new ForbiddenException("Access denied");
 
         await _repository.DeleteAsync(id, cancellationToken); 

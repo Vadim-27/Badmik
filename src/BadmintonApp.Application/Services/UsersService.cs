@@ -3,7 +3,7 @@ using BadmintonApp.Application.DTOs.Users;
 using BadmintonApp.Application.Exceptions;
 using BadmintonApp.Application.Interfaces.Repositories;
 using BadmintonApp.Application.Interfaces.Users;
-using BadmintonApp.Domain.Users;
+using BadmintonApp.Domain.Core;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using System;
