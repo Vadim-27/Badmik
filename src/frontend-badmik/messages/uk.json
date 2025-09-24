@@ -9,7 +9,8 @@
       "addTrainingHeader":"Додати тренування",
       "usersHeader":"Гравці клубу",
       "trainingsHeader":"Тренування",
-      "editUserHeader":"Редагування користувача"
+      "editUserHeader":"Редагування користувача",
+      "employeeHeader": "Робітники клубів"
     }
   },
   "Sidebar": {
@@ -150,6 +151,7 @@
     "buttons": {
       "addClub": "Додати клуб",
       "addUser": "Додати користувача",
+      "addPlayer": "Додати гравця",
       "addTraining": "Додати тренування",
       "update": "Редагувати",
       "back": "Назад",
@@ -216,5 +218,36 @@
     "description": "Ви дійсно хочете видалити?",
     "confirm": "Так",
     "cancel": "Ні"
-  }
+  },
+  "EmployeeForm": {
+    "email": "Електронна пошта",
+    "emailRequired": "Електронна пошта обов'язкова",
+    "emailInvalid": "Неправильний формат електронної пошти",
+    "password": "Пароль",
+    "passwordRequired": "Пароль обов'язковий",
+    "passwordMin": "Мінімум 6 символів",
+    "firstName": "Ім'я",
+    "firstNameRequired": "Ім'я обов'язкове",
+    "lastName": "Прізвище",
+    "lastNameRequired": "Прізвище обов'язкове",
+    "role": "Роль",
+    "roleRequired": "Роль обов'язкова",
+    "selectRole": "-- Оберіть роль --",
+    "admin": "Адмін",
+    "manager": "Менеджер",
+    "coach": "Тренер",
+    "submitCreate": "Створити користувача",
+    "submitUpdate": "Оновити користувача"
+  },
+  "EmployeeTable": {
+    
+    "firstName": "Ім'я",
+    "lastName": "Прізвище",
+    "role": "Роль",
+    "actions": "Дії",
+    "view": "Переглянути",
+    "edit": "Редагувати",
+    "delete": "Видалити",
+    "confirmDelete": "Ви дійсно хочете видалити цього користувача?"
+}
 }

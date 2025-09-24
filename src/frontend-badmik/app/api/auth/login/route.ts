@@ -60,13 +60,13 @@
 
 import { NextResponse } from "next/server";
 
-const LOGIN_PATH = "/api/Auth/login"; // зі Swagger
+const LOGIN_PATH = "/api/Auth/login"; 
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    const r = await fetch(`${process.env.API_URL}${LOGIN_PATH}`, {
+    const r = await fetch(`${process.env.BACKEND_ORIGIN}${LOGIN_PATH}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
@@ -78,7 +78,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: raw || "Login failed" }, { status: r.status });
     }
 
-    // Бек повертає { token, refreshToken, expiresAt, role, userId, ... }
+    
     let data: any = {};
     try { data = raw ? JSON.parse(raw) : {}; } catch {}
 
@@ -97,18 +97,18 @@ export async function POST(req: Request) {
     const isProd = process.env.NODE_ENV === "production";
 
     if (token) {
-      // можна виставити термін дії за expiresAt або maxAge
+      
       const cookieOpts: Parameters<typeof res.cookies.set>[2] = {
         httpOnly: true,
-        secure: isProd,       // на localhost має бути false
+        secure: isProd,       
         sameSite: "lax",
         path: "/",
       };
       if (expiresAt) {
-        const expDate = new Date(expiresAt); // з бекенду ISO-рядок
+        const expDate = new Date(expiresAt); 
         if (!Number.isNaN(expDate.getTime())) cookieOpts.expires = expDate;
       } else {
-        cookieOpts.maxAge = 60 * 60; // 1 год — запасний варіант
+        cookieOpts.maxAge = 60 * 60; 
       }
 
       res.cookies.set("token", token, cookieOpts);
