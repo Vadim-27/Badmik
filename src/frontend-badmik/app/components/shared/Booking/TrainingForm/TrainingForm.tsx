@@ -248,7 +248,10 @@ export default function CreateTraining({ clubId }: { clubId: string }) {
             disabled={!isChanged}
             label="buttons.draft"
           />
-          <SaveButton onClick={handleSubmit(onSubmit)} disabled={!isChanged} label="buttons.save" />
+          <SaveButton 
+          onClick={handleSubmit(onSubmit)} 
+          disabled={!isChanged} 
+          label="buttons.save" />
         </div>
       </ActionHeader>
       <div className={styles.container}>
@@ -550,72 +553,13 @@ export default function CreateTraining({ clubId }: { clubId: string }) {
                     )}
                   </div>
 
-                  {/* <div>
-                    <label htmlFor="weekday" className={styles.label}>
-                      {t('weekday')}
-                    </label>
-                    <select
-                      id="weekday"
-                      className={`${styles.input} ${errors.weekday ? styles.errorInput : ''}`}
-                      disabled={!isRecurring} 
-                      {...register('weekday', {
-                        validate: (value) => {
-                          if (!isRecurring) return true;
-                          if (!value) return `${t('weekdayRequired')}`;
-                          return true;
-                        },
-                        onChange: () => setIsChanged(true),
-                      })}
-                    >
-                      <option value="">{t('selectDays.select')}</option>
-                      <option>{t('selectDays.monday')}</option>
-                      <option>{t('selectDays.tuesday')}</option>
-                      <option>{t('selectDays.wednesday')}</option>
-                      <option>{t('selectDays.thursday')}</option>
-                      <option>{t('selectDays.friday')}</option>
-                      <option>{t('selectDays.saturday')}</option>
-                      <option>{t('selectDays.sunday')}</option>
-                    </select>
-                    {errors.weekday && <p className={styles.errorText}>{errors.weekday.message}</p>}
-                  </div> */}
+                 
                 </div>
                 <div>
                   <label htmlFor="repeatCount" className={styles.label}>
                     {t('weekday')}
                   </label>
-                  {/* <div className={`${styles.daysGroup} ${errors.weekday ? styles.errorInput : ''}`}>
-                    {(
-                      Object.entries({
-                        monday: t('daysShort.monday'),
-                        tuesday: t('daysShort.tuesday'),
-                        wednesday: t('daysShort.wednesday'),
-                        thursday: t('daysShort.thursday'),
-                        friday: t('daysShort.friday'),
-                        saturday: t('daysShort.saturday'),
-                        sunday: t('daysShort.sunday'),
-                      }) as [string, string][]
-                    ).map(([key, label]) => (
-                      <label
-                        key={key}
-                        className={`${styles.dayBtn} ${watch('days')?.includes(label) ? styles.dayBtnActive : ''} ${errors.days ? styles.errorInput : ''}`}
-                      >
-                        <input
-                          type="checkbox"
-                          value={label}
-                          className={styles.hiddenCheckbox}
-                          disabled={!isRecurring}
-                          {...register('days', {
-                            validate: (val) => {
-                              if (!isRecurring) return true;
-                              return val && val.length > 0 ? true : `${t('weekdayRequired')}`;
-                            },
-                            onChange: () => setIsChanged(true),
-                          })}
-                        />
-                        {label}
-                      </label>
-                    ))}
-                  </div> */}
+                  
 
                   <div className={`${styles.daysGroup} ${errors.weekday ? styles.errorInput : ''}`}>
   {(Object.entries({
@@ -673,30 +617,19 @@ export default function CreateTraining({ clubId }: { clubId: string }) {
                       {...register('cancelValue', { onChange: () => setIsChanged(true) })}
                     />
                   </div>
-                  {/* <div>
-                    <label className={styles.label}>{t('cancelUnit')}</label>
-                    <select
-                      defaultValue="hours"
-                      className={styles.select}
-                      {...register('cancelUnit', { onChange: () => setIsChanged(true) })}
-                    >
-                      <option value="minutes">{t('minutes')}</option>
-                      <option value="hours">{t('hours')}</option>
-                      <option value="days">{t('days')}</option>
-                    </select>
-                  </div> */}
+                  
                   <div>
   <label className={styles.label}>{t('priceValue')}</label>
   <input
     type="number"
     defaultValue={2}
-    min={1} // додатково підкаже браузеру
+    min={1} 
     className={`${styles.input} ${errors.priceValue ? styles.errorInput : ''}`}
     {...register('priceValue', {
-      required: `${t('priceRequiredError')}`, // локалізований текст, якщо порожньо
+      required: `${t('priceRequiredError')}`, 
       min: {
         value: 1,
-        message: `${t('priceMinError')}`, // локалізований текст, якщо < 1
+        message: `${t('priceMinError')}`, 
       },
       onChange: () => setIsChanged(true),
     })}
@@ -710,21 +643,7 @@ export default function CreateTraining({ clubId }: { clubId: string }) {
             </aside>
           </div>
 
-          {/* <section className={styles.actionbar}>
-          <div className={styles.actions}>
-            <button
-            className={`${styles.btn} ${styles.btnOutline}`}
-            onClick={handleBack}
-          >
-            Назад
-          </button>
-            <span className={styles.spacer}></span>
-            <button className={`${styles.btn} ${styles.btnSecondary}`}>Зберегти як чернетку</button>
-            <button className={`${styles.btn} ${styles.btnPrimary}`}>
-              Опублікувати тренування
-            </button>
-          </div>
-        </section> */}
+          
         </form>
       </div>
     </>
