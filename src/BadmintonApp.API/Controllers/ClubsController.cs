@@ -65,13 +65,6 @@ namespace BadmintonApp.API.Controllers
 
             return Ok(); // 204
         }
-
-        [HttpPut("{clubId}/assign-admin")]
-        public async Task<IActionResult> AssignAdmin(Guid clubId, [FromBody] AssignAdminDto dto, CancellationToken cancellationToken)
-        {
-           await _clubsService.AssignAdminAsync(clubId, dto.UserId, cancellationToken);
-            
-            return Ok();
-        }
+        
     }
 }

@@ -1,4 +1,4 @@
-﻿using BadmintonApp.Domain.Users;
+﻿using BadmintonApp.Domain.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;

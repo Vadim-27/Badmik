@@ -12,7 +12,8 @@ namespace BadmintonApp.Application.DTOs.Users
         public string Password { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string Role { get; set; } // "Player", "Trainer", "Admin"
+        public Guid ClubId { get; set; }
+        
         public DateTime DoB { get; set; }
     }
 }

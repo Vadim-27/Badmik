@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace BadmintonApp.Application.Interfaces.Repositories;
 
-public interface IUserRoleRepository
+public interface IRoleRepository
 {
-    Task<List<Role>> GetUserRoleForClubAsync(Guid userId, Guid clubId, CancellationToken cancellationToken);
+    Task AssignRoleForUser(Guid userId, Guid clubId, Guid roleId, CancellationToken cancellationToken);
+    Task<List<Role>> GetAll(CancellationToken cancellationToken);
 }

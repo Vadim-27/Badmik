@@ -1,29 +1,54 @@
+version: "3.9"
+
+networks:
+  badmik:
+    driver: bridge
+
 services:
-  postgres:
-    image: postgres:15
-    container_name: postgres-dev
-    restart: always
+  # postgres:
+  #   image: postgres:15
+  #   container_name: postgres-dev
+  #   restart: always
+  #   environment:
+  #     POSTGRES_USER: badmik_user
+  #     POSTGRES_PASSWORD: badmik_password
+  #     POSTGRES_DB: badmik_db
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - pgdata:/var/lib/postgresql/data
+
+  ngrok:
+    image: ngrok/ngrok
+    container_name: ngrok
+    command: "http host.docker.internal:61805"          #local api
+    #command: "http host.docker.internal:5000"          #docker api
     environment:
-      POSTGRES_USER: badmik_user
-      POSTGRES_PASSWORD: badmik_password
-      POSTGRES_DB: badmik_db
+      - NGROK_AUTHTOKEN=32ptWOM93nNz0rx9sZqkkGcx9ls_5gwVZ7thDqwKK8KNweJ3W
     ports:
-      - "5432:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
+      - "4040:4040"
+      - "8081:8081"
+    depends_on:
+      - api
+    networks:
+      - badmik
+    
 
   api:
     build:
       context: ./src
-      dockerfile: BadmintonApp.API/Dockerfile
+      dockerfile: Dockerfile
     container_name: badminton-api
     ports:
-      - "5000:80"
+      - "5000:5000"
     environment:
-      ASPNETCORE_ENVIRONMENT: Development
-      ConnectionStrings__DefaultConnection: Host=postgres;Port=5432;Database=badmik_db;Username=badmik_user;Password=badmik_password
-    depends_on:
-      - postgres
+      ASPNETCORE_URLS: 'http://+:5000'
+    networks:
+      - badmik
+      #ASPNETCORE_ENVIRONMENT: Development
+      #ConnectionStrings__DefaultConnection: Host=postgres;Port=5432;Database=badmik_db;Username=badmik_user;Password=badmik_password
+    # depends_on:
+    #   - postgres
 
-volumes:
-  pgdata:
+# volumes:
+#   pgdata:

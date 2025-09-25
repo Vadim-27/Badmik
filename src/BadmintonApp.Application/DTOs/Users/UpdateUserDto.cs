@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BadmintonApp.Application.DTOs.Users
 {
@@ -16,6 +12,6 @@ namespace BadmintonApp.Application.DTOs.Users
         public DateTime DoB { get; set; } // not sure if it should be updated
         public string Rank { get; set; }
         public string Level { get; set; }
-        public string ImageUrl { get; set; } 
+        
     }
 }
