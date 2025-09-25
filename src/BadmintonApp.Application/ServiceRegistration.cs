@@ -2,11 +2,12 @@
 using BadmintonApp.Application.Interfaces.Clubs;
 using BadmintonApp.Application.Interfaces.Logs;
 using BadmintonApp.Application.Interfaces.Permissions;
+using BadmintonApp.Application.Interfaces.Roles;
 using BadmintonApp.Application.Interfaces.Trainings;
 using BadmintonApp.Application.Interfaces.Users;
 using BadmintonApp.Application.Mappings;
 using BadmintonApp.Application.Services;
-using BadmintonApp.Domain.Users;
+using BadmintonApp.Domain.Core;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,6 +28,8 @@ namespace BadmintonApp.Application
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             services.AddScoped<ILogService, LogService>();
             services.AddScoped<IClubsService, ClubsService>();
+            services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IPermissionService, PermissionService>();
 
             return services;
         }

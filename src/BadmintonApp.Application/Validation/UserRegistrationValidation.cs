@@ -29,7 +29,7 @@ public class UserRegistrationValidation : AbstractValidator<RegisterDto>
             .NotEmpty().WithMessage("Password is required.").WithErrorCode("Pssword.Empty")
             .MinimumLength(8).WithMessage("Password must be at least 8 characters.").WithErrorCode("Password.TooShort")
             .MaximumLength(64).WithMessage("Password must be at most 64 characters.").WithErrorCode("Password.TooLong")
-            .Must(p => p.All(c => !char.IsWhiteSpace(' '))).WithMessage("Password cannot cotain whitespace.").WithErrorCode("Password.Whitespace")
+            .Must(p => p.All(c => !char.IsWhiteSpace(c))).WithMessage("Password cannot cotain whitespace.").WithErrorCode("Password.Whitespace")
             .Must(p => p.Any(char.IsDigit)).WithMessage("Password must contain at least one digit.").WithErrorCode("Password.NoDigit")
             .Must(p => p.Any(char.IsUpper)).WithMessage("Password must contain at least one uppercase letter.").WithErrorCode("Password.NoUpper")
             .Must(p => p.Any(char.IsLower)).WithMessage("Password must contain at least one lowercase letter.").WithErrorCode("Password.MoLower")
