@@ -1,70 +1,42 @@
 
-"use client"
+import { cookies } from "next/headers";
+import { decodeJwt } from "jose";
+import HeaderClient from "./HeaderClient/HeaderClient";
 
-import UserMenu from '@/app/components/ui/UserMenu/UserMenu';
-import Cookies from 'js-cookie';
-import jwt from 'jwt-simple';
-import {Link} from '@/i18n/navigation';
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import styles from './Header.module.scss';
-import { LanguageSwitcher } from '@/app/components/shared/Header/LangSwitcher/LanguageSwitcher';
+const ROLE_CLAIM   = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role";
+const NAMEID_CLAIM = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier";
 
-const JWT_SECRET = 'your-secret';
+export default async function Header() {
+  const cookieStore = await cookies();
+    const token = cookieStore.get("token")?.value;
 
-export default function Header() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [avatarUrl, setAvatarUrl] = useState<string | undefined>(undefined);
+  let isAuthenticated = false;
+  let role: string | undefined;
+  let userId: string | undefined;
+  let email: string | undefined;
+  let avatarUrl: string | undefined;
 
-  const router = useRouter();
-  const token = Cookies.get('token');
- 
-
-  useEffect(() => {
-    
-    if (token) {
-      try {
-        const decoded = jwt.decode(token, JWT_SECRET);
-        const role = decoded.role;
-        setAvatarUrl(decoded.avatarUrl); 
-        setIsAuthenticated(true);
-       
-        setIsAdmin(['owner_admin', 'assistant', 'club_admin'].includes(role));
-        router.refresh();
-      } catch (err) {
-        Cookies.remove('token');
-        setIsAuthenticated(false);
-      }
+  if (token) {
+    try {
+      const p: any = decodeJwt(token); 
+      role     = p[ROLE_CLAIM] ?? p.role;
+      userId   = p[NAMEID_CLAIM] ?? p.sub;
+      email    = p.email;
+      avatarUrl = p.avatarUrl;
+      isAuthenticated = true;
+    } catch {
+      // битий/протух токен — вважаємо неавторизованим
     }
-  }, [token, router]);
-
-  const handleLogout = () => {
-    Cookies.remove('token');
-    // window.location.reload();
-    setIsAuthenticated(false); 
-  router.refresh(); 
-  router.push('/');
-  };
+  }
 
   return (
-    <header className={styles.header}>
-      <nav className={styles.nav}>
-        <Link href="/">Logo</Link>
-        {/* {isAdmin && <Link href="/admin">Admin</Link>} */}
-      </nav>
-
-      <div className={styles.actions}>
-        <LanguageSwitcher />
-        {isAuthenticated ? (
-          <UserMenu avatarUrl={avatarUrl} onLogout={handleLogout} />
-        ) : (
-          <Link href="/login" className={styles.authButton}>
-            Login
-          </Link>
-        )}
-      </div>
-    </header>
+    <HeaderClient
+      isAuthenticated={isAuthenticated}
+      role={role}
+      userId={userId}
+      email={email}
+      avatarUrl={avatarUrl}
+    />
   );
 }
 
