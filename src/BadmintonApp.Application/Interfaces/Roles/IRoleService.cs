@@ -10,4 +10,6 @@ public interface IRoleService
 {
     Task AssignRoleForUser(Guid userId, Guid clubId, Guid roleId, CancellationToken cancellationToken);
     Task<List<Role>> GetAll(CancellationToken cancellationToken);
+    Task RoleBindPermission(Guid roleId, Guid permissionId, CancellationToken cancellationToken);
+    Task RoleDeletePermission(Guid roleId, Guid permissionId, CancellationToken cancellationToken);
 }

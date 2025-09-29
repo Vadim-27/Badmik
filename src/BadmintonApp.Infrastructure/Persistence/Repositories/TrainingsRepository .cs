@@ -21,22 +21,24 @@ public class TrainingsRepository : ITrainingsRepository
     }
     public async Task<Training> CreateAsync(Training training, CancellationToken cancellationToken)
     {
-        _dbContext.Add(training);
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.AddAsync(training, cancellationToken);
+
+        await _dbContext.SaveChangesAsync(cancellationToken);
         return training;
     }
 
     public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
-        var entity = await _dbContext.Set<Training>().FindAsync(id, cancellationToken);       
+        var entity = await _dbContext.Trainings.FirstAsync(x =>x.Id == id, cancellationToken);
 
         _dbContext.Remove(entity);
-        return await _dbContext.SaveChangesAsync() > 0;
+        return await _dbContext.SaveChangesAsync(cancellationToken) > 0;
     }
      
     public async Task<Training> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _dbContext.Trainings.AsNoTracking()
+        return await _dbContext.Trainings
+            .AsNoTracking()
             .Include(x => x.Participants)
             .Include(x => x.Queue)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
@@ -51,7 +53,9 @@ public class TrainingsRepository : ITrainingsRepository
 
     public async Task<List<Training>> GetTrainingsByUserAsync(Guid userId, CancellationToken cancellationToken)
     {
-        return await _dbContext.Set<Training>()
+        return await _dbContext.Trainings
+            .AsNoTracking()
+            .Include(x => x.Participants)
             .Where(t => t.Participants.Any(p => p.UserId == userId))
             .ToListAsync(cancellationToken);
     }
@@ -69,7 +73,10 @@ public class TrainingsRepository : ITrainingsRepository
             query = query.Where(x => x.Type == type);
 
         if (level.HasValue)
-            query = query.Where(x => x.AllowedLevels.Contains(level.Value));
+
+            query = query
+                .Include(x => x.AllowedLevels)
+                .Where(x => x.AllowedLevels.Contains(level.Value));
 
         return query
             .Include(x => x.Participants)

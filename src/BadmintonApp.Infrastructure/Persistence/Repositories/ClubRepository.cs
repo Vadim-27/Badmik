@@ -27,7 +27,8 @@ public class ClubRepository : IClubsRepository
 
     public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
-        var club = await _context.Clubs.FindAsync(id, cancellationToken);
+        var club = await _context.Clubs.FirstAsync(x => x.Id == id, cancellationToken);
+
         _context.Clubs.Remove(club);
         return await _context.SaveChangesAsync(cancellationToken) > 0;
     }
