@@ -3,6 +3,7 @@ using BadmintonApp.Application.Interfaces.Roles;
 using BadmintonApp.Domain.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,6 +36,23 @@ namespace BadmintonApp.API.Controllers
 
             return Ok(roles);
         }
+
+        [HttpPut]
+        public async Task<ActionResult> BindPermission([FromBody] RoleBindPermissionDto dto, CancellationToken cancellationToken)
+        {
+            await _roleService.RoleBindPermission(dto.RoleId, dto.PermissionId, cancellationToken);
+
+            return Ok();
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult> DeletePermission([FromBody] RoleBindPermissionDto dtoDelete, CancellationToken cancellationToken)
+        {
+            await _roleService.RoleDeletePermission(dtoDelete.RoleId, dtoDelete.PermissionId, cancellationToken);
+
+            return Ok();
+        }
+
         
     }
 }

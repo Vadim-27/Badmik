@@ -31,8 +31,7 @@ namespace BadmintonApp.Infrastructure.Persistence
                 c.RoleId,
                 c.ClubId
             });
-            SeedData(modelBuilder);
-
+            SeedData(modelBuilder);            
 
             base.OnModelCreating(modelBuilder);
         }
@@ -178,6 +177,8 @@ namespace BadmintonApp.Infrastructure.Persistence
                     RoleId = roles[2].Id, //ClubManager,
                     PermissionId = permissions[5].Id //ClubsManageOwn
                 });
+
+
             modelBuilder.Entity<RolePermission>().HasData(rolePermissions);
         }
     }

@@ -38,4 +38,33 @@ public class RoleRepository : IRoleRepository
             .ToListAsync(cancellationToken);
         return roles;
     }
+
+
+    public async Task RoleBindPermission(Guid roleId, Guid permissionId, CancellationToken cancellationToken)
+    {        
+
+        var rolePermision = new RolePermission
+        {
+            RoleId = roleId,
+            PermissionId = permissionId
+        };
+
+        await _context.RolePermissions.AddAsync(rolePermision, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<bool> IsExist(Guid roleId, Guid permissionId, CancellationToken cancellationToken)
+    {
+        return await _context.RolePermissions
+            .AnyAsync(x => x.RoleId == roleId && x.PermissionId == permissionId, cancellationToken);        
+    }
+
+    public async Task RoleDeletePermission(Guid roleId, Guid permissionId, CancellationToken cancellationToken)
+    {
+        var rolePermission = await _context.RolePermissions.FirstAsync(x => x.RoleId == roleId && x.PermissionId == permissionId, cancellationToken);
+
+        _context.RolePermissions.Remove(rolePermission);
+
+        await _context.SaveChangesAsync(cancellationToken);
+    }
 }

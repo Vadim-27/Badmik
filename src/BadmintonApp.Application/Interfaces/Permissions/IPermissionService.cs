@@ -10,5 +10,6 @@ namespace BadmintonApp.Application.Interfaces.Permissions
     {
         Task<bool> HasPermission(Guid userId, Guid clubId, PermissionType permission, CancellationToken cancellationToken);
         Task<List<Permission>> GetAll(CancellationToken cancellationToken);
+        
     }
 }

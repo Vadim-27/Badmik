@@ -19,13 +19,26 @@ public class UserRoleRepository : IUserRoleRepository
     }
     public async Task<List<Role>> GetUserRoleForClubAsync(Guid userId, Guid clubId, CancellationToken cancellationToken)
     {
-        return await _dbContext.UserClubRoles
+        var userClubRoles = await _dbContext.UserClubRoles
             .AsNoTracking()
             .Include(x => x.Role)
-            .ThenInclude(x => x.RolePermissions)
-            .ThenInclude(x => x.Permission)
+                .ThenInclude(x => x.RolePermissions)
+                .ThenInclude(x => x.Permission)
             .Where(x => x.UserId == userId && x.ClubId == clubId)
-            .Select(x => x.Role)            
+            .Select(x => x.Role)
             .ToListAsync(cancellationToken);
+
+       var globalUserRoles =  await _dbContext.UserRoles
+            .AsNoTracking()
+            .Include(x => x.Role)
+                .ThenInclude(x => x.RolePermissions)
+                .ThenInclude(x => x.Permission)
+            .Where(x => x.UserId == userId)
+            .Select( x => x.Role)
+            .ToListAsync(cancellationToken);
+
+        userClubRoles.AddRange(globalUserRoles);
+
+        return userClubRoles;
     }
 }

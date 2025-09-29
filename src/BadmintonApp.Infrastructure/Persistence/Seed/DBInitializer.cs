@@ -13,8 +13,9 @@ public static class DbInitializer
     {
         if (!await context.Users.AnyAsync())
         {
-
             var passwordHasher = new PasswordHasher<User>();
+
+            var existingClubId = Guid.Parse("2672dab8-b42d-4c58-a67b-7e39e2fbES");
 
             var user = new User
             {
@@ -27,15 +28,13 @@ public static class DbInitializer
                 CreatedAt = DateTime.UtcNow,
                 Rank = "Pro",
                 Level = PlayerLevel.A,
-                ImageUrl = "https://example.com/image.jpg"
+                ImageUrl = "https://example.com/image.jpg",
+                ClubId = existingClubId
             };
-
-
             user.PasswordHash = passwordHasher.HashPassword(user, "admin123");
 
             context.Users.AddRange(user);
             await context.SaveChangesAsync();
         }
-
     }
 }
