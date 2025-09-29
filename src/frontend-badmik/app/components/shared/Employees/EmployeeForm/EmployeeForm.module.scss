@@ -131,3 +131,56 @@ $focus-ring: rgba(147, 197, 253, 0.35);
 
   @include media-rules(tablet) { font-size: 13px; }
 }
+
+
+
+
+
+//=================================
+
+.comboRoot { position: relative; }
+
+.inputChevron { padding-right: 40px; } 
+
+.comboChevron {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+ 
+  pointer-events: auto;
+  color: var(--muted);
+}
+
+.options {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 1000;
+
+  max-height: 240px;
+  overflow-y: auto;
+
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
+}
+
+.option {
+  padding: 10px 12px;
+  box-sizing: border-box;
+  cursor: pointer;
+  font-size: 14px;
+  background: #fff;
+
+  &:not(:last-child) { border-bottom: 1px solid #f1f5f9; }
+}
+
+.optionActive { background: #eef3ff; }
+
+/* щоб дропдаун не обрізався */
+.wrapper, .formBox, .form { overflow: visible; }
+
+

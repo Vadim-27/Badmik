@@ -30,7 +30,7 @@ export default function NewAdminPage() {
     <>
       <ActionHeader>
         <BackButton label="buttons.back" />
-        <h2 className="text-lg font-semibold">{tAH('title.editUserHeader')}</h2>
+        <h2 className="text-lg font-semibold">{tAH('title.addUserHeader')}</h2>
         <SaveButton
           onClick={() => formRef.current?.submit()}
           disabled={!isChanged}

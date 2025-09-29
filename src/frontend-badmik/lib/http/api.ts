@@ -1,54 +1,46 @@
-// import axios from "axios";
 
-// export const api = axios.create({
-//   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "/api",
-//   withCredentials: true,
-//   headers: { "Content-Type": "application/json" },
-// });
-
-// // опційний response-інтерсептор (логування/алерти)
-// api.interceptors.response.use(
-//   (r) => r,
-//   (e) => Promise.reject(e)
-// );
 
 // lib/http/api.ts
-import axios from 'axios';
+import axios, { CanceledError, isCancel } from 'axios';
 
 export const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || '/api',
-  withCredentials: true, 
+  baseURL: '/api',
+  withCredentials: true,
   headers: { 'Content-Type': 'application/json' },
 });
 
+// корисно для зв'язки логів клієнт ↔ proxy
+function makeReqId() {
+  return Math.random().toString(36).slice(2, 10);
+}
 
-let refreshing = false;
-let waiters: Array<() => void> = [];
+api.interceptors.request.use((config) => {
+  const url = (config.baseURL ?? '') + (config.url ?? '');
+  const method = (config.method ?? 'get').toUpperCase();
+  // console.log(`[API ▶] ${method} ${url}`);
+  return config;
+});
 
 api.interceptors.response.use(
-  (res) => res,
-  async (err) => {
-    const { response, config } = err || {};
-    if (response?.status !== 401 || (config as any).__retried) {
+  (res) => {
+    const url = (res.config.baseURL ?? '') + (res.config.url ?? '');
+    const method = (res.config.method ?? 'get').toUpperCase();
+    console.log(`[API ◀] ${method} ${url} → ${res.status}`);
+    return res;
+  },
+  (err) => {
+    if (err instanceof CanceledError || isCancel(err) || err?.code === 'ERR_CANCELED') {
       return Promise.reject(err);
     }
-
-    if (refreshing) {
-      await new Promise<void>((res) => waiters.push(res));
-    } else {
-      refreshing = true;
-      try {
-        await api.post('/auth/refresh');
-        waiters.forEach((r) => r());
-        waiters = [];
-      } finally {
-        refreshing = false;
-      }
-    }
-
-    (config as any).__retried = true;
-    return api.request(config);
+    const url = (err?.config?.baseURL ?? '') + (err?.config?.url ?? '');
+    const method = (err?.config?.method ?? 'get').toUpperCase();
+    // console.error(
+    //   `[API ✖] ${method} ${url} →`,
+    //   'status:', err?.response?.status, 'message:', err?.message, 'code:', err?.code
+    // );
+    return Promise.reject(err);
   }
 );
+
 
 export default api;
