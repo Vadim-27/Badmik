@@ -1,18 +1,20 @@
-import type { NextConfig } from "next";
+
+
+
+/** @type {import('next').NextConfig} */
 import createNextIntlPlugin from 'next-intl/plugin';
 
-const nextConfig: NextConfig = {
-  /* config options here */
-   reactStrictMode: true,
-  // swcMinify: true,
-  //  output: "export",
-  trailingSlash: true, 
-  images: {
-    unoptimized: true, 
-  },
+const nextConfig = {
+  reactStrictMode: true,
+  images: { unoptimized: true },
+
+
+  trailingSlash: false,
+  skipTrailingSlashRedirect: true,
+  skipMiddlewareUrlNormalize: true,
+
+  
 };
 
 const withNextIntl = createNextIntlPlugin();
 export default withNextIntl(nextConfig);
-
-// export default nextConfig;
