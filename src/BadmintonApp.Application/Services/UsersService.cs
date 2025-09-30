@@ -65,9 +65,9 @@ namespace BadmintonApp.Application.Services
             return user == null ? null : MapToProfile(user);
         }
 
-        public async Task<List<UserResultDto>> GetAllAsync(CancellationToken cancellationToken)
+        public async Task<List<UserResultDto>> GetAllAsync(string? filter = null, CancellationToken cancellationToken = default)
         {
-            var users = await _userRepository.GetAllAsync(cancellationToken);
+            var users = await _userRepository.GetAllAsync(filter, cancellationToken);
             return users.Select(MapToProfile).ToList();
         }
 
