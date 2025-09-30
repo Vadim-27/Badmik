@@ -4,7 +4,7 @@ using BadmintonApp.Application.Interfaces.Logs;
 using BadmintonApp.Application.Interfaces.Repositories;
 using BadmintonApp.Application.Interfaces.Users;
 using BadmintonApp.Application.Services;
-using BadmintonApp.Domain.Users;
+using BadmintonApp.Domain.Core;
 using BadmintonApp.Infrastructure.Auth;
 using BadmintonApp.Infrastructure.Persistence;
 using BadmintonApp.Infrastructure.Persistence.Repositories;
@@ -29,6 +29,8 @@ namespace BadmintonApp.Infrastructure
             services.AddScoped<IClubsRepository, ClubRepository>();
             services.AddScoped<IUserRoleRepository, UserRoleRepository>();            
             services.AddScoped<ILogRepository, LogRepository>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<IPermissionRepository, PermissionRepository>();
             
             services.AddScoped<ITrainingsRepository, TrainingsRepository>();
 

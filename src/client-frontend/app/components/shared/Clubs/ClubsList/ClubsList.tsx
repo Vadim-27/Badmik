@@ -61,7 +61,7 @@ export default async function ClubsList() {
                         <span>від </span>
                         <span className={styles.priceValue}>{club.price}</span>
                       </p>
-                      <ClubListButton href={`/clubs/${club.id}`}>
+                      <ClubListButton href={`/clubs/${club.id}`} className="cardBtn">
                         Детальніше
                       </ClubListButton>
                     </div>

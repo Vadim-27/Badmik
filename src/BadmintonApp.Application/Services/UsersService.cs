@@ -3,7 +3,7 @@ using BadmintonApp.Application.DTOs.Users;
 using BadmintonApp.Application.Exceptions;
 using BadmintonApp.Application.Interfaces.Repositories;
 using BadmintonApp.Application.Interfaces.Users;
-using BadmintonApp.Domain.Users;
+using BadmintonApp.Domain.Core;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -41,7 +41,7 @@ namespace BadmintonApp.Application.Services
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
                 DoB = dto.DoB,
-                Role = dto.Role, // роль при створенні ми не маємо права вибирати, таке право має надавати адмін, або якась базова роль присвоюється.. (!!!)
+                ClubId = dto.ClubId,               
                 CreatedAt = DateTime.UtcNow,
                 IsActive = true
             };
@@ -80,8 +80,7 @@ namespace BadmintonApp.Application.Services
             //await _updateUserValidation.ValidateAndThrowAsync(dto, cancellationToken);
 
             user.FirstName = dto.FirstName;
-            user.LastName = dto.LastName;
-            user.Role = dto.Role;
+            user.LastName = dto.LastName;            
 
             await _userRepository.UpdateAsync(user, cancellationToken);
 
@@ -101,8 +100,7 @@ namespace BadmintonApp.Application.Services
             Id = user.Id.ToString(),
             Email = user.Email,
             FirstName = user.FirstName,
-            LastName = user.LastName,
-            Role = user.Role,
+            LastName = user.LastName,            
             DoB = user.DoB
         };
     }
