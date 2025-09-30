@@ -7,11 +7,13 @@ using BadmintonApp.Application.Interfaces.Trainings;
 using BadmintonApp.Application.Interfaces.Users;
 using BadmintonApp.Application.Mappings;
 using BadmintonApp.Application.Services;
+using BadmintonApp.Application.UseCases.Account.Commands.Login;
 using BadmintonApp.Domain.Core;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using MediatR;
 
 namespace BadmintonApp.Application
 {
@@ -30,6 +32,11 @@ namespace BadmintonApp.Application
             services.AddScoped<IClubsService, ClubsService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IPermissionService, PermissionService>();
+
+            services.AddMediatR(cfg =>
+            {
+                cfg.RegisterServicesFromAssembly(Assembly.GetAssembly(typeof(LoginCommand))); 
+            });
 
             return services;
         }

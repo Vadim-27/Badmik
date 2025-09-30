@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BadmintonApp.Application.Services;
 
-public class RoleService : IRoleService 
+public class RoleService : IRoleService
 {
     private readonly IRoleRepository _roleRepository;
     private readonly IClubsRepository _clubsRepository;
@@ -37,5 +37,24 @@ public class RoleService : IRoleService
     public async Task<List<Role>> GetAll(CancellationToken cancellationToken)
     {
         return await _roleRepository.GetAll(cancellationToken);
+    }
+
+    public async Task RoleBindPermission(Guid roleId, Guid permissionId, CancellationToken cancellationToken)
+    {
+
+        if (await _roleRepository.IsExist(roleId, permissionId, cancellationToken))
+        {
+            throw new BadRequestException("Role already has permission.");
+        }
+            await _roleRepository.RoleBindPermission(roleId, permissionId, cancellationToken);
+    }
+
+    public async Task RoleDeletePermission(Guid roleId, Guid permissionId, CancellationToken cancellationToken)
+    {
+        if (await _roleRepository.IsExist(roleId, permissionId, cancellationToken))
+        {
+            throw new BadRequestException("Role has not permission.");
+        }
+        await _roleRepository.RoleDeletePermission(roleId, permissionId, cancellationToken);
     }
 }

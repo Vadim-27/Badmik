@@ -1,11 +1,11 @@
-﻿using BadmintonApp.Application.DTOs.Users;
+﻿using BadmintonApp.API.Extensions;
+using BadmintonApp.Application.DTOs.Users;
 using BadmintonApp.Application.Interfaces.Users;
-using BadmintonApp.Application.Validation;
+using BadmintonApp.Domain.Core;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Security.Claims;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,13 +17,13 @@ namespace BadmintonApp.API.Controllers
     {
         private readonly IUsersService _usersService;
         private readonly IValidator<RegisterDto> _registerDtoValidator;
-        
 
-        public UsersController(IUsersService usersService, IValidator<RegisterDto> registerDtoValidator )
+
+        public UsersController(IUsersService usersService, IValidator<RegisterDto> registerDtoValidator)
         {
             _usersService = usersService;
             _registerDtoValidator = registerDtoValidator;
-            
+
         }
 
         // POST: /api/auth/register
@@ -33,24 +33,27 @@ namespace BadmintonApp.API.Controllers
             await _registerDtoValidator.ValidateAndThrowAsync(registerDto, cancellationToken);
 
             await _usersService.RegisterAsync(registerDto, cancellationToken);
-            
+
             return Ok();
         }
 
-        // GET: /api/users/me
         [Authorize]
         [HttpGet("me")]
         public async Task<IActionResult> GetProfile(CancellationToken cancellationToken)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (string.IsNullOrEmpty(userId))
-                return Unauthorized();
 
-            var user = await _usersService.GetByIdAsync(Guid.Parse(userId), cancellationToken);
-            if (user == null)
-                return NotFound();
+            var user = await _usersService.GetByIdAsync(User.GetUserId(), cancellationToken);
 
             return Ok(user);
         }
-    }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<ActionResult> GetAll([FromQuery] string? filter, CancellationToken cancellationToken)
+        {
+            List<UserResultDto> users = await _usersService.GetAllAsync(filter, cancellationToken);
+            return Ok(users);
+        }
+
+    } 
 }
