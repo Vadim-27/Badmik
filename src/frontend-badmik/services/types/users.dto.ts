@@ -3,9 +3,10 @@ export type Role = "super_admin" | "club_admin" | "coach" | "assistant" | "user"
 export type CreateUserDto = {
   email: string;
   password: string;
-  fullName: string;
-  role: Role;
+  firstName: string;
+  lastName: string;
   clubId?: string;
+  doB: string; // ISO-строка
 };
 
 export type UpdateUserDto = Partial<Omit<CreateUserDto, "password">> & {
@@ -15,7 +16,7 @@ export type UpdateUserDto = Partial<Omit<CreateUserDto, "password">> & {
 export type User = {
   id: string;
   email: string;
-  fullName: string;
+  fullName: string;   // бек може повертати склеєне "firstName lastName"
   role: Role;
   clubId?: string | null;
   createdAt: string;

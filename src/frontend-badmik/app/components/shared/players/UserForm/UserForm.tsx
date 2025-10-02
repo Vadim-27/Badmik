@@ -1,11 +1,13 @@
 
-// EmployeeForm.tsx
+
+// UserForm.tsx
 'use client';
 
 import { forwardRef, useImperativeHandle, useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import styles from './EmployeeForm.module.scss';
+import styles from './UserForm.module.scss';
 import ClubSelectFieldAdd from '@/app/components/shared/Employees/EmployeeForm/ClubSelectAdd/ClubSelectFieldAdd';
+import CircularProgress from "@mui/material/CircularProgress";
 
 export type FormValues = {
   email: string;
@@ -24,12 +26,14 @@ type Props = {
   onSubmitUpdate?: (adminId: string, data: FormValues) => Promise<void>;
   isChanged?: boolean;
   setIsChanged?: (v: boolean) => void;
+  busy?: boolean; 
 };
 
-export type EmployeeFormHandle = {
+export type UserFormHandle = {
   submit: () => void;
   isValid: () => boolean;
   getValues?: () => FormValues;
+  setFieldError?: (name: keyof FormValues, message: string) => void; 
 };
 
 function isAtLeast8Years(oldDateStr: string) {
@@ -47,8 +51,8 @@ const hasLower = /[a-z]/;
 const hasSpecial = /[!@#$%^&*()_+\-=[\]{}|;':",.<>?/`~]/;
 const noWhitespace = /^\S+$/;
 
-const EmployeeForm = forwardRef<EmployeeFormHandle, Props>(function EmployeeForm(
-  { mode, adminId, defaultValues, onSubmitCreate, onSubmitUpdate, setIsChanged },
+const UserForm = forwardRef<UserFormHandle, Props>(function UserForm(
+  { mode, adminId, defaultValues, onSubmitCreate, onSubmitUpdate, setIsChanged, busy },
   ref
 ) {
   const {
@@ -58,6 +62,7 @@ const EmployeeForm = forwardRef<EmployeeFormHandle, Props>(function EmployeeForm
     reset,
     formState: { errors, isDirty, isValid },
     getValues,
+    setError,
   } = useForm<FormValues>({
     mode: 'all',
     defaultValues: {
@@ -78,16 +83,19 @@ const EmployeeForm = forwardRef<EmployeeFormHandle, Props>(function EmployeeForm
   const submitHandler = useCallback(
     async (raw: FormValues) => {
       // НІЯКИХ API тут. Тільки проброс даних нагору:
-      if (adminId && onSubmitUpdate) {
-        await onSubmitUpdate(adminId, raw);
-      } else if (onSubmitCreate) {
-        await onSubmitCreate(raw);
+        try {
+        // лише проброс у батька; тут НІЯКИХ API
+        if (adminId && onSubmitUpdate) await onSubmitUpdate(adminId, raw);
+        else if (onSubmitCreate) await onSubmitCreate(raw);
+
+        // ⬅️ скидаємо форму ТІЛЬКИ якщо вище не кинуто помилку
+        if (mode === 'create') reset();
+        else reset({ ...raw, password: '' });
+
+        setIsChanged?.(false);
+      } catch {
+        // на помилці форму НЕ чіпаємо
       }
-
-      if (mode === 'create') reset();
-      else reset({ ...raw, password: '' });
-
-      setIsChanged?.(false);
     },
     [adminId, mode, onSubmitCreate, onSubmitUpdate, reset, setIsChanged]
   );
@@ -98,9 +106,12 @@ const EmployeeForm = forwardRef<EmployeeFormHandle, Props>(function EmployeeForm
       submit: () => handleSubmit(submitHandler)(),
       isValid: () => Boolean(isValid),
       getValues: () => getValues() as FormValues,
+      setFieldError: (name, message) => setError(name, { type: 'server', message }),
     }),
-    [handleSubmit, submitHandler, isValid, getValues]
+    [handleSubmit, submitHandler, isValid, getValues, setError]
   );
+
+  const isBusy = Boolean(busy);
 
   return (
     <div className={styles.wrapper}>
@@ -229,8 +240,24 @@ const EmployeeForm = forwardRef<EmployeeFormHandle, Props>(function EmployeeForm
           </div>
         </form>
       </div>
+      {isBusy && (
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background: "rgba(255,255,255,0.6)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            borderRadius: "12px",
+            zIndex: 10,
+          }}
+        >
+          <CircularProgress size="3rem" />
+        </div>
+      )}
     </div>
   );
 });
 
-export default EmployeeForm;
+export default UserForm;

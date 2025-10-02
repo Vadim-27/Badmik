@@ -335,7 +335,7 @@ export async function middleware(request: NextRequest) {
       const clubId = payload.clubId as string | undefined;
       console.log("MW role:", role);
 
-      if (role === "Admin") {
+      if (role === "SuperAdmin") {
         if (pathname === "/") {
           return NextResponse.redirect(new URL("/admin/", request.url));
         }

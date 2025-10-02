@@ -1,4 +1,4 @@
-import UserTable from '@/app/components/shared/UserTable/UserTable';
+import UserTable from '@/app/components/shared/players/UserTable/UserTable';
 import ActionHeader from '@/app/components/ui/Layout/ActionHeader/ActionHeader';
 import BackButton from '@/app/components/ui/Buttons/BackButton/BackButton';
 import AddButton from '@/app/components/ui/Buttons/AddButton/AddButton';
