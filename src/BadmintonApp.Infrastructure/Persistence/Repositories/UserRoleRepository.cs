@@ -1,8 +1,10 @@
 ﻿using BadmintonApp.Application.Interfaces.Repositories;
-using BadmintonApp.Domain.Permissions;
+using BadmintonApp.Domain.Core;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BadmintonApp.Infrastructure.Persistence.Repositories;
@@ -15,18 +17,28 @@ public class UserRoleRepository : IUserRoleRepository
     {
         _dbContext = dbContext;
     }
-    public async Task<Role> GetUserRoleForClubAsync(Guid userId, Guid clubId)
+    public async Task<List<Role>> GetUserRoleForClubAsync(Guid userId, Guid clubId, CancellationToken cancellationToken)
     {
-
-        var userRole = await _dbContext.UserClubRoles
+        var userClubRoles = await _dbContext.UserClubRoles
             .AsNoTracking()
+            .Include(x => x.Role)
+                .ThenInclude(x => x.RolePermissions)
+                .ThenInclude(x => x.Permission)
             .Where(x => x.UserId == userId && x.ClubId == clubId)
-            .FirstAsync();
+            .Select(x => x.Role)
+            .ToListAsync(cancellationToken);
 
-        return await _dbContext.Roles
+       var globalUserRoles =  await _dbContext.UserRoles
             .AsNoTracking()
-            .Where(x => x.Type == userRole.Role)
-          //.Include(x => x.Permissions)
-            .FirstOrDefaultAsync();
+            .Include(x => x.Role)
+                .ThenInclude(x => x.RolePermissions)
+                .ThenInclude(x => x.Permission)
+            .Where(x => x.UserId == userId)
+            .Select( x => x.Role)
+            .ToListAsync(cancellationToken);
+
+        userClubRoles.AddRange(globalUserRoles);
+
+        return userClubRoles;
     }
 }

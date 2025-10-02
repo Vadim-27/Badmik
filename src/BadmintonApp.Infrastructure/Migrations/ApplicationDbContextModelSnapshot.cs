@@ -37,31 +37,7 @@ namespace BadmintonApp.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Clubs");
-                });
-
-            modelBuilder.Entity("BadmintonApp.Domain.Clubs.UserClubRole", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("ClubId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Role")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClubId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserClubRoles");
+                    b.ToTable("Clubs", (string)null);
                 });
 
             modelBuilder.Entity("BadmintonApp.Domain.Clubs.WorkingHour", b =>
@@ -86,7 +62,285 @@ namespace BadmintonApp.Infrastructure.Migrations
 
                     b.HasIndex("ClubId");
 
-                    b.ToTable("WorkingHours");
+                    b.ToTable("WorkingHours", (string)null);
+                });
+
+            modelBuilder.Entity("BadmintonApp.Domain.Core.Permission", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Permissions", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("fe2da074-fff1-426f-b045-44427951a6eb"),
+                            Name = "ClubsView"
+                        },
+                        new
+                        {
+                            Id = new Guid("31f6a90f-2d85-4d9d-92aa-85e702289278"),
+                            Name = "PlayersManage"
+                        },
+                        new
+                        {
+                            Id = new Guid("ac341087-ee9a-49c1-ac8b-0b34e28cdee8"),
+                            Name = "ClubsAssignAdmin"
+                        },
+                        new
+                        {
+                            Id = new Guid("a5263fcf-69e8-47b2-8bf4-466a71292137"),
+                            Name = "ClubsManageAll"
+                        },
+                        new
+                        {
+                            Id = new Guid("37368913-d1ac-488a-ad47-44d75c453f5a"),
+                            Name = "TrainingsManage"
+                        },
+                        new
+                        {
+                            Id = new Guid("b0010909-dd1e-4e33-ab89-7a09fddcbf49"),
+                            Name = "ClubsManageOwn"
+                        },
+                        new
+                        {
+                            Id = new Guid("08556e74-e70f-4f19-8322-8a6371a359b7"),
+                            Name = "RolesManage"
+                        },
+                        new
+                        {
+                            Id = new Guid("7167cda8-c1b8-425b-af52-eb9aa3e27d2b"),
+                            Name = "AnalyticsViewAll"
+                        },
+                        new
+                        {
+                            Id = new Guid("12e48bab-edee-4833-830d-129f36e26c71"),
+                            Name = "AnalyticsViewOwn"
+                        });
+                });
+
+            modelBuilder.Entity("BadmintonApp.Domain.Core.Role", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("45225223-0e47-4c7a-b045-38de629412e5"),
+                            Name = "SuperAdmin"
+                        },
+                        new
+                        {
+                            Id = new Guid("98e5cfcd-cada-486a-96bb-30b6a9a60174"),
+                            Name = "ClubAdmin"
+                        },
+                        new
+                        {
+                            Id = new Guid("bb074c39-08df-45d9-8e74-5b6a07257883"),
+                            Name = "ClubManager"
+                        },
+                        new
+                        {
+                            Id = new Guid("5b0ac8d3-e270-422f-af95-99e8be79e47a"),
+                            Name = "Player"
+                        });
+                });
+
+            modelBuilder.Entity("BadmintonApp.Domain.Core.RolePermission", b =>
+                {
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("PermissionId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("RoleId", "PermissionId");
+
+                    b.HasIndex("PermissionId");
+
+                    b.ToTable("RolePermissions", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            RoleId = new Guid("45225223-0e47-4c7a-b045-38de629412e5"),
+                            PermissionId = new Guid("fe2da074-fff1-426f-b045-44427951a6eb")
+                        },
+                        new
+                        {
+                            RoleId = new Guid("45225223-0e47-4c7a-b045-38de629412e5"),
+                            PermissionId = new Guid("31f6a90f-2d85-4d9d-92aa-85e702289278")
+                        },
+                        new
+                        {
+                            RoleId = new Guid("45225223-0e47-4c7a-b045-38de629412e5"),
+                            PermissionId = new Guid("ac341087-ee9a-49c1-ac8b-0b34e28cdee8")
+                        },
+                        new
+                        {
+                            RoleId = new Guid("45225223-0e47-4c7a-b045-38de629412e5"),
+                            PermissionId = new Guid("a5263fcf-69e8-47b2-8bf4-466a71292137")
+                        },
+                        new
+                        {
+                            RoleId = new Guid("45225223-0e47-4c7a-b045-38de629412e5"),
+                            PermissionId = new Guid("37368913-d1ac-488a-ad47-44d75c453f5a")
+                        },
+                        new
+                        {
+                            RoleId = new Guid("45225223-0e47-4c7a-b045-38de629412e5"),
+                            PermissionId = new Guid("b0010909-dd1e-4e33-ab89-7a09fddcbf49")
+                        },
+                        new
+                        {
+                            RoleId = new Guid("45225223-0e47-4c7a-b045-38de629412e5"),
+                            PermissionId = new Guid("08556e74-e70f-4f19-8322-8a6371a359b7")
+                        },
+                        new
+                        {
+                            RoleId = new Guid("45225223-0e47-4c7a-b045-38de629412e5"),
+                            PermissionId = new Guid("7167cda8-c1b8-425b-af52-eb9aa3e27d2b")
+                        },
+                        new
+                        {
+                            RoleId = new Guid("45225223-0e47-4c7a-b045-38de629412e5"),
+                            PermissionId = new Guid("12e48bab-edee-4833-830d-129f36e26c71")
+                        },
+                        new
+                        {
+                            RoleId = new Guid("98e5cfcd-cada-486a-96bb-30b6a9a60174"),
+                            PermissionId = new Guid("fe2da074-fff1-426f-b045-44427951a6eb")
+                        },
+                        new
+                        {
+                            RoleId = new Guid("98e5cfcd-cada-486a-96bb-30b6a9a60174"),
+                            PermissionId = new Guid("b0010909-dd1e-4e33-ab89-7a09fddcbf49")
+                        },
+                        new
+                        {
+                            RoleId = new Guid("98e5cfcd-cada-486a-96bb-30b6a9a60174"),
+                            PermissionId = new Guid("31f6a90f-2d85-4d9d-92aa-85e702289278")
+                        },
+                        new
+                        {
+                            RoleId = new Guid("98e5cfcd-cada-486a-96bb-30b6a9a60174"),
+                            PermissionId = new Guid("37368913-d1ac-488a-ad47-44d75c453f5a")
+                        },
+                        new
+                        {
+                            RoleId = new Guid("98e5cfcd-cada-486a-96bb-30b6a9a60174"),
+                            PermissionId = new Guid("7167cda8-c1b8-425b-af52-eb9aa3e27d2b")
+                        },
+                        new
+                        {
+                            RoleId = new Guid("bb074c39-08df-45d9-8e74-5b6a07257883"),
+                            PermissionId = new Guid("31f6a90f-2d85-4d9d-92aa-85e702289278")
+                        },
+                        new
+                        {
+                            RoleId = new Guid("bb074c39-08df-45d9-8e74-5b6a07257883"),
+                            PermissionId = new Guid("37368913-d1ac-488a-ad47-44d75c453f5a")
+                        },
+                        new
+                        {
+                            RoleId = new Guid("bb074c39-08df-45d9-8e74-5b6a07257883"),
+                            PermissionId = new Guid("b0010909-dd1e-4e33-ab89-7a09fddcbf49")
+                        });
+                });
+
+            modelBuilder.Entity("BadmintonApp.Domain.Core.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ClubId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DoB")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Rank")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("BadmintonApp.Domain.Core.UserClubRole", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ClubId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("UserId", "RoleId", "ClubId");
+
+                    b.HasIndex("ClubId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("UserClubRoles", (string)null);
+                });
+
+            modelBuilder.Entity("BadmintonApp.Domain.Core.UserRole", b =>
+                {
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("RoleId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserRoles", (string)null);
                 });
 
             modelBuilder.Entity("BadmintonApp.Domain.Logs.Log", b =>
@@ -109,41 +363,7 @@ namespace BadmintonApp.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Logs");
-                });
-
-            modelBuilder.Entity("BadmintonApp.Domain.Permissions.Permission", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Code")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Permissions");
-                });
-
-            modelBuilder.Entity("BadmintonApp.Domain.Permissions.Role", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("TEXT");
-
-                    b.PrimitiveCollection<string>("Permissions")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Roles");
+                    b.ToTable("Logs", (string)null);
                 });
 
             modelBuilder.Entity("BadmintonApp.Domain.Trainings.Training", b =>
@@ -187,7 +407,7 @@ namespace BadmintonApp.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Trainings");
+                    b.ToTable("Trainings", (string)null);
                 });
 
             modelBuilder.Entity("BadmintonApp.Domain.Trainings.TrainingParticipant", b =>
@@ -209,7 +429,7 @@ namespace BadmintonApp.Infrastructure.Migrations
 
                     b.HasIndex("TrainingId");
 
-                    b.ToTable("TrainingParticipants");
+                    b.ToTable("TrainingParticipants", (string)null);
                 });
 
             modelBuilder.Entity("BadmintonApp.Domain.Trainings.TrainingQueueEntry", b =>
@@ -231,85 +451,7 @@ namespace BadmintonApp.Infrastructure.Migrations
 
                     b.HasIndex("TrainingId");
 
-                    b.ToTable("TrainingQueueEntries");
-                });
-
-            modelBuilder.Entity("BadmintonApp.Domain.Users.User", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ClubId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("DoB")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ImageUrl")
-                        .HasMaxLength(300)
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Level")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Rank")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("BadmintonApp.Domain.Clubs.UserClubRole", b =>
-                {
-                    b.HasOne("BadmintonApp.Domain.Clubs.Club", "Club")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("ClubId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BadmintonApp.Domain.Users.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Club");
-
-                    b.Navigation("User");
+                    b.ToTable("TrainingQueueEntries", (string)null);
                 });
 
             modelBuilder.Entity("BadmintonApp.Domain.Clubs.WorkingHour", b =>
@@ -321,6 +463,71 @@ namespace BadmintonApp.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Club");
+                });
+
+            modelBuilder.Entity("BadmintonApp.Domain.Core.RolePermission", b =>
+                {
+                    b.HasOne("BadmintonApp.Domain.Core.Permission", "Permission")
+                        .WithMany("RolePermissions")
+                        .HasForeignKey("PermissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BadmintonApp.Domain.Core.Role", "Role")
+                        .WithMany("RolePermissions")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Permission");
+
+                    b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("BadmintonApp.Domain.Core.UserClubRole", b =>
+                {
+                    b.HasOne("BadmintonApp.Domain.Clubs.Club", "Club")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("ClubId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BadmintonApp.Domain.Core.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BadmintonApp.Domain.Core.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Club");
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("BadmintonApp.Domain.Core.UserRole", b =>
+                {
+                    b.HasOne("BadmintonApp.Domain.Core.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BadmintonApp.Domain.Core.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BadmintonApp.Domain.Trainings.TrainingParticipant", b =>
@@ -342,6 +549,16 @@ namespace BadmintonApp.Infrastructure.Migrations
                     b.Navigation("UserRoles");
 
                     b.Navigation("WorkingHours");
+                });
+
+            modelBuilder.Entity("BadmintonApp.Domain.Core.Permission", b =>
+                {
+                    b.Navigation("RolePermissions");
+                });
+
+            modelBuilder.Entity("BadmintonApp.Domain.Core.Role", b =>
+                {
+                    b.Navigation("RolePermissions");
                 });
 
             modelBuilder.Entity("BadmintonApp.Domain.Trainings.Training", b =>

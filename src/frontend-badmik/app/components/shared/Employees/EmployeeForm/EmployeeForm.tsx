@@ -1,222 +1,19 @@
-// 'use client';
 
-// import * as React from 'react';
-// import { useEffect } from 'react';
-// import { useForm, Controller } from 'react-hook-form';
-// import styles from './EmployeeForm.module.scss';
-
-// type Role = 'owner_admin' | 'assistant' | 'club_admin';
-// type Permission = 'all' | 'view_users' | 'club_dashboard' | 'manage_bookings';
-
-// const ALL_PERMISSIONS: Permission[] = [
-//   'all',
-//   'view_users',
-//   'club_dashboard',
-//   'manage_bookings',
-// ];
-
-// type FormValues = {
-//   email: string;
-//   password?: string;
-//   role: Role;
-//   clubId?: string;
-//   permissions: Permission[];
-// };
-
-// type Props = {
-//   mode: 'create' | 'edit';
-//   adminId?: string;
-//   defaultValues?: Partial<FormValues>;
-//   onSubmitCreate?: (data: FormValues) => Promise<void>;
-//   onSubmitUpdate?: (adminId: string, data: FormValues) => Promise<void>;
-//   // додано: функція для повідомлення батька, що форма змінилася
-//   isChanged?: boolean;
-//   setIsChanged?: (v: boolean) => void;
-// };
-
-// export default function EmployeeForm({
-//   mode,
-//   adminId,
-//   defaultValues,
-//   onSubmitCreate,
-//   onSubmitUpdate,
-//   isChanged,
-//   setIsChanged,
-// }: Props) {
-//   const {
-//     register,
-//     handleSubmit,
-//     control,
-//     reset,
-//     watch,
-//     formState: { errors, isSubmitting, isDirty, isValid },
-//   } = useForm<FormValues>({
-//     mode: 'all',
-//     defaultValues: {
-//       email: '',
-//       password: '',
-//       role: 'assistant',
-//       clubId: '',
-//       permissions: [],
-//       ...defaultValues,
-//     },
-//   });
-
-//   const role = watch('role');
-
-//   useEffect(() => {
-//   // тут логіка: активувати кнопку коли форма змінилася і валідна
-//   // або просто коли валідна (залежить від того, що тобі треба)
-//   const active = Boolean(isDirty && isValid);
-//   // або якщо хочеш ставити активною при будь-якій зміні (навіть невалідній):
-//   // const active = Boolean(isDirty);
-//   setIsChanged?.(active);
-// }, [isDirty, isValid, setIsChanged]);
-
-//   const onSubmit = (data: FormValues) => {
-//     console.log('Form submitted:', data);
-//     reset({ ...data });
-//     setIsChanged?.(false);
-//     // тут можна викликати onSubmitCreate/onSubmitUpdate якщо потрібно
-//   };
-
-//   return (
-//     <div className={styles.wrapper}>
-//       <div className={styles.formBox}>
-//         <form onSubmit={handleSubmit(onSubmit)} className={styles.form} noValidate>
-//           {/* Email */}
-//           <div>
-//             <label className={styles.label}>Email</label>
-//             <input
-//               className={`${styles.input} ${errors.email ? styles.errorInput : ''}`}
-//               type="email"
-//               {...register('email', {
-//                 required: 'Обовʼязково',
-//                 pattern: {
-//                   value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-//                   message: 'Некоректний email',
-//                 },
-//                 // onChange: () => setIsChanged?.(true),
-//               })}
-//             />
-//             {errors.email && <p className={styles.errorText}>{errors.email.message}</p>}
-//           </div>
-
-//           {/* Password */}
-//           <div>
-//             <label className={styles.label}>
-//               Пароль {mode === 'create' ? <span style={{ color: '#e63946' }}>*</span> : <span style={{ color: 'var(--muted)' }}>(залиш порожнім — без змін)</span>}
-//             </label>
-//             <input
-//               className={`${styles.input} ${errors.password ? styles.errorInput : ''}`}
-//               type="password"
-//               autoComplete="new-password"
-//               {...register('password', {
-//                 required: mode === 'create' ? 'Обовʼязково' : false,
-//                 minLength: mode === 'create' ? { value: 6, message: 'Мінімум 6 символів' } : undefined,
-//                 // onChange: () => setIsChanged?.(true),
-//               })}
-//             />
-//             {errors.password && <p className={styles.errorText}>{errors.password.message}</p>}
-//           </div>
-
-//           {/* Role */}
-//           <div>
-//             <label className={styles.label}>Роль</label>
-//             <select
-//               className={`${styles.select} ${errors.role ? styles.errorInput : ''}`}
-//               {...register('role', { required: 'Обовʼязково', onChange: () => setIsChanged?.(true) })}
-//             >
-//               <option value="owner_admin">owner_admin</option>
-//               <option value="assistant">assistant</option>
-//               <option value="club_admin">club_admin</option>
-//             </select>
-//             {errors.role && <p className={styles.errorText}>{errors.role.message}</p>}
-//           </div>
-
-//           {/* Club ID (тільки для club_admin) */}
-//           {role === 'club_admin' && (
-//             <div>
-//               <label className={styles.label}>Club ID</label>
-//               <input
-//                 className={`${styles.input} ${errors.clubId ? styles.errorInput : ''}`}
-//                 placeholder="наприклад: FC Kyiv"
-//                 {...register('clubId', { required: 'Обовʼязково для club_admin', onChange: () => setIsChanged?.(true) })}
-//               />
-//               {errors.clubId && <p className={styles.errorText}>{errors.clubId.message}</p>}
-//             </div>
-//           )}
-
-//           {/* Permissions */}
-//           <div>
-//             <label className={styles.label}>Права доступу</label>
-//             <Controller
-//               name="permissions"
-//               control={control}
-//               rules={{
-//                 validate: (v) => (v?.length ?? 0) > 0 || 'Оберіть принаймні одне право',
-//               }}
-//               render={({ field }) => (
-//                 <div className={styles.checkboxRow}>
-//                   {ALL_PERMISSIONS.map((p) => {
-//                     const active = field.value?.includes(p);
-//                     return (
-//                       <label key={p} className={`${styles.chip} ${active ? styles.chipActive : ''}`}>
-//                         <input
-//                           type="checkbox"
-//                           checked={!!active}
-//                           onChange={(e) => {
-//                             if (e.target.checked) field.onChange([...(field.value || []), p]);
-//                             else field.onChange((field.value || []).filter((x: Permission) => x !== p));
-//                             setIsChanged?.(true);
-//                           }}
-//                         />
-//                         {p}
-//                       </label>
-//                     );
-//                   })}
-//                 </div>
-//               )}
-//             />
-//             {errors.permissions && <p className={styles.errorText}>{errors.permissions.message as string}</p>}
-//           </div>
-//         </form>
-//       </div>
-//     </div>
-//   );
-// }
-
-//=====================
-
-
+// EmployeeForm.tsx
 'use client';
 
-import React, { forwardRef, useImperativeHandle, useCallback, useEffect } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { forwardRef, useImperativeHandle, useCallback, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import styles from './EmployeeForm.module.scss';
-
-type Role = 'owner_admin' | 'assistant' | 'club_admin';
-type Permission = 'all' | 'view_users' | 'club_dashboard' | 'manage_bookings';
-
-const ALL_PERMISSIONS: Permission[] = [
-  'all',
-  'view_users',
-  'club_dashboard',
-  'manage_bookings',
-];
+import ClubSelectFieldAdd from '@/app/components/shared/Employees/EmployeeForm/ClubSelectAdd/ClubSelectFieldAdd';
 
 export type FormValues = {
   email: string;
-  password?: string;
-  role: Role;
-  clubId?: string;
-  permissions: Permission[];
-};
-
-export type EmployeeFormHandle = {
-  submit: () => void;
-  isValid: () => boolean;
-  getValues?: () => FormValues;
+  password: string;
+  firstName: string;
+  lastName: string;
+  clubId: string;
+  doB: string; // yyyy-mm-dd з <input type="date" />
 };
 
 type Props = {
@@ -229,16 +26,29 @@ type Props = {
   setIsChanged?: (v: boolean) => void;
 };
 
+export type EmployeeFormHandle = {
+  submit: () => void;
+  isValid: () => boolean;
+  getValues?: () => FormValues;
+};
+
+function isAtLeast8Years(oldDateStr: string) {
+  if (!oldDateStr) return false;
+  const d = new Date(oldDateStr);
+  const now = new Date();
+  const eightYearsAgo = new Date(now.getFullYear() - 8, now.getMonth(), now.getDate());
+  return d <= eightYearsAgo;
+}
+
+const nameOnlyLetters = /^[\p{L}'’-]+$/u;
+const hasDigit = /\d/;
+const hasUpper = /[A-Z]/;
+const hasLower = /[a-z]/;
+const hasSpecial = /[!@#$%^&*()_+\-=[\]{}|;':",.<>?/`~]/;
+const noWhitespace = /^\S+$/;
+
 const EmployeeForm = forwardRef<EmployeeFormHandle, Props>(function EmployeeForm(
-  {
-    mode,
-    adminId,
-    defaultValues,
-    onSubmitCreate,
-    onSubmitUpdate,
-    isChanged,
-    setIsChanged,
-  },
+  { mode, adminId, defaultValues, onSubmitCreate, onSubmitUpdate, setIsChanged },
   ref
 ) {
   const {
@@ -246,74 +56,46 @@ const EmployeeForm = forwardRef<EmployeeFormHandle, Props>(function EmployeeForm
     handleSubmit,
     control,
     reset,
-    watch,
-    formState: { errors, isSubmitting, isDirty, isValid },
+    formState: { errors, isDirty, isValid },
     getValues,
   } = useForm<FormValues>({
     mode: 'all',
     defaultValues: {
       email: '',
       password: '',
-      role: 'assistant',
+      firstName: '',
+      lastName: '',
       clubId: '',
-      permissions: [],
+      doB: '',
       ...defaultValues,
     },
   });
 
-  const role = watch('role');
-
- 
   useEffect(() => {
-    const active = Boolean(isDirty && isValid);
-    setIsChanged?.(active);
+    setIsChanged?.(Boolean(isDirty && isValid));
   }, [isDirty, isValid, setIsChanged]);
 
- 
   const submitHandler = useCallback(
-    async (data: FormValues) => {
-      try {
-   
-  console.log('Form submitted (parent):', data);
+    async (raw: FormValues) => {
+      // НІЯКИХ API тут. Тільки проброс даних нагору:
+      if (adminId && onSubmitUpdate) {
+        await onSubmitUpdate(adminId, raw);
+      } else if (onSubmitCreate) {
+        await onSubmitCreate(raw);
+      }
 
-       if (adminId && typeof onSubmitUpdate === 'function') {
-        console.log('calling onSubmitUpdate', adminId);
-        await onSubmitUpdate(adminId, data);
-      } else if (typeof onSubmitCreate === 'function') {
-      
-        console.log('calling onSubmitCreate');
-        await onSubmitCreate(data);
-      } else {
-       
-        console.log('No submit handler provided — form data:', data);
-        return Promise.resolve();
-      }
-        // Після успіху:
-      if (mode === 'create') {
-       
-        reset();
-      } else {
+      if (mode === 'create') reset();
+      else reset({ ...raw, password: '' });
 
-        reset({ ...data, password: '' });
-      }
-        setIsChanged?.(false);
-      } catch (err) {
-        console.error('EmployeeForm submit error:', err);
-       
-        throw err;
-      }
+      setIsChanged?.(false);
     },
-    [mode, adminId, onSubmitCreate, onSubmitUpdate, reset, setIsChanged]
+    [adminId, mode, onSubmitCreate, onSubmitUpdate, reset, setIsChanged]
   );
-
 
   useImperativeHandle(
     ref,
     () => ({
-      submit: () => {
-       
-        handleSubmit(submitHandler)();
-      },
+      submit: () => handleSubmit(submitHandler)(),
       isValid: () => Boolean(isValid),
       getValues: () => getValues() as FormValues,
     }),
@@ -324,17 +106,61 @@ const EmployeeForm = forwardRef<EmployeeFormHandle, Props>(function EmployeeForm
     <div className={styles.wrapper}>
       <div className={styles.formBox}>
         <form onSubmit={handleSubmit(submitHandler)} className={styles.form} noValidate>
+          {/* First name */}
+          <div>
+            <label className={styles.label}>
+              Імʼя <span style={{ color: '#e63946' }}>*</span>
+            </label>
+            <input
+              className={`${styles.input} ${errors.firstName ? styles.errorInput : ''}`}
+              {...register('firstName', {
+                required: 'First name is required.',
+                minLength: { value: 2, message: 'First name is too short.' },
+                maxLength: { value: 60, message: 'First name is too long.' },
+                pattern: {
+                  value: nameOnlyLetters,
+                  message: 'First name contains invalid characters.',
+                },
+              })}
+            />
+            {errors.firstName && <p className={styles.errorText}>{errors.firstName.message}</p>}
+          </div>
+
+          {/* Last name */}
+          <div>
+            <label className={styles.label}>
+              Прізвище <span style={{ color: '#e63946' }}>*</span>
+            </label>
+            <input
+              className={`${styles.input} ${errors.lastName ? styles.errorInput : ''}`}
+              {...register('lastName', {
+                required: 'Last name is required.',
+                minLength: { value: 2, message: 'Last name is too short.' },
+                maxLength: { value: 50, message: 'Last name is too long.' },
+                pattern: {
+                  value: nameOnlyLetters,
+                  message: 'Last name contains invalid characters.',
+                },
+              })}
+            />
+            {errors.lastName && <p className={styles.errorText}>{errors.lastName.message}</p>}
+          </div>
+
           {/* Email */}
           <div>
-            <label className={styles.label}>Email</label>
+            <label className={styles.label}>
+              Email <span style={{ color: '#e63946' }}>*</span>
+            </label>
             <input
               className={`${styles.input} ${errors.email ? styles.errorInput : ''}`}
               type="email"
               {...register('email', {
-                required: 'Обовʼязково',
+                required: 'Email is required.',
+                minLength: { value: 5, message: 'Email is too short.' },
+                maxLength: { value: 254, message: 'Email is too long.' },
                 pattern: {
                   value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: 'Некоректний email',
+                  message: 'Email format is invalid.',
                 },
               })}
             />
@@ -344,78 +170,62 @@ const EmployeeForm = forwardRef<EmployeeFormHandle, Props>(function EmployeeForm
           {/* Password */}
           <div>
             <label className={styles.label}>
-              Пароль {mode === 'create' ? <span style={{ color: '#e63946' }}>*</span> : <span style={{ color: 'var(--muted)' }}>(залиш порожнім — без змін)</span>}
+              Пароль <span style={{ color: '#e63946' }}>*</span>
             </label>
             <input
               className={`${styles.input} ${errors.password ? styles.errorInput : ''}`}
               type="password"
               autoComplete="new-password"
               {...register('password', {
-                required: mode === 'create' ? 'Обовʼязково' : false,
-                minLength: mode === 'create' ? { value: 6, message: 'Мінімум 6 символів' } : undefined,
+                required: 'Password is required.',
+                minLength: { value: 8, message: 'Password must be at least 8 characters.' },
+                maxLength: { value: 64, message: 'Password must be at most 64 characters.' },
+                validate: {
+                  noSpace: (v) => noWhitespace.test(v) || 'Password cannot contain whitespace.',
+                  hasDigit: (v) => hasDigit.test(v) || 'Password must contain at least one digit.',
+                  hasUpper: (v) =>
+                    hasUpper.test(v) || 'Password must contain at least one uppercase letter.',
+                  hasLower: (v) =>
+                    hasLower.test(v) || 'Password must contain at least one lowercase letter.',
+                  hasSpecial: (v) =>
+                    hasSpecial.test(v) || 'Password must contain at least one special character.',
+                },
               })}
             />
             {errors.password && <p className={styles.errorText}>{errors.password.message}</p>}
           </div>
 
-          {/* Role */}
+          {/* Club ID */}
           <div>
-            <label className={styles.label}>Роль</label>
-            <select
-              className={`${styles.select} ${errors.role ? styles.errorInput : ''}`}
-              {...register('role', { required: 'Обовʼязково' })}
-            >
-              <option value="owner_admin">owner_admin</option>
-              <option value="assistant">assistant</option>
-              <option value="club_admin">club_admin</option>
-            </select>
-            {errors.role && <p className={styles.errorText}>{errors.role.message}</p>}
+            <label className={styles.label}>
+              Клуб <span style={{ color: '#e63946' }}>*</span>
+            </label>
+            <ClubSelectFieldAdd
+              control={control}
+              name="clubId"
+              rootClassName={styles.comboRoot}
+              inputClassName={`${styles.input} ${styles.inputChevron} ${errors.clubId ? styles.errorInput : ''}`}
+              optionsClassName={styles.options}
+              optionClassName={styles.option}
+              optionActiveClassName={styles.optionActive}
+              chevronClassName={styles.comboChevron}
+            />
           </div>
 
-          {/* Club ID (тільки для club_admin) */}
-          {role === 'club_admin' && (
-            <div>
-              <label className={styles.label}>Club ID</label>
-              <input
-                className={`${styles.input} ${errors.clubId ? styles.errorInput : ''}`}
-                placeholder="наприклад: FC Kyiv"
-                {...register('clubId', { required: 'Обовʼязково для club_admin' })}
-              />
-              {errors.clubId && <p className={styles.errorText}>{errors.clubId.message}</p>}
-            </div>
-          )}
-
-          {/* Permissions */}
+          {/* Date of Birth */}
           <div>
-            <label className={styles.label}>Права доступу</label>
-            <Controller
-              name="permissions"
-              control={control}
-              rules={{
-                validate: (v) => (v?.length ?? 0) > 0 || 'Оберіть принаймні одне право',
-              }}
-              render={({ field }) => (
-                <div className={styles.checkboxRow}>
-                  {ALL_PERMISSIONS.map((p) => {
-                    const active = field.value?.includes(p);
-                    return (
-                      <label key={p} className={`${styles.chip} ${active ? styles.chipActive : ''}`}>
-                        <input
-                          type="checkbox"
-                          checked={!!active}
-                          onChange={(e) => {
-                            if (e.target.checked) field.onChange([...(field.value || []), p]);
-                            else field.onChange((field.value || []).filter((x: Permission) => x !== p));
-                          }}
-                        />
-                        {p}
-                      </label>
-                    );
-                  })}
-                </div>
-              )}
+            <label className={styles.label}>
+              Дата народження <span style={{ color: '#e63946' }}>*</span>
+            </label>
+            <input
+              className={`${styles.input} ${errors.doB ? styles.errorInput : ''}`}
+              type="date"
+              {...register('doB', {
+                required: 'Date of birth is required.',
+                validate: (v) => isAtLeast8Years(v) || 'You must be at least 8 years old.',
+              })}
             />
-            {errors.permissions && <p className={styles.errorText}>{errors.permissions.message as string}</p>}
+            {errors.doB && <p className={styles.errorText}>{errors.doB.message}</p>}
           </div>
         </form>
       </div>
@@ -424,7 +234,3 @@ const EmployeeForm = forwardRef<EmployeeFormHandle, Props>(function EmployeeForm
 });
 
 export default EmployeeForm;
-
-
-
-

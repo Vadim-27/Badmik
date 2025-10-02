@@ -1,5 +1,5 @@
 ﻿using BadmintonApp.Application.Interfaces.Repositories;
-using BadmintonApp.Domain.Users;
+using BadmintonApp.Domain.Core;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -19,17 +19,23 @@ namespace BadmintonApp.Infrastructure.Persistence.Repositories
 
         public async Task<User> GetByEmailAsync(string email, CancellationToken cancellationToken)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
+            return await _context.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
         }
 
         public async Task<User> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            return await _context.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
         }
 
-        public async Task<List<User>> GetAllAsync(CancellationToken cancellationToken)
+        public async Task<List<User>> GetAllAsync(string? filter = null, CancellationToken cancellationToken = default)
         {
-            return await _context.Users.ToListAsync(cancellationToken);
+            return await _context.Users
+                .AsNoTracking()
+                .ToListAsync(cancellationToken);
         }
 
         public async Task CreateAsync(User user, CancellationToken cancellationToken)

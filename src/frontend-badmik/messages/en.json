@@ -4,7 +4,7 @@
       "adminHeader": "Clubs",
       "editClubHeader": "Editing the club",
       "addClubHeader": "Adding a club",
-      "addUserHeader": "Adding a user",
+      "addPlayerHeader": "Adding a Player",
       "addTrainingHeader": "Adding training",
       "usersHeader": "Players club",
       "trainingsHeader": "Trainings",
@@ -154,6 +154,7 @@
       "update": "Update",
       "back": "Back",
       "save": "Save",
+      "saving": "Saving...",
       "delete": "Delete",
       "draft": "Save Draft"
     }
@@ -201,6 +202,9 @@
     }
   },
   "UserTable": {
+    "fullName": "Full Name",
+    "email": "Email",
+    "age": "Age",
     "firstName": "First Name",
     "lastName": "Last Name",
     "level": "Level",

@@ -1,14 +1,12 @@
-﻿using BadmintonApp.Domain.Permissions;
+﻿using BadmintonApp.Domain.Core;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace BadmintonApp.Application.Interfaces.Repositories
+namespace BadmintonApp.Application.Interfaces.Repositories;
+
+public interface IUserRoleRepository
 {
-    public interface IUserRoleRepository
-    {
-        Task<Role> GetUserRoleForClubAsync(Guid userId, Guid clubId);
-    }
+    Task<List<Role>> GetUserRoleForClubAsync(Guid userId, Guid clubId, CancellationToken cancellationToken);
 }
