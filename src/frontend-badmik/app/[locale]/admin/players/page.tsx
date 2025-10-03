@@ -1,7 +1,8 @@
-import UserTable from '@/app/components/shared/UserTable/UserTable';
+import UserTable from '@/app/components/shared/players/UserTable/UserTable';
 import ActionHeader from '@/app/components/ui/Layout/ActionHeader/ActionHeader';
 import BackButton from '@/app/components/ui/Buttons/BackButton/BackButton';
 import AddButton from '@/app/components/ui/Buttons/AddButton/AddButton';
+
 import { getTranslations } from 'next-intl/server';
 
 const UsersClub = async ({
@@ -18,6 +19,7 @@ const UsersClub = async ({
       <ActionHeader>
         <BackButton label="buttons.back"/>
         <h2 className="text-lg font-semibold">{t('usersHeader')}</h2>
+        <AddButton href={`/admin/players/add-player`} label="buttons.addPlayer" />
         </ActionHeader>
     
       <UserTable />

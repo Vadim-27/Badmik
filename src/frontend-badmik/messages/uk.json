@@ -5,7 +5,7 @@
       "adminHeader":"Клуби",
       "editClubHeader":"Редагування клубу",
       "addClubHeader":"Додати клуб",
-      "addUserHeader":"Додати користувача",
+      "addPlayerHeader":"Додати Гравця",
       "addTrainingHeader":"Додати тренування",
       "usersHeader":"Гравці клубу",
       "trainingsHeader":"Тренування",
@@ -156,6 +156,7 @@
       "update": "Редагувати",
       "back": "Назад",
       "save": "Зберегти",
+      "saving": "Збереження...",
       "delete": "Видалити",
       "draft": "Зберегти як чернетку"
     }
@@ -202,6 +203,9 @@
   }
   },
   "UserTable": {
+    "fullName": "Повне ім'я",
+    "email": "Електронна пошта",
+    "age": "Вік",
     "firstName": "Ім'я",
     "lastName": "Прізвище",
     "level": "Рівень",

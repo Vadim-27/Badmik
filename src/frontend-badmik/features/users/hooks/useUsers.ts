@@ -4,20 +4,24 @@ import { usersService } from "@/services/users.service";
 import type { CreateUserDto, UpdateUserDto, User } from "@/services/types/users.dto";
 
 
-export const useUsers = () =>
-  useQuery<User[]>({
+export function useUsers() {
+  return useQuery<User[]>({
     queryKey: ["users"],
     queryFn: ({ signal }) => usersService.list(signal),
   });
+}
 
-
-export const useCreateUser = () => {
+export function useCreateUser() {
   const qc = useQueryClient();
   return useMutation({
+    mutationKey: ["users", "create"],
     mutationFn: (dto: CreateUserDto) => usersService.create(dto),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["users"] }),
+    onSuccess: () => {
+      // оновлюємо кеш списку
+      qc.invalidateQueries({ queryKey: ["users"] });
+    },
   });
-};
+}
 
 
 export const useUpdateUser = () => {

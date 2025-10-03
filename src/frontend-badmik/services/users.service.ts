@@ -3,15 +3,33 @@ import { ENDPOINTS } from "@/lib/endpoints";
 import type { CreateUserDto, UpdateUserDto, User } from "./types/users.dto";
 import { unwrap, ApiError } from "@/lib/http/utils";
 
+export function dateToIsoStartOfDay(dateStr: string) {
+  if (!dateStr) return "";
+  const [y, m, d] = dateStr.split("-").map(Number);
+  // UTC, щоб уникнути зсувів таймзони
+  return new Date(Date.UTC(y, (m ?? 1) - 1, d ?? 1, 0, 0, 0)).toISOString();
+}
+
 export const usersService = {
+  // list: (signal?: AbortSignal) =>
+  //   api.get<User[]>(ENDPOINTS.users, { signal }).then(r => r.data),
+
+  // /**
+  //  * POST /api/Users/register — створення користувача
+  //  */
+  // create: (dto: CreateUserDto, signal?: AbortSignal) =>
+  //   api.post<User>(ENDPOINTS.usersRegister, dto, { signal }).then(r => r.data),
+
+
   list: (signal?: AbortSignal) =>
     unwrap<User[]>(api.get(ENDPOINTS.users, { signal })),
 
-  get: (id: string, signal?: AbortSignal) =>
-    unwrap<User>(api.get(`${ENDPOINTS.users}/${id}`, { signal })),
-
   create: (dto: CreateUserDto, signal?: AbortSignal) =>
-    unwrap<User>(api.post(ENDPOINTS.users, dto, { signal })),
+    unwrap<User>(api.post(ENDPOINTS.usersRegister, dto, { signal })),
+
+
+  // create: (dto: CreateUserDto, signal?: AbortSignal) =>
+  //   unwrap<User>(api.post(ENDPOINTS.users, dto, { signal })),
 
   update: (id: string, dto: UpdateUserDto, signal?: AbortSignal) =>
     unwrap<User>(api.put(`${ENDPOINTS.users}/${id}`, dto, { signal })),
