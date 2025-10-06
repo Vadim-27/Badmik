@@ -1,0 +1,69 @@
+.reviewsSection {
+//   padding: 64px 20px;
+  text-align: center;
+}
+
+.heading {
+  font-family: var(--font-title-Unbounded);
+  font-size: 2rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.31; /* 131.25% */
+  margin-bottom: 54px;
+  text-align: center;
+  color: var(--text-color-primary-dark);
+}
+
+.slider {
+  width: 100%;
+}
+
+.slide {
+  padding: 0 10px;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+
+  height: 285px;
+  overflow: hidden;
+}
+
+.text {
+  
+
+  color: var(--text-color-primary-dark);
+font-family: var(--font-display-Manrope);
+font-size: 1.25em;
+font-style: normal;
+font-weight: 400;
+line-height: 1.6; /* 160% */
+  text-align: left;
+
+  
+  display: -webkit-box;
+  -webkit-line-clamp: 4; 
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+}
+
+.author {
+   color: var(--text-color-primary-dark);
+font-family: var(--font-display-Manrope);
+font-size: 1.25em;
+font-style: normal;
+font-weight: 700;
+line-height: 1.6; /* 160% */
+}

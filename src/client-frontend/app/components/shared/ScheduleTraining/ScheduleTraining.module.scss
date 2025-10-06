@@ -4,12 +4,12 @@
   font-weight: 700;
   text-align: center;
   line-height: 1.31;
-  margin-bottom: 54px;
+  padding-bottom: 54px;
   color: var(--text-color-primary-dark, #161616);
 }
 
 // .slider {
-//   display: flex;
+//   overflow: hidden;
 // }
 
 .slide {
@@ -45,6 +45,17 @@
   background: var(--color-primary-light-color-bg);
   border: 1px solid #eee;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  z-index: 100;
+
+  &:hover {
+    border-radius: 16px;
+box-shadow: 0 313px 88px 0 rgba(0, 0, 0, 0.00), 0 200px 80px 0 rgba(0, 0, 0, 0.01), 0 113px 68px 0 rgba(0, 0, 0, 0.05), 0 50px 50px 0 rgba(0, 0, 0, 0.09), 0 13px 28px 0 rgba(0, 0, 0, 0.10);
+    // box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    // transform: translateY(-2px);
+    // transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+
 }
 
 .thumb {

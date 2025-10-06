@@ -1,0 +1,87 @@
+.dateBox {
+  position: relative;
+  width: 450px;     /* або 100% під лейаут */
+}
+
+/* Кнопка-тригер, візуально як інпут. Текст зліва */
+.dateTrigger {
+  width: 100%;
+  height: 56px;
+  padding: 0 52px 0 16px;   /* місце справа під іконку */
+  border-radius: 16px;
+  border: 1px solid #e3e7ee;
+  background: #fff;
+  text-align: left;
+  cursor: pointer;
+
+  color: var(--text-color-primary-dark, #161616);
+  font-family: var(--font-display-Manrope);
+  font-size: 1.125em;
+  font-weight: 400;
+  line-height: 1.77;
+
+  transition: border-color .2s, box-shadow .2s;
+  &:hover { border-color: #d6dbe5; }
+  &:focus-visible {
+    outline: none;
+    border-color: #0d74cf;
+    box-shadow: 0 0 0 3px rgba(13,116,207,.15);
+  }
+}
+
+/* Іконка календаря ПРАВОРУЧ */
+.calendarIconRight {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 22px;
+  height: 22px;
+  color: #98a2b3;      /* SVG з fill: currentColor */
+  pointer-events: none;
+}
+
+/* Поповер з календарем */
+.popContent {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;             /* якщо треба по правому краю: right:0; left:auto; */
+  z-index: 1000;
+  background: #fff;
+  border: 1px solid #e3e7ee;
+  border-radius: 12px;
+  box-shadow: 0 12px 28px rgba(16,24,40,.12);
+  padding: 12px;
+}
+
+/* Легка стилізація react-day-picker */
+.popContent .rdp {
+  --rdp-cell-size: 36px;
+  --rdp-accent-color: #0d74cf;
+  font-family: var(--font-display-Manrope);
+  font-size: 14px;
+}
+
+.popContent .rdp-caption_label { font-weight: 700; }
+.popContent .rdp-nav_button { color: var(--rdp-accent-color); border-radius: 8px; }
+.popContent .rdp-weekday { color: #667085; font-weight: 600; }
+
+.popContent .rdp-day {
+  width: var(--rdp-cell-size);
+  height: var(--rdp-cell-size);
+  margin: 2px;
+  border-radius: 8px;
+}
+
+.popContent .rdp-day_selected,
+.popContent .rdp-day_selected:focus-visible {
+  background: var(--rdp-accent-color);
+  color: #fff;
+  font-weight: 700;
+}
+
+.popContent .rdp-day:not(.rdp-day_selected):not(.rdp-day_outside):hover {
+  background: #f4f7fb;
+}
+
+.popContent .rdp-day_outside { color: #98a2b3; }

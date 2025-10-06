@@ -1,40 +1,30 @@
-// @import '@/app/styles/common/mixins';
-
-// .embla {
-//     @apply relative overflow-hidden;
-// }
-
-// .embla__container {
-//     @apply flex;
-// }
-
-// .dots {
-//     @apply absolute left-1/2 mt-12 flex -translate-x-1/2 justify-center;
-// }
-
-// .dot {
-//     @apply mx-[5px] h-4 w-4 -rotate-180 cursor-pointer rounded-full bg-black-25%;
-//     transition:
-//         transform 300ms linear,
-//         background-color 300ms linear;
-
-//     &:hover {
-//         @apply bg-button;
-//     }
-// }
-
-// .dot.active {
-//     @apply w-[76px] rotate-180 bg-button;
-// }
+.sliderWrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    // padding-bottom: 127px;
+    // z-index: 100;
+      
+}
 .embla {
     position: relative;
-    overflow: hidden;
-    margin-bottom: 54px;
+    // overflow: hidden;
+    // overflow-x: hidden;  /* по осі X — обрізаємо */
+//   overflow-y: visible; 
+    padding-bottom: 64px;
+    // z-index: 100;
+      
 }
+// .embla__viewport {
+//   overflow-x: hidden;  /* по осі X — обрізаємо */
+//   overflow-y: visible;   /* обрізає тільки слайди */
+//   width: 100%;
+// }
 .embla__container {
 //   --gap: 10px;                /* один проміжок між слайдами */
   display: grid;
   grid-auto-flow: column;
+  
 //   gap: var(--gap);
 
   /* 1 слайд на екрані — віднімати нічого */
@@ -56,6 +46,9 @@
 }
 
 .arrows{
+    // position: absolute;
+    // right: 0;
+    z-index: 2;
     display: flex;
     justify-content: end;
     gap: 20px;

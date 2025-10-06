@@ -1,0 +1,47 @@
+.button {
+  display: inline-flex;
+  width: auto;      /* ширина за вмістом */
+  flex: 0 0 auto;
+  align-self: flex-start;
+//   width: 183px;
+  padding: 14px 24px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+
+  border-radius: 16px;
+  background: var(--accent-color-primary);
+  color: var(--text-color-secondary-light);
+
+  font-family:  var(--font-display-Inter);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 32px; 
+  letter-spacing: 0.36px;
+
+  text-decoration: none; /* бо це <a> */
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: #0b63b3;
+  }
+
+  &:active {
+    background: #094f8d;
+  }
+}
+
+// .icon {
+//   display: inline-flex;
+//   align-items: center;
+//   justify-content: center;
+// }
+
+.label {
+  display: inline-block;
+}
+.iconSvg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}

@@ -7,13 +7,13 @@
   gap: 10px;
 
   border-radius: 16px;
-  background: #0d74cf;
-  color: #fff;
+  background: var(--accent-color-primary);
+  color: var(--text-color-secondary-light);
 
-  font-family:  var(--font-display-Manrope);
+  font-family:  var(--font-display-Inter);
   font-size: 18px;
   font-weight: 700;
-  line-height: 32px; /* можна перерахувати у відносне значення */
+  line-height: 32px; 
   letter-spacing: 0.36px;
 
   text-decoration: none; /* бо це <a> */
@@ -40,5 +40,5 @@
 .iconSvg {
   width: 14px;
   height: 14px;
-  fill: currentColor; // щоб колір спадкував від тексту
+  fill: currentColor;
 }
