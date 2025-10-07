@@ -1,11 +1,11 @@
-﻿using BadmintonApp.Application.DTOs.Users;
+﻿using BadmintonApp.Application.DTOs.Player;
 using BadmintonApp.Application.Interfaces.Repositories;
 using FluentValidation;
 using System;
 using System.Linq;
 namespace BadmintonApp.Application.Validation;
 
-public class UserRegistrationValidation : AbstractValidator<RegisterDto>
+public class UserRegistrationValidation : AbstractValidator<PlayerRegisterDto>
 {
 
 
