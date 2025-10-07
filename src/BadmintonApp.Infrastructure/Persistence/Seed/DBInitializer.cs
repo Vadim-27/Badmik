@@ -26,8 +26,8 @@ public static class DbInitializer
                 DoB = new DateTime(1990, 1, 1),
                 IsActive = true,
                 CreatedAt = DateTime.UtcNow,
-                Rank = "Pro",
-                Level = PlayerLevel.A,
+                //Rank = "Pro",
+                //Level = PlayerLevel.A,
                 ImageUrl = "https://example.com/image.jpg",
                 ClubId = existingClubId
             };
