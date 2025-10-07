@@ -1,4 +1,5 @@
 ﻿using BadmintonApp.API.Extensions;
+using BadmintonApp.Application.DTOs.Player;
 using BadmintonApp.Application.DTOs.Users;
 using BadmintonApp.Application.Interfaces.Users;
 using BadmintonApp.Domain.Core;
@@ -13,13 +14,13 @@ namespace BadmintonApp.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UsersController : ControllerBase
+    public class PlayersController : ControllerBase
     {
         private readonly IUsersService _usersService;
-        private readonly IValidator<RegisterDto> _registerDtoValidator;
+        private readonly IValidator<PlayerRegisterDto> _registerDtoValidator;
 
 
-        public UsersController(IUsersService usersService, IValidator<RegisterDto> registerDtoValidator)
+        public PlayersController(IUsersService usersService, IValidator<PlayerRegisterDto> registerDtoValidator)
         {
             _usersService = usersService;
             _registerDtoValidator = registerDtoValidator;
@@ -28,11 +29,11 @@ namespace BadmintonApp.API.Controllers
 
         // POST: /api/auth/register
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterDto registerDto, CancellationToken cancellationToken)
+        public async Task<IActionResult> Register([FromBody] PlayerRegisterDto registerDto, CancellationToken cancellationToken)
         {
-            await _registerDtoValidator.ValidateAndThrowAsync(registerDto, cancellationToken);
+            
 
-            await _usersService.RegisterAsync(registerDto, cancellationToken);
+            await _usersService.RegisterPlayerAsync(registerDto, cancellationToken);
 
             return Ok();
         }

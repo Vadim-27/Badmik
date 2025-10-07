@@ -18,8 +18,7 @@ namespace BadmintonApp.Domain.Core
         public DateTime DoB { get; set; }
         public bool IsActive { get; set; }
         public DateTime CreatedAt { get; set; }
-        public string Rank { get; set; }
-        public PlayerLevel Level { get; set; }
+        //public string Rank { get; set; }        
         public Guid? ClubId { get; set; }
         public string  ImageUrl { get; set; }
     }

@@ -189,8 +189,8 @@ public class TrainingsService : ITrainingsService
 
         if (training == null) throw new NotFoundException("Training not found");
 
-        if (!IsLevelAllowed(training, user.Level))
-            throw new BadRequestException("Your level is not allowed");
+        //if (!IsLevelAllowed(training, user.Level))
+        //    throw new BadRequestException("Your level is not allowed");
 
         if (training.Participants.Any(p => p.UserId == userId))
             throw new BadRequestException("Already registered");

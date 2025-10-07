@@ -1,8 +1,13 @@
 ﻿using AutoMapper;
+using BadmintonApp.Application.DTOs.Player;
+using BadmintonApp.Application.DTOs.Staff;
 using BadmintonApp.Application.DTOs.Users;
 using BadmintonApp.Application.Exceptions;
+using BadmintonApp.Application.Interfaces.Players;
 using BadmintonApp.Application.Interfaces.Repositories;
+using BadmintonApp.Application.Interfaces.Staffs;
 using BadmintonApp.Application.Interfaces.Users;
+using BadmintonApp.Domain.Clubs;
 using BadmintonApp.Domain.Core;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
@@ -17,23 +22,26 @@ namespace BadmintonApp.Application.Services
     public class UserService : IUsersService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IPlayerRepository _playerRepository;
+        private readonly IStaffRepository _staffRepository;
         private readonly IPasswordHasher<User> _passwordHasher;
-        private readonly IValidator<RegisterDto> _userRegisterValidation;
+        private readonly IValidator<PlayerRegisterDto> _userRegisterValidation;
         
         private readonly IMapper _mapper;
 
-        public UserService(IUserRepository userRepository, IPasswordHasher<User> passwordHasher, IValidator<RegisterDto> userRegisterValidation,  IMapper mapper)
+        public UserService(IUserRepository userRepository, IPlayerRepository playerRepository,IStaffRepository staffRepository, IPasswordHasher<User> passwordHasher, IValidator<PlayerRegisterDto> userRegisterValidation,  IMapper mapper)
         {
             _userRepository = userRepository;
+            _playerRepository = playerRepository;
+            _staffRepository = staffRepository;
             _passwordHasher = passwordHasher;
             _userRegisterValidation = userRegisterValidation;            
             _mapper = mapper;
         }
 
-        public async Task RegisterAsync(RegisterDto dto, CancellationToken cancellationToken)
-        {
+        public async Task RegisterPlayerAsync(PlayerRegisterDto dto, CancellationToken cancellationToken)
+        {            
             await _userRegisterValidation.ValidateAndThrowAsync(dto, cancellationToken);
-
             var user = new User
             {
                 Id = Guid.NewGuid(),
@@ -45,10 +53,43 @@ namespace BadmintonApp.Application.Services
                 CreatedAt = DateTime.UtcNow,
                 IsActive = true
             };
+            user.PasswordHash = _passwordHasher.HashPassword(user, dto.Password);
+            await _userRepository.CreateAsync(user, cancellationToken);
+
+            await _playerRepository.Registration(user.Id, dto.Level, cancellationToken);
+
+        }
+
+        public async Task RegisterStaffAsync(StaffRegisterDto dto, CancellationToken cancellationToken)
+        {           
+
+            var user = new User
+            {
+                Id = Guid.NewGuid(),
+                Email = dto.Email,
+                FirstName = dto.FirstName,
+                LastName = dto.LastName,
+                DoB = dto.DoB,
+                ClubId = dto.ClubId,
+                CreatedAt = DateTime.UtcNow,
+                IsActive = true
+            };
 
             user.PasswordHash = _passwordHasher.HashPassword(user, dto.Password);
             await _userRepository.CreateAsync(user, cancellationToken);
 
+            var WorkingHours = new List<WorkingHour>()
+            {
+                CreateWorkingHour(DayOfWeek.Monday, dto.WorkingHours.Monday),
+                CreateWorkingHour(DayOfWeek.Tuesday, dto.WorkingHours.Tuesday),
+                CreateWorkingHour(DayOfWeek.Wednesday, dto.WorkingHours.Wednesday),
+                CreateWorkingHour(DayOfWeek.Thursday, dto.WorkingHours.Thursday),
+                CreateWorkingHour(DayOfWeek.Friday, dto.WorkingHours.Friday),
+                CreateWorkingHour(DayOfWeek.Saturday, dto.WorkingHours.Saturday),
+                CreateWorkingHour(DayOfWeek.Sunday, dto.WorkingHours.Sunday),
+            }.Where(x => x != null).ToList()
+
+            await _staffRepository.Registration(user.Id, , dto.Salary, cancellationToken);            
         }
 
         public async Task<UserResultDto> GetByIdAsync(Guid userId, CancellationToken cancellationToken)
