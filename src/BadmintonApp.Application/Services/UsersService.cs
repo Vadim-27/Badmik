@@ -76,20 +76,13 @@ namespace BadmintonApp.Application.Services
             };
 
             user.PasswordHash = _passwordHasher.HashPassword(user, dto.Password);
-            await _userRepository.CreateAsync(user, cancellationToken);
+            await _userRepository.CreateAsync(user, cancellationToken);   
+            
+            Staff staff = _mapper.Map<Staff>(dto);
 
-            var WorkingHours = new List<WorkingHour>()
-            {
-                CreateWorkingHour(DayOfWeek.Monday, dto.WorkingHours.Monday),
-                CreateWorkingHour(DayOfWeek.Tuesday, dto.WorkingHours.Tuesday),
-                CreateWorkingHour(DayOfWeek.Wednesday, dto.WorkingHours.Wednesday),
-                CreateWorkingHour(DayOfWeek.Thursday, dto.WorkingHours.Thursday),
-                CreateWorkingHour(DayOfWeek.Friday, dto.WorkingHours.Friday),
-                CreateWorkingHour(DayOfWeek.Saturday, dto.WorkingHours.Saturday),
-                CreateWorkingHour(DayOfWeek.Sunday, dto.WorkingHours.Sunday),
-            }.Where(x => x != null).ToList()
+            staff.UserId = user.Id;
 
-            await _staffRepository.Registration(user.Id, , dto.Salary, cancellationToken);            
+            await _staffRepository.Registration(staff, cancellationToken);            
         }
 
         public async Task<UserResultDto> GetByIdAsync(Guid userId, CancellationToken cancellationToken)
