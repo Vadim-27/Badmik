@@ -5,8 +5,12 @@ import { unwrap, ApiError } from "@/lib/http/utils";
 
 export const clubsService = {
   // list: (signal?: AbortSignal) => unwrap<Club[]>(api.get(ENDPOINTS.clubs, { signal })),
+    // list: (signal?: AbortSignal) =>
+    // api.get<Club[]>('/Clubs', { signal }).then(r => r.data),
+
     list: (signal?: AbortSignal) =>
-    api.get<Club[]>('/Clubs', { signal }).then(r => r.data),
+  api.get<Club[]>('/Clubs', { signal }).then((r: { data: Club[] }) => r.data),
+
  
   get: (id: string, signal?: AbortSignal) => unwrap<Club>(api.get(`${ENDPOINTS.clubs}/${id}`, { signal })),
   create: (dto: CreateClubDto, signal?: AbortSignal) => unwrap<Club>(api.post(ENDPOINTS.clubs, dto, { signal })),
