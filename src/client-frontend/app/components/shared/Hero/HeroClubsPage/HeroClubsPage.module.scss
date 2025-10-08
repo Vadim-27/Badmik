@@ -1,60 +1,231 @@
-.hero{
-    position: relative;
-    margin-top: 20px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 234px;
-    padding: 40px 80px 54px 80px;
-    width: 1880px;
-    height: 700px;
-    background: var(--color-primary-dark-bg);
-    border-radius: 40px;
-}
-.breadcrumbsWrapper{
-    margin-top: 100px;
-}
-.containerHero{
-    margin-top: 54px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+// .hero{
+//     position: relative;
+//     margin-top: 20px;
+//     margin-left: auto;
+//     margin-right: auto;
+//     margin-bottom: 234px;
+//     padding: 40px 80px 54px 80px;
+//     width: 1880px;
+//     height: 700px;
+//     background: var(--color-primary-dark-bg);
+//     border-radius: 40px;
+// }
+// .breadcrumbsWrapper{
+//     margin-top: 100px;
+// }
+// .containerHero{
+//     margin-top: 54px;
+//     display: flex;
+//     justify-content: space-between;
+//     align-items: center;
+// }
+
+// .contentHero{
+//     display: flex;
+//     flex-direction: column;
+//     gap: 54px;
+//     // width: 57%;
+// }
+
+// .titleHero{
+//     text-align: center;
+//     color: var(--text-color-secondary-light);
+// font-family: var(--font-title-Unbounded);
+// font-size: 3.375em;
+// font-style: normal;
+// font-weight: 700;
+// line-height: 1.26; /* 125.926% */
+// letter-spacing: 1.62px;
+// }
+// .textHero{
+//     text-align: center;
+//     padding: 0 120px;
+//     color: var(--text-color-primary-light);
+// font-family: var(--font-display-Manrope);
+// font-size: 1.5em;
+// font-style: normal;
+// font-weight: 400;
+// line-height: 1.41; /* 141.667% */
+// }
+// .imageWrapper {
+//   position: relative;
+//   border-radius: 16px;
+//   width: 705px;
+//   height: 660px;
+// }
+
+// .image {
+//   object-fit: cover; 
+//   border-radius: 16px;
+// }
+
+@use "mixins" as *;
+
+.hero {
+  position: relative;
+
+  /* контейнер */
+  margin: 12px auto 64px;
+  inline-size: min(100%, 1880px);
+  border-radius: 28px;
+
+  /* падінги мобайл-фьорст */
+  padding: 16px;
+  background: var(--color-primary-dark-bg);
+  min-height: 620px;
+
+  @include media-rules(tablet) {
+    margin-block-end: 96px;
+    padding: 24px 24px 28px;
+    border-radius: 32px;
+    min-height: 640px;
+  }
+
+  @include media-rules(laptop) {
+    margin-block-start: 20px;
+    margin-block-end: 160px;
+    padding: 32px 48px 36px;
+    border-radius: 36px;
+    min-height: 660px;
+  }
+
+  @include media-rules(desktop) {
+    margin-block-end: 234px;
+    padding: 40px 80px 54px;
+    border-radius: 40px; 
+    min-height: 700px; /* як було */
+  }
 }
 
-.contentHero{
-    display: flex;
-    flex-direction: column;
-    gap: 54px;
-    // width: 57%;
+.breadcrumbsWrapper {
+  margin-top: 16px;
+
+  @include media-rules(tablet) { margin-top: 24px; }
+  @include media-rules(laptop) { margin-top: 40px; }
+  @include media-rules(desktop) { margin-top: 100px; } /* оригінал */
 }
 
-.titleHero{
-    text-align: center;
-    color: var(--text-color-secondary-light);
-font-family: var(--font-title-Unbounded);
-font-size: 3.375em;
-font-style: normal;
-font-weight: 700;
-line-height: 1.26; /* 125.926% */
-letter-spacing: 1.62px;
+.containerHero {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column; /* мобілка — стовпець */
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+
+  @include media-rules(tablet) {
+    margin-top: 40px;
+    gap: 20px;
+  }
+
+  @include media-rules(laptop) {
+    margin-top: 48px;
+    gap: 28px;
+    /* якщо додаватимеш інші блоки — можна перейти у ряд */
+    /* flex-direction: row; justify-content: space-between; */
+  }
+
+  @include media-rules(desktop) {
+    margin-top: 54px; /* як у десктопі */
+    gap: 32px;
+  }
 }
-.textHero{
-    text-align: center;
-    padding: 0 120px;
-    color: var(--text-color-primary-light);
-font-family: var(--font-display-Manrope);
-font-size: 1.5em;
-font-style: normal;
-font-weight: 400;
-line-height: 1.41; /* 141.667% */
+
+.contentHero {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  inline-size: 100%;
+  max-inline-size: 1400px;
+  margin-inline: auto;
+
+  @include media-rules(tablet) { gap: 20px; }
+  @include media-rules(laptop) { gap: 28px; }
+  @include media-rules(desktop) { 
+    max-inline-size: 1400px;
+    gap: 54px; 
+} /* оригінал */
 }
+
+.titleHero {
+  text-align: center;
+  color: var(--text-color-secondary-light);
+  font-family: var(--font-title-Unbounded);
+  font-weight: 700;
+
+  /* мобільний */
+  font-size: 1.75rem;
+  line-height: 1.25;
+  letter-spacing: 0.5px;
+
+  @include media-rules(tablet) {
+    font-size: 2rem;
+    letter-spacing: 0.8px;
+  }
+
+  @include media-rules(laptop) {
+    font-size: 2.5rem;
+    letter-spacing: 1.1px;
+  }
+
+  @include media-rules(desktop) {
+    font-size: 3.375rem; /* як було */
+    line-height: 1.26;
+    letter-spacing: 1.62px;
+  }
+}
+
+.textHero {
+  text-align: center;
+  color: var(--text-color-primary-light);
+  font-family: var(--font-display-Manrope);
+  font-weight: 400;
+
+  /* мобільний */
+  padding-inline: 0;
+  font-size: 1rem;
+  line-height: 1.55;
+
+  @include media-rules(tablet) {
+    // padding-inline: 24px;
+    font-size: 1.125rem;
+  }
+
+  @include media-rules(laptop) {
+    // padding-inline: 64px;
+    font-size: 1.25rem;
+    line-height: 1.5;
+  }
+
+  @include media-rules(desktop) {
+    // padding-inline: 120px; /* як було */
+    font-size: 1.5rem;
+    line-height: 1.41;
+  }
+}
+
+/* якщо згодом додаси ілюстрацію — залишаю готові стилі */
 .imageWrapper {
   position: relative;
   border-radius: 16px;
-  width: 705px;
-  height: 660px;
+  overflow: hidden;
+
+  inline-size: 100%;
+  aspect-ratio: 4 / 3;
+
+  @include media-rules(tablet) { aspect-ratio: 3 / 2; }
+
+  @include media-rules(laptop) {
+    inline-size: 43%;
+    max-inline-size: 750px;
+    aspect-ratio: 1 / 1;
+  }
+
+  @include media-rules(desktop) {
+    inline-size: 40%;
+    aspect-ratio: auto;
+    block-size: 660px;
+  }
 }
 
-.image {
-  object-fit: cover; 
-  border-radius: 16px;
-}
+.image { object-fit: cover; border-radius: inherit; }

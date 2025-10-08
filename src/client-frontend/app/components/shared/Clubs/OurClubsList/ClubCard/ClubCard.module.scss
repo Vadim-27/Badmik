@@ -105,7 +105,14 @@ line-height: 1.55; /* 155.556% */
 .MapIcon{
   width: 1.5em;
   height: 1.5em;
+  fill: var(--accent-color-primary);
+   
+}
+.icon{
+  width: 1.5em;
+  height: 1.5em;
   fill: var(--accent-color-primary); 
+  // stroke: var(--accent-color-primary);
 }
 
 .tags {

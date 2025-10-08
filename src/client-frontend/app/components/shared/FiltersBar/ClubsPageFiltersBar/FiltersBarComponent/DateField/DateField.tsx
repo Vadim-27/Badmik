@@ -38,7 +38,7 @@ export default function DateField({
 
   return (
     <div className={className} ref={boxRef}>
-      {/* текст/плейсхолдер зліва (вигляд інпуту) */}
+     
       <button
         type="button"
         className={styles.dateTrigger}
@@ -47,10 +47,10 @@ export default function DateField({
         {value ? format(value, "d MMMM yyyy", { locale: uk }) : (placeholder ?? "")}
       </button>
 
-      {/* іконка календаря СПРАВА */}
+    
       <CalendarIcon className={styles.calendarIconRight} aria-hidden />
 
-      {/* поповер з календарем */}
+    
       {open && (
         <div className={styles.popContent}>
             <DayPicker
