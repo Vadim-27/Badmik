@@ -2,7 +2,6 @@
 using BadmintonApp.Application.DTOs.Player;
 using BadmintonApp.Application.DTOs.Users;
 using BadmintonApp.Application.Interfaces.Users;
-using BadmintonApp.Domain.Core;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -31,7 +30,7 @@ namespace BadmintonApp.API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] PlayerRegisterDto registerDto, CancellationToken cancellationToken)
         {
-            
+
 
             await _usersService.RegisterPlayerAsync(registerDto, cancellationToken);
 
@@ -56,5 +55,5 @@ namespace BadmintonApp.API.Controllers
             return Ok(users);
         }
 
-    } 
+    }
 }

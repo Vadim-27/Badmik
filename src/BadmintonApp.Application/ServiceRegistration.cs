@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using MediatR;
+using BadmintonApp.Application.Interfaces.Staffs;
 
 namespace BadmintonApp.Application
 {
@@ -32,7 +33,8 @@ namespace BadmintonApp.Application
             services.AddScoped<IClubsService, ClubsService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IPermissionService, PermissionService>();
-
+            services.AddScoped<IStaffService, StaffService>();
+            
             services.AddMediatR(cfg =>
             {
                 cfg.RegisterServicesFromAssembly(Assembly.GetAssembly(typeof(LoginCommand))); 
