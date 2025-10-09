@@ -1,12 +1,19 @@
 
 
 export interface ClubFeatures {
-  courts: number;            
-  flooring: string;          
-  parking: boolean;          
-  water: boolean;            
-  airConditioning: boolean;  
+  courts?: number;
+  flooring?: string;
+  parking?: boolean;
+  water?: boolean;
+  airConditioning?: boolean;
+  trainingsRoom?: boolean;
+  showers?: boolean;
+  swimmingPool?: boolean;
+  squashCenter?: boolean;
+  groupClasses?: boolean;
+  laserSpa?: boolean;
 }
+
 
 export interface Club {
   id: string;                

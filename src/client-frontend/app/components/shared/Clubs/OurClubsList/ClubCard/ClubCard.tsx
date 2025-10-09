@@ -12,9 +12,11 @@ import WaterDrop from "@/app/assets/icons/WaterDrop.svg";
 import AirConditioner from "@/app/assets/icons/AirConditioner.svg";
 import Columns from "@/app/assets/icons/Columns.svg";
 import ClubListButton from "@/app/components/ui/Buttons/ClubListButton/ClubListButton";
+import Shower from "@/app/assets/icons/Shower.svg";
 
 export default function ClubCard({ club }: { club: Club }) {
   const {
+    id,
     name,
     badge,
     image,
@@ -23,7 +25,7 @@ export default function ClubCard({ club }: { club: Club }) {
     features,
     priceFrom,
     currency,
-    detailsUrl,
+    // detailsUrl,
   } = club;
 
   const badgeClass =
@@ -88,6 +90,12 @@ export default function ClubCard({ club }: { club: Club }) {
               <span className={styles.tagText}>Кондиціонер</span>
             </span>
           )}
+          {features.showers && (
+            <span className={styles.tag}>
+              <Shower className={styles.icon} aria-hidden />
+              <span className={styles.tagText}>Душ</span>
+            </span>
+          )}
         </div>
 
         <div className={styles.footer}>
@@ -98,7 +106,11 @@ export default function ClubCard({ club }: { club: Club }) {
             </span>
           </div>
 
-          <ClubListButton href={detailsUrl} size="medium" className="cardBtn">
+          <ClubListButton 
+        //   href={detailsUrl}
+          href={`/clubs/${id}`}
+           size="medium" 
+           className="cardBtn">
             Детальніше
           </ClubListButton>
         </div>

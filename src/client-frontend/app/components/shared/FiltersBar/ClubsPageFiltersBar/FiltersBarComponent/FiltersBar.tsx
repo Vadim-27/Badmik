@@ -6,7 +6,7 @@ import { Combobox } from "@headlessui/react";
 // import { format } from "date-fns";
 
 
-import clubsJson from "@/data/clubList.json"; // ← перевір, що файл справді тут
+import clubsJson from "@/data/clubList.json"; 
 import PinIcon from "@/app/assets/icons/Map.svg";
 
 import SearchIcon from "@/app/assets/icons/Search.svg";
@@ -18,8 +18,7 @@ import { Club } from "@/types/club";
 
 
 
-// const levels = ["D", "C", "B", "A", "Masters"] as const;
-// type Level = (typeof levels)[number];
+
 
 export default function FiltersBar() {
   const clubs: Club[] = useMemo(() => clubsJson, []);
@@ -85,39 +84,6 @@ export default function FiltersBar() {
         </div>
       </div>
 
-      {/* Дата */}
-      {/* <div className={styles.field}>
-        <label className={styles.label}>Оберіть дату тренування</label>
-        <DateField
-  value={date}
-  onChangeDateAction={setDate}
-  placeholder="Дата"
-  className={styles.dateBox}
-/>
-     
-      </div> */}
-
-      {/* Рівень */}
-      {/* <div className={styles.field}>
-        <label className={styles.label}>Рівень гравців</label>
-        <div className={styles.levels}>
-          {levels.map((l) => (
-            <button
-              key={l}
-              type="button"
-              onClick={() => setLevel(l)}
-              className={`${styles.levelBtn} ${
-                level === l ? styles.levelActive : ""
-              }`}
-              aria-pressed={level === l}
-            >
-              {l}
-            </button>
-          ))}
-        </div>
-      </div> */}
-
-      {/* Submit */}
       <button type="submit" className={styles.submit}>
         <SearchIcon className={styles.submitIcon} aria-hidden /> Знайти
       </button>

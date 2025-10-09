@@ -12,7 +12,13 @@
         "flooring": "Вінілове покриття",
         "parking": true,
         "water": true,
-        "airConditioning": true
+        "airConditioning": true,
+        "trainingsRoom": true,
+        "showers": false,
+        "swimmingPool": false,
+        "squashCenter": false,
+        "groupClasses": false,
+        "laserSpa": false
       },
       "priceFrom": 500,
       "currency": "UAH",
@@ -31,7 +37,13 @@
         "flooring": "Вінілове покриття",
         "parking": true,
         "water": true,
-        "airConditioning": true
+        "airConditioning": true,
+        "trainingsRoom": false,
+        "showers": false,
+        "swimmingPool": false,
+        "squashCenter": false,
+        "groupClasses": false,
+        "laserSpa": false
       },
       "priceFrom": 500,
       "currency": "UAH",
@@ -50,7 +62,13 @@
         "flooring": "Вінілове покриття",
         "parking": true,
         "water": true,
-        "airConditioning": true
+        "airConditioning": true,
+        "trainingsRoom": true,
+        "showers": true,
+        "swimmingPool": true,
+        "squashCenter": true,
+        "groupClasses": true,
+        "laserSpa": true
       },
       "priceFrom": 500,
       "currency": "UAH",
@@ -69,7 +87,13 @@
         "flooring": "Вінілове покриття",
         "parking": true,
         "water": true,
-        "airConditioning": true
+        "airConditioning": true,
+        "trainingsRoom": true,
+        "showers": true,
+        "swimmingPool": true,
+        "squashCenter": true,
+        "groupClasses": true,
+        "laserSpa": true
       },
       "priceFrom": 500,
       "currency": "UAH",
@@ -88,7 +112,13 @@
         "flooring": "Вінілове покриття",
         "parking": true,
         "water": true,
-        "airConditioning": true
+        "airConditioning": true,
+        "trainingsRoom": true,
+        "showers": true,
+        "swimmingPool": true,
+        "squashCenter": true,
+        "groupClasses": true,
+        "laserSpa": true
       },
       "priceFrom": 500,
       "currency": "UAH",
@@ -107,7 +137,13 @@
         "flooring": "Вінілове покриття",
         "parking": true,
         "water": true,
-        "airConditioning": true
+        "airConditioning": true,
+        "trainingsRoom": true,
+        "showers": true,
+        "swimmingPool": true,
+        "squashCenter": true,
+        "groupClasses": true,
+        "laserSpa": true
       },
       "priceFrom": 500,
       "currency": "UAH",
@@ -126,7 +162,13 @@
         "flooring": "Вінілове покриття",
         "parking": true,
         "water": true,
-        "airConditioning": true
+        "airConditioning": true,
+        "trainingsRoom": true,
+        "showers": true,
+        "swimmingPool": true,
+        "squashCenter": true,
+        "groupClasses": true,
+        "laserSpa": true
       },
       "priceFrom": 500,
       "currency": "UAH",
@@ -145,7 +187,13 @@
         "flooring": "Вінілове покриття",
         "parking": true,
         "water": true,
-        "airConditioning": true
+        "airConditioning": true,
+        "trainingsRoom": true,
+        "showers": true,
+        "swimmingPool": true,
+        "squashCenter": true,
+        "groupClasses": true,
+        "laserSpa": true
       },
       "priceFrom": 500,
       "currency": "UAH",
@@ -164,7 +212,13 @@
         "flooring": "Вінілове покриття",
         "parking": true,
         "water": true,
-        "airConditioning": true
+        "airConditioning": true,
+        "trainingsRoom": true,
+        "showers": true,
+        "swimmingPool": true,
+        "squashCenter": true,
+        "groupClasses": true,
+        "laserSpa": true
       },
       "priceFrom": 500,
       "currency": "UAH",
