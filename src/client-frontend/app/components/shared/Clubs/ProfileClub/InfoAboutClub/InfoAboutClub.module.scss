@@ -32,7 +32,8 @@
         max-width: 950px;
       }
       @include media-rules(desktop) {
-        max-width: 1100px;
+        max-width: 1200px;
+        // width: 100%;
       }
 }
 .titleSection{
@@ -84,18 +85,47 @@ line-height: 1.55; /* 155.556% */
 }
 
 .featuresList{
+    
     display: flex;
     flex-wrap: wrap;
     // flex-direction: column;
     gap: 16px;
-    margin-bottom: 40px;
+    @include media-rules(tablet) {
+        gap: 16px;
+      }
 
       @include media-rules(laptop) {
         gap: 20px;
-        margin-bottom: 48px;
+        
       }
+        @include media-rules(desktop) {
+            gap: 20px;
+            
+        }
      
 }
+
+// .featuresList{
+//   display: grid;
+//   gap: 16px;
+//   grid-template-columns: 1fr;          // мобілка: 1 колонка
+//   justify-items: center;               // “посередині” всередині комірки
+
+//   @include media-rules(tablet) {
+//     grid-template-columns: repeat(3, 1fr); // таблет: 3 колонки
+//   }
+
+//   @include media-rules(laptop) {
+//     gap: 20px;
+//     grid-template-columns: repeat(3, 1fr); // лаптоп: 2 колонки
+//   }
+
+//   @include media-rules(desktop) {
+//     gap: 24px;
+//     grid-template-columns: repeat(3, 1fr); // або змінюй за потреби
+//   }
+// }
+
 
 .item{
     display: flex;
@@ -212,11 +242,11 @@ border: 1px solid #E2E8F0;
       }
 
       @include media-rules(laptop) {
-        width: 100%;
+        width: 45%;
         gap: 40px;
       }
       @include media-rules(desktop) {
-        width: 100%;
+        width: 50%;
         gap: 40px;
       }
 }
