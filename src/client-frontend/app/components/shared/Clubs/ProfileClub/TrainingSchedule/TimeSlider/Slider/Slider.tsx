@@ -4,7 +4,7 @@
 
 import { FC, ReactNode, useEffect, useState } from "react";
 import clsx from "clsx";
-import Autoplay from "embla-carousel-autoplay";
+// import Autoplay from "embla-carousel-autoplay";
 import useEmblaCarousel from "embla-carousel-react";
 
 import options from "@/app/components/configs/embla-slider";
@@ -20,12 +20,12 @@ interface ISlider {
 
 const Slider: FC<ISlider> = ({ children, className }) => {
   const [emblaRef, emblaApi] = useEmblaCarousel(options, [
-    Autoplay({
-      playOnInit: true,
-      delay: 5000,
-      stopOnInteraction: false,
-      stopOnMouseEnter: true,
-    }),
+    // Autoplay({
+    //   playOnInit: true,
+    //   delay: 5000,
+    //   stopOnInteraction: false,
+    //   stopOnMouseEnter: true,
+    // }),
   ]);
 
   const [canScrollPrev, setCanScrollPrev] = useState(false);
@@ -58,12 +58,29 @@ const Slider: FC<ISlider> = ({ children, className }) => {
 
   return (
     <div className={scss.sliderWrapper}>
+      <button
+            className={clsx(scss.arrow, scss.arrowLeft)}
+            onClick={() => emblaApi?.scrollPrev()}
+            disabled={!canScrollPrev}
+            aria-label="Попередній слайд"
+          >
+            <ArrowSliderLeft className={scss.iconLeft} aria-hidden />
+          </button>
       <div className={scss.embla} ref={emblaRef}>
         <div className={clsx(scss.embla__container, className)}>{children}</div>
       </div>
 
+       <button
+            className={clsx(scss.arrow, scss.arrowRight)}
+            onClick={() => emblaApi?.scrollNext()}
+            disabled={!canScrollNext}
+            aria-label="Наступний слайд"
+          >
+            <ArrowSliderRight className={scss.iconRight} aria-hidden />
+          </button>
+
       {/* Стрілки */}
-      <div className={scss.controls}>
+      {/* <div className={scss.controls}>
          {/* <div className={scss.dots}>
           {Array.from({ length: slideCount }).map((_, index) => (
             <button
@@ -78,7 +95,7 @@ const Slider: FC<ISlider> = ({ children, className }) => {
         {/* <div className={scss.pages}>
           {selectedIndex + 1} / {slideCount}
         </div> */}
-        <div className={scss.arrows}>
+        {/* <div className={scss.arrows}>
           <button
             className={clsx(scss.arrow, scss.arrowLeft)}
             onClick={() => emblaApi?.scrollPrev()}
@@ -95,9 +112,9 @@ const Slider: FC<ISlider> = ({ children, className }) => {
           >
             <ArrowSliderRight className={scss.iconRight} aria-hidden />
           </button>
-        </div>
+        </div> */}
        
-      </div>
+      {/* </div> */} 
     </div>
   );
 };

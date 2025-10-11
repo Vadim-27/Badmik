@@ -3,7 +3,9 @@
 
 import { useParams } from "next/navigation";
 import InfoAboutClub from "./InfoAboutClub/InfoAboutClub";
+import TrainingSchedule from "./TrainingSchedule/TrainingSchedule";
 import CoachesClub from "./CoachesClub/CoachesClub";
+import ClubGalleryPhoto from "./ClubGalleryPhoto/ClubGalleryPhoto";
 import data from "@/data/ourListClubs.json";
 
 
@@ -21,7 +23,9 @@ const ProfileClub = () => {
   return (
     <>
         <InfoAboutClub  club={club}/>
+        <TrainingSchedule />
         <CoachesClub />
+        <ClubGalleryPhoto />
     </>
   );
 }
