@@ -54,6 +54,7 @@ import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import requestConfig from "@/i18n/request";
+import Providers from "../providers";
 
 
 
@@ -92,10 +93,12 @@ export default async function LocaleLayout({
   return (
     <html lang={locale}>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <Providers>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Header />
           {children}
         </NextIntlClientProvider>
+        </Providers>
       </body>
     </html>
   );

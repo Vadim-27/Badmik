@@ -1,5 +1,5 @@
 import React from 'react';
-import UserDetail from '@/app/components/shared/UserDetail/UserDetail';
+import UserDetail from '@/app/components/shared/players/UserDetail/UserDetail';
 import { usersFromMok } from '@/data/mockUsers';
 
 type Params = {
