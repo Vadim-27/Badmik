@@ -1,9 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BadmintonApp.Application.DTOs.Common;
 
 public class PaginationListDto<T>
 {
-    public int TotalCount { get; set; }
-    public List<T> List { get; set; }
+    public IReadOnlyList<T> List { get; init; } = Array.Empty<T>();
+    public int TotalCount { get; init; }
+    public int Page { get; init; }
+    public int PerPage { get; init; }
+
+    public int TotalPages => (int)Math.Ceiling((double)TotalCount / PerPage);
+    public bool HasPrevious => Page > 1;
+    public bool HasNext => Page < TotalPages;
 }
