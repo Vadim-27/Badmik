@@ -1,9 +1,7 @@
 ﻿using BadmintonApp.Application.Interfaces.Auth;
 using BadmintonApp.Application.Interfaces.Clubs;
 using BadmintonApp.Application.Interfaces.Logs;
-using BadmintonApp.Application.Interfaces.Players;
 using BadmintonApp.Application.Interfaces.Repositories;
-using BadmintonApp.Application.Interfaces.Staffs;
 using BadmintonApp.Application.Interfaces.Transactions;
 using BadmintonApp.Application.Interfaces.Users;
 using BadmintonApp.Application.Services;

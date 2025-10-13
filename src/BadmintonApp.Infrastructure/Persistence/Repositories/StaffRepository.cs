@@ -1,5 +1,5 @@
 ﻿using BadmintonApp.Application.DTOs.Staff;
-using BadmintonApp.Application.Interfaces.Staffs;
+using BadmintonApp.Application.Interfaces.Repositories;
 using BadmintonApp.Domain.Core;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -29,13 +29,13 @@ public class StaffRepository : IStaffRepository
     public async Task Update(Staff staff, CancellationToken cancellationToken)
     {
 
-        var staffUpdate = await _dbContext.Staffs
+        var currentStaff = await _dbContext.Staffs
             .AsNoTracking()
             .FirstAsync(x => x.Id == staff.Id, cancellationToken);
 
-        staff.CreatedAt = staffUpdate.CreatedAt;
+        staff.CreatedAt = currentStaff.CreatedAt;
         staff.UpdatedAt = DateTime.Now;
-        staff.UserId = staffUpdate.UserId;
+        staff.UserId = currentStaff.UserId;
 
         _dbContext.Staffs.Update(staff);
         await _dbContext.SaveChangesAsync(cancellationToken);

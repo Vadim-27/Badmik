@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace BadmintonApp.Application.Interfaces.Staffs;
+namespace BadmintonApp.Application.Interfaces.Repositories;
 
 public interface IStaffRepository
 {

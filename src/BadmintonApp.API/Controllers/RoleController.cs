@@ -21,7 +21,7 @@ namespace BadmintonApp.API.Controllers
         {
             _roleService = roleService;
         }
-        [HttpPost]
+        [HttpPost("AssignRoleForUser")]
         public async Task<ActionResult> AssignRoleForUser([FromBody] AssignRoleForUserDto assignRoleForUserDto, CancellationToken cancellationToken)
         {
             await _roleService.AssignRoleForUser(assignRoleForUserDto.UserId, assignRoleForUserDto.ClubId, assignRoleForUserDto.RoleId, cancellationToken);

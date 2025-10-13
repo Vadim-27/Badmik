@@ -2,19 +2,18 @@
 using BadmintonApp.Application.Interfaces.Clubs;
 using BadmintonApp.Application.Interfaces.Logs;
 using BadmintonApp.Application.Interfaces.Permissions;
+using BadmintonApp.Application.Interfaces.Players;
 using BadmintonApp.Application.Interfaces.Roles;
+using BadmintonApp.Application.Interfaces.Staffs;
 using BadmintonApp.Application.Interfaces.Trainings;
 using BadmintonApp.Application.Interfaces.Users;
 using BadmintonApp.Application.Mappings;
 using BadmintonApp.Application.Services;
-using BadmintonApp.Application.UseCases.Account.Commands.Login;
 using BadmintonApp.Domain.Core;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
-using MediatR;
-using BadmintonApp.Application.Interfaces.Staffs;
 
 namespace BadmintonApp.Application
 {
@@ -25,7 +24,7 @@ namespace BadmintonApp.Application
             services.AddScoped<IUsersService, UserService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ITrainingsService, TrainingsService>();
-            services.AddValidatorsFromAssemblyContaining<UserService>(includeInternalTypes: true);            
+            services.AddValidatorsFromAssemblyContaining<UserService>(includeInternalTypes: true);
             services.AddAutoMapper(conf => conf.AddMaps(Assembly.GetAssembly(typeof(TrainingMappingProfile))));
             services.AddScoped<IPermissionService, PermissionService>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
@@ -34,11 +33,7 @@ namespace BadmintonApp.Application
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IPermissionService, PermissionService>();
             services.AddScoped<IStaffService, StaffService>();
-            
-            services.AddMediatR(cfg =>
-            {
-                cfg.RegisterServicesFromAssembly(Assembly.GetAssembly(typeof(LoginCommand))); 
-            });
+            services.AddScoped<IPlayerService, PlayerService>();
 
             return services;
         }

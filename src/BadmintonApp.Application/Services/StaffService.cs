@@ -30,8 +30,6 @@ public class StaffService : IStaffService
     {
         var staffs = await _staffRepository.GetAll(cancellationToken);
 
-
-
         return _mapper.Map<List<StaffDto>>(staffs);
     }
 
