@@ -22,8 +22,7 @@ namespace BadmintonApp.Application.Services
         }
         public async Task<bool> HasPermission(Guid userId, Guid clubId, PermissionType permission, CancellationToken cancellationToken)
         {
-            var role = await _userRoleRepository.GetUserRoleForClubAsync(userId, clubId, cancellationToken);
-            //return role != null && role.Permissions.Contains(permission);
+            var role = await _userRoleRepository.GetUserRoleForClubAsync(userId, clubId, cancellationToken);           
             return  true;
         }
         public async Task<List<Permission>> GetAll(CancellationToken cancellationToken)

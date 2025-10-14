@@ -21,7 +21,7 @@ namespace BadmintonApp.API.Controllers
             _permissionService = permissionService;
         }
 
-        [HttpGet]
+        [HttpGet("GetAll")]
         public async Task<ActionResult> GetAll(CancellationToken cancellationToken)
         {
             List<Permission> permissions = await _permissionService.GetAll(cancellationToken);

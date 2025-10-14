@@ -5,11 +5,12 @@ using System;
 using System.Linq;
 namespace BadmintonApp.Application.Validation;
 
-public class UserRegistrationValidation : AbstractValidator<PlayerRegisterDto>
+public class PlayerRegistrationValidation : AbstractValidator<PlayerRegisterDto>
 {
+    
 
 
-    public UserRegistrationValidation(IUserRepository userRepository)
+    public PlayerRegistrationValidation(IUserRepository userRepository, IClubsRepository clubsRepository)
     {
 
         RuleFor(x => x.Email)
@@ -40,7 +41,12 @@ public class UserRegistrationValidation : AbstractValidator<PlayerRegisterDto>
             .NotEmpty().WithMessage("First name is required.").WithErrorCode("FirstName.Empty")
             .MinimumLength(2).WithMessage("First name is too short.").WithErrorCode("FirstName.TooShort")
             .MaximumLength(60).WithMessage("First name is too long").WithErrorCode("FirstName.TooLong")
-            .Must(p => p.All(char.IsLetter));// !!!!      
+            .Must(p => p.All(char.IsLetter));// !!!!
+
+        RuleFor(x => x.ClubId)
+            .Cascade(CascadeMode.Stop)
+            .MustAsync(clubsRepository.IsExist).WithMessage("ClubId is not exist.").WithErrorCode("ClubId.NotExist");
+            
        
 
         RuleFor(x => x.LastName)

@@ -49,6 +49,11 @@ public class ClubRepository : IClubsRepository
          .FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
     }
 
+    public async Task<bool> IsExist(Guid id, CancellationToken cancellationToken)
+    {
+        return await _context.Clubs.AnyAsync(x => x.Id == id, cancellationToken);
+    }
+
     public async Task<Club> UpdateAsync(Club club, CancellationToken cancellationToken)
     {
         _context.Clubs.Update(club);

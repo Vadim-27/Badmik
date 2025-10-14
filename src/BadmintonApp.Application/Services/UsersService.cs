@@ -5,7 +5,6 @@ using BadmintonApp.Application.DTOs.Users;
 using BadmintonApp.Application.Exceptions;
 using BadmintonApp.Application.Interfaces.Repositories;
 using BadmintonApp.Application.Interfaces.Users;
-using BadmintonApp.Domain.Clubs;
 using BadmintonApp.Domain.Core;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
@@ -23,31 +22,34 @@ namespace BadmintonApp.Application.Services
         private readonly IPlayerRepository _playerRepository;
         private readonly IStaffRepository _staffRepository;
         private readonly IPasswordHasher<User> _passwordHasher;
-        private readonly IValidator<PlayerRegisterDto> _userRegisterValidation;
-        
-        private readonly IMapper _mapper;
+        private readonly IValidator<PlayerRegisterDto> _playerRegisterValidation;
 
-        public UserService(IUserRepository userRepository, IPlayerRepository playerRepository,IStaffRepository staffRepository, IPasswordHasher<User> passwordHasher, IValidator<PlayerRegisterDto> userRegisterValidation,  IMapper mapper)
+        private readonly IMapper _mapper;
+        private readonly IValidator<StaffRegisterDto> _staffRegisterValidation;
+
+        public UserService(IUserRepository userRepository, IPlayerRepository playerRepository, IStaffRepository staffRepository, IPasswordHasher<User> passwordHasher, IValidator<PlayerRegisterDto> playerRegisterValidation, IMapper mapper, IValidator<StaffRegisterDto> staffRegisterValidation)
         {
             _userRepository = userRepository;
             _playerRepository = playerRepository;
             _staffRepository = staffRepository;
             _passwordHasher = passwordHasher;
-            _userRegisterValidation = userRegisterValidation;            
+            _playerRegisterValidation = playerRegisterValidation;
             _mapper = mapper;
+            _staffRegisterValidation = staffRegisterValidation;
         }
 
         public async Task RegisterPlayerAsync(PlayerRegisterDto dto, CancellationToken cancellationToken)
-        {            
-            await _userRegisterValidation.ValidateAndThrowAsync(dto, cancellationToken);
+        {
+            await _playerRegisterValidation.ValidateAndThrowAsync(dto, cancellationToken);
             var user = new User
             {
                 Id = Guid.NewGuid(),
                 Email = dto.Email,
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
+                ImageUrl = dto.ImageUrl,
                 DoB = dto.DoB,
-                ClubId = dto.ClubId,               
+                ClubId = dto.ClubId,
                 CreatedAt = DateTime.UtcNow,
                 IsActive = true
             };
@@ -59,7 +61,8 @@ namespace BadmintonApp.Application.Services
         }
 
         public async Task RegisterStaffAsync(StaffRegisterDto dto, CancellationToken cancellationToken)
-        {           
+        {
+            await _staffRegisterValidation.ValidateAndThrowAsync(dto, cancellationToken);
 
             var user = new User
             {
@@ -67,6 +70,7 @@ namespace BadmintonApp.Application.Services
                 Email = dto.Email,
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
+                ImageUrl = dto.ImageUrl,
                 DoB = dto.DoB,
                 ClubId = dto.ClubId,
                 CreatedAt = DateTime.UtcNow,
@@ -74,24 +78,24 @@ namespace BadmintonApp.Application.Services
             };
 
             user.PasswordHash = _passwordHasher.HashPassword(user, dto.Password);
-            await _userRepository.CreateAsync(user, cancellationToken);   
-            
+            await _userRepository.CreateAsync(user, cancellationToken);
+
             Staff staff = _mapper.Map<Staff>(dto);
 
             staff.UserId = user.Id;
 
-            await _staffRepository.Registration(staff, cancellationToken);            
+            await _staffRepository.Registration(staff, cancellationToken);
         }
 
         public async Task<UserResultDto> GetByIdAsync(Guid userId, CancellationToken cancellationToken)
         {
             var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
             if (user == null) throw new NotFoundException("User not found.");
-            
-            return MapToProfile(user); // використати автомапер.
+
+            return MapToProfile(user);
         }
 
-        public async Task<UserResultDto> GetProfileAsync(Guid currentUserId, CancellationToken cancellationToken) // два однакових методи, чи э в них обох неохыднысть?
+        public async Task<UserResultDto> GetProfileAsync(Guid currentUserId, CancellationToken cancellationToken)
         {
             var user = await _userRepository.GetByIdAsync(currentUserId, cancellationToken);
             return user == null ? null : MapToProfile(user);
@@ -109,14 +113,12 @@ namespace BadmintonApp.Application.Services
             var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
             if (user == null) throw new NotFoundException("User not found.");
 
-            //await _updateUserValidation.ValidateAndThrowAsync(dto, cancellationToken);
-
             user.FirstName = dto.FirstName;
-            user.LastName = dto.LastName;            
+            user.LastName = dto.LastName;
 
             await _userRepository.UpdateAsync(user, cancellationToken);
 
-            return _mapper.Map<UserResultDto>(user);            
+            return _mapper.Map<UserResultDto>(user);
         }
 
         public async Task DeleteAsync(Guid userId, CancellationToken cancellationToken)
@@ -132,7 +134,8 @@ namespace BadmintonApp.Application.Services
             Id = user.Id.ToString(),
             Email = user.Email,
             FirstName = user.FirstName,
-            LastName = user.LastName,            
+            LastName = user.LastName,
+
             DoB = user.DoB
         };
     }

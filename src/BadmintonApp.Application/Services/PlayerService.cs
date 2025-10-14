@@ -27,6 +27,13 @@ public class PlayerService : IPlayerService
         _transactionService = transactionService;
         _userRepository = userRepository;
     }
+
+    public async Task<PlayerDto> GetById(Guid Id, CancellationToken cancellationToken)
+    {
+        var player = await _playerRepository.GetById(Id, cancellationToken);
+        return _mapper.Map<PlayerDto>(player);
+    }
+
     public async Task Update(PlayerUpdateDto dto, CancellationToken cancellationToken)
     {       
         var player = _mapper.Map<Player>(dto);       

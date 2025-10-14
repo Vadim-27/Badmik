@@ -9,6 +9,7 @@ public class StaffUpdateDto
     public string Email { get; set; }    
     public string FirstName { get; set; }
     public string LastName { get; set; }
+    public string ImageUrl { get; set; }
     public Guid ClubId { get; set; }
 
     public DateTime DoB { get; set; }
@@ -24,6 +25,7 @@ public class StaffUpdateDto
     public decimal HourlyRate { get; set; }
     public decimal MonthlySalary { get; set; }
     public string Currency { get; set; }
+    public decimal PerTrainingRate { get; set; }
     public string PayrollNotes { get; set; }
     public string TimeZone { get; set; }
     public string WorkingHours { get; set; }

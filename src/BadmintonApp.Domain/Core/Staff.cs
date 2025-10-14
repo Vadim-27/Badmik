@@ -29,15 +29,13 @@ public class Staff
     public decimal HourlyRate { get; set; }
     public decimal MonthlySalary { get; set; }
     public string Currency { get; set; }
+    public decimal PerTrainingRate { get; set; }
     public string PayrollNotes  { get; set; }
 
     public string TimeZone { get; set; }
     public string WorkingHours { get; set; }
     public string WorkingHoursExceptions { get; set; }
 
-    public string StatusReason { get; set; }
-
-    //public decimal Salary { get; set; }
-    //public List<WorkingHour> WorkingHours { get; set; } = new();
+    public string StatusReason { get; set; }    
 
 }

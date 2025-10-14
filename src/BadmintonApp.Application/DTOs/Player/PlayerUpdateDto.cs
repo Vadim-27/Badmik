@@ -9,6 +9,7 @@ public class PlayerUpdateDto
     public string Email { get; set; }   
     public string FirstName { get; set; }
     public string LastName { get; set; }
+    public string ImageUrl { get; set; }
     public Guid ClubId { get; set; }
     public PlayerLevel Level { get; set; }
 
