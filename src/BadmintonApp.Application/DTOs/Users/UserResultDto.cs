@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BadmintonApp.Application.DTOs.WorkingHourDtos;
+using System;
 
 namespace BadmintonApp.Application.DTOs.Users
 {
@@ -13,5 +14,7 @@ namespace BadmintonApp.Application.DTOs.Users
         public DateTime DoB { get; set; }
         public string Rank { get; set; }
         public string Level { get; set; }
+
+        public WorkingHourDto WorkingHours { get; set; } = new();
     }
 }

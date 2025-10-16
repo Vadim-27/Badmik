@@ -1,4 +1,4 @@
-﻿using BadmintonApp.Application.DTOs.Clubs;
+﻿using BadmintonApp.Application.DTOs.WorkingHourDtos;
 using FluentValidation;
 using System;
 using System.Globalization;

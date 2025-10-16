@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BadmintonApp.Application.DTOs.WorkingHourDtos;
+using System;
 
 namespace BadmintonApp.Application.DTOs.Clubs;
 

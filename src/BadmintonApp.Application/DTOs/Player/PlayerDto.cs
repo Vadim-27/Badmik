@@ -9,5 +9,6 @@ public class PlayerDto
     public Guid Id { get; set; } = Guid.NewGuid();
     public Guid UserId { get; set; }
     public string ImageUrl { get; set; }
+    public string PhoneNumber { get; set; }
     public PlayerLevel Level { get; set; }
 }

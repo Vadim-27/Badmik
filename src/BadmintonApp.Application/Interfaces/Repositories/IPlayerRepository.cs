@@ -1,6 +1,9 @@
-﻿using BadmintonApp.Domain.Core;
+﻿using BadmintonApp.Application.DTOs.Logs;
+using BadmintonApp.Domain.Core;
+using BadmintonApp.Domain.Logs;
 using BadmintonApp.Domain.Trainings.Enums;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,3 +15,4 @@ public interface IPlayerRepository
     Task Update(Player player, CancellationToken cancellationToken);
     Task<Player> GetById(Guid id, CancellationToken cancellationToken);
 }
+    

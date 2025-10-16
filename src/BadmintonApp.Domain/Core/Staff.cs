@@ -1,5 +1,6 @@
 ﻿using BadmintonApp.Domain.Clubs;
 using BadmintonApp.Domain.Enums;
+using BadmintonApp.Domain.WorkingHours;
 using System;
 using System.Collections.Generic;
 
@@ -24,6 +25,7 @@ public class Staff
     public DateOnly EndDate { get; set; }
     public string Notes { get; set; }
 
+    public List<WorkingHour> WorkingHours { get; set; } = new();
     public SalaryType SalaryType { get; set; }
 
     public decimal HourlyRate { get; set; }
@@ -32,10 +34,8 @@ public class Staff
     public decimal PerTrainingRate { get; set; }
     public string PayrollNotes  { get; set; }
 
-    public string TimeZone { get; set; }
-    public string WorkingHours { get; set; }
-    public string WorkingHoursExceptions { get; set; }
-
+    public string TimeZone { get; set; }   
+    //public string WorkingHoursExceptions { get; set; }
     public string StatusReason { get; set; }    
 
 }

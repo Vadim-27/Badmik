@@ -9,4 +9,6 @@ public interface IPlayerService
 {
     Task Update(PlayerUpdateDto dto, CancellationToken cancellationToken);
     Task<PlayerDto> GetById(Guid Id, CancellationToken cancellationToken);
+
+
 }

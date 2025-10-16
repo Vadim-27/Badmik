@@ -1,9 +1,6 @@
-﻿using BadmintonApp.Domain.Trainings.Enums;
+﻿using BadmintonApp.Domain.WorkingHours;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BadmintonApp.Domain.Core
 {
@@ -13,13 +10,14 @@ namespace BadmintonApp.Domain.Core
         public string Email { get; set; }
         public string PasswordHash { get; set; }
         public string FirstName { get; set; }
-        public string LastName { get; set; }        
+        public string LastName { get; set; }
+        public string PhoneNumber { get; set; }
 
         public DateTime DoB { get; set; }
         public bool IsActive { get; set; }
         public DateTime CreatedAt { get; set; }
-        //public string Rank { get; set; }        
+          
         public Guid? ClubId { get; set; }
-        public string  ImageUrl { get; set; }
+        public string ImageUrl { get; set; }        
     }
 }

@@ -3,6 +3,7 @@ using System;
 using BadmintonApp.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BadmintonApp.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251015103001_add_PhoneNumber")]
+    partial class add_PhoneNumber
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.7");
@@ -38,6 +41,36 @@ namespace BadmintonApp.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Clubs");
+                });
+
+            modelBuilder.Entity("BadmintonApp.Domain.Clubs.WorkingHour", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ClubId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("DayOfWeek")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<TimeOnly>("EndTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("StaffId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<TimeOnly>("StartTime")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClubId");
+
+                    b.HasIndex("StaffId");
+
+                    b.ToTable("WorkingHours");
                 });
 
             modelBuilder.Entity("BadmintonApp.Domain.Core.Permission", b =>
@@ -593,6 +626,12 @@ namespace BadmintonApp.Infrastructure.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("WorkingHours")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("WorkingHoursExceptions")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ClubId");
@@ -789,34 +828,19 @@ namespace BadmintonApp.Infrastructure.Migrations
                     b.ToTable("TrainingQueueEntries");
                 });
 
-            modelBuilder.Entity("BadmintonApp.Domain.WorkingHours.WorkingHour", b =>
+            modelBuilder.Entity("BadmintonApp.Domain.Clubs.WorkingHour", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                    b.HasOne("BadmintonApp.Domain.Clubs.Club", "Club")
+                        .WithMany("WorkingHours")
+                        .HasForeignKey("ClubId");
 
-                    b.Property<Guid?>("ClubId")
-                        .HasColumnType("TEXT");
+                    b.HasOne("BadmintonApp.Domain.Core.Staff", "Staff")
+                        .WithMany()
+                        .HasForeignKey("StaffId");
 
-                    b.Property<int>("DayOfWeek")
-                        .HasColumnType("INTEGER");
+                    b.Navigation("Club");
 
-                    b.Property<TimeOnly>("EndTime")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("StaffId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<TimeOnly>("StartTime")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClubId");
-
-                    b.HasIndex("StaffId");
-
-                    b.ToTable("WorkingHours");
+                    b.Navigation("Staff");
                 });
 
             modelBuilder.Entity("BadmintonApp.Domain.Core.Player", b =>
@@ -928,21 +952,6 @@ namespace BadmintonApp.Infrastructure.Migrations
                         .HasForeignKey("TrainingId");
                 });
 
-            modelBuilder.Entity("BadmintonApp.Domain.WorkingHours.WorkingHour", b =>
-                {
-                    b.HasOne("BadmintonApp.Domain.Clubs.Club", "Club")
-                        .WithMany("WorkingHours")
-                        .HasForeignKey("ClubId");
-
-                    b.HasOne("BadmintonApp.Domain.Core.Staff", "Staff")
-                        .WithMany("WorkingHours")
-                        .HasForeignKey("StaffId");
-
-                    b.Navigation("Club");
-
-                    b.Navigation("Staff");
-                });
-
             modelBuilder.Entity("BadmintonApp.Domain.Clubs.Club", b =>
                 {
                     b.Navigation("UserRoles");
@@ -958,11 +967,6 @@ namespace BadmintonApp.Infrastructure.Migrations
             modelBuilder.Entity("BadmintonApp.Domain.Core.Role", b =>
                 {
                     b.Navigation("RolePermissions");
-                });
-
-            modelBuilder.Entity("BadmintonApp.Domain.Core.Staff", b =>
-                {
-                    b.Navigation("WorkingHours");
                 });
 
             modelBuilder.Entity("BadmintonApp.Domain.Trainings.Training", b =>

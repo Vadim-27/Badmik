@@ -2,6 +2,7 @@
 using BadmintonApp.Domain.Core;
 using BadmintonApp.Domain.Logs;
 using BadmintonApp.Domain.Trainings;
+using BadmintonApp.Domain.WorkingHours;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

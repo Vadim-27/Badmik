@@ -1,4 +1,5 @@
 ﻿using BadmintonApp.Application.DTOs.Clubs;
+using BadmintonApp.Application.DTOs.WorkingHourDtos;
 using BadmintonApp.Application.Interfaces.Clubs;
 using BadmintonApp.Application.Validation;
 using FluentValidation;
