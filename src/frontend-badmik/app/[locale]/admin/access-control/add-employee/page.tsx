@@ -1,4 +1,4 @@
-import AddEmployee from '@/app/components/shared/Employees/AddEmployee/AddEmployee';
+import AddEmployee from '@/app/components/shared/Staff/AddStaff/AddStaff';
 
 const AddEmployeePage = () => {
     return (

@@ -1,0 +1,76 @@
+@use '../../../../../styles/mixins' as *;
+
+.actionsBar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.button {
+  appearance: none;
+  border: 1px solid var(--btn-primary-border);
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  transition: transform .02s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease;
+
+  &:active { transform: translateY(1px); }
+  &:disabled { opacity: .6; cursor: not-allowed; }
+}
+
+.buttonGhost {
+  background: #fff;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.popoverRoot { position: relative; display: inline-block; }
+
+.popoverPanel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  z-index: 1000;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
+  padding: 10px;
+}
+
+.chipsRow {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  max-width: 360px;
+}
+
+/* стиль "пігулок" як на скріні */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: #f8fafc;
+  color: #334155;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  user-select: none;
+
+  &:hover { background: #eef1f6; }
+}
+
+.chipActive {
+  background: #e9f1ff;
+  border-color: #c7d2fe;
+  color: #0b3b8c;
+}

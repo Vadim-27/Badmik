@@ -1,0 +1,236 @@
+[
+    {
+      "id": "club1",
+      "name": "Sport Life Позняки",
+      "badge": "Топ",
+      "city": "Київ",
+      "address": "вулиця Михайла Драгоманова, 40Г, Київ",
+      "descriptionShort": "Звичайне тренування з тренером",
+      "description": "Сучасний простір для тренувань та активного відпочинку. Створені комфортні умови для занять.",
+      "features": {
+        "courts": 2,
+        "flooring": "Вінілове покриття",
+        "parking": true,
+        "water": true,
+        "airConditioning": true,
+        "trainingsRoom": true,
+        "showers": false,
+        "swimmingPool": false,
+        "squashCenter": false,
+        "groupClasses": false,
+        "laserSpa": false
+      },
+      "images": [
+        "/clubs/club1.jpg",
+        "/clubs/club1-1.jpg",
+        "/clubs/club1-2.jpg",
+        "/clubs/club1-3.jpg"
+      ],
+      "priceFrom": 500,
+      "currency": "UAH",
+      "imagePrimary": "/clubs/club1.jpg",
+      "seasonTicketCategories": [
+        "Sport", 
+        "Sport + Pool", 
+        "Premium", 
+        "Premium Sport", 
+        "Lux & SPA"
+      ]
+     
+    },
+    {
+      "id": "club2",
+      "name": "Sport Life Позняки",
+      "badge": "Топ",
+      "city": "Київ",
+      "address": "вулиця Михайла Драгоманова, 40Г, Київ",
+      "descriptionShort": "Звичайне тренування з тренером",
+      "description": "Сучасний простір для тренувань та активного відпочинку. Створені комфортні умови для занять.",
+      "features": {
+        "courts": 2,
+        "flooring": "Вінілове покриття",
+        "parking": true,
+        "water": true,
+        "airConditioning": true,
+        "trainingsRoom": true,
+        "showers": false,
+        "swimmingPool": false,
+        "squashCenter": false,
+        "groupClasses": false,
+        "laserSpa": false
+      },
+      "images": [
+        "/clubs/club1.jpg",
+        "/clubs/club1-1.jpg",
+        "/clubs/club1-2.jpg",
+        "/clubs/club1-3.jpg"
+      ],
+      "priceFrom": 500,
+      "currency": "UAH",
+      "imagePrimary": "/clubs/club1.jpg",
+      "seasonTicketCategories": [
+        "Sport", 
+        "Sport + Pool", 
+        "Premium", 
+        "Premium Sport", 
+        "Lux & SPA"
+      ]
+     
+    },
+    {
+      "id": "club3",
+      "name": "Sport Life Позняки",
+      "badge": "Топ",
+      "city": "Київ",
+      "address": "вулиця Михайла Драгоманова, 40Г, Київ",
+      "descriptionShort": "Звичайне тренування з тренером",
+      "description": "Сучасний простір для тренувань та активного відпочинку. Створені комфортні умови для занять.",
+      "features": {
+        "courts": 2,
+        "flooring": "Вінілове покриття",
+        "parking": true,
+        "water": true,
+        "airConditioning": true,
+        "trainingsRoom": true,
+        "showers": false,
+        "swimmingPool": false,
+        "squashCenter": false,
+        "groupClasses": false,
+        "laserSpa": false
+      },
+      "images": [
+        "/clubs/club1.jpg",
+        "/clubs/club1-1.jpg",
+        "/clubs/club1-2.jpg",
+        "/clubs/club1-3.jpg"
+      ],
+      "priceFrom": 500,
+      "currency": "UAH",
+      "imagePrimary": "/clubs/club1.jpg",
+      "seasonTicketCategories": [
+        "Sport", 
+        "Sport + Pool", 
+        "Premium", 
+        "Premium Sport", 
+        "Lux & SPA"
+      ]
+     
+    },
+    {
+      "id": "club4",
+      "name": "Sport Life Позняки",
+      "badge": "Топ",
+      "city": "Київ",
+      "address": "вулиця Михайла Драгоманова, 40Г, Київ",
+      "descriptionShort": "Звичайне тренування з тренером",
+      "description": "Сучасний простір для тренувань та активного відпочинку. Створені комфортні умови для занять.",
+      "features": {
+        "courts": 2,
+        "flooring": "Вінілове покриття",
+        "parking": true,
+        "water": true,
+        "airConditioning": true,
+        "trainingsRoom": true,
+        "showers": false,
+        "swimmingPool": false,
+        "squashCenter": false,
+        "groupClasses": false,
+        "laserSpa": false
+      },
+      "images": [
+        "/clubs/club1.jpg",
+        "/clubs/club1-1.jpg",
+        "/clubs/club1-2.jpg",
+        "/clubs/club1-3.jpg"
+      ],
+      "priceFrom": 500,
+      "currency": "UAH",
+      "imagePrimary": "/clubs/club1.jpg",
+      "seasonTicketCategories": [
+        "Sport", 
+        "Sport + Pool", 
+        "Premium", 
+        "Premium Sport", 
+        "Lux & SPA"
+      ]
+     
+    },
+    {
+      "id": "club5",
+      "name": "Sport Life Позняки",
+      "badge": "Топ",
+      "city": "Київ",
+      "address": "вулиця Михайла Драгоманова, 40Г, Київ",
+      "descriptionShort": "Звичайне тренування з тренером",
+      "description": "Сучасний простір для тренувань та активного відпочинку. Створені комфортні умови для занять.",
+      "features": {
+        "courts": 2,
+        "flooring": "Вінілове покриття",
+        "parking": true,
+        "water": true,
+        "airConditioning": true,
+        "trainingsRoom": true,
+        "showers": false,
+        "swimmingPool": false,
+        "squashCenter": false,
+        "groupClasses": false,
+        "laserSpa": false
+      },
+      "images": [
+        "/clubs/club1.jpg",
+        "/clubs/club1-1.jpg",
+        "/clubs/club1-2.jpg",
+        "/clubs/club1-3.jpg"
+      ],
+      "priceFrom": 500,
+      "currency": "UAH",
+      "imagePrimary": "/clubs/club1.jpg",
+      "seasonTicketCategories": [
+        "Sport", 
+        "Sport + Pool", 
+        "Premium", 
+        "Premium Sport", 
+        "Lux & SPA"
+      ]
+     
+    },
+    {
+      "id": "club6",
+      "name": "Sport Life Позняки",
+      "badge": "Топ",
+      "city": "Київ",
+      "address": "вулиця Михайла Драгоманова, 40Г, Київ",
+      "descriptionShort": "Звичайне тренування з тренером",
+      "description": "Сучасний простір для тренувань та активного відпочинку. Створені комфортні умови для занять.",
+      "features": {
+        "courts": 2,
+        "flooring": "Вінілове покриття",
+        "parking": true,
+        "water": true,
+        "airConditioning": true,
+        "trainingsRoom": true,
+        "showers": false,
+        "swimmingPool": false,
+        "squashCenter": false,
+        "groupClasses": false,
+        "laserSpa": false
+      },
+      "images": [
+        "/clubs/club1.jpg",
+        "/clubs/club1-1.jpg",
+        "/clubs/club1-2.jpg",
+        "/clubs/club1-3.jpg"
+      ],
+      "priceFrom": 500,
+      "currency": "UAH",
+      "imagePrimary": "/clubs/club1.jpg",
+      "seasonTicketCategories": [
+        "Sport", 
+        "Sport + Pool", 
+        "Premium", 
+        "Premium Sport", 
+        "Lux & SPA"
+      ]
+     
+    }
+]

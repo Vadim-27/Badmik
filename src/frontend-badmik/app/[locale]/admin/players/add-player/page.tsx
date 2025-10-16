@@ -1,4 +1,4 @@
-import AddUser from '@/app/components/shared/players/AddUser/AddUser';
+import AddUser from '@/app/components/shared/Players/AddPlayer/AddPlayer';
 
 const AddPlayerPage = () => {
     return (

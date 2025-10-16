@@ -10,7 +10,7 @@ export function useClubs() {
   return useQuery<Club[]>({
     queryKey: ['clubs'],
     queryFn: async () => {
-      const r = await api.get('/Clubs');
+      const r = await api.get('/Clubs/GetAll');
       // бекенд інколи повертає { result: Club[] }
       return Array.isArray(r.data) ? r.data : r.data?.result ?? [];
     },
