@@ -1,0 +1,27 @@
+ [
+    {
+      "id": 1,
+     
+      "image": "/ClubPhoto/PhotoClub1.jpg"
+    },
+    {
+      "id": 2,
+     
+      "image": "/ClubPhoto/PhotoClub2.jpg"
+    },
+    {
+      "id": 3,
+      
+      "image": "/ClubPhoto/PhotoClub3.jpg"
+    },
+    {
+      "id": 4,
+      
+      "image": "/ClubPhoto/PhotoClub4.jpg"
+    },
+    {
+      "id": 5,
+      
+      "image": "/ClubPhoto/PhotoClub5.jpg" 
+    }
+  ]

@@ -48,6 +48,8 @@ namespace BadmintonApp.Infrastructure.Persistence
         public DbSet<Permission> Permissions => Set<Permission>();
         public DbSet<Role> Roles => Set<Role>();
         public DbSet<Log> Logs => Set<Log>();
+        public DbSet<Player> Players => Set<Player>();
+        public DbSet<Staff> Staffs => Set<Staff>();
 
         private void SeedData(ModelBuilder modelBuilder)
         {

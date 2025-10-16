@@ -1,0 +1,34 @@
+ [
+    {
+      "id": 1,
+      "name": "Давід Младенов",
+      "specialization": "Персональний тренер по бадмінтону",
+      "image": "/coaches/coach1.jpg"
+    },
+    {
+      "id": 2,
+      "name": "Богдан Севрук",
+      "specialization": "Персональний тренер по фітнесу",
+      "age": 32,
+      "image": "/coaches/coach2.jpg"
+    },
+    {
+      "id": 3,
+      "name": "Дмитро Биховченко",
+      "specialization": "Персональний тренер по бадмінтону",
+      "image": "/coaches/coach3.jpg"
+    },
+    {
+      "id": 4,
+      "name": "Тетяна Петренко",
+      "specialization": "Персональний тренер по бадмінтону",
+      "image": "/coaches/coach4.jpg"
+    },
+    {
+      "id": 5,
+      "name": "Ігор Ковальчук",
+      "specialization": "Персональний тренер по бадмінтону",
+      "image": "/coaches/coach5.jpg" 
+    }
+  ]
+

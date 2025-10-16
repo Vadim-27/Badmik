@@ -1,0 +1,281 @@
+// .hero{
+//     position: relative;
+//     margin-top: 20px;
+//     margin-left: auto;
+//     margin-right: auto;
+//     margin-bottom: 234px;
+//     padding: 40px 80px 54px 80px;
+//     width: 1880px;
+//     height: 700px;
+//     background: var(--color-primary-dark-bg);
+//     border-radius: 40px;
+// }
+// .breadcrumbsWrapper{
+//     margin-top: 100px;
+// }
+// .containerHero{
+//     margin-top: 54px;
+//     display: flex;
+//     justify-content: space-between;
+//     align-items: center;
+// }
+
+// .contentHero{
+//     margin-left: auto;
+//     margin-right: auto;
+//     display: flex;
+//     flex-direction: column;
+//     gap: 54px;
+//     // width: 57%;
+// }
+
+// .titleHero{
+//     text-align: center;
+//     color: var(--text-color-secondary-light);
+// font-family: var(--font-title-Unbounded);
+// font-size: 3.375em;
+// font-style: normal;
+// font-weight: 700;
+// line-height: 1.26; /* 125.926% */
+// letter-spacing: 1.62px;
+// }
+// .addressWrapper{
+//   display: flex; 
+//   align-items: center; 
+//   gap: 14px;
+
+//   opacity: .95;
+//   justify-content: center;
+// }
+// .textHero{
+//     text-align: center;
+//     // padding: 0 120px;
+//     color: var(--text-color-primary-light);
+// font-family: var(--font-display-Manrope);
+// font-size: 1.5em;
+// font-style: normal;
+// font-weight: 400;
+// line-height: 1.41; /* 141.667% */
+// }
+// .imageWrapper {
+//   position: relative;
+//   border-radius: 16px;
+//   width: 705px;
+//   height: 660px;
+// }
+
+// .image {
+//   object-fit: cover; 
+//   border-radius: 16px;
+// }
+
+// .MapIcon{
+//   width: 1.5em;
+//   height: 1.5em;
+//   fill: var(--accent-color-primary); 
+// }
+
+@use "mixins" as *;
+
+.hero {
+  position: relative;
+
+  /* контейнер */
+  margin: 12px auto 64px;
+  inline-size: min(100%, 1880px);
+  border-radius: 28px;
+
+  /* падінги мобайл-фьорст */
+  padding: 16px;
+//   background: var(--color-primary-dark-bg);
+
+
+       background-image:
+    linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.85) 100%),
+    var(--hero-bg);
+  background-position: center, center;
+  background-size: cover, cover;
+  background-repeat: no-repeat, no-repeat;
+  background-color: #161616;
+
+  /* тінь для блоку з фоном */
+  box-shadow:
+    0 189px 189px 0 rgba(0, 0, 0, 0.05),
+    0 47px 104px 0 rgba(0, 0, 0, 0.05);
+  /* висота без жорсткої фіксації */
+  min-block-size: 360px;
+
+  @include media-rules(tablet) {
+    // margin-block-end: 96px;
+    padding: 24px 24px 28px;
+    border-radius: 32px;
+    min-block-size: 440px;
+  }
+
+  @include media-rules(laptop) {
+    margin-block-start: 20px;
+    // margin-block-end: 160px;
+    padding: 32px 48px 36px;
+    border-radius: 36px;
+    min-block-size: 560px;
+  }
+
+  @include media-rules(desktop) {
+    // margin-block-end: 234px;
+    padding: 40px 80px 54px;
+    border-radius: 40px;
+    min-block-size: 700px; 
+  }
+
+
+}
+
+.breadcrumbsWrapper {
+  margin-top: 16px;
+
+  @include media-rules(tablet) { margin-top: 24px; }
+  @include media-rules(laptop) { margin-top: 40px; }
+  @include media-rules(desktop) { margin-top: 100px; } /* як у макеті */
+}
+
+.containerHero {
+  margin-top: 24px;
+
+  display: flex;
+  flex-direction: column;  /* контент по центру в колонку */
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+
+  @include media-rules(tablet) {
+    margin-top: 36px;
+    gap: 20px;
+  }
+
+  @include media-rules(laptop) {
+    margin-top: 48px;
+    gap: 28px;
+  }
+
+  @include media-rules(desktop) {
+    margin-top: 54px;
+    gap: 32px;
+  }
+}
+
+.contentHero {
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+
+  inline-size: 100%;
+  max-inline-size: 1100px;
+
+  @include media-rules(tablet) { gap: 20px; }
+  @include media-rules(laptop) { gap: 28px; }
+  @include media-rules(desktop) { gap: 54px; }
+}
+
+.titleHero {
+  text-align: center;
+  color: var(--text-color-secondary-light);
+  font-family: var(--font-title-Unbounded);
+  font-weight: 700;
+
+  /* мобільний */
+  font-size: 1.75rem;
+  line-height: 1.25;
+  letter-spacing: 0.5px;
+
+  @include media-rules(tablet) {
+    font-size: 2rem;
+    letter-spacing: 0.8px;
+  }
+
+  @include media-rules(laptop) {
+    font-size: 2.5rem;
+    letter-spacing: 1.1px;
+  }
+
+  @include media-rules(desktop) {
+    font-size: 3.375rem; /* 54px */
+    line-height: 1.26;
+    letter-spacing: 1.62px;
+  }
+}
+
+.addressWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  opacity: 0.95;
+
+
+  flex-wrap: wrap;
+  text-align: center;
+}
+
+.textHero {
+  color: var(--text-color-primary-light);
+  font-family: var(--font-display-Manrope);
+  font-weight: 400;
+
+  /* мобільний */
+  font-size: 1rem;
+  line-height: 1.5;
+
+  @include media-rules(tablet) {
+    font-size: 1.125rem;
+    line-height: 1.55;
+  }
+
+  @include media-rules(laptop) {
+    font-size: 1.25rem;
+  }
+
+  @include media-rules(desktop) {
+    font-size: 1.5rem;  /* 24px */
+    line-height: 1.41;
+  }
+}
+
+
+.imageWrapper {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+
+  inline-size: 100%;
+  aspect-ratio: 4 / 3;
+
+  @include media-rules(tablet) { aspect-ratio: 3 / 2; }
+
+  @include media-rules(laptop) {
+    inline-size: 43%;
+    max-inline-size: 750px;
+    aspect-ratio: 1 / 1;
+  }
+
+  @include media-rules(desktop) {
+    inline-size: 40%;
+    aspect-ratio: auto;
+    block-size: 660px;
+  }
+}
+
+.image { object-fit: cover; border-radius: inherit; }
+
+.MapIcon {
+  inline-size: 1.25em;
+  block-size: 1.25em;
+  fill: var(--accent-color-primary);
+
+  @include media-rules(tablet) {
+    inline-size: 1.5em;
+    block-size: 1.5em;
+  }
+}

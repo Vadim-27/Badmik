@@ -9,7 +9,8 @@
       "addTrainingHeader":"Додати тренування",
       "usersHeader":"Гравці клубу",
       "trainingsHeader":"Тренування",
-      "editUserHeader":"Редагування користувача",
+      "editStaffHeader":"Редагування персоналу",
+      "addStaffHeader":"Додати персонал",
       "employeeHeader": "Робітники клубів"
     }
   },

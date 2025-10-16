@@ -8,7 +8,8 @@
       "addTrainingHeader": "Adding training",
       "usersHeader": "Players club",
       "trainingsHeader": "Trainings",
-      "editUserHeader": "Editing the User",
+      "editStaffHeader": "Editing the Staff",
+      "addStaffHeader": "Adding a Staff",
       "employeeHeader": "Club employees"
     }
   },

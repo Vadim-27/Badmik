@@ -1,5 +1,5 @@
 
-import EmployeeDetail from '@/app/components/shared/Employees/EmployeeDetail/EmployeeDetail';
+import EmployeeDetail from '@/app/components/shared/Staff/StaffDetail/StaffDetail';
 import { usersFromMok } from '@/data/mockUsers';
 
 type Params = {
