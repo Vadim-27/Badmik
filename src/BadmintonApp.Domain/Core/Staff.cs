@@ -22,7 +22,7 @@ public class Staff
 
     public string Title { get; set; }
     public DateOnly StartDate { get; set; }
-    public DateOnly EndDate { get; set; }
+    public DateOnly ? EndDate { get; set; }
     public string Notes { get; set; }
 
     public List<WorkingHour> WorkingHours { get; set; } = new();

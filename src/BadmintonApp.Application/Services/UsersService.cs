@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BadmintonApp.Application.DTOs.Common;
 using BadmintonApp.Application.DTOs.Player;
 using BadmintonApp.Application.DTOs.Staff;
 using BadmintonApp.Application.DTOs.Users;
@@ -110,9 +111,9 @@ namespace BadmintonApp.Application.Services
             return user == null ? null : MapToProfile(user);
         }
 
-        public async Task<List<UserResultDto>> GetAllAsync(string? filter = null, CancellationToken cancellationToken = default)
+        public async Task<List<UserResultDto>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            var users = await _userRepository.GetAllAsync(filter, cancellationToken);
+            var users = await _userRepository.GetAllAsync(cancellationToken);
             return users.Select(MapToProfile).ToList();
         }
 

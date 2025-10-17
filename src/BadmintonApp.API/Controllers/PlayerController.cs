@@ -52,9 +52,9 @@ namespace BadmintonApp.API.Controllers
 
         //[Authorize]
         [HttpGet("GetAll")]
-        public async Task<ActionResult> GetAll([FromQuery] string? filter, CancellationToken cancellationToken)
+        public async Task<ActionResult> GetAll([FromQuery] CancellationToken cancellationToken)
         {
-            List<UserResultDto> users = await _usersService.GetAllAsync(filter, cancellationToken);
+            List<UserResultDto> users = await _usersService.GetAllAsync(cancellationToken);
             return Ok(users);
         }
 

@@ -14,7 +14,7 @@ namespace BadmintonApp.Application.Interfaces.Users
         Task RegisterPlayerAsync(PlayerRegisterDto dto, CancellationToken cancellationToken);
         Task RegisterStaffAsync(StaffRegisterDto dto, CancellationToken cancellationToken);
         Task<UserResultDto> GetByIdAsync(Guid userId, CancellationToken cancellationToken);
-        Task<List<UserResultDto>> GetAllAsync(string? filter, CancellationToken cancellationToken);
+        Task<List<UserResultDto>> GetAllAsync(CancellationToken cancellationToken);
         Task<UserResultDto> UpdateAsync(Guid userId, UpdateUserDto dto, CancellationToken cancellationToken);
         Task DeleteAsync(Guid userId, CancellationToken cancellationToken);
     }

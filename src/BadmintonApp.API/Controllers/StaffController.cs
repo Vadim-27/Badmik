@@ -1,4 +1,6 @@
-﻿using BadmintonApp.Application.DTOs.Staff;
+﻿using BadmintonApp.Application.DTOs.Common;
+using BadmintonApp.Application.DTOs.Paginations;
+using BadmintonApp.Application.DTOs.Staff;
 using BadmintonApp.Application.Interfaces.Staffs;
 using BadmintonApp.Application.Interfaces.Users;
 using Microsoft.AspNetCore.Mvc;
@@ -46,11 +48,10 @@ namespace BadmintonApp.API.Controllers
         }
 
         [HttpGet("GetAll")]
-        public async Task<ActionResult> GetAll(CancellationToken cancellationToken)
+        public async Task<ActionResult> GetAll([FromQuery]PaginationFilterDto paginationFilterDto, CancellationToken cancellationToken)
         {
-            List<StaffDto> staffDtos = await _staffService.GetAll(cancellationToken);
-
-            return Ok(staffDtos);
+            var result = await _staffService.GetAll(paginationFilterDto, cancellationToken);
+            return Ok(result);
         }
 
     }

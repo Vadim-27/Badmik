@@ -1,4 +1,5 @@
-﻿using BadmintonApp.Application.Interfaces.Repositories;
+﻿using BadmintonApp.Application.DTOs.Common;
+using BadmintonApp.Application.Interfaces.Repositories;
 using BadmintonApp.Domain.Core;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -31,7 +32,7 @@ namespace BadmintonApp.Infrastructure.Persistence.Repositories
                 .FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
         }
 
-        public async Task<List<User>> GetAllAsync(string? filter = null, CancellationToken cancellationToken = default)
+        public async Task<List<User>> GetAllAsync(CancellationToken cancellationToken = default)
         {
             return await _context.Users
                 .AsNoTracking()

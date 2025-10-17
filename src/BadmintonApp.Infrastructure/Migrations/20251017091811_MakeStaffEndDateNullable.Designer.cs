@@ -3,6 +3,7 @@ using System;
 using BadmintonApp.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BadmintonApp.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251017091811_MakeStaffEndDateNullable")]
+    partial class MakeStaffEndDateNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.7");
@@ -37,7 +40,7 @@ namespace BadmintonApp.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Clubs", (string)null);
+                    b.ToTable("Clubs");
                 });
 
             modelBuilder.Entity("BadmintonApp.Domain.Core.Permission", b =>
@@ -51,7 +54,7 @@ namespace BadmintonApp.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Permissions", (string)null);
+                    b.ToTable("Permissions");
 
                     b.HasData(
                         new
@@ -207,7 +210,7 @@ namespace BadmintonApp.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Players", (string)null);
+                    b.ToTable("Players");
                 });
 
             modelBuilder.Entity("BadmintonApp.Domain.Core.Role", b =>
@@ -221,7 +224,7 @@ namespace BadmintonApp.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("Roles");
 
                     b.HasData(
                         new
@@ -258,7 +261,7 @@ namespace BadmintonApp.Infrastructure.Migrations
 
                     b.HasIndex("PermissionId");
 
-                    b.ToTable("RolePermissions", (string)null);
+                    b.ToTable("RolePermissions");
 
                     b.HasData(
                         new
@@ -599,7 +602,7 @@ namespace BadmintonApp.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Staffs", (string)null);
+                    b.ToTable("Staffs");
                 });
 
             modelBuilder.Entity("BadmintonApp.Domain.Core.User", b =>
@@ -640,7 +643,7 @@ namespace BadmintonApp.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("BadmintonApp.Domain.Core.UserClubRole", b =>
@@ -660,7 +663,7 @@ namespace BadmintonApp.Infrastructure.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("UserClubRoles", (string)null);
+                    b.ToTable("UserClubRoles");
                 });
 
             modelBuilder.Entity("BadmintonApp.Domain.Core.UserRole", b =>
@@ -675,7 +678,7 @@ namespace BadmintonApp.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserRoles", (string)null);
+                    b.ToTable("UserRoles");
                 });
 
             modelBuilder.Entity("BadmintonApp.Domain.Logs.Log", b =>
@@ -698,7 +701,7 @@ namespace BadmintonApp.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Logs", (string)null);
+                    b.ToTable("Logs");
                 });
 
             modelBuilder.Entity("BadmintonApp.Domain.Trainings.Training", b =>
@@ -742,7 +745,7 @@ namespace BadmintonApp.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Trainings", (string)null);
+                    b.ToTable("Trainings");
                 });
 
             modelBuilder.Entity("BadmintonApp.Domain.Trainings.TrainingParticipant", b =>
@@ -764,7 +767,7 @@ namespace BadmintonApp.Infrastructure.Migrations
 
                     b.HasIndex("TrainingId");
 
-                    b.ToTable("TrainingParticipants", (string)null);
+                    b.ToTable("TrainingParticipants");
                 });
 
             modelBuilder.Entity("BadmintonApp.Domain.Trainings.TrainingQueueEntry", b =>
@@ -786,7 +789,7 @@ namespace BadmintonApp.Infrastructure.Migrations
 
                     b.HasIndex("TrainingId");
 
-                    b.ToTable("TrainingQueueEntries", (string)null);
+                    b.ToTable("TrainingQueueEntries");
                 });
 
             modelBuilder.Entity("BadmintonApp.Domain.WorkingHours.WorkingHour", b =>
@@ -816,7 +819,7 @@ namespace BadmintonApp.Infrastructure.Migrations
 
                     b.HasIndex("StaffId");
 
-                    b.ToTable("WorkingHours", (string)null);
+                    b.ToTable("WorkingHours");
                 });
 
             modelBuilder.Entity("BadmintonApp.Domain.Core.Player", b =>

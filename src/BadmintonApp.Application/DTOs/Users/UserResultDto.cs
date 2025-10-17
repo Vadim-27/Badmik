@@ -11,7 +11,7 @@ namespace BadmintonApp.Application.DTOs.Users
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Role { get; set; }
-        public DateTime DoB { get; set; }
+        public DateTime  DoB { get; set; }
         public string Rank { get; set; }
         public string Level { get; set; }
 

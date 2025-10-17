@@ -1,9 +1,10 @@
-﻿using BadmintonApp.Application.DTOs.Staff;
+﻿using BadmintonApp.Application.DTOs.Common;
+using BadmintonApp.Application.DTOs.Paginations;
 using BadmintonApp.Application.Interfaces.Repositories;
 using BadmintonApp.Domain.Core;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -46,14 +47,33 @@ public class StaffRepository : IStaffRepository
     {
         return await _dbContext.Staffs
            .AsNoTracking()
-           .FirstAsync(x => x.Id == id, cancellationToken);              
+           .Include(x => x.User)
+           .FirstAsync(x => x.Id == id, cancellationToken);
     }
 
-    public async Task<List<Staff>> GetAll(CancellationToken cancellationToken)
+    public async Task<PaginationListDto<Staff>> GetAll(PaginationFilterDto paginationFilterDto, CancellationToken cancellationToken)
     {
-        return await _dbContext.Staffs
-            .AsNoTracking()
-            .Include(x => x.User)                       
+        var query = _dbContext.Staffs
+               .AsNoTracking()
+               .Include(x => x.User)
+               .OrderBy(x => x.User.LastName)
+               .AsQueryable();
+
+        var totalCount = await query.CountAsync(cancellationToken);
+
+        var items = await query
+            .Skip((paginationFilterDto.Page - 1) * paginationFilterDto.PageSize)
+            .Take(paginationFilterDto.PageSize)
             .ToListAsync(cancellationToken);
+
+        return new PaginationListDto<Staff>
+        {
+            List = items,
+            TotalCount = totalCount,
+            Page = paginationFilterDto.Page,
+            PageSize = paginationFilterDto.PageSize
+
+
+        };
     }
 }
