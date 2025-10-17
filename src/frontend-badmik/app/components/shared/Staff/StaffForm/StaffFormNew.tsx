@@ -1,9 +1,4 @@
-// const StaffFormNew =() => {
-//     return (
-//         <form ></form>
 
-//     )
-// }
 // export default StaffFormNew;
 
 'use client';
@@ -67,12 +62,14 @@ type Props = {
   onSubmitUpdate?: (adminId: string, data: FormValues) => Promise<void>;
   isChanged?: boolean;
   setIsChanged?: (v: boolean) => void;
+  busy?: boolean; // ⬅️ додали
 };
 
 export type StaffFormHandle = {
   submit: () => void;
   isValid: () => boolean;
   getValues?: () => FormValues;
+  setFieldError?: (name: keyof FormValues, message: string) => void;
 };
 
 function isAtLeast8Years(oldDateStr: string) {
@@ -93,7 +90,7 @@ const noWhitespace = /^\S+$/;
 // const EMPLOYMENT_OPTIONS: EmploymentType[] = ['Employee', 'Contractor', 'PartTime', 'Volunteer'];
 
 const StaffFormNew = forwardRef<StaffFormHandle, Props>(function EmployeeForm(
-  { mode, adminId, defaultValues, onSubmitCreate, onSubmitUpdate, setIsChanged },
+  { mode, adminId, defaultValues, onSubmitCreate, onSubmitUpdate, setIsChanged, busy },
   ref
 ) {
   // сьогодні у форматі yyyy-mm-dd для min у даті
@@ -107,6 +104,7 @@ const StaffFormNew = forwardRef<StaffFormHandle, Props>(function EmployeeForm(
     formState: { errors, isDirty, isValid },
     getValues,
     setValue,
+    setError,
   } = useForm<FormValues>({
     mode: 'all',
     defaultValues: {
@@ -176,9 +174,10 @@ const StaffFormNew = forwardRef<StaffFormHandle, Props>(function EmployeeForm(
         monthlySalary: raw.monthlySalary || 0,
         perTrainingRate: raw.perTrainingRate || 0,
         currency: raw.currency || null,
-        
+
         payrollNotes: raw.payrollNotes?.trim() ? raw.payrollNotes : null,
         notes: raw.notes?.trim() ? raw.notes : null,
+        
       };
 console.log('📦 SUBMIT FORM VALUES:', normalized);
 // console.error('📦 SUBMIT FORM VALUES:', normalized);
@@ -222,6 +221,7 @@ console.log('📦 SUBMIT FORM VALUES:', normalized);
       )(),
     isValid: () => Boolean(isValid),
     getValues: () => getValues() as FormValues,
+    setFieldError: (name, message) => setError(name, { type: 'server', message }),
   }),
   [handleSubmit, submitHandler, isValid, getValues]
 );
@@ -512,6 +512,23 @@ console.log('📦 SUBMIT FORM VALUES:', normalized);
           </div>
         </form>
       </div>
+      {Boolean(busy) && (
+  <div
+    style={{
+      position: 'fixed',
+      inset: 0,
+      background: 'rgba(255,255,255,0.6)',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 1000,
+    }}
+  >
+    {/* якщо вже тягнеш MUI, можна їхній CircularProgress;
+       якщо ні — постав будь-який свій спінер */}
+    <div className="spinner" />
+  </div>
+)}
     </div>
   );
 });

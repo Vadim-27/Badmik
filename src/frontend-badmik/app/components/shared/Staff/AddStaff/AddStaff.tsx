@@ -18,6 +18,9 @@ import { dateToIsoStartOfDay } from '@/services/players.service';
 import { useStaff } from '@/features/staff/hooks/useStaff';
 import { useCreateStaff } from '@/features/staff/hooks/useStaff';
 
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+
 
 import StaffFormNew, {
   StaffFormHandle,
@@ -40,19 +43,15 @@ export default function NewStaff() {
  
   const formRef = useRef<StaffFormHandle | null>(null);
   const [isChanged, setIsChanged] = useState(false);
+  const [snack, setSnack] = useState<{ open: boolean; severity: 'success'|'error'; message: string }>({
+  open: false, severity: 'success', message: ''
+});
+// const qc = useQueryClient();
 
   // const { data: staff, isLoading, isError, error } = useStaff();
   const createStaff = useCreateStaff();
 
-  
-  // if (isLoading) return <p>Loading staff…</p>;
-  // if (isError) {
-  //   return (
-  //     <pre className="text-red-500 whitespace-pre-wrap">
-  //       {getApiErrorMessage(error)}
-  //     </pre>
-  //   );
-  // }
+
 
   
   const handleCreate = async (v: FormValues): Promise<void> => {
@@ -111,20 +110,35 @@ const safeImageUrl =
 
   timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
 
-  // ⬇️ БЕК ЧЕКАЄ ОБ’ЄКТ, НЕ STRING
+  
   workingHours: buildWorkingHours(v.workingHoursObj),
 
   workingHoursExceptions: null, // якщо поки не підтримуєш
 };
 
+console.groupCollapsed('➡️ /staff/Register payload');
+console.log('raw form:', v);
+// console.log('doB raw (from input):', rawDoB);
+console.log('doB as sent (ISO):', payload.doB);
+// console.log('debug date calc:', {
+//   'new Date(rawDoB).toString()': new Date(rawDoB).toString(),
+//   'new Date(rawDoB).toISOString()': (() => {
+//     try { return new Date(rawDoB).toISOString(); } catch { return 'invalid' }
+//   })(),
+// });
+console.log('FULL payload:', payload);
+console.groupEnd();
+
 // console.error('➡️ Payload to /staff/Register:', payload);
     try {
       const created = await createStaff.mutateAsync(payload);
+      setSnack({ open: true, severity: 'success', message: 'Співробітника створено' });
       console.log('✅ Staff created:', created);
       
     } catch (err) {
-      const msg = getApiErrorMessage(err);
-      alert(msg);
+     
+       const msg = getApiErrorMessage(err);
+  setSnack({ open: true, severity: 'error', message: msg });
       console.error('❌ Create staff failed:', msg, err);
     }
   };
@@ -163,7 +177,9 @@ const safeImageUrl =
         mode="create"
         isChanged={isChanged}
         setIsChanged={setIsChanged}
-        onSubmitCreate={handleCreate} />
+        onSubmitCreate={handleCreate}
+        busy={createStaff.isPending} />
+        
 
       {/* <StaffForm
         ref={formRef}
@@ -172,7 +188,21 @@ const safeImageUrl =
         setIsChanged={setIsChanged}
         onSubmitCreate={handleCreate}
       /> */}
-
+<Snackbar
+  open={snack.open}
+  autoHideDuration={4000}
+  onClose={() => setSnack(s => ({ ...s, open: false }))}
+  anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+>
+  <Alert
+    severity={snack.severity}
+    variant="filled"
+    onClose={() => setSnack(s => ({ ...s, open: false }))}
+    sx={{ width: '100%' }}
+  >
+    {snack.message}
+  </Alert>
+</Snackbar>
       
     </>
   );

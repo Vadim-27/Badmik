@@ -52,6 +52,8 @@ export interface Staff {
   statusReason: string | null;
 }
 
+
+
 // ===== DTO для POST /api/staff (реєстрація) — зі Swagger =====
 export interface StaffRegisterDto {
   email?: string | null;
@@ -124,5 +126,8 @@ export interface UpdateStaffDto {
 }
 
 // ===== Зручні аліаси під відповіді GET =====
-export type StaffListResponse = Staff[];
+export type StaffListResponse = {
+data: Staff[];
+total: number; // total rows for server-side pagination
+};
 export type StaffDetailsResponse = Staff;

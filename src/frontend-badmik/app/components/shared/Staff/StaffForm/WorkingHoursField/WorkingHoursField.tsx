@@ -21,9 +21,9 @@ export type WorkingHourDto = Record<DayKey, TimeRangeDto>;
 
 type Props<TFieldValues extends FieldValues> = {
   control: Control<TFieldValues>;
-  /** шлях у формі, де лежить об’єкт із годинам, напр. "workingHoursObj" */
+
   name: Path<TFieldValues>;
-  /** якщо треба паралельно мати JSON-рядок — отримає серіалізований об’єкт з null-ами */
+  
   onSerializedChange?: (json: string) => void;
 };
 

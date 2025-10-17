@@ -2,9 +2,37 @@
 import { api } from "@/lib/http/api";
 import { ENDPOINTS } from "@/lib/endpoints";
 import { unwrap } from "@/lib/http/utils";
-import type { Staff, StaffRegisterDto, UpdateStaffDto } from "./types/staff.dto";
+import type { Staff, StaffRegisterDto, UpdateStaffDto, StaffListResponse } from "./types/staff.dto";
 
 export const staffService = {
+//   async list({
+// signal,
+// page = 0,
+// pageSize = 10,
+// sort,
+// order,
+// filters,
+// }: {
+// signal?: AbortSignal;
+// page?: number;
+// pageSize?: number;
+// sort?: string;
+// order?: "asc" | "desc";
+// filters?: { field: string; operator: string; value?: string }[];
+// }): Promise<StaffListResponse> {
+// const qs = new URLSearchParams();
+// qs.set("page", String(page + 1)); // backend often 1-based
+// qs.set("limit", String(pageSize));
+// if (sort) qs.set("sort", sort);
+// if (order) qs.set("order", order);
+// if (filters?.length) qs.set("filters", JSON.stringify(filters));
+
+
+// const res = await fetch(`/api/staff?${qs.toString()}`, { signal });
+// if (!res.ok) throw new Error("Failed to fetch staff");
+// return res.json();
+// },
+
   list: (signal?: AbortSignal) =>
     unwrap<Staff[]>(api.get(ENDPOINTS.staff.getAll, { signal })),
 
