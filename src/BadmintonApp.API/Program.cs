@@ -87,8 +87,7 @@ builder.Logging.AddFilter<DbLoggerProvider>((category, level) =>
         category.StartsWith("Microsoft.EntityFrameworkCore") ||
         category.StartsWith("Microsoft.AspNetCore"))
         return false;
-
-    // за бажанням — поріг рівня:
+    
     return true;
 });
 
@@ -110,7 +109,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-//app.UseHttpsRedirection();
+
 
 app.UseAuthentication();
 
@@ -120,8 +119,7 @@ app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
 {
-    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    //dbContext.Database.EnsureCreated();
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();    
     dbContext.Database.Migrate();
     await DbInitializer.SeedAsync(dbContext);
 }

@@ -1,4 +1,6 @@
-﻿using BadmintonApp.Application.DTOs.Staff;
+﻿using BadmintonApp.Application.DTOs.Common;
+using BadmintonApp.Application.DTOs.Paginations;
+using BadmintonApp.Application.DTOs.Staff;
 using BadmintonApp.Application.Interfaces.Staffs;
 using BadmintonApp.Application.Interfaces.Users;
 using Microsoft.AspNetCore.Mvc;
@@ -22,21 +24,21 @@ namespace BadmintonApp.API.Controllers
             _staffService = staffService;
         }
 
-        [HttpPost]
+        [HttpPost("Register")]
         public async Task<ActionResult> Register([FromBody] StaffRegisterDto dto, CancellationToken cancellationToken)
         {
             await _usersService.RegisterStaffAsync(dto, cancellationToken);
             return Ok();
         }
 
-        [HttpPut]
+        [HttpPut("Update")]
         public async Task<ActionResult> Update([FromBody] StaffUpdateDto dto, CancellationToken cancellationToken)
         {
             await _staffService.Update(dto, cancellationToken);
             return Ok();
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}/GetById")]
         public async Task<ActionResult> GetById(Guid id, CancellationToken cancellationToken)
         {
             StaffDto staff = await _staffService.GetById(id, cancellationToken);
@@ -45,12 +47,11 @@ namespace BadmintonApp.API.Controllers
             return Ok(staff);
         }
 
-        [HttpGet]
-        public async Task<ActionResult> GetAll(CancellationToken cancellationToken)
+        [HttpGet("GetAll")]
+        public async Task<ActionResult> GetAll([FromQuery]PaginationFilterDto paginationFilterDto, CancellationToken cancellationToken)
         {
-            List<StaffDto> staffDtos = await _staffService.GetAll(cancellationToken);
-
-            return Ok(staffDtos);
+            var result = await _staffService.GetAll(paginationFilterDto, cancellationToken);
+            return Ok(result);
         }
 
     }

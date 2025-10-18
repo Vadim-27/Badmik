@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using BadmintonApp.Application.DTOs.Common;
+using BadmintonApp.Application.DTOs.Paginations;
 using BadmintonApp.Application.DTOs.Staff;
 using BadmintonApp.Application.Interfaces.Repositories;
 using BadmintonApp.Application.Interfaces.Staffs;
@@ -26,11 +28,19 @@ public class StaffService : IStaffService
         _transactionService = transactionService;
     }
 
-    public async Task<List<StaffDto>> GetAll(CancellationToken cancellationToken)
+    public async Task<PaginationListDto<StaffDto>> GetAll(PaginationFilterDto paginationFilterDto, CancellationToken cancellationToken)
     {
-        var staffs = await _staffRepository.GetAll(cancellationToken);
+        var staffs = await _staffRepository.GetAll(paginationFilterDto, cancellationToken);
 
-        return _mapper.Map<List<StaffDto>>(staffs);
+        var mapped = _mapper.Map<List<StaffDto>>(staffs.List);
+
+        return new PaginationListDto<StaffDto>
+        {
+            List = mapped,
+            TotalCount = staffs.TotalCount,
+            Page = staffs.Page,
+            PageSize = staffs.PageSize
+        };
     }
 
     public async Task<StaffDto> GetById(Guid id, CancellationToken cancellationToken)

@@ -1,4 +1,7 @@
-﻿using BadmintonApp.Application.DTOs.Staff;
+﻿using BadmintonApp.Application.DTOs.Common;
+using BadmintonApp.Application.DTOs.Logs;
+using BadmintonApp.Application.DTOs.Paginations;
+using BadmintonApp.Application.DTOs.Staff;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -10,5 +13,6 @@ public interface IStaffService
 {
     Task Update(StaffUpdateDto staffUpdateDto, CancellationToken cancellationToken);
     Task<StaffDto> GetById(Guid id, CancellationToken cancellationToken);
-    Task<List<StaffDto>> GetAll(CancellationToken cancellationToken);
+    Task<PaginationListDto<StaffDto>> GetAll(PaginationFilterDto paginationFilterDto, CancellationToken cancellationToken);
+    
 }

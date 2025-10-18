@@ -1,14 +1,15 @@
-﻿using BadmintonApp.Domain.Core;
+﻿using BadmintonApp.Domain.Clubs;
+using BadmintonApp.Domain.Core;
 using System;
 
-namespace BadmintonApp.Domain.Clubs;
+namespace BadmintonApp.Domain.WorkingHours;
 
 public class WorkingHour
 {
     public Guid Id { get; set; }
 
     public Guid? ClubId { get; set; }
-    public Club Club { get; set; }
+    public Club Club { get; set; }  
 
     public Guid? StaffId { get; set; }
     public Staff Staff { get; set; }

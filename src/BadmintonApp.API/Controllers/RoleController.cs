@@ -29,7 +29,7 @@ namespace BadmintonApp.API.Controllers
             return Ok();
         }
 
-        [HttpGet]
+        [HttpGet("GetAll")]
         public async Task<ActionResult> GetAll(CancellationToken cancellationToken)
         {
             List<Role> roles = await _roleService.GetAll(cancellationToken);
@@ -37,7 +37,7 @@ namespace BadmintonApp.API.Controllers
             return Ok(roles);
         }
 
-        [HttpPut]
+        [HttpPut("BindPermission")]
         public async Task<ActionResult> BindPermission([FromBody] RoleBindPermissionDto dto, CancellationToken cancellationToken)
         {
             await _roleService.RoleBindPermission(dto.RoleId, dto.PermissionId, cancellationToken);
@@ -45,7 +45,7 @@ namespace BadmintonApp.API.Controllers
             return Ok();
         }
 
-        [HttpDelete]
+        [HttpDelete("DeletePermission")]
         public async Task<ActionResult> DeletePermission([FromBody] RoleBindPermissionDto dtoDelete, CancellationToken cancellationToken)
         {
             await _roleService.RoleDeletePermission(dtoDelete.RoleId, dtoDelete.PermissionId, cancellationToken);

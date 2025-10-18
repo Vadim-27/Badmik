@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BadmintonApp.Application.DTOs.Clubs
+namespace BadmintonApp.Application.DTOs.WorkingHourDtos
 {
     public class WorkingHourDto
     {
