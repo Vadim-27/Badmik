@@ -1,8 +1,10 @@
 import ActionHeader from '@/app/components/ui/Layout/ActionHeader/ActionHeader';
 import BackButton from '@/app/components/ui/Buttons/BackButton/BackButton';
-import EmployeesTable from '@/app/components/shared/Employees/EmployeesTable/EmployeesTable';
+import EmployeesTable from '@/app/components/shared/Staff/StaffTable/StaffTable';
 import { getTranslations } from 'next-intl/server';
 import AddButton from '@/app/components/ui/Buttons/AddButton/AddButton';
+
+import { srvStaffList } from "@/services/server/staff.server";
 
 const AccessPage = async ({
   params,
@@ -11,6 +13,8 @@ const AccessPage = async ({
 }) => {
   const {  locale } = await params;
   const t = await getTranslations({locale, namespace: 'ActionHeader.title'});
+  const staff = await srvStaffList();
+  console.log("staff  = back", staff);
     return (
     <div className="p-4 w-full h-screen">
         <ActionHeader>
