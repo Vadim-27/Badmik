@@ -24,8 +24,7 @@ const AccessPage = async ({
     staffServerQueries.list(),
   ]);
   
-  // const staff = await srvStaffList();
-  // console.log("staff  = back", staff);
+
     return (
       <RQHydrate state={state}>
     <div className="p-4 w-full h-screen">
