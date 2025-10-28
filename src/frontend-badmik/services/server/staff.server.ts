@@ -15,7 +15,8 @@ export async function srvStaffList(): Promise<Staff[]> {
 }
 
 export async function srvStaffById(id: string): Promise<Staff> {
-  return json<Staff>(`${ENDPOINTS.staff}/${id}`);
+  // return json<Staff>(`${ENDPOINTS.staff}/${id}`);
+  return json<Staff>(ENDPOINTS.staff.getById(id));
 }
 
 // якщо знадобляться мутації з сервера
