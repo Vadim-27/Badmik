@@ -349,7 +349,7 @@ export async function middleware(request: NextRequest) {
         return NextResponse.next();
       }
 
-      if (role === "club_admin") {
+      if (role === "ClubAdmin") {
         // console.log("pathname", pathname);
         if (pathname === "/") {
           return NextResponse.redirect(new URL(`/admin/${clubId}`, request.url));
