@@ -9,7 +9,7 @@ import BackButton from '@/app/components/ui/Buttons/BackButton/BackButton';
 import SaveButton from '@/app/components/ui/Buttons/SaveButton/SaveButton';
 import { useTranslations } from 'next-intl';
 
-import { dateToIsoStartOfDay } from '@/services/players.service';
+// import { dateToIsoStartOfDay } from '@/services/players.service';
 import type { CreatePlayerDto } from '@/services/types/players.dto';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { usersService } from '@/services/players.service';
@@ -18,6 +18,14 @@ import { getApiErrorMessage } from "@/lib/http/utils";
 
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+
+
+export function dateToIsoStartOfDay(dateStr: string) {
+  if (!dateStr) return "";
+  const [y, m, d] = dateStr.split("-").map(Number);
+  // UTC, щоб уникнути зсувів таймзони
+  return new Date(Date.UTC(y, (m ?? 1) - 1, d ?? 1, 0, 0, 0)).toISOString();
+}
 
 export default function AddPlayer() {
   const tAH = useTranslations('ActionHeader');

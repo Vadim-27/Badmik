@@ -12,11 +12,12 @@ import SaveButton from '@/app/components/ui/Buttons/SaveButton/SaveButton';
 import { useTranslations } from 'next-intl';
 
 import { getApiErrorMessage } from '@/lib/http/utils';
-import { dateToIsoStartOfDay } from '@/services/players.service'; 
+// import { dateToIsoStartOfDay } from '@/services/players.service'; 
 
 
-import { useStaff } from '@/features/staff/hooks/useStaff';
-import { useCreateStaff } from '@/features/staff/hooks/useStaff';
+// import { useStaff } from '@/features/staff/hooks/useStaff';
+// import { useCreateStaff } from '@/features/staff/hooks/useStaff';
+import {useCreateStaff} from '@/services/staff/queries.client'
 
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
@@ -28,6 +29,14 @@ import StaffFormNew, {
 } from '../StaffForm/StaffFormNew';
 
 import type { StaffRegisterDto } from '@/services/types/staff.dto';
+
+export function dateToIsoStartOfDay(dateStr: string) {
+  if (!dateStr) return "";
+  const [y, m, d] = dateStr.split("-").map(Number);
+  // UTC, щоб уникнути зсувів таймзони
+  return new Date(Date.UTC(y, (m ?? 1) - 1, d ?? 1, 0, 0, 0)).toISOString();
+}
+
 
 function toDateOnly(dateStr?: string) {
  
