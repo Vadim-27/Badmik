@@ -7,13 +7,13 @@ export type SalaryType = "Hourly" | "Salary" | "PerTraining";
 
 export type TimeRangeDto = { from: string | null; to: string | null };
 export type WorkingHoursDto = {
-  monday: TimeRangeDto;
-  tuesday: TimeRangeDto;
-  wednesday: TimeRangeDto;
-  thursday: TimeRangeDto;
-  friday: TimeRangeDto;
-  saturday: TimeRangeDto;
-  sunday: TimeRangeDto;
+  monday:    TimeRangeDto | null;
+  tuesday:   TimeRangeDto | null;
+  wednesday: TimeRangeDto | null;
+  thursday:  TimeRangeDto | null;
+  friday:    TimeRangeDto | null;
+  saturday:  TimeRangeDto | null;
+  sunday:    TimeRangeDto | null;
 };
 
 // ===== Те, що повертає бек у списках/деталях =====
@@ -95,21 +95,24 @@ export type CreateStaffDto = StaffRegisterDto;
 // ===== DTO для PUT /api/staff (оновлення) =====
 
 export interface UpdateStaffDto {
-  id: string;                           
+  id: string;
 
   email?: string | null;
   firstName?: string | null;
   lastName?: string | null;
 
+  // ✅ нові поля
+  phoneNumber?: string | null;
+  imageUrl?: string | null;
+  doB?: string | null;
+
   staffStatus?: StaffStatus;
   employmentType?: StaffEmploymentType;
 
   clubId?: string;
-
   title?: string | null;
-  startDate?: string;                     
-  endDate?: string;                      
-
+  startDate?: string;
+  endDate?: string | null;
   notes?: string | null;
 
   salaryType?: SalaryType;
@@ -119,7 +122,7 @@ export interface UpdateStaffDto {
   payrollNotes?: string | null;
 
   timeZone?: string | null;
-  workingHours?: string | null;
+  workingHours?: WorkingHoursDto | null; // ⬅️ було string, треба об’єкт
   workingHoursExceptions?: string | null;
 
   statusReason?: string | null;

@@ -15,7 +15,8 @@ import { Box, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { ukUA, enUS } from '@mui/x-data-grid/locales';
 import { useTranslations, useLocale } from 'next-intl';
-import { usePlayers } from '@/features/players/hooks/usePlayers';
+// import { usePlayers } from '@/features/players/hooks/usePlayers';
+import { usePlayersList } from '@/services/players/queries.client';
 import type { Player } from '@/services/types/players.dto';
 
 
@@ -58,8 +59,8 @@ const PlayerTable: React.FC = () => {
 
   React.useEffect(() => setMounted(true), []);
 
-
-  const { data, isLoading, isError, error } = usePlayers();
+const { data, isLoading, isError, error } = usePlayersList();
+  // const { data, isLoading, isError, error } = usePlayers();
 
   
  const rows = React.useMemo<Row[]>(() => {
@@ -82,8 +83,9 @@ const PlayerTable: React.FC = () => {
   const rowCount = rows.length;
 
   const handleRowClick = (params: any) => {
-    const userId = params.id as string;
-    router.push(`/${locale}/admin/players/${userId}`);
+    const playerId = params.id as string;
+    console.log(" playerId Table =", playerId);
+    router.push(`/${locale}/admin/players/${playerId}`);
   };
 
   const displayOrDefault = (v: unknown) =>

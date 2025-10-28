@@ -1,4 +1,3 @@
-
 // export default StaffFormNew;
 
 'use client';
@@ -15,18 +14,17 @@ import WorkingHoursField from '@/app/components/shared/Staff/StaffForm/WorkingHo
 import StaffActionsBar from '@/app/components/shared/Staff/StaffForm/StaffActionsBar/StaffActionsBar';
 import SalaryField from '@/app/components/shared/Staff/StaffForm/SalaryField/SalaryField';
 
-
 export type StaffStatus = 'New' | 'Active' | 'Disabled' | 'Deleted';
 
 type TimeRangeDto = { from: string | null; to: string | null };
-type WorkingHourDto = {
-  monday: TimeRangeDto;
-  tuesday: TimeRangeDto;
-  wednesday: TimeRangeDto;
-  thursday: TimeRangeDto;
-  friday: TimeRangeDto;
-  saturday: TimeRangeDto;
-  sunday: TimeRangeDto;
+export type WorkingHourDto = {
+  monday: TimeRangeDto | null;
+  tuesday: TimeRangeDto | null;
+  wednesday: TimeRangeDto | null;
+  thursday: TimeRangeDto | null;
+  friday: TimeRangeDto | null;
+  saturday: TimeRangeDto | null;
+  sunday: TimeRangeDto | null;
 };
 
 export type FormValues = {
@@ -36,10 +34,10 @@ export type FormValues = {
   firstName: string;
   lastName: string;
   clubId: string;
-  doB: string; // yyyy-mm-dd
-  title: string; // посада
-  phone: string | null; // телефон
-  startDate: string; // yyyy-mm-dd
+  doB: string;
+  title: string;
+  phone: string | null;
+  startDate: string;
 
   imageUrl: string;
   salaryType: 'Hourly' | 'Salary' | 'PerTraining';
@@ -50,19 +48,23 @@ export type FormValues = {
   payrollNotes?: string | null;
   notes?: string | null;
   staffStatus: StaffStatus;
-  // workingHours: string; // JSON-рядок для бекенду
+  endDate?: string | null;
+  roleId: string | null;
+  userId?: string | null;
+
   workingHoursObj: WorkingHourDto;
 };
 
 type Props = {
   mode: 'create' | 'edit';
-  adminId?: string;
+  staffId?: string;
+  userId?: string | undefined;
   defaultValues?: Partial<FormValues>;
   onSubmitCreate?: (data: FormValues) => Promise<void>;
-  onSubmitUpdate?: (adminId: string, data: FormValues) => Promise<void>;
+  onSubmitUpdate?: (staffId: string, data: FormValues) => Promise<void>;
   isChanged?: boolean;
   setIsChanged?: (v: boolean) => void;
-  busy?: boolean; // ⬅️ додали
+  busy?: boolean; 
 };
 
 export type StaffFormHandle = {
@@ -90,7 +92,7 @@ const noWhitespace = /^\S+$/;
 // const EMPLOYMENT_OPTIONS: EmploymentType[] = ['Employee', 'Contractor', 'PartTime', 'Volunteer'];
 
 const StaffFormNew = forwardRef<StaffFormHandle, Props>(function EmployeeForm(
-  { mode, adminId, defaultValues, onSubmitCreate, onSubmitUpdate, setIsChanged, busy },
+  { mode, staffId, defaultValues, onSubmitCreate, onSubmitUpdate, setIsChanged, busy },
   ref
 ) {
   // сьогодні у форматі yyyy-mm-dd для min у даті
@@ -116,18 +118,18 @@ const StaffFormNew = forwardRef<StaffFormHandle, Props>(function EmployeeForm(
       doB: '',
       title: '',
       phone: null,
-      startDate: todayStr, // дефолт — сьогодні
+      startDate: todayStr, 
       employmentType: 'Employee',
       // workingHours: '',
-       workingHoursObj: {
-      monday:    { from: null, to: null },
-      tuesday:   { from: null, to: null },
-      wednesday: { from: null, to: null },
-      thursday:  { from: null, to: null },
-      friday:    { from: null, to: null },
-      saturday:  { from: null, to: null },
-      sunday:    { from: null, to: null },
-    }, // дефолт — Employee
+      workingHoursObj: {
+        monday: { from: null, to: null },
+        tuesday: { from: null, to: null },
+        wednesday: { from: null, to: null },
+        thursday: { from: null, to: null },
+        friday: { from: null, to: null },
+        saturday: { from: null, to: null },
+        sunday: { from: null, to: null },
+      }, // дефолт — Employee
       salaryType: 'Hourly',
       hourlyRate: 0,
       monthlySalary: null,
@@ -136,37 +138,19 @@ const StaffFormNew = forwardRef<StaffFormHandle, Props>(function EmployeeForm(
       payrollNotes: null,
       notes: null,
       staffStatus: 'New',
+      endDate: null,
+      roleId: null,
+      userId: '',
       ...defaultValues,
     },
   });
 
-  // useEffect(() => {
-  //   setIsChanged?.(Boolean(isDirty && isValid));
-  // }, [isDirty, isValid, setIsChanged]);
-
-   useEffect(() => {
-   setIsChanged?.(isDirty && isValid);
- }, [isDirty, isValid, setIsChanged]);
-
-  // const submitHandler = useCallback(
-  //   async (raw: FormValues) => {
-  //     if (adminId && onSubmitUpdate) {
-  //       await onSubmitUpdate(adminId, raw);
-  //     } else if (onSubmitCreate) {
-  //       await onSubmitCreate(raw);
-  //     }
-
-  //     if (mode === 'create') reset();
-  //     else reset({ ...raw, password: '' });
-
-  //     setIsChanged?.(false);
-  //   },
-  //   [adminId, mode, onSubmitCreate, onSubmitUpdate, reset, setIsChanged]
-  // );
+  useEffect(() => {
+    setIsChanged?.(isDirty && isValid);
+  }, [isDirty, isValid, setIsChanged]);
 
   const submitHandler = useCallback(
     async (raw: FormValues) => {
-      // '' -> null для бекенду
       const normalized: FormValues = {
         ...raw,
         phone: raw.phone?.trim() ? raw.phone : null,
@@ -177,12 +161,11 @@ const StaffFormNew = forwardRef<StaffFormHandle, Props>(function EmployeeForm(
 
         payrollNotes: raw.payrollNotes?.trim() ? raw.payrollNotes : null,
         notes: raw.notes?.trim() ? raw.notes : null,
-        
       };
-console.log('📦 SUBMIT FORM VALUES:', normalized);
-// console.error('📦 SUBMIT FORM VALUES:', normalized);
-      if (adminId && onSubmitUpdate) {
-        await onSubmitUpdate(adminId, normalized);
+      console.log('📦 SUBMIT FORM VALUES:', normalized);
+
+      if (staffId && onSubmitUpdate) {
+        await onSubmitUpdate(staffId, normalized);
       } else if (onSubmitCreate) {
         await onSubmitCreate(normalized);
       }
@@ -192,39 +175,24 @@ console.log('📦 SUBMIT FORM VALUES:', normalized);
 
       setIsChanged?.(false);
     },
-    [adminId, mode, onSubmitCreate, onSubmitUpdate, reset, setIsChanged]
+    [staffId, mode, onSubmitCreate, onSubmitUpdate, reset, setIsChanged]
   );
 
-  
-
-  // useImperativeHandle(
-  //   ref,
-  //   () => ({
-  //     submit: () => handleSubmit(submitHandler) (),
-  //     isValid: () => Boolean(isValid),
-  //     getValues: () => getValues() as FormValues,
-  //   }),
-  //   [handleSubmit, submitHandler, isValid, getValues]
-  // );
-
   useImperativeHandle(
-  ref,
-  () => ({
-    submit: () =>
-      handleSubmit(
-        submitHandler,
-        (errs) => {
+    ref,
+    () => ({
+      submit: () =>
+        handleSubmit(submitHandler, (errs) => {
           // ⬇️ побачиш, чому не викликалось submitHandler
-          // console.error('❌ RHF validation errors:', errs);
-          // console.error('🧪 RHF current values:', getValues());
-        }
-      )(),
-    isValid: () => Boolean(isValid),
-    getValues: () => getValues() as FormValues,
-    setFieldError: (name, message) => setError(name, { type: 'server', message }),
-  }),
-  [handleSubmit, submitHandler, isValid, getValues]
-);
+          console.error('❌ RHF validation errors:', errs);
+          console.error('🧪 RHF current values:', getValues());
+        })(),
+      isValid: () => Boolean(isValid),
+      getValues: () => getValues() as FormValues,
+      setFieldError: (name, message) => setError(name, { type: 'server', message }),
+    }),
+    [handleSubmit, submitHandler, isValid, getValues]
+  );
 
   return (
     <div className={styles.wrapper}>
@@ -236,35 +204,15 @@ console.log('📦 SUBMIT FORM VALUES:', normalized);
             <AvatarUploadField
               control={control}
               name="imageUrl"
-              // rootClassName=""
-              // avatarClassName={styles.avatar}
-              // avatarEmptyClassName={styles.avatarEmpty}
-              // btnClassName={styles.button}
-              // btnGhostClassName={styles.buttonGhost}
-              // errorTextClassName={styles.errorText}
-              // labelClassName={styles.label}
-              // ⚠️ передай реальний аплоадер:
               uploadFile={async (file) => {
-                // приклад: відправка на ваш бекенд
-                // const formData = new FormData();
-                // formData.append('file', file);
-                // const res = await fetch('/api/upload', { method: 'POST', body: formData });
-                // const { url } = await res.json();
-                // return url as string;
-
-                // тимчасово — емітуємо URL preview, щоб все працювало до інтеграції API:
                 return new Promise<string>((resolve) => {
                   const tmp = URL.createObjectURL(file);
                   setTimeout(() => resolve(tmp), 400);
                 });
               }}
             />
-            <StaffActionsBar<FormValues>
-              control={control}
-              onRolesClick={() => {
-                // TODO: відкриття модалки керування ролями (пізніше додамо)
-              }}
-            />
+
+            <StaffActionsBar<FormValues> control={control} showRolesButton={mode === 'edit'} />
           </div>
           <div className={styles.formGrid}>
             {/* First name */}
@@ -275,7 +223,7 @@ console.log('📦 SUBMIT FORM VALUES:', normalized);
               <input
                 className={`${styles.input} ${errors.firstName ? styles.errorInput : ''}`}
                 {...register('firstName', {
-                  required: 'First name is required.',
+                  required: mode === 'create' ? 'First name is required.' : false,
                   minLength: { value: 2, message: 'First name is too short.' },
                   maxLength: { value: 60, message: 'First name is too long.' },
                   pattern: {
@@ -295,7 +243,7 @@ console.log('📦 SUBMIT FORM VALUES:', normalized);
               <input
                 className={`${styles.input} ${errors.lastName ? styles.errorInput : ''}`}
                 {...register('lastName', {
-                  required: 'Last name is required.',
+                  required: mode === 'create' ? 'Last name is required.' : false,
                   minLength: { value: 2, message: 'Last name is too short.' },
                   maxLength: { value: 50, message: 'Last name is too long.' },
                   pattern: {
@@ -316,7 +264,7 @@ console.log('📦 SUBMIT FORM VALUES:', normalized);
                 className={`${styles.input} ${errors.email ? styles.errorInput : ''}`}
                 type="email"
                 {...register('email', {
-                  required: 'Email is required.',
+                  required: mode === 'create' ? 'Email is required.' : false,
                   minLength: { value: 5, message: 'Email is too short.' },
                   maxLength: { value: 254, message: 'Email is too long.' },
                   pattern: {
@@ -329,45 +277,48 @@ console.log('📦 SUBMIT FORM VALUES:', normalized);
             </div>
 
             {/* Password */}
-            <div>
-              <label className={styles.label}>
-                Пароль <span style={{ color: '#e63946' }}>*</span>
-              </label>
-              <input
-                className={`${styles.input} ${errors.password ? styles.errorInput : ''}`}
-                type="password"
-                autoComplete="new-password"
-                {...register('password', {
-                  required: 'Password is required.',
-                  minLength: { value: 8, message: 'Password must be at least 8 characters.' },
-                  maxLength: { value: 64, message: 'Password must be at most 64 characters.' },
-                  validate: {
-                    noSpace: (v) => noWhitespace.test(v) || 'Password cannot contain whitespace.',
-                    hasDigit: (v) =>
-                      hasDigit.test(v) || 'Password must contain at least one digit.',
-                    hasUpper: (v) =>
-                      hasUpper.test(v) || 'Password must contain at least one uppercase letter.',
-                    hasLower: (v) =>
-                      hasLower.test(v) || 'Password must contain at least one lowercase letter.',
-                    hasSpecial: (v) =>
-                      hasSpecial.test(v) || 'Password must contain at least one special character.',
-                  },
-                })}
-              />
-              {errors.password && <p className={styles.errorText}>{errors.password.message}</p>}
-            </div>
+            {mode === 'create' && (
+              <div>
+                <label className={styles.label}>
+                  Пароль <span style={{ color: '#e63946' }}>*</span>
+                </label>
+                <input
+                  className={`${styles.input} ${errors.password ? styles.errorInput : ''}`}
+                  type="password"
+                  autoComplete="new-password"
+                  {...register('password', {
+                    required: 'Password is required.',
+                    minLength: { value: 8, message: 'Password must be at least 8 characters.' },
+                    maxLength: { value: 64, message: 'Password must be at most 64 characters.' },
+                    validate: {
+                      noSpace: (v) => noWhitespace.test(v) || 'Password cannot contain whitespace.',
+                      hasDigit: (v) =>
+                        hasDigit.test(v) || 'Password must contain at least one digit.',
+                      hasUpper: (v) =>
+                        hasUpper.test(v) || 'Password must contain at least one uppercase letter.',
+                      hasLower: (v) =>
+                        hasLower.test(v) || 'Password must contain at least one lowercase letter.',
+                      hasSpecial: (v) =>
+                        hasSpecial.test(v) ||
+                        'Password must contain at least one special character.',
+                    },
+                  })}
+                />
+                {errors.password && <p className={styles.errorText}>{errors.password.message}</p>}
+              </div>
+            )}
 
             {/* Title */}
             <div>
               <label className={styles.label}>
-                Посада <span style={{ color: '#e63946' }}>*</span>
+                Посада {mode === 'create' && <span style={{ color: '#e63946' }}>*</span>}
               </label>
               <input
                 className={`${styles.input} ${errors.title ? styles.errorInput : ''}`}
                 type="text"
                 placeholder="Наприклад: тренер, адміністратор"
                 {...register('title', {
-                  required: 'Посада є обовʼязковою.',
+                  required: mode === 'create' ? 'Email is required.' : false,
                   minLength: { value: 2, message: 'Назва посади занадто коротка.' },
                   maxLength: { value: 60, message: 'Назва посади занадто довга.' },
                   pattern: {
@@ -382,14 +333,14 @@ console.log('📦 SUBMIT FORM VALUES:', normalized);
             {/* Phone */}
             <div>
               <label className={styles.label}>
-                Номер телефону <span style={{ color: '#e63946' }}>*</span>
+                Номер телефону {mode === 'create' && <span style={{ color: '#e63946' }}>*</span>}
               </label>
               <input
                 className={`${styles.input} ${errors.phone ? styles.errorInput : ''}`}
                 type="tel"
                 placeholder="+380XXXXXXXXX"
                 {...register('phone', {
-                  required: 'Номер телефону є обовʼязковим.',
+                  required: mode === 'create' ? 'Email is required.' : false,
                   pattern: {
                     value: /^\+?380\d{9}$/,
                     message: 'Номер має бути у форматі +380XXXXXXXXX.',
@@ -402,7 +353,7 @@ console.log('📦 SUBMIT FORM VALUES:', normalized);
             {/* Club ID (combobox) */}
             <div>
               <label className={styles.label}>
-                Клуб <span style={{ color: '#e63946' }}>*</span>
+                Клуб {mode === 'create' && <span style={{ color: '#e63946' }}>*</span>}
               </label>
               <ClubSelectFieldAdd
                 control={control}
@@ -419,13 +370,13 @@ console.log('📦 SUBMIT FORM VALUES:', normalized);
             {/* Date of Birth */}
             <div>
               <label className={styles.label}>
-                Дата народження <span style={{ color: '#e63946' }}>*</span>
+                Дата народження {mode === 'create' && <span style={{ color: '#e63946' }}>*</span>}
               </label>
               <input
                 className={`${styles.input} ${errors.doB ? styles.errorInput : ''}`}
                 type="date"
                 {...register('doB', {
-                  required: 'Date of birth is required.',
+                  required: mode === 'create' ? 'Email is required.' : false,
                   validate: (v) => isAtLeast8Years(v) || 'You must be at least 8 years old.',
                 })}
               />
@@ -433,21 +384,58 @@ console.log('📦 SUBMIT FORM VALUES:', normalized);
             </div>
 
             {/* Start Date (no past dates) */}
-            <div>
-              <label className={styles.label}>
-                Дата початку роботи <span style={{ color: '#e63946' }}>*</span>
-              </label>
-              <input
-                className={`${styles.input} ${errors.startDate ? styles.errorInput : ''}`}
-                type="date"
-                min={todayStr}
-                {...register('startDate', {
-                  required: 'Дата початку є обовʼязковою.',
-                  validate: (v) => !v || v >= todayStr || 'Не можна обирати дату в минулому.',
-                })}
-              />
-              {errors.startDate && <p className={styles.errorText}>{errors.startDate.message}</p>}
-            </div>
+            {mode === 'create' && (
+              <div>
+                <label className={styles.label}>
+                  Дата початку роботи{' '}
+                  {mode === 'create' && <span style={{ color: '#e63946' }}>*</span>}
+                </label>
+                <input
+                  className={`${styles.input} ${errors.startDate ? styles.errorInput : ''}`}
+                  type="date"
+                  min={todayStr}
+                  {...register('startDate', {
+                    required: 'Дата початку є обовʼязковою.',
+                    validate: (v) => !v || v >= todayStr || 'Не можна обирати дату в минулому.',
+                  })}
+                />
+                {errors.startDate && <p className={styles.errorText}>{errors.startDate.message}</p>}
+              </div>
+            )}
+            {mode === 'edit' && (
+              <div>
+                <label className={styles.label}>
+                  Дата початку роботи{' '}
+                  {mode !== 'edit' && <span style={{ color: '#e63946' }}>*</span>}
+                </label>
+                <input
+                  className={`${styles.input} ${errors.startDate ? styles.errorInput : ''}`}
+                  type="date"
+                  min={todayStr}
+                  {...register('startDate', {
+                    // required: 'Дата початку є обовʼязковою.',
+                    // validate: (v) => !v || v >= todayStr || 'Не можна обирати дату в минулому.',
+                  })}
+                />
+                {errors.startDate && <p className={styles.errorText}>{errors.startDate.message}</p>}
+              </div>
+            )}
+
+            {/* End Date (no past dates) */}
+            {mode === 'edit' && (
+              <div>
+                <label className={styles.label}>Дата завершення роботи</label>
+                <input
+                  className={styles.input}
+                  type="date"
+                  min={todayStr}
+                  {...register('endDate', {
+                    validate: (v) => !v || v >= todayStr || 'Не можна обирати дату в минулому.',
+                  })}
+                />
+                {errors.endDate && <p className={styles.errorText}>{errors.endDate.message}</p>}
+              </div>
+            )}
 
             {/* Employment Type (combobox like Club) */}
             <div>
@@ -469,16 +457,7 @@ console.log('📦 SUBMIT FORM VALUES:', normalized);
             </div>
           </div>
           {/* Working hours */}
-          {/* <label className={styles.label}>Робочі години</label> */}
-          {/* <WorkingHoursField
-            control={control}
-            name="workingHoursObj"
-            onSerializedChange={(json) => {
-              // синхронізуємо рядок для відправки
-              // @ts-ignore
-              setValue('workingHours', json, { shouldDirty: true, shouldValidate: true });
-            }}
-          /> */}
+         
           <WorkingHoursField control={control} name="workingHoursObj" />
           <SalaryField<FormValues> control={control} />
           {/* Нотатки для бухгалтерії */}
@@ -513,24 +492,25 @@ console.log('📦 SUBMIT FORM VALUES:', normalized);
         </form>
       </div>
       {Boolean(busy) && (
-  <div
-    style={{
-      position: 'fixed',
-      inset: 0,
-      background: 'rgba(255,255,255,0.6)',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      zIndex: 1000,
-    }}
-  >
-    {/* якщо вже тягнеш MUI, можна їхній CircularProgress;
-       якщо ні — постав будь-який свій спінер */}
-    <div className="spinner" />
-  </div>
-)}
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(255,255,255,0.6)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 1000,
+          }}
+        >
+         
+          <div className="spinner" />
+        </div>
+      )}
     </div>
   );
 });
 
 export default StaffFormNew;
+
+
