@@ -33,6 +33,11 @@ function getAge(doB?: string | null): number | null {
   return age >= 0 ? age : null;
 }
 
+type PlayersApiResponse =
+  | Player[]                                     // [ ... ]
+  | { items: Player[]; total?: number }          // { items: [...] }
+  | { data: Player[]; totalCount?: number }; 
+
 type Row = {
   id: string;
   fullName: string;
@@ -61,24 +66,57 @@ const PlayerTable: React.FC = () => {
 
 const { data, isLoading, isError, error } = usePlayersList();
   // const { data, isLoading, isError, error } = usePlayers();
+console.log(" 🚀 PlayerTable data =", data);
 
-  
- const rows = React.useMemo<Row[]>(() => {
-  const list = (data ?? []).map((u: any) => {
-    const age = getAge(u.doB ?? u.dateOfBirth);
-  
+const items: Player[] = React.useMemo(() => {
+  const d = data as PlayersApiResponse | undefined;
+  if (!d) return [];
+  if (Array.isArray(d)) return d;
+  if (Array.isArray((d as any).items)) return (d as any).items as Player[];
+  if (Array.isArray((d as any).data))  return (d as any).data  as Player[];
+  return [];
+}, [data]);
+
+const rows = React.useMemo<Row[]>(() => {
+  return items.map((u) => {
+    const age = getAge(
+      (u as any).doB ?? (u as any).dateOfBirth ?? (u as any).dob ?? null
+    );
+
+    const fullName =
+      (u as any).fullName ??
+      `${(u as any).firstName ?? ''} ${(u as any).lastName ?? ''}`.trim();
+
     return {
-      id: u.id,
-      fullName: u.fullName ?? `${u.firstName ?? ''} ${u.lastName ?? ''}`.trim(),
-      email: u.email,
+      id: String((u as any).id),
+      fullName,
+      email: (u as any).email ?? '',
       age,
-      role: u.role ?? '',
-      level: u.level ?? '',
-      club: '',
+      role: (u as any).role ?? '',
+      level: (u as any).level ?? '',
+      club: '', // поки порожньо, як просив
     };
   });
-  return list;
-}, [data]);
+}, [items]);
+
+
+  
+//  const rows = React.useMemo<Row[]>(() => {
+//   const list = (data ?? []).map((u: any) => {
+//     const age = getAge(u.doB ?? u.dateOfBirth);
+  
+//     return {
+//       id: u.id,
+//       fullName: u.fullName ?? `${u.firstName ?? ''} ${u.lastName ?? ''}`.trim(),
+//       email: u.email,
+//       age,
+//       role: u.role ?? '',
+//       level: u.level ?? '',
+//       club: '',
+//     };
+//   });
+//   return list;
+// }, [data]);
 
   const rowCount = rows.length;
 
