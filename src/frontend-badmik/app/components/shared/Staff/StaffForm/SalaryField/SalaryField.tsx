@@ -17,7 +17,6 @@ export type Currency = 'UAH' | 'USD';
 
 type Props<TFieldValues extends FieldValues> = {
   control: Control<TFieldValues>;
-  // Якщо у формі інші назви полів — можна прокинути, але дефолтні працюють "як є"
   salaryTypeName?: Path<TFieldValues>;
   currencyName?: Path<TFieldValues>;
   hourlyRateName?: Path<TFieldValues>;
@@ -33,7 +32,7 @@ export default function SalaryField<TFieldValues extends FieldValues>({
   monthlySalaryName,
   perTrainingRateName,
 }: Props<TFieldValues>) {
-  // ---- імена полів (за замовчуванням стандартні ключі форми) ----
+  // ---- дефолтні імена полів ----
   const salaryTypePath = (salaryTypeName ?? ('salaryType' as Path<TFieldValues>)) as Path<TFieldValues>;
   const currencyPath = (currencyName ?? ('currency' as Path<TFieldValues>)) as Path<TFieldValues>;
   const hourlyRatePath = (hourlyRateName ?? ('hourlyRate' as Path<TFieldValues>)) as Path<TFieldValues>;
@@ -56,7 +55,10 @@ export default function SalaryField<TFieldValues extends FieldValues>({
     name: hourlyRatePath,
     rules: {
       validate: (v) =>
-        (salaryTypeField.value as SalaryType) !== 'Hourly' || Number(v) >= 0 || 'Ставка не може бути відʼємною.',
+        (salaryTypeField.value as SalaryType) !== 'Hourly' ||
+        v === '' ||
+        Number(v) >= 0 ||
+        'Ставка не може бути відʼємною.',
     },
   });
 
@@ -65,7 +67,10 @@ export default function SalaryField<TFieldValues extends FieldValues>({
     name: monthlySalaryPath,
     rules: {
       validate: (v) =>
-        (salaryTypeField.value as SalaryType) !== 'Salary' || Number(v ?? 0) >= 0 || 'Ставка не може бути відʼємною.',
+        (salaryTypeField.value as SalaryType) !== 'Salary' ||
+        v === '' ||
+        Number(v) >= 0 ||
+        'Ставка не може бути відʼємною.',
     },
   });
 
@@ -75,39 +80,34 @@ export default function SalaryField<TFieldValues extends FieldValues>({
     rules: {
       validate: (v) =>
         (salaryTypeField.value as SalaryType) !== 'PerTraining' ||
-        Number(v ?? 0) >= 0 ||
+        v === '' ||
+        Number(v) >= 0 ||
         'Ставка не може бути відʼємною.',
     },
   });
 
-  // ---- синхронізація: активне поле ≥ 0, неактивні → null ----
+  // ---- при зміні типу ставки очищаємо неактивні поля ----
   useEffect(() => {
-    const t = (salaryTypeField.value as SalaryType) ?? 'Hourly';
+    const type = (salaryTypeField.value as SalaryType) ?? 'Hourly';
 
-    if (t === 'Hourly') {
-      if (hourly.field.value == null) {
-        hourly.field.onChange(0 as FieldPathValue<TFieldValues, Path<TFieldValues>>);
-      }
+    if (type === 'Hourly') {
+      if (hourly.field.value == null) hourly.field.onChange('' as FieldPathValue<TFieldValues, Path<TFieldValues>>);
       monthly.field.onChange(null as unknown as FieldPathValue<TFieldValues, Path<TFieldValues>>);
       perTraining.field.onChange(null as unknown as FieldPathValue<TFieldValues, Path<TFieldValues>>);
-    } else if (t === 'Salary') {
-      if (monthly.field.value == null) {
-        monthly.field.onChange(0 as FieldPathValue<TFieldValues, Path<TFieldValues>>);
-      }
+    } else if (type === 'Salary') {
+      if (monthly.field.value == null) monthly.field.onChange('' as FieldPathValue<TFieldValues, Path<TFieldValues>>);
       hourly.field.onChange(null as unknown as FieldPathValue<TFieldValues, Path<TFieldValues>>);
       perTraining.field.onChange(null as unknown as FieldPathValue<TFieldValues, Path<TFieldValues>>);
     } else {
-      // PerTraining
-      if (perTraining.field.value == null) {
-        perTraining.field.onChange(0 as FieldPathValue<TFieldValues, Path<TFieldValues>>);
-      }
+      if (perTraining.field.value == null)
+        perTraining.field.onChange('' as FieldPathValue<TFieldValues, Path<TFieldValues>>);
       hourly.field.onChange(null as unknown as FieldPathValue<TFieldValues, Path<TFieldValues>>);
       monthly.field.onChange(null as unknown as FieldPathValue<TFieldValues, Path<TFieldValues>>);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [salaryTypeField.value]);
 
-  // ---- спільний суфікс валюти ----
+  // ---- випадаючий список валюти ----
   const RateSuffix = (
     <div className={styles.suffix}>
       <select
@@ -123,11 +123,51 @@ export default function SalaryField<TFieldValues extends FieldValues>({
     </div>
   );
 
+  // ---- санітизація вводу: ≥0, без провідних нулів, кома → крапка, ".5" → "0.5" ----
+  const handleRateChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    onChange: (value: FieldPathValue<TFieldValues, Path<TFieldValues>>) => void
+  ) => {
+    let str = e.target.value;
+
+    // порожнє поле дозволяємо (щоб не показувати 0)
+    if (str === '') {
+      onChange('' as FieldPathValue<TFieldValues, Path<TFieldValues>>);
+      return;
+    }
+
+    // локальний ввід з комою
+    str = str.replace(',', '.').trim();
+
+    // якщо користувач ввів ".5" → "0.5"
+    if (str.startsWith('.')) str = '0' + str;
+
+    // забороняємо провідні нулі для цілої частини: "0123" → "123", "00.5" → "0.5"
+    if (/^0\d+/.test(str) && !str.startsWith('0.')) {
+      str = str.replace(/^0+/, '');
+      if (str === '') str = '0';
+    }
+    // нормалізація "000.5" → "0.5"
+    if (/^0+\./.test(str)) {
+      str = str.replace(/^0+/, '0');
+    }
+
+    // парсимо та клампимо
+    const num = Number(str);
+    if (!Number.isFinite(num)) {
+      onChange('' as FieldPathValue<TFieldValues, Path<TFieldValues>>);
+      return;
+    }
+    const clamped = Math.max(0, num);
+
+    onChange(clamped as FieldPathValue<TFieldValues, Path<TFieldValues>>);
+  };
+
   // ---- рендер активного інпута ставки ----
   const renderRateInput = () => {
-    const t = (salaryTypeField.value as SalaryType) ?? 'Hourly';
+    const type = (salaryTypeField.value as SalaryType) ?? 'Hourly';
 
-    if (t === 'Hourly') {
+    if (type === 'Hourly') {
       return (
         <>
           <label className={styles.label}>Ставка (за годину)</label>
@@ -137,29 +177,21 @@ export default function SalaryField<TFieldValues extends FieldValues>({
               step="0.01"
               min="0"
               inputMode="decimal"
+              placeholder="0"
               className={`${styles.input} ${styles.inputPadRight} ${
                 hourly.fieldState.error ? styles.errorInput : ''
               }`}
-              value={(hourly.field.value as number | null | undefined) ?? 0}
-              onChange={(e) =>
-                hourly.field.onChange(
-                  (e.target.value === '' ? 0 : Number(e.target.value)) as FieldPathValue<
-                    TFieldValues,
-                    Path<TFieldValues>
-                  >
-                )
-              }
+              value={(hourly.field.value as number | string | null | undefined) ?? ''}
+              onChange={(e) => handleRateChange(e, hourly.field.onChange)}
             />
             {RateSuffix}
           </div>
-          {hourly.fieldState.error && (
-            <p className={styles.errorText}>{String(hourly.fieldState.error.message)}</p>
-          )}
+          {hourly.fieldState.error && <p className={styles.errorText}>{String(hourly.fieldState.error.message)}</p>}
         </>
       );
     }
 
-    if (t === 'Salary') {
+    if (type === 'Salary') {
       return (
         <>
           <label className={styles.label}>Місячна зарплата</label>
@@ -169,29 +201,20 @@ export default function SalaryField<TFieldValues extends FieldValues>({
               step="0.01"
               min="0"
               inputMode="decimal"
+              placeholder="0"
               className={`${styles.input} ${styles.inputPadRight} ${
                 monthly.fieldState.error ? styles.errorInput : ''
               }`}
-              value={(monthly.field.value as number | null | undefined) ?? 0}
-              onChange={(e) =>
-                monthly.field.onChange(
-                  (e.target.value === '' ? 0 : Number(e.target.value)) as FieldPathValue<
-                    TFieldValues,
-                    Path<TFieldValues>
-                  >
-                )
-              }
+              value={(monthly.field.value as number | string | null | undefined) ?? ''}
+              onChange={(e) => handleRateChange(e, monthly.field.onChange)}
             />
             {RateSuffix}
           </div>
-          {monthly.fieldState.error && (
-            <p className={styles.errorText}>{String(monthly.fieldState.error.message)}</p>
-          )}
+          {monthly.fieldState.error && <p className={styles.errorText}>{String(monthly.fieldState.error.message)}</p>}
         </>
       );
     }
 
-    // PerTraining
     return (
       <>
         <label className={styles.label}>Ставка (за тренування)</label>
@@ -201,18 +224,12 @@ export default function SalaryField<TFieldValues extends FieldValues>({
             step="0.01"
             min="0"
             inputMode="decimal"
+            placeholder="0"
             className={`${styles.input} ${styles.inputPadRight} ${
               perTraining.fieldState.error ? styles.errorInput : ''
             }`}
-            value={(perTraining.field.value as number | null | undefined) ?? 0}
-            onChange={(e) =>
-              perTraining.field.onChange(
-                (e.target.value === '' ? 0 : Number(e.target.value)) as FieldPathValue<
-                  TFieldValues,
-                  Path<TFieldValues>
-                >
-              )
-            }
+            value={(perTraining.field.value as number | string | null | undefined) ?? ''}
+            onChange={(e) => handleRateChange(e, perTraining.field.onChange)}
           />
           {RateSuffix}
         </div>
@@ -227,8 +244,6 @@ export default function SalaryField<TFieldValues extends FieldValues>({
     <div className={styles.salaryBlock}>
       <div>
         <label className={styles.label}>Тип оплати</label>
-
-        {/* чипи-радіо */}
         <div className={styles.chipsRow} role="radiogroup" aria-label="Тип оплати">
           {[
             { value: 'Hourly' as SalaryType, label: 'Погодинна' },
@@ -244,9 +259,7 @@ export default function SalaryField<TFieldValues extends FieldValues>({
                 aria-checked={active}
                 className={`${styles.chip} ${active ? styles.chipActive : ''}`}
                 onClick={() =>
-                  salaryTypeField.onChange(
-                    opt.value as FieldPathValue<TFieldValues, Path<TFieldValues>>
-                  )
+                  salaryTypeField.onChange(opt.value as FieldPathValue<TFieldValues, Path<TFieldValues>>)
                 }
               >
                 {opt.label}
