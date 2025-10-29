@@ -20,7 +20,7 @@ export interface Club {
 
 export const clubs: Club[] = [
   {
-    id: 'fc-kyiv',
+    id: '991834b1-2d08-430c-9cbd-ddf17226c1ae',
     name: 'Energy Fit',
     status: 'Активний',
     statusColor: 'green',
@@ -30,7 +30,7 @@ export const clubs: Club[] = [
     courts: 5,
   },
   {
-    id: 'club-2',
+    id: '48e13f1d-1877-492b-b88d-bd2d777cfcb1',
     name: 'FitZone',
     status: 'Очікує',
     statusColor: 'yellow',
@@ -40,7 +40,7 @@ export const clubs: Club[] = [
     courts: 3,
   },
   {
-    id: 'club-3',
+    id: '94f4c42a-97d5-4044-b093-a42a85b78ec5',
     name: 'Power Gym',
     status: 'Заблокований',
     statusColor: 'red',
@@ -50,7 +50,7 @@ export const clubs: Club[] = [
     courts: 2,
   },
   {
-    id: 'club-4',
+    id: '9b921175-93b3-4d05-a529-432a0a62c7b0',
     name: 'SportLife',
     status: 'Активний',
     statusColor: 'green',
@@ -60,7 +60,7 @@ export const clubs: Club[] = [
     courts: 4,
   },
   {
-    id: 'club-5',
+    id: 'be12fb23-0be8-4a8f-8d4b-343f9416862c',
     name: 'Urban Tennis Club',
     status: 'Активний',
     statusColor: 'green',
@@ -70,7 +70,7 @@ export const clubs: Club[] = [
     courts: 6,
   },
   {
-    id: 'club-6',
+    id: 'eaa85593-0735-42bc-92a2-96df14d6654d',
     name: 'Champion Arena',
     status: 'Очікує',
     statusColor: 'yellow',
