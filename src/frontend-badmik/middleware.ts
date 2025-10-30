@@ -331,9 +331,12 @@ export async function middleware(request: NextRequest) {
       (payload[NAMEID_CLAIM] as string | undefined) ??
       (payload.sub as string | undefined);
 
+      console.log('JWT payload:', JSON.stringify(payload, null, 2));
+
     
       const clubId = payload.clubId as string | undefined;
       console.log("MW role:", role);
+      console.log("clubId", clubId);
 
       if (role === "SuperAdmin") {
         if (pathname === "/") {
@@ -349,7 +352,7 @@ export async function middleware(request: NextRequest) {
         return NextResponse.next();
       }
 
-      if (role === "club_admin") {
+      if (role === "ClubAdmin") {
         // console.log("pathname", pathname);
         if (pathname === "/") {
           return NextResponse.redirect(new URL(`/admin/${clubId}`, request.url));

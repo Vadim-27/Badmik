@@ -3,7 +3,8 @@
 import { Controller, type Control, type FieldValues, type FieldPath } from 'react-hook-form';
 import { Combobox, Transition } from '@headlessui/react';
 import { Fragment, useMemo, useState, useCallback, useRef } from 'react';
-import { useClubs } from '@/features/clubs/hooks/useClubs';
+// import { useClubs } from '@/features/clubs/hooks/useClubs';
+import { useClubsList } from '@/services/clubs/queries.client';
 import type { Club } from '@/services/types/clubs.dto';
 import clsx from 'clsx';
 
@@ -37,7 +38,8 @@ export default function ClubSelectFieldAdd<TFieldValues extends FieldValues>({
   renderOption,
   placeholder = 'Пошук клубу за назвою або адресою',
 }: Props<TFieldValues>) {
-  const { data, isLoading, error } = useClubs();
+  // const { data, isLoading, error } = useClubs();
+   const { data, isLoading, error } = useClubsList();
   const [query, setQuery] = useState('');
   const btnRef = useRef<HTMLButtonElement | null>(null);
 

@@ -73,6 +73,7 @@ $focus-ring: rgba(147, 197, 253, 0.35);
   color: var(--text);
   outline: none;
   transition: border 0.2s, box-shadow 0.2s, background 0.2s;
+  line-height: 1.4;
 
   &:focus {
     border-color: var(--focus);

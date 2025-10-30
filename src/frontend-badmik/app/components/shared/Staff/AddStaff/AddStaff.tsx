@@ -12,11 +12,12 @@ import SaveButton from '@/app/components/ui/Buttons/SaveButton/SaveButton';
 import { useTranslations } from 'next-intl';
 
 import { getApiErrorMessage } from '@/lib/http/utils';
-import { dateToIsoStartOfDay } from '@/services/players.service'; 
+// import { dateToIsoStartOfDay } from '@/services/players.service'; 
 
 
-import { useStaff } from '@/features/staff/hooks/useStaff';
-import { useCreateStaff } from '@/features/staff/hooks/useStaff';
+// import { useStaff } from '@/features/staff/hooks/useStaff';
+// import { useCreateStaff } from '@/features/staff/hooks/useStaff';
+import {useCreateStaff} from '@/services/staff/queries.client'
 
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
@@ -28,6 +29,14 @@ import StaffFormNew, {
 } from '../StaffForm/StaffFormNew';
 
 import type { StaffRegisterDto } from '@/services/types/staff.dto';
+
+export function dateToIsoStartOfDay(dateStr: string) {
+  if (!dateStr) return "";
+  const [y, m, d] = dateStr.split("-").map(Number);
+  // UTC, щоб уникнути зсувів таймзони
+  return new Date(Date.UTC(y, (m ?? 1) - 1, d ?? 1, 0, 0, 0)).toISOString();
+}
+
 
 function toDateOnly(dateStr?: string) {
  
@@ -62,15 +71,50 @@ export default function NewStaff() {
     }
 
 
-const buildWorkingHours = (wh: FormValues['workingHoursObj']) => ({
-  monday:    { from: wh.monday.from || null,    to: wh.monday.to || null },
-  tuesday:   { from: wh.tuesday.from || null,   to: wh.tuesday.to || null },
-  wednesday: { from: wh.wednesday.from || null, to: wh.wednesday.to || null },
-  thursday:  { from: wh.thursday.from || null,  to: wh.thursday.to || null },
-  friday:    { from: wh.friday.from || null,    to: wh.friday.to || null },
-  saturday:  { from: wh.saturday.from || null,  to: wh.saturday.to || null },
-  sunday:    { from: wh.sunday.from || null,    to: wh.sunday.to || null },
-});
+// const buildWorkingHours = (wh: FormValues['workingHoursObj']) => ({
+//   monday:    { from: wh.monday.from || null,    to: wh.monday.to || null },
+//   tuesday:   { from: wh.tuesday.from || null,   to: wh.tuesday.to || null },
+//   wednesday: { from: wh.wednesday.from || null, to: wh.wednesday.to || null },
+//   thursday:  { from: wh.thursday.from || null,  to: wh.thursday.to || null },
+//   friday:    { from: wh.friday.from || null,    to: wh.friday.to || null },
+//   saturday:  { from: wh.saturday.from || null,  to: wh.saturday.to || null },
+//   sunday:    { from: wh.sunday.from || null,    to: wh.sunday.to || null },
+// });
+
+const buildWorkingHours = (wh: FormValues['workingHoursObj']) => {
+  const days = [
+    'monday',
+    'tuesday',
+    'wednesday',
+    'thursday',
+    'friday',
+    'saturday',
+    'sunday',
+  ] as const;
+
+  const result: Record<typeof days[number], { from: string; to: string } | null> = {} as any;
+
+  for (const day of days) {
+    const from = wh[day]?.from?.trim() || null;
+    const to = wh[day]?.to?.trim() || null;
+
+    // якщо обидва пусті — вихідний
+    if (!from && !to) {
+      result[day] = null;
+      continue;
+    }
+
+    // якщо один є, іншого нема — це логічна помилка у формі
+    if (!from || !to) {
+      throw new Error(`У день "${day}" задано лише один час. Потрібно обидва або жодного.`);
+    }
+
+    // робочий день
+    result[day] = { from, to };
+  }
+
+  return result;
+};
 
 
 // const buildWorkingHours = (wh: FormValues['workingHoursObj']) =>

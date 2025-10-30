@@ -84,11 +84,19 @@ export default function AvatarUploadField<TFieldValues extends FieldValues>({
 
             <div className={styles.row}>
               {/* аватар */}
-              {preview ? (
+              {/* {preview ? (
                 <img src={preview} alt="Аватар" className={styles.avatar} />
               ) : (
                 <div className={`${styles.avatar} ${styles.avatarEmpty}`}>Аватар</div>
-              )}
+              )} */}
+
+              <div className={styles.avatarBox}>
+      {preview ? (
+        <img src={preview} alt="Аватар" className={styles.avatarImg} />
+      ) : (
+        <span className={styles.avatarPlaceholder}>Аватар</span>
+      )}
+    </div>
 
               {/* кнопки */}
               <div className={styles.buttons}>
