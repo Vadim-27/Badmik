@@ -10,21 +10,30 @@ import RQHydrate from '@/services/_shared/RQHydrate';
 import { prefetch } from '@/services/_shared/prefetch';
 import { roleServerQueries } from '@/services/role/queries.server';
 import { staffServerQueries } from '@/services/staff/queries.server';
+import { buildHrefServer } from '@/lib/club-scope.server';
+
+
+type Params = {
+  locale: string;
+  clubId?: string; 
+};
+
 
 const AccessPage = async ({
   params,
 }: {
-  params: { locale: string};
+  params: Params; 
 }) => {
-  const {  locale } = await params;
+  const {  locale, clubId } = await params;
   const t = await getTranslations({locale, namespace: 'ActionHeader.title'});
 
     const state = await prefetch([
     roleServerQueries.list(),
     // staffServerQueries.list(),
-    staffServerQueries.list(/* clubId */ undefined),
+    staffServerQueries.list(clubId),
   ]);
   
+  const addHref = buildHrefServer(clubId, 'access-control/add-staff');
 
     return (
       <RQHydrate state={state}>
@@ -32,7 +41,10 @@ const AccessPage = async ({
         <ActionHeader>
         <BackButton label="buttons.back"/>
         <h2 className="text-lg font-semibold">{t('employeeHeader')}</h2>
-        <AddButton href={`/admin/access-control/add-staff`} label="buttons.addUser" />
+        <AddButton 
+        href={addHref}
+        // href={`/admin/access-control/add-staff`} 
+        label="buttons.addUser" />
         </ActionHeader>
         <StaffTable />
     </div>

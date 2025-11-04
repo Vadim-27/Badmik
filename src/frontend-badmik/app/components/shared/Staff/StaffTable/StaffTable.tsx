@@ -344,6 +344,9 @@ import { useTranslations, useLocale } from 'next-intl';
 import { useStaffList } from '@/services/staff/queries.client';
 import type { Staff } from '@/services/types/staff.dto';
 
+import { useClubScope } from '@/lib/club-scope';
+ 
+
 // ---- helpers & types --------------------------------------------------------
 
 const EMPTY_LABEL = 'дані ще не заповнені';
@@ -440,6 +443,10 @@ const StaffTable: React.FC = () => {
   const staffQuery = useStaffList();
   const { data, isLoading, isError, error } = staffQuery;
 
+
+  const { buildHref } = useClubScope();
+
+
   // Уніфікуємо можливі формати відповіді
   const items: StaffFromApi[] = React.useMemo(() => {
     const d = data as StaffApiResponse | undefined;
@@ -483,8 +490,12 @@ const StaffTable: React.FC = () => {
         const first = toNameCase(row.firstName);
         const last  = toNameCase(row.lastName);
         const hasAny = (first && first.trim()) || (last && last.trim());
+         const href = buildHref(`access-control/${row.id}`);
         return (
-          <Link href={`/admin/access-control/${row.id}`} className="fioStack">
+          <Link 
+          href={href}
+          // href={`/admin/access-control/${row.id}`}
+           className="fioStack">
             <span>{hasAny ? first || EMPTY_LABEL : EMPTY_LABEL}</span>
             {hasAny && <span>{last || EMPTY_LABEL}</span>}
           </Link>

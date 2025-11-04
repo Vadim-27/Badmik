@@ -334,7 +334,7 @@ export async function middleware(request: NextRequest) {
       console.log('JWT payload:', JSON.stringify(payload, null, 2));
 
     
-      const clubId = payload.clubId as string | undefined;
+      const clubId = payload.ClubId as string | undefined;
       console.log("MW role:", role);
       console.log("clubId", clubId);
 

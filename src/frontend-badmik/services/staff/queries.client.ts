@@ -13,12 +13,14 @@ import { qk } from '../_shared/queryKeys';
 import { staffApiClient } from './api.client';
 import type { Staff, StaffRegisterDto, UpdateStaffDto } from '../types/staff.dto';
 
+
 export function useStaffList(
+  params?: { clubId?: string },
   options?: Partial<UseQueryOptions<Staff[], unknown, Staff[], QueryKey>>
 ) {
   return useQuery({
-    queryKey: qk.staff.list(),
-    queryFn: ({ signal }) => staffApiClient.list(signal),
+    queryKey: qk.staff.list(params?.clubId),
+    queryFn: ({ signal }) => staffApiClient.list({ clubId: params?.clubId }, signal),
     placeholderData: keepPreviousData,
     staleTime: 5 * 60 * 1000,
     retry: 1,
@@ -26,6 +28,20 @@ export function useStaffList(
     ...(options ?? {}),
   });
 }
+
+// export function useStaffList(
+//   options?: Partial<UseQueryOptions<Staff[], unknown, Staff[], QueryKey>>
+// ) {
+//   return useQuery({
+//     queryKey: qk.staff.list(),
+//     queryFn: ({ signal }) => staffApiClient.list(signal),
+//     placeholderData: keepPreviousData,
+//     staleTime: 5 * 60 * 1000,
+//     retry: 1,
+//     refetchOnWindowFocus: false,
+//     ...(options ?? {}),
+//   });
+// }
 
 type UseStaffByIdOptions = Partial<
   UseQueryOptions<Staff, unknown, Staff, QueryKey>
