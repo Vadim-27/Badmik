@@ -59,10 +59,22 @@ import { api } from '@/lib/http/api';
 import { ENDPOINTS } from '@/lib/endpoints';
 import { unwrap } from '@/lib/http/utils';
 import type { Staff, StaffRegisterDto, UpdateStaffDto } from '../types/staff.dto';
+import { withQuery } from '@/lib/http/qs';
+
+type ListParams = { clubId?: string; page?: number; pageSize?: number };
 
 export const staffApiClient = {
-  list: (signal?: AbortSignal) =>
-    unwrap<Staff[]>(api.get(ENDPOINTS.staff.getAll, { signal })),
+
+  list: (params?: ListParams, signal?: AbortSignal) => {
+    const url = withQuery(ENDPOINTS.staff.getAll, {
+      ClubId: params?.clubId,
+      Page: params?.page,
+      PageSize: params?.pageSize,
+    });
+    return unwrap<Staff[]>(api.get(url, { signal }));
+  },
+  // list: (signal?: AbortSignal) =>
+  //   unwrap<Staff[]>(api.get(ENDPOINTS.staff.getAll, { signal })),
 
   byId: (id: string, signal?: AbortSignal) =>
     unwrap<Staff>(api.get(ENDPOINTS.staff.getById(id), { signal })),

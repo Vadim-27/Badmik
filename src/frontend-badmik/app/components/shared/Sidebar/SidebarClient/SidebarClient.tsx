@@ -7,6 +7,13 @@ import { useTranslations } from "next-intl";
 import SidebarLink from "./SidebarLink/SidebarLink";
 import styles from "./Sidebar.module.scss";
 
+//====
+
+import { useClubScope } from '@/lib/club-scope';
+
+
+//====
+
 type Props = {
   role?: string;
   userId?: string;
@@ -20,6 +27,9 @@ export default function SidebarClient({ role, userId, email }: Props) {
   const [open, setOpen] = useState(true);
   const params = useParams();
   const t = useTranslations("Sidebar");
+
+  const { buildHref } = useClubScope();
+  
 
   // якщо немає ролі — взагалі не рендеримо
   if (!role) return null;
@@ -73,7 +83,10 @@ export default function SidebarClient({ role, userId, email }: Props) {
         <div className={styles.sideSec}>
           <div className={styles.secTitle}>{open && 'Основне'}</div>
           <nav className={styles.navList}>
-            <SidebarLink href="/admin/dashboard/" open={open}>
+            <SidebarLink 
+            href={buildHref('dashboard')} 
+            // href="/admin/dashboard/" 
+            open={open}>
               <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                 <path d="M3 12h18M3 6h18M3 18h18" />
               </svg>
@@ -93,14 +106,20 @@ export default function SidebarClient({ role, userId, email }: Props) {
               )}
             </SidebarLink>
 
-            <SidebarLink href="/admin/trainings" open={open} count={34}>
+            <SidebarLink 
+            href={buildHref('trainings')} 
+            // href="/admin/trainings" 
+            open={open} count={34}>
               <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                 <path d="M3 7h18M3 12h18M3 17h18" />
               </svg>
               {open && (<span>{t('Workout')}</span>)}
               
             </SidebarLink>
-            <SidebarLink href="/admin/players" open={open} count={512}>
+            <SidebarLink 
+            // href="/admin/players" 
+            href={buildHref('players')} 
+            open={open} count={512}>
               <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                 <path d="M12 12c2.8 0 5-2.2 5-5s-2.2-5-5-5-5 2.2-5 5 2.2 5 5 5zM3 22c0-3.9 4.5-7 9-7s9 3.1 9 7" />
               </svg>
@@ -120,7 +139,10 @@ export default function SidebarClient({ role, userId, email }: Props) {
               {open && (<span>{t('Settings')}</span>
               )}
             </SidebarLink>
-            <SidebarLink  href="/admin/access-control/" open={open} >
+            <SidebarLink  
+            // href="/admin/access-control/"
+            href={buildHref('access-control')} 
+            open={open} >
               <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                 <rect x="3" y="4" width="7" height="7" />
                 <rect x="14" y="4" width="7" height="7" />
