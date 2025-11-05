@@ -1,8 +1,8 @@
 ﻿using BadmintonApp.Application.Interfaces.Auth;
 using BadmintonApp.Application.Interfaces.Clubs;
 using BadmintonApp.Application.Interfaces.Logs;
-using BadmintonApp.Application.Interfaces.Players;
 using BadmintonApp.Application.Interfaces.Repositories;
+using BadmintonApp.Application.Interfaces.Transactions;
 using BadmintonApp.Application.Interfaces.Users;
 using BadmintonApp.Application.Services;
 using BadmintonApp.Domain.Core;
@@ -33,8 +33,10 @@ namespace BadmintonApp.Infrastructure
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IPermissionRepository, PermissionRepository>();
             services.AddScoped<IPlayerRepository, PlayerRepository>();
-            
+            services.AddScoped<IStaffRepository, StaffRepository>();
             services.AddScoped<ITrainingsRepository, TrainingsRepository>();
+            services.AddScoped<ITransactionService, TransactionService>();
+            services.AddScoped<IWorkingHourRepository, WorkingHourRepository>();
 
             return services;
         }

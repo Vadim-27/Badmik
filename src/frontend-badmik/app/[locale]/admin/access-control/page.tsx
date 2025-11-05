@@ -21,7 +21,8 @@ const AccessPage = async ({
 
     const state = await prefetch([
     roleServerQueries.list(),
-    staffServerQueries.list(),
+    // staffServerQueries.list(),
+    staffServerQueries.list(/* clubId */ undefined),
   ]);
   
 

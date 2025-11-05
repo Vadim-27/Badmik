@@ -1,4 +1,5 @@
 ﻿using BadmintonApp.Application.DTOs.Clubs;
+using BadmintonApp.Application.DTOs.WorkingHourDtos;
 using BadmintonApp.Application.Interfaces.Clubs;
 using BadmintonApp.Application.Validation;
 using FluentValidation;
@@ -27,7 +28,7 @@ namespace BadmintonApp.API.Controllers
             _workingHourDtoValidator = workingHourDtoValidator;
         }
 
-        [HttpPost]
+        [HttpPost("{id}/Create")]
         public async Task<ActionResult> Create([FromBody] CreateClubDto create, CancellationToken cancellationToken)
         {
             await _createClubValidation.ValidateAndThrowAsync(create, cancellationToken);
@@ -39,7 +40,7 @@ namespace BadmintonApp.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet]
+        [HttpGet("GetAll")]
         public async Task<ActionResult> GetAll([FromQuery] string? filter, CancellationToken cancellationToken)
         {
             var res = _clubsService.GetAllAsync(filter, cancellationToken); //?
@@ -47,7 +48,7 @@ namespace BadmintonApp.API.Controllers
             return Ok(res);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id}/Update")]
         public async Task<ActionResult> Update(Guid id, [FromBody] UpdateClubDto dto, CancellationToken cancellationToken)
         {
             await _updateClubValidation.ValidateAndThrowAsync(dto, cancellationToken);
@@ -58,7 +59,7 @@ namespace BadmintonApp.API.Controllers
             return Ok(result);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}/Delete")]
         public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
         {
             await _clubsService.DeleteAsync(id, cancellationToken);

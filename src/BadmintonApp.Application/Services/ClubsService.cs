@@ -1,8 +1,10 @@
 ﻿using BadmintonApp.Application.DTOs.Clubs;
+using BadmintonApp.Application.DTOs.WorkingHourDtos;
 using BadmintonApp.Application.Exceptions;
 using BadmintonApp.Application.Interfaces.Clubs;
 using BadmintonApp.Application.Interfaces.Repositories;
 using BadmintonApp.Domain.Clubs;
+using BadmintonApp.Domain.WorkingHours;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -12,22 +14,20 @@ using System.Threading.Tasks;
 
 namespace BadmintonApp.Application.Services;
 
-public class ClubsService : IClubsService
+public class ClubsService(
+    IClubsRepository clubsRepository,
+    IUserRepository userRepository,
+    IValidator<CreateClubDto> createClubValidation,
+    IValidator<WorkingHourDto> workingHourValidation,
+    IValidator<UpdateClubDto> updateClubValidation,
+    IWorkingHourRepository workingHourRepository) : IClubsService
 {
-    private readonly IClubsRepository _clubsRepository;
-    private readonly IUserRepository _userRepository;
-    private readonly IValidator<CreateClubDto> _createClubValidation;
-    private readonly IValidator<WorkingHourDto> _workingHourValidation;
-    private readonly IValidator<UpdateClubDto> _updateClubValidation;
-
-    public ClubsService(IClubsRepository clubsRepository, IUserRepository userRepository, IValidator<CreateClubDto> createClubValidation, IValidator<WorkingHourDto> workingHourValidation, IValidator<UpdateClubDto> updateClubValidation)
-    {
-        _clubsRepository = clubsRepository;
-        _userRepository = userRepository;
-        _createClubValidation = createClubValidation;
-        _workingHourValidation = workingHourValidation;
-        _updateClubValidation = updateClubValidation;
-    }    
+    private readonly IClubsRepository _clubsRepository = clubsRepository;
+    private readonly IUserRepository _userRepository = userRepository;
+    private readonly IValidator<CreateClubDto> _createClubValidation = createClubValidation;
+    private readonly IValidator<WorkingHourDto> _workingHourValidation = workingHourValidation;
+    private readonly IValidator<UpdateClubDto> _updateClubValidation = updateClubValidation;
+    private readonly IWorkingHourRepository _workingHourRepository = workingHourRepository;
 
     public async Task<ClubResultDto> CreateAsync(CreateClubDto dto, CancellationToken cancellationToken)
     {
@@ -43,7 +43,9 @@ public class ClubsService : IClubsService
             City = dto.Location.City,
             Name = dto.Name,
             TotalCourts = dto.CourtCount,
-            WorkingHours = new List<WorkingHour>()
+
+        };
+        var workingHours = new List<WorkingHour>()
             {
                 CreateWorkingHour(DayOfWeek.Monday, dto.WorkingHours.Monday),
                 CreateWorkingHour(DayOfWeek.Tuesday, dto.WorkingHours.Tuesday),
@@ -52,8 +54,11 @@ public class ClubsService : IClubsService
                 CreateWorkingHour(DayOfWeek.Friday, dto.WorkingHours.Friday),
                 CreateWorkingHour(DayOfWeek.Saturday, dto.WorkingHours.Saturday),
                 CreateWorkingHour(DayOfWeek.Sunday, dto.WorkingHours.Sunday),
-            }.Where(x => x != null).ToList()
-        };
+            }.Where(x => x != null).ToList();
+
+        workingHours.ForEach(x => x.ClubId = club.Id);
+
+        await _workingHourRepository.AddWorkingHour(workingHours, cancellationToken);
 
         var clubRes = await _clubsRepository.CreateAsync(club, cancellationToken);
 
@@ -80,7 +85,7 @@ public class ClubsService : IClubsService
         await _updateClubValidation.ValidateAndThrowAsync(dto, cancellationToken);
         await _workingHourValidation.ValidateAndThrowAsync(dto.WorkingHours, cancellationToken);
 
-        var club = await _clubsRepository.GetByIdAsync(id, cancellationToken) ?? throw new BadRequestException("Club not found");        
+        var club = await _clubsRepository.GetByIdAsync(id, cancellationToken) ?? throw new BadRequestException("Club not found");
 
         club.Name = dto.Name;
         club.Address = dto.Address;

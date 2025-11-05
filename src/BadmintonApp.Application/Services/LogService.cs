@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using BadmintonApp.Application.DTOs.Common;
 using BadmintonApp.Application.DTOs.Logs;
+using BadmintonApp.Application.DTOs.Paginations;
+using BadmintonApp.Application.Extension;
 using BadmintonApp.Application.Interfaces.Logs;
 using BadmintonApp.Application.Interfaces.Repositories;
 using System;
@@ -26,12 +29,9 @@ public class LogService : ILogService
         CancellationToken cancellationToken)
 
     {
-        var list = await _logRepository.GetLogsByFilters(getLogsFilterDto, cancellationToken);        
-
-        return new PaginationListDto<LogDto> 
-        {
-            List = list.Select(x => _mapper.Map<LogDto>(x)).ToList(),
-            TotalCount = await _logRepository.GetTotalCountLogsByFilter(getLogsFilterDto, cancellationToken)
-        };
+        await Task.Yield();
+        return _logRepository.GetLogsByFilters(getLogsFilterDto, cancellationToken)
+            .ProjectTo<LogDto>(_mapper.ConfigurationProvider)
+            .AsPagination(getLogsFilterDto);
     }
 }

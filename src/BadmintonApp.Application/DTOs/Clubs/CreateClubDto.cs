@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using BadmintonApp.Application.DTOs.WorkingHourDtos;
+using System.Collections.Generic;
 
 namespace BadmintonApp.Application.DTOs.Clubs;
 

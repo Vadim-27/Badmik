@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using BadmintonApp.Application.DTOs.Clubs;
-using BadmintonApp.Domain.Clubs;
+using BadmintonApp.Application.DTOs.WorkingHourDtos;
+using BadmintonApp.Domain.WorkingHours;
 
 namespace BadmintonApp.Application.Mappings;
 

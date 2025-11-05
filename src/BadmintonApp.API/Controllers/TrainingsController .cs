@@ -30,7 +30,7 @@ namespace BadmintonApp.API.Controllers
             _workingHourValidator = workingHourValidator;
         }
 
-        [HttpGet]
+        [HttpGet("GetAll")]
         public ActionResult GetAll(
             [FromQuery] Guid clubId,
             [FromQuery] DateTime? date,
@@ -41,7 +41,7 @@ namespace BadmintonApp.API.Controllers
             return Ok(trainings);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}/GetById")]
         public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
         {
             var training = await _trainingsService.GetByIdAsync(id, cancellationToken);
@@ -51,7 +51,7 @@ namespace BadmintonApp.API.Controllers
             return Ok(training);
         }
 
-        [HttpPost]
+        [HttpPost("Create")]
         [Authorize]
         public async Task<IActionResult> Create([FromBody] CreateTrainingDto dto, CancellationToken cancellationToken)
         {
@@ -63,7 +63,7 @@ namespace BadmintonApp.API.Controllers
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id}/Update")]
         public async Task<IActionResult> Update(Guid id, [FromBody] UpdateTrainingDto dto, CancellationToken cancellationToken)
         {
             await _updateTrainingValidator.ValidateAndThrowAsync(dto, cancellationToken);
@@ -75,7 +75,7 @@ namespace BadmintonApp.API.Controllers
             return Ok(updated);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}/Delete")]
         public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
         {
             var userId = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
@@ -85,7 +85,7 @@ namespace BadmintonApp.API.Controllers
             return Ok();
         }
 
-        [HttpPost("{id}/cancel")]
+        [HttpPost("{id}/Cancel")]
         public async Task<IActionResult> Cancel(Guid id, CancellationToken cancellationToken)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -97,7 +97,7 @@ namespace BadmintonApp.API.Controllers
             return Ok();
         }
 
-        [HttpPost("{id}/queue")]
+        [HttpPost("{id}/JoinQueue")]
         public async Task<IActionResult> JoinQueue(Guid id, CancellationToken cancellationToken)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -109,7 +109,7 @@ namespace BadmintonApp.API.Controllers
             return Ok();
         }
 
-        [HttpDelete("{id}/queue")]
+        [HttpDelete("{id}/LeaveQueue")]
         public async Task<IActionResult> LeaveQueue(Guid id, CancellationToken cancellationToken)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -121,14 +121,14 @@ namespace BadmintonApp.API.Controllers
             return Ok();
         }
 
-        [HttpGet("{id}/participants")]
+        [HttpGet("{id}/GetParticipants")]
         public async Task<IActionResult> GetParticipants(Guid id, CancellationToken cancellationToken)
         {
             var result = await _trainingsService.GetParticipantsAsync(id, cancellationToken);
             return Ok(result);
         }
 
-        [HttpGet("{id}/queue")]
+        [HttpGet("{id}/GetQueue")]
         public async Task<IActionResult> GetQueue(Guid id, CancellationToken cancellationToken)
         {
             var result = await _trainingsService.GetQueueAsync(id, cancellationToken);

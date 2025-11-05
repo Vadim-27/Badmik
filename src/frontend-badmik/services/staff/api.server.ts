@@ -2,11 +2,26 @@
 import 'server-only';
 import { serverFetch } from '@/lib/http/serverFetch';
 import { ENDPOINTS } from '@/lib/endpoints';
+import { withQuery } from '@/lib/http/qs';
 import type { Staff, StaffRegisterDto, UpdateStaffDto } from '../types/staff.dto';
 
+type ListParams = { clubId?: string; page?: number; pageSize?: number };
+
+// export const staffApiServer = {
+//   async list(): Promise<Staff[]> {
+//     const res = await serverFetch(ENDPOINTS.staff.getAll, {}, { revalidate: 60, tags: ['staff'] });
+//     return res.json();
+//   },
 export const staffApiServer = {
-  async list(): Promise<Staff[]> {
-    const res = await serverFetch(ENDPOINTS.staff.getAll, {}, { revalidate: 60, tags: ['staff'] });
+  async list(params: ListParams = {}): Promise<Staff[]> {
+    // бек чекає ClubId у query → підставляємо лише якщо є
+    const url = withQuery(ENDPOINTS.staff.getAll, {
+      ClubId: params.clubId,
+      Page: params.page,
+      PageSize: params.pageSize,
+    });
+
+    const res = await serverFetch(url, {}, { revalidate: 60, tags: ['staff'] });
     return res.json();
   },
 

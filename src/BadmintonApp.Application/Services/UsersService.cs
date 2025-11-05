@@ -1,13 +1,11 @@
 ﻿using AutoMapper;
+using BadmintonApp.Application.DTOs.Common;
 using BadmintonApp.Application.DTOs.Player;
 using BadmintonApp.Application.DTOs.Staff;
 using BadmintonApp.Application.DTOs.Users;
 using BadmintonApp.Application.Exceptions;
-using BadmintonApp.Application.Interfaces.Players;
 using BadmintonApp.Application.Interfaces.Repositories;
-using BadmintonApp.Application.Interfaces.Staffs;
 using BadmintonApp.Application.Interfaces.Users;
-using BadmintonApp.Domain.Clubs;
 using BadmintonApp.Domain.Core;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
@@ -19,37 +17,39 @@ using System.Threading.Tasks;
 
 namespace BadmintonApp.Application.Services
 {
-    public class UserService : IUsersService
+    public class UserService(
+        IUserRepository userRepository,
+        IPlayerRepository playerRepository,
+        IStaffRepository staffRepository,
+        IPasswordHasher<User> passwordHasher,
+        IValidator<PlayerRegisterDto> playerRegisterValidation,
+        IMapper mapper,
+        IValidator<StaffRegisterDto> staffRegisterValidation,
+        IWorkingHourRepository workingHourRepository) : IUsersService
     {
-        private readonly IUserRepository _userRepository;
-        private readonly IPlayerRepository _playerRepository;
-        private readonly IStaffRepository _staffRepository;
-        private readonly IPasswordHasher<User> _passwordHasher;
-        private readonly IValidator<PlayerRegisterDto> _userRegisterValidation;
-        
-        private readonly IMapper _mapper;
+        private readonly IUserRepository _userRepository = userRepository;
+        private readonly IPlayerRepository _playerRepository = playerRepository;
+        private readonly IStaffRepository _staffRepository = staffRepository;
+        private readonly IPasswordHasher<User> _passwordHasher = passwordHasher;
+        private readonly IValidator<PlayerRegisterDto> _playerRegisterValidation = playerRegisterValidation;
 
-        public UserService(IUserRepository userRepository, IPlayerRepository playerRepository,IStaffRepository staffRepository, IPasswordHasher<User> passwordHasher, IValidator<PlayerRegisterDto> userRegisterValidation,  IMapper mapper)
-        {
-            _userRepository = userRepository;
-            _playerRepository = playerRepository;
-            _staffRepository = staffRepository;
-            _passwordHasher = passwordHasher;
-            _userRegisterValidation = userRegisterValidation;            
-            _mapper = mapper;
-        }
+        private readonly IMapper _mapper = mapper;
+        private readonly IValidator<StaffRegisterDto> _staffRegisterValidation = staffRegisterValidation;
+        private readonly IWorkingHourRepository _workingHourRepository = workingHourRepository;
 
         public async Task RegisterPlayerAsync(PlayerRegisterDto dto, CancellationToken cancellationToken)
-        {            
-            await _userRegisterValidation.ValidateAndThrowAsync(dto, cancellationToken);
+        {
+            await _playerRegisterValidation.ValidateAndThrowAsync(dto, cancellationToken);
             var user = new User
             {
                 Id = Guid.NewGuid(),
                 Email = dto.Email,
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
+                PhoneNumber = dto.PhoneNumber,
+                ImageUrl = dto.ImageUrl,
                 DoB = dto.DoB,
-                ClubId = dto.ClubId,               
+                ClubId = dto.ClubId,
                 CreatedAt = DateTime.UtcNow,
                 IsActive = true
             };
@@ -61,7 +61,8 @@ namespace BadmintonApp.Application.Services
         }
 
         public async Task RegisterStaffAsync(StaffRegisterDto dto, CancellationToken cancellationToken)
-        {           
+        {
+            await _staffRegisterValidation.ValidateAndThrowAsync(dto, cancellationToken);
 
             var user = new User
             {
@@ -69,46 +70,50 @@ namespace BadmintonApp.Application.Services
                 Email = dto.Email,
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
+                PhoneNumber = dto.PhoneNumber,
+                ImageUrl = dto.ImageUrl,
                 DoB = dto.DoB,
                 ClubId = dto.ClubId,
                 CreatedAt = DateTime.UtcNow,
                 IsActive = true
+
             };
 
+            Staff staff = _mapper.Map<Staff>(dto);
+            staff.UserId = user.Id;
+
+            staff.Id = Guid.NewGuid();
+
+            var workingHours = staff.WorkingHours;
+            staff.WorkingHours = null;
+            workingHours.ForEach(x => x.StaffId = staff.Id);
+
             user.PasswordHash = _passwordHasher.HashPassword(user, dto.Password);
+
             await _userRepository.CreateAsync(user, cancellationToken);
 
-            var WorkingHours = new List<WorkingHour>()
-            {
-                CreateWorkingHour(DayOfWeek.Monday, dto.WorkingHours.Monday),
-                CreateWorkingHour(DayOfWeek.Tuesday, dto.WorkingHours.Tuesday),
-                CreateWorkingHour(DayOfWeek.Wednesday, dto.WorkingHours.Wednesday),
-                CreateWorkingHour(DayOfWeek.Thursday, dto.WorkingHours.Thursday),
-                CreateWorkingHour(DayOfWeek.Friday, dto.WorkingHours.Friday),
-                CreateWorkingHour(DayOfWeek.Saturday, dto.WorkingHours.Saturday),
-                CreateWorkingHour(DayOfWeek.Sunday, dto.WorkingHours.Sunday),
-            }.Where(x => x != null).ToList()
+            await _staffRepository.Registration(staff, cancellationToken);
 
-            await _staffRepository.Registration(user.Id, , dto.Salary, cancellationToken);            
+            await _workingHourRepository.AddWorkingHour(workingHours, cancellationToken);
         }
 
         public async Task<UserResultDto> GetByIdAsync(Guid userId, CancellationToken cancellationToken)
         {
             var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
             if (user == null) throw new NotFoundException("User not found.");
-            
-            return MapToProfile(user); // використати автомапер.
+
+            return MapToProfile(user);
         }
 
-        public async Task<UserResultDto> GetProfileAsync(Guid currentUserId, CancellationToken cancellationToken) // два однакових методи, чи э в них обох неохыднысть?
+        public async Task<UserResultDto> GetProfileAsync(Guid currentUserId, CancellationToken cancellationToken)
         {
             var user = await _userRepository.GetByIdAsync(currentUserId, cancellationToken);
             return user == null ? null : MapToProfile(user);
         }
 
-        public async Task<List<UserResultDto>> GetAllAsync(string? filter = null, CancellationToken cancellationToken = default)
+        public async Task<List<UserResultDto>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            var users = await _userRepository.GetAllAsync(filter, cancellationToken);
+            var users = await _userRepository.GetAllAsync(cancellationToken);
             return users.Select(MapToProfile).ToList();
         }
 
@@ -118,14 +123,12 @@ namespace BadmintonApp.Application.Services
             var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
             if (user == null) throw new NotFoundException("User not found.");
 
-            //await _updateUserValidation.ValidateAndThrowAsync(dto, cancellationToken);
-
             user.FirstName = dto.FirstName;
-            user.LastName = dto.LastName;            
+            user.LastName = dto.LastName;
 
             await _userRepository.UpdateAsync(user, cancellationToken);
 
-            return _mapper.Map<UserResultDto>(user);            
+            return _mapper.Map<UserResultDto>(user);
         }
 
         public async Task DeleteAsync(Guid userId, CancellationToken cancellationToken)
@@ -141,8 +144,17 @@ namespace BadmintonApp.Application.Services
             Id = user.Id.ToString(),
             Email = user.Email,
             FirstName = user.FirstName,
-            LastName = user.LastName,            
+            LastName = user.LastName,
+
             DoB = user.DoB
         };
+
+
+
+
+
+
+
+
     }
 }

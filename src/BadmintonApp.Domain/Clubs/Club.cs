@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System;
 using BadmintonApp.Domain.Core;
+using BadmintonApp.Domain.WorkingHours;
 
 namespace BadmintonApp.Domain.Clubs;
 

@@ -9,7 +9,7 @@ namespace BadmintonApp.API.Controllers
 {
     [ApiController]
     [Route("api/logs")]
-    [Authorize]
+    //[Authorize]
     public class LogsController : ControllerBase
     {
         private readonly ILogService _logService;
