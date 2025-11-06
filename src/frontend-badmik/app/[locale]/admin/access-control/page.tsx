@@ -10,6 +10,7 @@ import RQHydrate from '@/services/_shared/RQHydrate';
 import { prefetch } from '@/services/_shared/prefetch';
 import { roleServerQueries } from '@/services/role/queries.server';
 import { staffServerQueries } from '@/services/staff/queries.server';
+import AppBreadcrumbs from '@/app/components/ui/Breadcrumbs/AppBreadcrumbs';
 
 const AccessPage = async ({
   params,
@@ -29,11 +30,18 @@ const AccessPage = async ({
     return (
       <RQHydrate state={state}>
     <div className="p-4 w-full h-screen">
+      
         <ActionHeader>
         <BackButton label="buttons.back"/>
         <h2 className="text-lg font-semibold">{t('employeeHeader')}</h2>
         <AddButton href={`/admin/access-control/add-staff`} label="buttons.addUser" />
         </ActionHeader>
+        <AppBreadcrumbs className="pl-[10px] pb-6"
+      items={[
+        { label: 'Admin', href: '/admin/access-control' },
+        { label: 'Access Control' },
+      ]}
+    />
         <StaffTable />
     </div>
     </RQHydrate>
