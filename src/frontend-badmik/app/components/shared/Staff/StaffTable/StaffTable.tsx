@@ -345,6 +345,7 @@ import { useStaffList } from '@/services/staff/queries.client';
 import type { Staff } from '@/services/types/staff.dto';
 
 import { useClubScope } from '@/lib/club-scope';
+
  
 
 // ---- helpers & types --------------------------------------------------------

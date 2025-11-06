@@ -303,12 +303,12 @@ export async function middleware(request: NextRequest) {
   }
 
 
-  if (pathname === "/") {
-    return NextResponse.redirect(new URL("/admin", request.url));
-  }
+  // if (pathname === "/") {
+  //   return NextResponse.redirect(new URL("/admin", request.url));
+  // }
 
 
-  if (pathname.startsWith("/admin")) {
+  if (pathname.startsWith("/")) {
     const token = request.cookies.get("token")?.value;
     console.log("token", token)
     if (!token) {
@@ -340,7 +340,7 @@ export async function middleware(request: NextRequest) {
 
       if (role === "SuperAdmin") {
         if (pathname === "/") {
-          return NextResponse.redirect(new URL("/admin/", request.url));
+          return NextResponse.redirect(new URL("/admin/dashboard/", request.url));
         }
         return NextResponse.next();
       }

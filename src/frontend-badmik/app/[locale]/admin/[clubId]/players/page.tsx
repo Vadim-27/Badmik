@@ -3,6 +3,7 @@ import ActionHeader from '@/app/components/ui/Layout/ActionHeader/ActionHeader';
 import BackButton from '@/app/components/ui/Buttons/BackButton/BackButton';
 import AddButton from '@/app/components/ui/Buttons/AddButton/AddButton';
 import { buildHrefServer } from '@/lib/club-scope.server';
+import AppBreadcrumbs from '@/app/components/ui/Breadcrumbs/AppBreadcrumbs';
 
 import { getTranslations } from 'next-intl/server';
 
@@ -29,6 +30,13 @@ const UsersClub = async ({
         <h2 className="text-lg font-semibold">{t('usersHeader')}</h2>
         <AddButton href={addHref} label="buttons.addPlayer" />
         </ActionHeader>
+
+        <AppBreadcrumbs className="pl-[10px] pb-6"
+              items={[
+                { label: 'Admin', href: '/admin/players' },
+                { label: 'Players' },
+              ]}
+            />
     
       <UserTable />
     </div>

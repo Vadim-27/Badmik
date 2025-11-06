@@ -10,6 +10,8 @@ import EditButton from '@/app/components/ui/Buttons/EditButton/EditButton';
 import DeleteButton from '@/app/components/ui/Buttons/DeleteButton/DeleteButton';
 import { ConfirmDialog } from '@/app/components/ui/DeleteModal/ConfirmDialog';
 import { useTranslations } from 'next-intl';
+import AppBreadcrumbs from '@/app/components/ui/Breadcrumbs/AppBreadcrumbs';
+import css from "./ClubDetails.module.scss";
 
 type Props = {
   club: Club;
@@ -44,6 +46,16 @@ export const ClubDetails = ({ club }: Props) => {
           <DeleteButton onClick={handleDeleteClick} label="buttons.delete" />
         </div>
       </ActionHeader>
+
+      <div className={css.wrapperBreadcrumbs}>
+             <AppBreadcrumbs
+            items={[
+              { label: 'Admin', href: '/admin/dashboard' },
+              {label: 'Clubs', href: '/admin/clubs' },
+              { label: `Club ${club.name}` },
+            ]}
+          />
+          </div>
 
       <div className="bg-white rounded-2xl shadow p-6 border border-gray-200">
         <div className="flex items-center justify-between mb-4">

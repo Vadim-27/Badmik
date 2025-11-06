@@ -3,9 +3,10 @@
 .containerPage {
   box-sizing: border-box;
   padding: 32px 24px;
-  margin-left: auto;
+  // margin-left: auto;
   margin-right: auto;
   background: var(--bg);
+  min-height: 91vh;
 
    @include media-rules(mobile) {
     padding: 0.5rem 1rem;
