@@ -1,12 +1,17 @@
 ﻿using BadmintonApp.API.Middlewares;
 using BadmintonApp.Application;
+using BadmintonApp.Domain.Logs;
 using BadmintonApp.Infrastructure;
 using BadmintonApp.Infrastructure.Logger;
 using BadmintonApp.Infrastructure.Persistence;
 using BadmintonApp.Infrastructure.Persistence.Seed;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -15,6 +20,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Text;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -99,6 +105,16 @@ builder.Services.AddLogging(l =>
                        .GetRequiredService<ApplicationDbContext>()));
 });
 
+builder.Services.AddCors(o =>
+{
+    o.AddPolicy("Ngrok", p =>
+        p.WithOrigins("https://*.ngrok-free.app")
+         .SetIsOriginAllowedToAllowWildcardSubdomains()
+         .AllowAnyHeader()
+         .AllowAnyMethod());
+});
+
+
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
@@ -119,9 +135,49 @@ app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
 {
-    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();    
-    dbContext.Database.Migrate();
-    await DbInitializer.SeedAsync(dbContext);
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    var retries = 5;
+    while (retries-- > 0)
+    {
+        try { db.Database.Migrate(); break; }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Migration failed: {ex.Message}. Retrying...");
+            await Task.Delay(2000);
+        }
+    }
 }
 
+app.MapGet("/__db", (ApplicationDbContext db) => Results.Text(db.Database.ProviderName));
+// ----- SECURE MIGRATION ENDPOINT -----
+app.MapPost("/__migrate", async (HttpContext ctx, IServiceScopeFactory scopeFactory, IConfiguration cfg, ILogger<Program> log) =>
+{
+    var tokenHeader = ctx.Request.Headers["X-Migrate-Token"].ToString();
+    var tokenConfig = cfg["MIGRATE_TOKEN"];
+    //if (string.IsNullOrEmpty(tokenConfig) || tokenHeader != tokenConfig)
+    //    return Results.Unauthorized();
+
+    try
+    {
+        await using var scope = scopeFactory.CreateAsyncScope();
+        var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+        // якщо БД ще не існує — створимо каталоги
+        var creator = db.Database.GetService<IRelationalDatabaseCreator>();
+        if (!await creator.ExistsAsync())
+            await creator.CreateAsync();
+
+        await db.Database.MigrateAsync();
+
+        // Run initializer
+        await DbInitializer.SeedAsync(db);
+        return Results.Ok("✅ Migrations applied successfully");
+    }
+    catch (Exception ex)
+    {
+        log.LogError(ex, "Migration failed");
+        return Results.Problem(detail: ex.ToString(), statusCode: 500, title: "Migration failed");
+    }
+});
+app.UseCors("Ngrok");
 app.Run();

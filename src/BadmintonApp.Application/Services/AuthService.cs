@@ -16,17 +16,18 @@ public class AuthService : IAuthService
     private readonly IUserRepository _userRepository;
     private readonly IPasswordHasher<User> _passwordHasher;
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
-    private readonly IUserRoleRepository _userRoleRepository;
+    private readonly IStaffRoleRepository _staffRoleRepository;
+    private readonly IStaffRepository _staffRepository;
 
     public AuthService(IUserRepository userRepository,
                        IPasswordHasher<User> passwordHasher,
                        IJwtTokenGenerator jwtTokenGenerator
-                       , IUserRoleRepository userRoleRepository)
+                       , IStaffRoleRepository userRoleRepository)
     {
         _userRepository = userRepository;
         _passwordHasher = passwordHasher;
         _jwtTokenGenerator = jwtTokenGenerator;
-        _userRoleRepository = userRoleRepository;
+        _staffRoleRepository = userRoleRepository;
     }
 
     public async Task<LoginResultDto> LoginAsync(LoginDto dto, CancellationToken cancellationToken)
@@ -38,7 +39,10 @@ public class AuthService : IAuthService
 
         if (result != PasswordVerificationResult.Success) throw new BadRequestException("Invalid credentials");
 
-        var roles = await _userRoleRepository.GetUserRoleForClubAsync(user.Id, user.ClubId.Value, cancellationToken);
+        var staff = await _staffRepository.GetByUserAndClubId(user.Id, user.ClubId.Value, cancellationToken);
+        if (staff == null) throw new BadRequestException("User is not staff member");
+
+        var roles = await _staffRoleRepository.GetStaffRoleForClubAsync(staff.Id, user.ClubId.Value, cancellationToken);
 
         var token = _jwtTokenGenerator.GenerateToken(user, roles.Select(x => x.Name).ToArray());
 
@@ -48,7 +52,7 @@ public class AuthService : IAuthService
             UserId = user.Id.ToString(),
             Email = user.Email,
             Roles = roles.Select(x => x.Name).ToArray(),
-            Permissions = roles.SelectMany(x => x.RolePermissions.Select(x => x.Permission.Name)),
+            Permissions = roles.SelectMany(x => x.RolePermissions.Select(x => x.Permission.Type)),
             FullName = $"{user.FirstName} {user.LastName}",
             ExpiresAt = DateTime.UtcNow.AddHours(2)
         };

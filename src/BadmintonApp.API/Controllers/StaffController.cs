@@ -48,10 +48,17 @@ namespace BadmintonApp.API.Controllers
         }
 
         [HttpGet("GetAll")]
-        public async Task<ActionResult> GetAll([FromQuery]PaginationFilterDto paginationFilterDto, CancellationToken cancellationToken)
+        public async Task<ActionResult> GetAll([FromQuery]ClubPaginationFilterDto paginationFilterDto, CancellationToken cancellationToken)
         {
             var result = await _staffService.GetAll(paginationFilterDto, cancellationToken);
             return Ok(result);
+        }
+
+        [HttpPut("ChangePassword")]
+        public async Task<ActionResult> ChangePassword([FromBody] StaffUpdatePasswordDto staffUpdateDto, CancellationToken cancellationToken)
+        {
+            await _staffService.ChangePassword(staffUpdateDto, cancellationToken);
+            return Ok();
         }
 
     }

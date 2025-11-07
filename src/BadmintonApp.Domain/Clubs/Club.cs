@@ -14,5 +14,5 @@ public class Club
     public int TotalCourts { get; set; }
 
     public List<WorkingHour> WorkingHours { get; set; } = new();
-    public List<UserClubRole> UserRoles { get; set; } = new();
+    public List<StaffClubRole> UserRoles { get; set; } = new();
 }

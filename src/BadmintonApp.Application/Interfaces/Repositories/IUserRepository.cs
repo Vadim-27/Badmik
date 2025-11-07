@@ -17,5 +17,7 @@ namespace BadmintonApp.Application.Interfaces.Repositories
         Task UpdateAsync(User user, CancellationToken cancellationToken);
         Task DeleteAsync(User user, CancellationToken cancellationToken);
         Task<List<User>> GetAllAsync(CancellationToken cancellationToken);
+
+        Task UpdatePasswordAsync(Guid id, string Password,  CancellationToken cancellationToken);
     }
 }

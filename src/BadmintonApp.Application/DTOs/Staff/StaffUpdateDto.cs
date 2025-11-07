@@ -1,5 +1,5 @@
 ﻿using BadmintonApp.Application.DTOs.WorkingHourDtos;
-using BadmintonApp.Domain.Enums;
+using BadmintonApp.Domain.Enums.Staff;
 using System;
 using System.Collections.Generic;
 
@@ -20,6 +20,7 @@ public class StaffUpdateDto
 
     public StaffStatus StaffStatus { get; set; }
     public StaffEmploymentType EmploymentType { get; set; }
+    public StaffPositionType PositionType { get; set; }
 
     public string Title { get; set; }
     public DateOnly StartDate { get; set; }

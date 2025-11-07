@@ -6,6 +6,7 @@ using BadmintonApp.Application.Interfaces.Repositories;
 using BadmintonApp.Application.Interfaces.Staffs;
 using BadmintonApp.Application.Interfaces.Transactions;
 using BadmintonApp.Domain.Core;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -19,16 +20,18 @@ public class StaffService : IStaffService
     private readonly IMapper _mapper;
     private readonly IUserRepository _userRepository;
     private readonly ITransactionService _transactionService;
+    private readonly IPasswordHasher<User> _passwordHasher;
 
-    public StaffService(IStaffRepository staffRepository, IMapper mapper, IUserRepository userRepository,ITransactionService transactionService)
+    public StaffService(IStaffRepository staffRepository, IPasswordHasher<User> passwordHasher, IMapper mapper, IUserRepository userRepository, ITransactionService transactionService)
     {
         _staffRepository = staffRepository;
         _mapper = mapper;
         _userRepository = userRepository;
         _transactionService = transactionService;
+        _passwordHasher = passwordHasher;
     }
 
-    public async Task<PaginationListDto<StaffDto>> GetAll(PaginationFilterDto paginationFilterDto, CancellationToken cancellationToken)
+    public async Task<PaginationListDto<StaffDto>> GetAll(ClubPaginationFilterDto paginationFilterDto, CancellationToken cancellationToken)
     {
         var staffs = await _staffRepository.GetAll(paginationFilterDto, cancellationToken);
 
@@ -76,5 +79,20 @@ public class StaffService : IStaffService
 
             throw;
         }
+    }
+
+
+    public async Task ChangePassword(StaffUpdatePasswordDto staffUpdateDto, CancellationToken cancellationToken)
+    {
+        var staff = await _staffRepository.GetById(staffUpdateDto.StaffId, cancellationToken);
+        if (staff == null)
+        {
+            throw new KeyNotFoundException("Staff not found");
+        }
+        var user = await _userRepository.GetByIdAsync(staff.UserId, cancellationToken);
+
+        var passwordHash = _passwordHasher.HashPassword(user, staffUpdateDto.Password);
+        await _userRepository.UpdatePasswordAsync(user.Id, passwordHash, cancellationToken);
+
     }
 }

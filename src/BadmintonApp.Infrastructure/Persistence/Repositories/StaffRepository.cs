@@ -51,10 +51,20 @@ public class StaffRepository : IStaffRepository
            .FirstAsync(x => x.Id == id, cancellationToken);
     }
 
-    public async Task<PaginationListDto<Staff>> GetAll(PaginationFilterDto paginationFilterDto, CancellationToken cancellationToken)
+    public async Task<Staff> GetByUserAndClubId(Guid userId, Guid clubId, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Staffs
+           .AsNoTracking()
+           .Where(x => x.ClubId == clubId)
+           .Include(x => x.User)
+           .FirstAsync(x => x.UserId == userId, cancellationToken);
+    }
+
+    public async Task<PaginationListDto<Staff>> GetAll(ClubPaginationFilterDto paginationFilterDto, CancellationToken cancellationToken)
     {
         var query = _dbContext.Staffs
                .AsNoTracking()
+               .Where(x => x.ClubId == paginationFilterDto.ClubId)
                .Include(x => x.User)
                .OrderBy(x => x.User.LastName)
                .AsQueryable();

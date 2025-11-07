@@ -6,7 +6,7 @@ namespace BadmintonApp.Domain.Core;
 public class Permission
 {
     public Guid Id { get; set; }
-    public string Name { get; set; }
+    public PermissionType Type { get; set; }
     public List<RolePermission> RolePermissions { get; set; }
 
 }

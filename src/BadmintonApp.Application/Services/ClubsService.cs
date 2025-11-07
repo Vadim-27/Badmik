@@ -122,55 +122,55 @@ public class ClubsService(
     {
         Monday = workingHours.Any(x => x.DayOfWeek == DayOfWeek.Monday) ? new TimeRangeDto
         {
-            From = workingHours.FirstOrDefault(x => x.DayOfWeek == DayOfWeek.Monday).StartTime.ToString("hh\\:mm"),
-            To = workingHours.FirstOrDefault(x => x.DayOfWeek == DayOfWeek.Monday).EndTime.ToString("hh\\:mm")
+            From = workingHours.FirstOrDefault(x => x.DayOfWeek == DayOfWeek.Monday).StartTime?.ToString("hh\\:mm"),
+            To = workingHours.FirstOrDefault(x => x.DayOfWeek == DayOfWeek.Monday).EndTime?.ToString("hh\\:mm")
         } : null,
 
         Tuesday = workingHours.Any(x => x.DayOfWeek == DayOfWeek.Tuesday)
     ? new TimeRangeDto
     {
-        From = workingHours.First(x => x.DayOfWeek == DayOfWeek.Tuesday).StartTime.ToString("hh\\:mm"),
-        To = workingHours.First(x => x.DayOfWeek == DayOfWeek.Tuesday).EndTime.ToString("hh\\:mm")
+        From = workingHours.First(x => x.DayOfWeek == DayOfWeek.Tuesday).StartTime?.ToString("hh\\:mm"),
+        To = workingHours.First(x => x.DayOfWeek == DayOfWeek.Tuesday).EndTime?.ToString("hh\\:mm")
     }
     : null,
 
         Wednesday = workingHours.Any(x => x.DayOfWeek == DayOfWeek.Wednesday)
     ? new TimeRangeDto
     {
-        From = workingHours.First(x => x.DayOfWeek == DayOfWeek.Wednesday).StartTime.ToString("hh\\:mm"),
-        To = workingHours.First(x => x.DayOfWeek == DayOfWeek.Wednesday).EndTime.ToString("hh\\:mm")
+        From = workingHours.First(x => x.DayOfWeek == DayOfWeek.Wednesday).StartTime?.ToString("hh\\:mm"),
+        To = workingHours.First(x => x.DayOfWeek == DayOfWeek.Wednesday).EndTime?.ToString("hh\\:mm")
     }
     : null,
 
         Thursday = workingHours.Any(x => x.DayOfWeek == DayOfWeek.Thursday)
     ? new TimeRangeDto
     {
-        From = workingHours.First(x => x.DayOfWeek == DayOfWeek.Thursday).StartTime.ToString("hh\\:mm"),
-        To = workingHours.First(x => x.DayOfWeek == DayOfWeek.Thursday).EndTime.ToString("hh\\:mm")
+        From = workingHours.First(x => x.DayOfWeek == DayOfWeek.Thursday).StartTime?.ToString("hh\\:mm"),
+        To = workingHours.First(x => x.DayOfWeek == DayOfWeek.Thursday).EndTime?.ToString("hh\\:mm")
     }
     : null,
 
         Friday = workingHours.Any(x => x.DayOfWeek == DayOfWeek.Friday)
     ? new TimeRangeDto
     {
-        From = workingHours.First(x => x.DayOfWeek == DayOfWeek.Friday).StartTime.ToString("hh\\:mm"),
-        To = workingHours.First(x => x.DayOfWeek == DayOfWeek.Friday).EndTime.ToString("hh\\:mm")
+        From = workingHours.First(x => x.DayOfWeek == DayOfWeek.Friday).StartTime?.ToString("hh\\:mm"),
+        To = workingHours.First(x => x.DayOfWeek == DayOfWeek.Friday).EndTime?.ToString("hh\\:mm")
     }
     : null,
 
         Saturday = workingHours.Any(x => x.DayOfWeek == DayOfWeek.Saturday)
     ? new TimeRangeDto
     {
-        From = workingHours.First(x => x.DayOfWeek == DayOfWeek.Saturday).StartTime.ToString("hh\\:mm"),
-        To = workingHours.First(x => x.DayOfWeek == DayOfWeek.Saturday).EndTime.ToString("hh\\:mm")
+        From = workingHours.First(x => x.DayOfWeek == DayOfWeek.Saturday).StartTime?.ToString("hh\\:mm"),
+        To = workingHours.First(x => x.DayOfWeek == DayOfWeek.Saturday).EndTime?.ToString("hh\\:mm")
     }
     : null,
 
         Sunday = workingHours.Any(x => x.DayOfWeek == DayOfWeek.Sunday)
     ? new TimeRangeDto
     {
-        From = workingHours.First(x => x.DayOfWeek == DayOfWeek.Sunday).StartTime.ToString("hh\\:mm"),
-        To = workingHours.First(x => x.DayOfWeek == DayOfWeek.Sunday).EndTime.ToString("hh\\:mm")
+        From = workingHours.First(x => x.DayOfWeek == DayOfWeek.Sunday).StartTime?.ToString("hh\\:mm"),
+        To = workingHours.First(x => x.DayOfWeek == DayOfWeek.Sunday).EndTime?.ToString("hh\\:mm")
     }
     : null,
     };
