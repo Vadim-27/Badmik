@@ -3,12 +3,14 @@
 $focus-ring: rgba(147, 197, 253, 0.35);
 
 .wrapper {
-  min-height: calc(100vh - 80px); 
+  // min-height: calc(100vh - 80px);
+   min-height: 77vh;  
   display: flex;
   align-items: flex-start;
   justify-content: center;
   padding: 24px;
   // width: 80%;
+  overflow: hidden;
 }
 
 .formBox {
@@ -19,11 +21,31 @@ $focus-ring: rgba(147, 197, 253, 0.35);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 24px;
+  padding-right: 4px;
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  // max-height: calc(100vh - 420px - 24px * 2);
+  // max-height: 30%;
+  max-height: 70vh;
+
+   display: flex;
+  flex-direction: column;
+  /* дозволяємо дітям стискатися для скролу */
+  min-height: 0;
+  position: relative;
 
   @include media-rules(mobile) {
     width: 80%;
   }
+}
+
+.formScroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable both-edges;
+  /* тут стилі скролу (як ти маєш у ScrollArea.module.scss) */
 }
 
 .topWrapperAvatarRow {
@@ -46,6 +68,7 @@ $focus-ring: rgba(147, 197, 253, 0.35);
 .form {
   display: grid;
   gap: 14px;
+   padding-right: 14px;
 }
 
 .formGrid {

@@ -18,6 +18,8 @@ import { getApiErrorMessage } from "@/lib/http/utils";
 
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import AppBreadcrumbs from '@/app/components/ui/Breadcrumbs/AppBreadcrumbs';
+import css from './AddPlayer.module.scss';
 
 
 export function dateToIsoStartOfDay(dateStr: string) {
@@ -92,6 +94,16 @@ try {
           label={createUser.isPending ? 'buttons.saving' : 'buttons.save'}
         />
       </ActionHeader>
+
+      <div className={css.wrapperBreadcrumbs}>
+       <AppBreadcrumbs
+      items={[
+        { label: 'Admin', href: '/admin/dashboard' },
+        {label: 'Players', href: '/admin/players' },
+        { label: 'Add Player' },
+      ]}
+    />
+    </div>
 
       <UserForm
         ref={formRef}

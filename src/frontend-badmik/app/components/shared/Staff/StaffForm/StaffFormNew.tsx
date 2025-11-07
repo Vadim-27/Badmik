@@ -14,6 +14,8 @@ import WorkingHoursField from '@/app/components/shared/Staff/StaffForm/WorkingHo
 import StaffActionsBar from '@/app/components/shared/Staff/StaffForm/StaffActionsBar/StaffActionsBar';
 import SalaryField from '@/app/components/shared/Staff/StaffForm/SalaryField/SalaryField';
 
+import ScrollArea from '@/app/components/ui/Scroll/ScrollArea';
+
 export type StaffStatus = 'New' | 'Active' | 'Disabled' | 'Deleted';
 
 type TimeRangeDto = { from: string | null; to: string | null };
@@ -197,6 +199,7 @@ const StaffFormNew = forwardRef<StaffFormHandle, Props>(function EmployeeForm(
   return (
     <div className={styles.wrapper}>
       <div className={styles.formBox}>
+        <ScrollArea className={styles.formScroll}>
         <form onSubmit={handleSubmit(submitHandler)} className={styles.form} noValidate>
           {/* Avatar */}
           <div className={styles.topWrapperAvatarRow}>
@@ -490,6 +493,7 @@ const StaffFormNew = forwardRef<StaffFormHandle, Props>(function EmployeeForm(
             {errors.notes && <p className={styles.errorText}>{errors.notes.message}</p>}
           </div>
         </form>
+        </ScrollArea>
       </div>
       {Boolean(busy) && (
         <div

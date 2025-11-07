@@ -16,6 +16,8 @@ import { useStaffById } from '@/services/staff/queries.client';
 import { useUpdateStaff } from '@/services/staff/queries.client';
 import { useAssignRoleForUser } from '@/services/role/queries.client';
 import { getApiErrorMessage } from '@/lib/http/utils';
+import css from "./EditStaff.module.scss";
+import AppBreadcrumbs from '@/app/components/ui/Breadcrumbs/AppBreadcrumbs';
 
 // import type { UpdateStaffDto, WorkingHours } from '@/services/types/staff.dto';
 import type { UpdateStaffDto, WorkingHoursDto } from '@/services/types/staff.dto';
@@ -183,6 +185,15 @@ export default function EditStaff({ staffId, initialData }: Props) {
           label="buttons.save"
         />
       </ActionHeader>
+      <div className={css.wrapperBreadcrumbs}>
+       <AppBreadcrumbs
+      items={[
+        { label: 'Admin', href: '/admin/dashboard' },
+        {label: 'Access Control', href: '/admin/access-control' },
+        { label: 'Edit Staff' },
+      ]}
+    />
+    </div>
 
       <StaffFormNew
         ref={formRef}

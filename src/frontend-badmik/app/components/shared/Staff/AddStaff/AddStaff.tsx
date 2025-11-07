@@ -21,6 +21,7 @@ import {useCreateStaff} from '@/services/staff/queries.client'
 
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import AppBreadcrumbs from '@/app/components/ui/Breadcrumbs/AppBreadcrumbs';
 
 
 import StaffFormNew, {
@@ -29,6 +30,7 @@ import StaffFormNew, {
 } from '../StaffForm/StaffFormNew';
 
 import type { StaffRegisterDto } from '@/services/types/staff.dto';
+import css from "./AddStaff.module.scss"
 
 export function dateToIsoStartOfDay(dateStr: string) {
   if (!dateStr) return "";
@@ -142,7 +144,7 @@ const safeImageUrl =
   startDate: toDateOnly(v.startDate),
 
   phoneNumber: v.phone || null,
-  imageUrl: safeImageUrl,                       // ⬅️ НЕ шлемо blob:...
+  imageUrl: safeImageUrl,                      
 
   notes: v.notes || null,
 
@@ -157,7 +159,7 @@ const safeImageUrl =
   
   workingHours: buildWorkingHours(v.workingHoursObj),
 
-  workingHoursExceptions: null, // якщо поки не підтримуєш
+  workingHoursExceptions: null, 
 };
 
 console.groupCollapsed('➡️ /staff/Register payload');
@@ -198,24 +200,17 @@ console.groupEnd();
           label={createStaff.isPending ? 'buttons.saving' : 'buttons.save'}
         />
       </ActionHeader>
+      <div className={css.wrapperBreadcrumbs}>
+       <AppBreadcrumbs
+      items={[
+        { label: 'Admin', href: '/admin/dashboard' },
+        {label: 'Access Control', href: '/admin/access-control' },
+        { label: 'Add Staff' },
+      ]}
+    />
+    </div>
 
-      {/* приклад виводу існуючих співробітників */}
-      {/* {!staff?.length ? (
-        <p>Порожньо</p>
-      ) : (
-        <ul className="space-y-2 mb-6">
-          {staff.map((s) => (
-            <li key={s.id} className="rounded border p-3">
-              <div className="font-medium">
-                {s.firstName} {s.lastName}
-              </div>
-              <div className="text-sm opacity-80">
-                {s.email} • {s.staffStatus} • {s.employmentType}
-              </div>
-            </li>
-          ))}
-        </ul>
-      )} */}
+
 
       <StaffFormNew ref={formRef}
         mode="create"
@@ -225,13 +220,7 @@ console.groupEnd();
         busy={createStaff.isPending} />
         
 
-      {/* <StaffForm
-        ref={formRef}
-        mode="create"
-        isChanged={isChanged}
-        setIsChanged={setIsChanged}
-        onSubmitCreate={handleCreate}
-      /> */}
+   
 <Snackbar
   open={snack.open}
   autoHideDuration={4000}

@@ -95,7 +95,7 @@ export default function SidebarClient({ role, userId, email }: Props) {
               )}
             </SidebarLink>
 
-            <SidebarLink  href="/admin" open={open} count={6}>
+            <SidebarLink  href="/admin/clubs" open={open} count={6}>
               <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                 <rect x="3" y="4" width="7" height="7" />
                 <rect x="14" y="4" width="7" height="7" />

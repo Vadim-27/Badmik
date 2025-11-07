@@ -6,6 +6,8 @@ import BackButton from '@/app/components/ui/Buttons/BackButton/BackButton';
 import SaveButton from '@/app/components/ui/Buttons/SaveButton/SaveButton';
 import { useTranslations } from 'next-intl';
 import AddClubForm from './AddClubForm/AddClubForm';
+import AppBreadcrumbs from '@/app/components/ui/Breadcrumbs/AppBreadcrumbs';
+import css from "./AddClub.module.scss";
 
 const AddClub = () => {
   const [isChanged, setIsChanged] = useState(false);
@@ -40,6 +42,16 @@ const AddClub = () => {
           />
         </div>
       </ActionHeader>
+
+      <div className={css.wrapperBreadcrumbs}>
+             <AppBreadcrumbs
+            items={[
+              { label: 'Admin', href: '/admin/dashboard' },
+              {label: 'Clubs', href: '/admin/clubs' },
+              { label: 'Add Club' },
+            ]}
+          />
+          </div>
 
       <AddClubForm
         mode="create"

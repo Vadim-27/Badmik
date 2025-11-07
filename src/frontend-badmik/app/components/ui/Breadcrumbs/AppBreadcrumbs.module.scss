@@ -1,0 +1,9 @@
+.breadcrumbs {
+  font-size: 0.95rem;
+  color: var(--muted);
+  a {
+    color: var(--link, #2563eb);
+    text-decoration: none;
+    &:hover { text-decoration: underline; }
+  }
+}

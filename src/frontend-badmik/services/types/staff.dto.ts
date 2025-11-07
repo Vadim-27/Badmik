@@ -16,10 +16,10 @@ export type WorkingHoursDto = {
   sunday:    TimeRangeDto | null;
 };
 
-// ===== Те, що повертає бек у списках/деталях =====
+
 export interface Staff {
-  id: string;                 // uuid
-  userId: string;             // uuid (зв'язок з користувачем)
+  id: string;                 
+  userId: string;             
   email: string;
 
   firstName: string;
@@ -54,7 +54,7 @@ export interface Staff {
 
 
 
-// ===== DTO для POST /api/staff (реєстрація) — зі Swagger =====
+
 export interface StaffRegisterDto {
   email?: string | null;
   password?: string | null;
@@ -62,15 +62,15 @@ export interface StaffRegisterDto {
   lastName?: string | null;
 
   clubId: string;
-  doB: string; // ISO date-time
+  doB: string; 
 
   staffStatus: StaffStatus;
   employmentType: StaffEmploymentType;
 
   title?: string | null;
-  startDate: string; // YYYY-MM-DD
+  startDate: string; 
 
-  // ⬇️ ДОДАТИ
+ 
   phoneNumber?: string | null;
   imageUrl?: string | null;
 
@@ -84,12 +84,12 @@ export interface StaffRegisterDto {
 
   timeZone?: string | null;
 
-  // ⬇️ ТУТ ГОЛОВНЕ: об’єкт або null (не string)
+  
   workingHours?: WorkingHoursDto | null;
   workingHoursExceptions?: string | null;
 }
 
-// Якщо ти хочеш відділити "create" від "register":
+
 export type CreateStaffDto = StaffRegisterDto;
 
 // ===== DTO для PUT /api/staff (оновлення) =====
