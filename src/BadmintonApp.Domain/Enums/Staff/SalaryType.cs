@@ -1,4 +1,4 @@
-﻿namespace BadmintonApp.Domain.Enums;
+﻿namespace BadmintonApp.Domain.Enums.Staff;
 
 public enum SalaryType
 {

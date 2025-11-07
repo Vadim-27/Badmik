@@ -20,10 +20,14 @@ namespace BadmintonApp.Infrastructure
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
+
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 //options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
-                options.UseSqlite(configuration.GetConnectionString("DefaultConnection"), options => options.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
-            
+                //options.UseSqlite(configuration.GetConnectionString("DefaultConnection"), options => options.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"))); 
+
+
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();           
