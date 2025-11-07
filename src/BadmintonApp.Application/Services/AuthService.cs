@@ -22,12 +22,14 @@ public class AuthService : IAuthService
     public AuthService(IUserRepository userRepository,
                        IPasswordHasher<User> passwordHasher,
                        IJwtTokenGenerator jwtTokenGenerator
-                       , IStaffRoleRepository userRoleRepository)
+                       , IStaffRoleRepository userRoleRepository
+        , IStaffRepository staffRepository)
     {
         _userRepository = userRepository;
         _passwordHasher = passwordHasher;
         _jwtTokenGenerator = jwtTokenGenerator;
         _staffRoleRepository = userRoleRepository;
+        _staffRepository = staffRepository;
     }
 
     public async Task<LoginResultDto> LoginAsync(LoginDto dto, CancellationToken cancellationToken)
@@ -54,7 +56,8 @@ public class AuthService : IAuthService
             Roles = roles.Select(x => x.Name).ToArray(),
             Permissions = roles.SelectMany(x => x.RolePermissions.Select(x => x.Permission.Type)),
             FullName = $"{user.FirstName} {user.LastName}",
-            ExpiresAt = DateTime.UtcNow.AddHours(2)
+            ExpiresAt = DateTime.UtcNow.AddHours(2),
+            IsAdmin = user.IsAdmin
         };
     }
 
