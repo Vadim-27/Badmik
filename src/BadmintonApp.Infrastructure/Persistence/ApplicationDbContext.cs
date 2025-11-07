@@ -83,50 +83,41 @@ namespace BadmintonApp.Infrastructure.Persistence
 
             Permission[] permissions =
             {
-                           // 1–19: Club & Locations
-                new Permission { Id = Guid.Parse("bb144aa6-d452-4c65-8dd8-26e83a343d10"), Name = "ClubView" }, // 0
-                new Permission { Id = Guid.Parse("dc24d312-1e12-455e-b58d-6a5e0e1c5a26"), Name = "ClubSettingsManage" }, // 1
-                new Permission { Id = Guid.Parse("c17101a7-c7f5-4cfc-99c4-c9e7bff062e0"), Name = "LocationsView" }, // 2
-                new Permission { Id = Guid.Parse("e804d9ec-17e5-4cb1-97fd-d033379b2a1e"), Name = "LocationsManage" }, // 3
-                new Permission { Id = Guid.Parse("f42d1226-3c8a-4690-a9cb-702d81e9d134"), Name = "CourtsManage" }, // 4
+                new Permission { Id = Guid.Parse("bb144aa6-d452-4c65-8dd8-26e83a343d10"), Type = PermissionType.ClubView },
+                new Permission { Id = Guid.Parse("dc24d312-1e12-455e-b58d-6a5e0e1c5a26"), Type = PermissionType.ClubSettingsManage },
+                new Permission { Id = Guid.Parse("c17101a7-c7f5-4cfc-99c4-c9e7bff062e0"), Type = PermissionType.LocationsView },
+                new Permission { Id = Guid.Parse("e804d9ec-17e5-4cb1-97fd-d033379b2a1e"), Type = PermissionType.LocationsManage },
+                new Permission { Id = Guid.Parse("f42d1226-3c8a-4690-a9cb-702d81e9d134"), Type = PermissionType.CourtsManage },
 
-                // 20–39: Trainings
-                new Permission { Id = Guid.Parse("6e378e33-7c14-41d8-9005-3211ac337ada"), Name = "TrainingsView" }, // 5
-                new Permission { Id = Guid.Parse("fbcc2933-164c-4f37-a9e7-11868c34dc64"), Name = "TrainingsManage" }, // 6
-                new Permission { Id = Guid.Parse("bcfd34b3-d0aa-4a84-a68e-d1c58e0a0f36"), Name = "TrainingsRegisterPlayer" }, // 7
-                new Permission { Id = Guid.Parse("e30aa5ae-2e19-4a5b-a9be-40cc74bb25e4"), Name = "TrainingsCancelPlayer" }, // 8
-                new Permission { Id = Guid.Parse("4fd7483a-2436-4c2c-bdd3-275e595dcd1e"), Name = "TrainingsQueueManage" }, // 9
-                new Permission { Id = Guid.Parse("2264ae2c-73b2-4a8f-8e92-cc38d4cd6b6c"), Name = "TrainingsAttendanceMark" }, // 10
-                new Permission { Id = Guid.Parse("b3a08f9f-263e-42cc-b02a-85b5c6a5979b"), Name = "TrainingsLevelOverride" }, // 11
+                new Permission { Id = Guid.Parse("6e378e33-7c14-41d8-9005-3211ac337ada"), Type = PermissionType.TrainingsView },
+                new Permission { Id = Guid.Parse("fbcc2933-164c-4f37-a9e7-11868c34dc64"), Type = PermissionType.TrainingsManage },
+                new Permission { Id = Guid.Parse("bcfd34b3-d0aa-4a84-a68e-d1c58e0a0f36"), Type = PermissionType.TrainingsRegisterPlayer },
+                new Permission { Id = Guid.Parse("e30aa5ae-2e19-4a5b-a9be-40cc74bb25e4"), Type = PermissionType.TrainingsCancelPlayer },
+                new Permission { Id = Guid.Parse("4fd7483a-2436-4c2c-bdd3-275e595dcd1e"), Type = PermissionType.TrainingsQueueManage },
+                new Permission { Id = Guid.Parse("2264ae2c-73b2-4a8f-8e92-cc38d4cd6b6c"), Type = PermissionType.TrainingsAttendanceMark },
+                new Permission { Id = Guid.Parse("b3a08f9f-263e-42cc-b02a-85b5c6a5979b"), Type = PermissionType.TrainingsLevelOverride },
 
-                // 50–69: Players
-                new Permission { Id = Guid.Parse("66d2b5fd-f0fd-4c29-92d6-e165fce4096f"), Name = "PlayersView" }, // 12
-                new Permission { Id = Guid.Parse("e47c2949-6cf3-4c2f-b6b0-e252b456cacf"), Name = "PlayersManage" }, // 13
-                new Permission { Id = Guid.Parse("94a13b97-2e03-41df-9c4e-84db8f5a05a1"), Name = "PlayersBalanceManage" }, // 14
+                new Permission { Id = Guid.Parse("66d2b5fd-f0fd-4c29-92d6-e165fce4096f"), Type = PermissionType.PlayersView },
+                new Permission { Id = Guid.Parse("e47c2949-6cf3-4c2f-b6b0-e252b456cacf"), Type = PermissionType.PlayersManage },
+                new Permission { Id = Guid.Parse("94a13b97-2e03-41df-9c4e-84db8f5a05a1"), Type = PermissionType.PlayersBalanceManage },
 
-                // 80–99: Staff & Roles
-                new Permission { Id = Guid.Parse("7c918f93-79b3-4f0f-91de-798a888d8ec9"), Name = "StaffView" }, // 15
-                new Permission { Id = Guid.Parse("f88b5e0f-78ec-40b0-ade6-dc6c0414d6b4"), Name = "StaffManage" }, // 16
-                new Permission { Id = Guid.Parse("6c2dba59-81c2-4d06-a476-66c7cf930a50"), Name = "RolesView" }, // 17
-                new Permission { Id = Guid.Parse("9f29376d-dbc5-4a1a-85c3-cd6d0cbac9a6"), Name = "RolesManage" }, // 18
-                new Permission { Id = Guid.Parse("95a05b7b-e88d-48c1-9e65-0cfc2c4a09f6"), Name = "RolePermissionsAssign" }, // 19
+                new Permission { Id = Guid.Parse("7c918f93-79b3-4f0f-91de-798a888d8ec9"), Type = PermissionType.StaffView },
+                new Permission { Id = Guid.Parse("f88b5e0f-78ec-40b0-ade6-dc6c0414d6b4"), Type = PermissionType.StaffManage },
+                new Permission { Id = Guid.Parse("6c2dba59-81c2-4d06-a476-66c7cf930a50"), Type = PermissionType.RolesView },
+                new Permission { Id = Guid.Parse("9f29376d-dbc5-4a1a-85c3-cd6d0cbac9a6"), Type = PermissionType.RolesManage },
+                new Permission { Id = Guid.Parse("95a05b7b-e88d-48c1-9e65-0cfc2c4a09f6"), Type = PermissionType.RolePermissionsAssign },
 
-                // 110–129: Notifications
-                new Permission { Id = Guid.Parse("79d4ef1a-8a4a-4cb2-b63a-2307698de15b"), Name = "NotificationsView" }, // 20
-                new Permission { Id = Guid.Parse("274e546f-78b0-4dc2-a7bc-548f5e92f4cc"), Name = "NotificationsManage" }, // 21
+                new Permission { Id = Guid.Parse("79d4ef1a-8a4a-4cb2-b63a-2307698de15b"), Type = PermissionType.NotificationsView },
+                new Permission { Id = Guid.Parse("274e546f-78b0-4dc2-a7bc-548f5e92f4cc"), Type = PermissionType.NotificationsManage },
 
-                // 130–139: Analytics
-                new Permission { Id = Guid.Parse("4a6970f1-ff3e-43fd-9172-c4f3f6c2c4c7"), Name = "AnalyticsView" }, // 22
+                new Permission { Id = Guid.Parse("4a6970f1-ff3e-43fd-9172-c4f3f6c2c4c7"), Type = PermissionType.AnalyticsView },
 
-                // 140–149: Media / Branding
-                new Permission { Id = Guid.Parse("f3a9df19-ea7c-4a90-a3ee-238c7f745f5f"), Name = "MediaManage" }, // 23
+                new Permission { Id = Guid.Parse("f3a9df19-ea7c-4a90-a3ee-238c7f745f5f"), Type = PermissionType.MediaManage },
 
-                // 160–169: Logs / Audit
-                new Permission { Id = Guid.Parse("aa0d8c57-e388-4db4-9746-b6cc4b47fd0d"), Name = "LogsView" }, // 24
+                new Permission { Id = Guid.Parse("aa0d8c57-e388-4db4-9746-b6cc4b47fd0d"), Type = PermissionType.LogsView },
 
-                // 180–189: Finance
-                new Permission { Id = Guid.Parse("1740be12-b8a1-40db-b184-d43fd3f6b0fa"), Name = "FinanceView" }, // 25
-                new Permission { Id = Guid.Parse("d474449e-3045-4418-89c7-5a7599e58033"), Name = "FinanceManage" }, // 26
+                new Permission { Id = Guid.Parse("1740be12-b8a1-40db-b184-d43fd3f6b0fa"), Type = PermissionType.FinanceView },
+                new Permission { Id = Guid.Parse("d474449e-3045-4418-89c7-5a7599e58033"), Type = PermissionType.FinanceManage },
             };
             modelBuilder.Entity<Permission>().HasData(permissions);
 

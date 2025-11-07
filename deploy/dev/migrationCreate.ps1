@@ -1,0 +1,2 @@
+$repo = (Resolve-Path "$PSScriptRoot\..\..").Path
+docker run --rm -it -v "${repo}:/src" -w /src mcr.microsoft.com/dotnet/sdk:9.0 bash -lc 'dotnet tool install -g dotnet-ef >/dev/null 2>&1 || true; export PATH="$PATH:/root/.dotnet/tools"; dotnet ef migrations add InitialPostgres --project src/BadmintonApp.Infrastructure --startup-project src/BadmintonApp.API --context ApplicationDbContext'

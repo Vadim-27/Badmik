@@ -48,7 +48,7 @@ public class AuthService : IAuthService
             UserId = user.Id.ToString(),
             Email = user.Email,
             Roles = roles.Select(x => x.Name).ToArray(),
-            Permissions = roles.SelectMany(x => x.RolePermissions.Select(x => x.Permission.Name)),
+            Permissions = roles.SelectMany(x => x.RolePermissions.Select(x => x.Permission.Type)),
             FullName = $"{user.FirstName} {user.LastName}",
             ExpiresAt = DateTime.UtcNow.AddHours(2)
         };

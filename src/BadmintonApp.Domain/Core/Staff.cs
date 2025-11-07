@@ -1,5 +1,5 @@
 ﻿using BadmintonApp.Domain.Clubs;
-using BadmintonApp.Domain.Enums;
+using BadmintonApp.Domain.Enums.Staff;
 using BadmintonApp.Domain.WorkingHours;
 using System;
 using System.Collections.Generic;
@@ -14,6 +14,7 @@ public class Staff
     public User User { get; set; }
     public StaffStatus StaffStatus { get; set; }
     public StaffEmploymentType EmploymentType { get; set; }
+    public StaffPositionType PositionType { get; set; }
     public Guid ClubId { get; set; }
     public Club Club { get; set; }
 

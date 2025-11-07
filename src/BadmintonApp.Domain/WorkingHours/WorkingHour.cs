@@ -16,6 +16,6 @@ public class WorkingHour
 
     public DayOfWeek DayOfWeek { get; set; }
 
-    public TimeOnly StartTime { get; set; } // TimeSpan
-    public TimeOnly EndTime { get; set; } // TimeSpan
+    public TimeOnly? StartTime { get; set; } // TimeSpan
+    public TimeOnly? EndTime { get; set; } // TimeSpan
 }
