@@ -3,10 +3,10 @@ using System;
 
 namespace BadmintonApp.Domain.Core;
 
-public class UserClubRole
+public class StaffClubRole
 {   
-    public Guid UserId { get; set; }
-    public User User { get; set; }
+    public Guid StaffId { get; set; }
+    public Staff Staff { get; set; }
 
     public Guid ClubId { get; set; }
     public Club Club { get; set; }

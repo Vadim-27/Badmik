@@ -32,7 +32,7 @@ namespace BadmintonApp.Infrastructure
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();           
             services.AddScoped<IClubsRepository, ClubRepository>();
-            services.AddScoped<IUserRoleRepository, UserRoleRepository>();            
+            services.AddScoped<IStaffRoleRepository, StaffRoleRepository>();            
             services.AddScoped<ILogRepository, LogRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IPermissionRepository, PermissionRepository>();

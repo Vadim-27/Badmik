@@ -21,14 +21,9 @@ namespace BadmintonApp.Infrastructure.Persistence
                 c.RoleId,
                 c.PermissionId
             });
-            modelBuilder.Entity<UserRole>().HasKey(c => new
+            modelBuilder.Entity<StaffClubRole>().HasKey(c => new
             {
-                c.RoleId,
-                c.UserId
-            });
-            modelBuilder.Entity<UserClubRole>().HasKey(c => new
-            {
-                c.UserId,
+                c.StaffId,
                 c.RoleId,
                 c.ClubId
             });
@@ -38,10 +33,9 @@ namespace BadmintonApp.Infrastructure.Persistence
         }
 
         public DbSet<RolePermission> RolePermissions { get; set; }
-        public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<User> Users => Set<User>();
         public DbSet<Club> Clubs => Set<Club>();
-        public DbSet<UserClubRole> UserClubRoles => Set<UserClubRole>();
+        public DbSet<StaffClubRole> StaffClubRoles => Set<StaffClubRole>();
         public DbSet<WorkingHour> WorkingHours => Set<WorkingHour>();
         public DbSet<Training> Trainings => Set<Training>();
         public DbSet<TrainingParticipant> TrainingParticipants => Set<TrainingParticipant>();
