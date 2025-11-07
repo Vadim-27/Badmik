@@ -30,9 +30,9 @@ namespace BadmintonApp.API.Controllers
         }
 
         [HttpGet("GetAll")]
-        public async Task<ActionResult> GetAll(CancellationToken cancellationToken)
+        public async Task<ActionResult> GetAll(Guid clubId, CancellationToken cancellationToken)
         {
-            List<Role> roles = await _roleService.GetAll(cancellationToken);
+            List<Role> roles = await _roleService.GetAll(clubId, cancellationToken);
 
             return Ok(roles);
         }
@@ -53,6 +53,15 @@ namespace BadmintonApp.API.Controllers
             return Ok();
         }
 
+        [HttpGet("GetRolesByStaffId")]
+        public async Task<ActionResult> GetRolesByStaffId(Guid staffId, Guid clubId, CancellationToken cancellationToken)
+        {
+            List<Role> roles = await _roleService.GetRolesByStaffId(staffId, clubId, cancellationToken);
+
+            return Ok(roles);
+        }
         
+
+
     }
 }

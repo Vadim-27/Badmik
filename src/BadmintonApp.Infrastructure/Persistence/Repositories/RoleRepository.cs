@@ -17,24 +17,26 @@ public class RoleRepository : IRoleRepository
     {
         _context = context;
     }
-    public async Task AssignRoleForUser(Guid userId, Guid clubId, Guid roleId, CancellationToken cancellationToken)
+    public async Task AssignRoleForStaff(Guid staffId, Guid clubId, Guid roleId, CancellationToken cancellationToken)
     {
 
-        _context.UserClubRoles.Add(new Domain.Core.UserClubRole
+        _context.StaffClubRoles.Add(new Domain.Core.StaffClubRole
         {
             ClubId = clubId,
             RoleId = roleId,
-            UserId = userId,
+            StaffId = staffId,
         });
 
         await _context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<List<Role>> GetAll(CancellationToken cancellationToken)
+    public async Task<List<Role>> GetAll(Guid clubId, CancellationToken cancellationToken)
     {
-        List<Role> roles = await _context.Roles
+        List<Role> roles = await _context.StaffClubRoles
             .AsNoTracking()
-            .Where(x => x.Name != "SuperAdmin")
+            .Where(x => x.ClubId == clubId)
+            .Select(x => x.Role)
+            .Distinct()
             .ToListAsync(cancellationToken);
         return roles;
     }
@@ -66,5 +68,14 @@ public class RoleRepository : IRoleRepository
         _context.RolePermissions.Remove(rolePermission);
 
         await _context.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<List<Role>> GetRolesByStaffId(Guid id, CancellationToken cancellationToken)
+    {
+        List<Role> roles = await _context.Roles
+            .AsNoTracking()
+            .Where(x => x.Name != "SuperAdmin")
+            .ToListAsync(cancellationToken);
+        return roles;
     }
 }

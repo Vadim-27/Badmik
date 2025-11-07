@@ -13,6 +13,6 @@ public interface IStaffService
 {
     Task Update(StaffUpdateDto staffUpdateDto, CancellationToken cancellationToken);
     Task<StaffDto> GetById(Guid id, CancellationToken cancellationToken);
-    Task<PaginationListDto<StaffDto>> GetAll(PaginationFilterDto paginationFilterDto, CancellationToken cancellationToken);
-    
+    Task<PaginationListDto<StaffDto>> GetAll(ClubPaginationFilterDto paginationFilterDto, CancellationToken cancellationToken);
+    Task ChangePassword(StaffUpdatePasswordDto staffUpdateDto, CancellationToken cancellationToken);
 }

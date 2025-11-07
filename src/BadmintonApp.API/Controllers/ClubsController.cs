@@ -43,7 +43,7 @@ namespace BadmintonApp.API.Controllers
         [HttpGet("GetAll")]
         public async Task<ActionResult> GetAll([FromQuery] string? filter, CancellationToken cancellationToken)
         {
-            var res = _clubsService.GetAllAsync(filter, cancellationToken); //?
+            var res = await _clubsService.GetAllAsync(filter, cancellationToken); //?
 
             return Ok(res);
         }
