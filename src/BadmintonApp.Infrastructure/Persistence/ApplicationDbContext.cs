@@ -15,7 +15,23 @@ namespace BadmintonApp.Infrastructure.Persistence
             : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {            
+        {
+            modelBuilder.Entity<Staff>(e =>
+            {
+                e.Property(x => x.CreatedAt)
+                    .HasColumnType("timestamptz") // "timestamp with time zone"
+                    .HasDefaultValueSql("timezone('utc', now())");
+
+                e.Property(x => x.UpdatedAt)
+                    .HasColumnType("timestamptz");
+
+                e.Property(x => x.StartDate)
+                    .HasColumnType("date");
+
+                e.Property(x => x.EndDate)
+                    .HasColumnType("date");
+            });
+
             modelBuilder.Entity<RolePermission>().HasKey( c => new 
             {
                 c.RoleId,

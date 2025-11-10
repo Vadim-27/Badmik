@@ -1,10 +1,11 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using BadmintonApp.Application.Interfaces.Auth;
+﻿using BadmintonApp.Application.Interfaces.Auth;
 using BadmintonApp.Domain.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
 
 namespace BadmintonApp.Infrastructure.Auth
 {
@@ -17,7 +18,7 @@ namespace BadmintonApp.Infrastructure.Auth
             _configuration = configuration;
         }
 
-        public string GenerateToken(User user, string[] roles)
+        public string GenerateToken(User user, PermissionType[] permissions)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -27,7 +28,9 @@ namespace BadmintonApp.Infrastructure.Auth
             new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Role, string.Join(",", roles))
+            new Claim("clubId", user.ClubId.Value.ToString()),
+            new Claim("isAdmin", user.IsAdmin.ToString()),
+            new Claim("permissions", string.Join(", ", permissions.Select(p => ((int)p).ToString())))
         };
 
             var token = new JwtSecurityToken(

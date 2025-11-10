@@ -22,7 +22,8 @@ public class StaffRepository : IStaffRepository
 
     public async Task Registration(Staff staff, CancellationToken cancellationToken)
     {
-        staff.CreatedAt = DateTime.Now;
+        staff.CreatedAt = DateTime.UtcNow;
+        
         await _dbContext.AddAsync(staff, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
@@ -63,11 +64,16 @@ public class StaffRepository : IStaffRepository
     public async Task<PaginationListDto<Staff>> GetAll(ClubPaginationFilterDto paginationFilterDto, CancellationToken cancellationToken)
     {
         var query = _dbContext.Staffs
-               .AsNoTracking()
-               .Where(x => x.ClubId == paginationFilterDto.ClubId)
-               .Include(x => x.User)
-               .OrderBy(x => x.User.LastName)
-               .AsQueryable();
+            .AsNoTracking()
+            .Include(x => x.User)
+            .OrderBy(x => x.User.LastName)
+            .AsQueryable();
+
+        if (paginationFilterDto.ClubId.HasValue)
+        {
+            query = query.Where(x => x.ClubId == paginationFilterDto.ClubId.Value);
+        }
+        
 
         var totalCount = await query.CountAsync(cancellationToken);
 

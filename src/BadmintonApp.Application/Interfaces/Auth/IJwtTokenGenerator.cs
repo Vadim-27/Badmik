@@ -4,5 +4,5 @@ namespace BadmintonApp.Application.Interfaces.Auth;
 
 public interface IJwtTokenGenerator
 {
-    string GenerateToken(User user, string[] roles);
+    string GenerateToken(User user, PermissionType[] permissions);
 }
