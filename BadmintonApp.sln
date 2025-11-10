@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadmintonApp.Infrastructure
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadmintonApp.Web", "src\BadmintonApp.Web\BadmintonApp.Web.csproj", "{F639F9B6-1F9F-FE65-2E9B-6D1A44F51A10}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadmintonApp.ApiTests", "tests\BadmintonApp.ApiTests\BadmintonApp.ApiTests.csproj", "{1D0BEC4A-B3E2-4E28-98BC-0C03A1A3968D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +40,10 @@ Global
 		{F639F9B6-1F9F-FE65-2E9B-6D1A44F51A10}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F639F9B6-1F9F-FE65-2E9B-6D1A44F51A10}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F639F9B6-1F9F-FE65-2E9B-6D1A44F51A10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D0BEC4A-B3E2-4E28-98BC-0C03A1A3968D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D0BEC4A-B3E2-4E28-98BC-0C03A1A3968D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D0BEC4A-B3E2-4E28-98BC-0C03A1A3968D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D0BEC4A-B3E2-4E28-98BC-0C03A1A3968D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

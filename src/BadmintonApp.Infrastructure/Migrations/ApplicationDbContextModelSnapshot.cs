@@ -548,7 +548,9 @@ namespace BadmintonApp.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamptz")
+                        .HasDefaultValueSql("timezone('utc', now())");
 
                     b.Property<string>("Currency")
                         .HasColumnType("text");
@@ -596,7 +598,7 @@ namespace BadmintonApp.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamptz");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");

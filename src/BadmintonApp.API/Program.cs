@@ -22,6 +22,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers()
@@ -181,3 +182,4 @@ app.MapPost("/__migrate", async (HttpContext ctx, IServiceScopeFactory scopeFact
 });
 app.UseCors("Ngrok");
 app.Run();
+public partial class Program { }

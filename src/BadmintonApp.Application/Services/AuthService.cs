@@ -45,16 +45,21 @@ public class AuthService : IAuthService
         if (staff == null) throw new BadRequestException("User is not staff member");
 
         var roles = await _staffRoleRepository.GetStaffRoleForClubAsync(staff.Id, user.ClubId.Value, cancellationToken);
+        
+        var permissionTypes = roles.Where(r => r.RolePermissions != null)
+            .SelectMany(r => r.RolePermissions)
+            .Where(rp => rp.Permission != null)
+            .Select(rp => rp.Permission.Type)
+            .Distinct()
+            .ToArray();
 
-        var token = _jwtTokenGenerator.GenerateToken(user, roles.Select(x => x.Name).ToArray());
+        var token = _jwtTokenGenerator.GenerateToken(user, permissionTypes);
 
         return new LoginResultDto
         {
             Token = token,
             UserId = user.Id.ToString(),
             Email = user.Email,
-            Roles = roles.Select(x => x.Name).ToArray(),
-            Permissions = roles.SelectMany(x => x.RolePermissions.Select(x => x.Permission.Type)),
             FullName = $"{user.FirstName} {user.LastName}",
             ExpiresAt = DateTime.UtcNow.AddHours(2),
             IsAdmin = user.IsAdmin
