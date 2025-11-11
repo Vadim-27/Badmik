@@ -66,6 +66,7 @@ public class StaffRepository : IStaffRepository
         var query = _dbContext.Staffs
             .AsNoTracking()
             .Include(x => x.User)
+            .Include(x => x.WorkingHours)
             .OrderBy(x => x.User.LastName)
             .AsQueryable();
 

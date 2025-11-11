@@ -1,4 +1,5 @@
-﻿using BadmintonApp.Domain.Clubs;
+﻿using BadmintonApp.Application.DTOs.WorkingHourDtos;
+using BadmintonApp.Domain.Clubs;
 using BadmintonApp.Domain.Core;
 using BadmintonApp.Domain.Enums.Staff;
 using System;
@@ -43,7 +44,7 @@ public class StaffDto
     public string PayrollNotes { get; set; }
 
     public string TimeZone { get; set; }
-    public string WorkingHours { get; set; }   
+    public WorkingHourDto WorkingHours { get; set; } = new();
 
     public string StatusReason { get; set; }
 }
