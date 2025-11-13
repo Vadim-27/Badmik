@@ -52,6 +52,14 @@ public class StaffRepository : IStaffRepository
            .FirstAsync(x => x.Id == id, cancellationToken);
     }
 
+    public async Task<Staff> GetByUserId(Guid id, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Staffs
+           .AsNoTracking()
+           .Include(x => x.User)
+           .FirstAsync(x => x.UserId == id, cancellationToken);
+    }
+
     public async Task<Staff> GetByUserAndClubId(Guid userId, Guid clubId, CancellationToken cancellationToken)
     {
         return await _dbContext.Staffs

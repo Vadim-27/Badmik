@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace BadmintonApp.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/players")]
     public class PlayerController : ControllerBase 
     {
         private readonly IUsersService _usersService;
@@ -30,7 +30,7 @@ namespace BadmintonApp.API.Controllers
         }
 
         // POST: /api/auth/register
-        [HttpPost("Register")]
+        [HttpPost("")]
         public async Task<IActionResult> Register([FromBody] PlayerRegisterDto registerDto, CancellationToken cancellationToken)
         {
 
@@ -51,21 +51,28 @@ namespace BadmintonApp.API.Controllers
         }
 
         //[Authorize]
-        [HttpGet("GetAll")]
+        [HttpGet("")]
         public async Task<ActionResult> GetAll([FromQuery] CancellationToken cancellationToken)
         {
             List<UserResultDto> users = await _usersService.GetAllAsync(cancellationToken);
             return Ok(users);
         }
 
-        [HttpGet("{id}/GetById")]
+        [HttpGet("{id:guid}")]
         public async Task<ActionResult> GetById(Guid id, CancellationToken cancellationToken)
         { 
             await _playerService.GetById(id, cancellationToken);
             return Ok();
         }
 
-        [HttpPut("{id}/Update")] // Повинен бути Апдейт аяк для користувача (обмежена), так і для адмінки (розширена)
+        [HttpGet("user/{id:guid}")]
+        public async Task<ActionResult> GetByUserId(Guid id, CancellationToken cancellationToken)
+        {
+            await _playerService.GetByUserId(id, cancellationToken);
+            return Ok();
+        }
+
+        [HttpPut("{id}")] // Повинен бути Апдейт аяк для користувача (обмежена), так і для адмінки (розширена)
         public async Task<ActionResult> Update([FromBody] PlayerUpdateDto dto, CancellationToken cancellationToken)
         {
             await _playerService.Update(dto, cancellationToken);

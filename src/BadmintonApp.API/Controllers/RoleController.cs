@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace BadmintonApp.API.Controllers
 {
     [ApiController]
-    [Route("api/role")]
+    [Route("api/roles")]
     //[Authorize]
     public class RoleController : ControllerBase
     {
@@ -21,18 +21,19 @@ namespace BadmintonApp.API.Controllers
         {
             _roleService = roleService;
         }
-        [HttpPost("AssignRoleForUser")]
-        public async Task<ActionResult> AssignRoleForUser([FromBody] AssignRoleForUserDto assignRoleForUserDto, CancellationToken cancellationToken)
+        [HttpPost("AssignRoleForStaff")]
+        public async Task<ActionResult> AssignRoleForStaff([FromBody] AssignRoleForUserDto assignRoleForUserDto, CancellationToken cancellationToken)
         {
-            await _roleService.AssignRoleForUser(assignRoleForUserDto.UserId, assignRoleForUserDto.ClubId, assignRoleForUserDto.RoleId, cancellationToken);
+            await _roleService.AssignRoleForStaff(assignRoleForUserDto.UserId, assignRoleForUserDto.ClubId, assignRoleForUserDto.RoleId, cancellationToken);
 
             return Ok();
         }
 
-        [HttpGet("GetAll")]
-        public async Task<ActionResult> GetAll(Guid clubId, CancellationToken cancellationToken)
+
+        [HttpGet("club/{id:guid}")]
+        public async Task<ActionResult> GetAllByClubId(Guid id, CancellationToken cancellationToken)
         {
-            List<Role> roles = await _roleService.GetAll(clubId, cancellationToken);
+            List<Role> roles = await _roleService.GetAll(id, cancellationToken);
 
             return Ok(roles);
         }

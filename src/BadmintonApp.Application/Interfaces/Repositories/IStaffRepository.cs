@@ -18,6 +18,7 @@ public interface IStaffRepository
     Task Registration(Staff staff, CancellationToken cancellationToken);
     Task Update(Staff staff, CancellationToken cancellationToken);
     Task<Staff> GetById(Guid id, CancellationToken cancellationToken);
+    Task<Staff> GetByUserId(Guid id, CancellationToken cancellationToken);
     Task<Staff> GetByUserAndClubId(Guid id, Guid clubId, CancellationToken cancellationToken);
     Task<PaginationListDto<Staff>> GetAll(ClubPaginationFilterDto paginationFilterDto, CancellationToken cancellationToken);
 }

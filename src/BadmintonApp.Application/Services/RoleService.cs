@@ -16,26 +16,28 @@ public class RoleService : IRoleService
     private readonly IRoleRepository _roleRepository;
     private readonly IClubsRepository _clubsRepository;
     private readonly IUserRepository _userRepository;
+    private readonly IStaffRepository _staffRepository;
     private readonly IPermissionService _permission;
 
-    public RoleService(IRoleRepository roleRepository, IPermissionService permission, IClubsRepository clubsRepository, IUserRepository userRepository)
+    public RoleService(IRoleRepository roleRepository, IPermissionService permission, IClubsRepository clubsRepository, IUserRepository userRepository, IStaffRepository staffRepository)
     {
         _roleRepository = roleRepository;
         _clubsRepository = clubsRepository;
         _userRepository = userRepository;
         _permission = permission;
+        _staffRepository = staffRepository;
     }
 
-    public async Task AssignRoleForUser(Guid userId, Guid clubId, Guid roleId, CancellationToken cancellationToken)
+    public async Task AssignRoleForStaff(Guid staffId, Guid clubId, Guid roleId, CancellationToken cancellationToken)
     {
         var club = await _clubsRepository.GetByIdAsync(clubId, cancellationToken);
         if (club == null) throw new BadRequestException("Club not found");
 
-        var user = await _userRepository
-            .GetByIdAsync(userId, cancellationToken);
-        if (user == null) throw new BadRequestException("User not found");
+        var user = await _staffRepository
+            .GetById(staffId, cancellationToken);
+        if (user == null) throw new BadRequestException("Staff not found");
 
-        await _roleRepository.AssignRoleForStaff(userId, clubId, roleId, cancellationToken);
+        await _roleRepository.AssignRoleForStaff(staffId, clubId, roleId, cancellationToken);
     }
 
     public async Task<List<Role>> GetAll(Guid clubId, CancellationToken cancellationToken)

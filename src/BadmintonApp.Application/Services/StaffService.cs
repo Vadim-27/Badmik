@@ -53,6 +53,13 @@ public class StaffService : IStaffService
         return _mapper.Map<StaffDto>(staff);
     }
 
+    public async Task<StaffDto> GetByUserId(Guid id, CancellationToken cancellationToken)
+    {
+        var staff = await _staffRepository.GetByUserId(id, cancellationToken);
+
+        return _mapper.Map<StaffDto>(staff);
+    }
+
     public async Task Update(StaffUpdateDto dto, CancellationToken cancellationToken)
     {
 

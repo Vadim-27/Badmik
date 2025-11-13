@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace BadmintonApp.API.Controllers
 {
     [ApiController]
-    [Route("api/permission")]
+    [Route("api/permissions")]
     //[Authorize]
     public class PermissionController : ControllerBase
     {

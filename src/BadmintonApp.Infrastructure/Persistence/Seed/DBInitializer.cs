@@ -30,9 +30,25 @@ namespace BadmintonApp.Infrastructure.Persistence.Seed
                 await context.SaveChangesAsync();
             }
 
-            // --- Ensure admin user exists (get-or-create) ---
+            await CreateStaffAsync(context, club, "admin@badmik.com.ua", "Admin", "User", "admin123",
+                Domain.Enums.Staff.StaffPositionType.Administrator, true, "");
+
+            await CreateStaffAsync(context, club, "vhusarov@badmik.com.ua", "Vadym", "Husarov", "husarov123",
+                Domain.Enums.Staff.StaffPositionType.Administrator, false, "ClubAdmin");
+
+            await CreateStaffAsync(context, club, "mzara@badmik.com.ua", "Max", "Zaraisky", "zaraisky123",
+                Domain.Enums.Staff.StaffPositionType.Trainer, false, "ClubTrainer");
+
+
+        }
+
+        private static async Task<User> CreateStaffAsync(ApplicationDbContext context, Club club,
+            string email, string firstName, string lastName, string password, 
+            Domain.Enums.Staff.StaffPositionType positionType, bool isAdmin, string roleName)
+        {
+            // --- 1️⃣ Ensure User exists ---
             var user = await context.Users
-                .FirstOrDefaultAsync(u => u.Email == "admin@badminton.ua");
+                .FirstOrDefaultAsync(u => u.Email == email);
 
             if (user == null)
             {
@@ -41,40 +57,67 @@ namespace BadmintonApp.Infrastructure.Persistence.Seed
                 user = new User
                 {
                     Id = Guid.NewGuid(),
-                    Email = "admin@badminton.ua",
-                    FirstName = "Admin",
-                    LastName = "User",
-                    DoB = DateTime.SpecifyKind(new DateTime(1990, 1, 1), DateTimeKind.Utc),
+                    Email = email,
+                    FirstName = firstName,
+                    LastName = lastName,
+                    DoB = DateTime.SpecifyKind(new DateTime(1995, 1, 1), DateTimeKind.Utc),
                     IsActive = true,
                     CreatedAt = DateTime.UtcNow,
-                    ImageUrl = "https://example.com/image.jpg",
+                    ImageUrl = "https://example.com/avatar.jpg",
                     ClubId = club.Id,
-                    IsAdmin = true
+                    IsAdmin = isAdmin
                 };
-                user.PasswordHash = passwordHasher.HashPassword(user, "admin123");
+                user.PasswordHash = passwordHasher.HashPassword(user, password);
 
                 context.Users.Add(user);
                 await context.SaveChangesAsync();
             }
 
-            // --- Ensure Staff for Admin ---
-            var existingStaff = await context.Staffs
-                .FirstOrDefaultAsync(s => s.UserId == user.Id);
+            // --- 2️⃣ Ensure Staff exists ---
+            var staff = await context.Staffs
+                .FirstOrDefaultAsync(s => s.UserId == user.Id && s.ClubId == club.Id);
 
-            if (existingStaff == null)
+            if (staff == null)
             {
-                var staff = new Staff
+                staff = new Staff
                 {
                     Id = Guid.NewGuid(),
                     UserId = user.Id,
                     ClubId = club.Id,
-                    PositionType = Domain.Enums.Staff.StaffPositionType.Administrator,
+                    PositionType = positionType,
                     CreatedAt = DateTime.UtcNow
                 };
 
                 context.Staffs.Add(staff);
                 await context.SaveChangesAsync();
             }
+
+            // --- 3️⃣ Assign Role ---
+            var role = await context.Roles
+                .AsNoTracking()
+                .FirstOrDefaultAsync(r => r.Name == roleName);
+
+            if (role == null)
+            {
+                return user;
+            }
+
+            var existingRole = await context.StaffClubRoles
+                .FirstOrDefaultAsync(scr => scr.StaffId == staff.Id && scr.RoleId == role.Id && scr.ClubId == club.Id);
+
+            if (existingRole == null)
+            {
+                context.StaffClubRoles.Add(new StaffClubRole
+                {
+                    StaffId = staff.Id,
+                    RoleId = role.Id,
+                    ClubId = club.Id
+                });
+
+                await context.SaveChangesAsync();
+            }
+
+            return user;
         }
     }
 }

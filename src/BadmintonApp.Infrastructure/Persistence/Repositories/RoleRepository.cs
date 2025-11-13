@@ -32,13 +32,22 @@ public class RoleRepository : IRoleRepository
 
     public async Task<List<Role>> GetAll(Guid clubId, CancellationToken cancellationToken)
     {
-        List<Role> roles = await _context.StaffClubRoles
+        var clubRoles = await _context.StaffClubRoles
             .AsNoTracking()
             .Where(x => x.ClubId == clubId)
             .Select(x => x.Role)
             .Distinct()
             .ToListAsync(cancellationToken);
-        return roles;
+
+        var systemRoles = await _context.Roles
+            .AsNoTracking()
+            .Where(x => x.IsSystem)
+            .ToListAsync(cancellationToken);
+
+        return clubRoles
+            .Union(systemRoles)
+            .Distinct()
+            .ToList();
     }
 
 
