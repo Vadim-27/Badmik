@@ -32,7 +32,7 @@ export default function SidebarClient({ role, userId, email }: Props) {
   
 
   // якщо немає ролі — взагалі не рендеримо
-  if (!role) return null;
+  // if (!role) return null;
 
   const toggleDrawer = () => setOpen((v) => !v);
 

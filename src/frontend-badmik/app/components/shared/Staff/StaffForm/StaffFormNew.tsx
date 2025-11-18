@@ -2,7 +2,7 @@
 
 'use client';
 
-import { forwardRef, useImperativeHandle, useCallback, useEffect, useMemo } from 'react';
+import { forwardRef, useImperativeHandle, useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import styles from './StaffFormNew.module.scss';
 import ClubSelectFieldAdd from '@/app/components/shared/Staff/StaffForm/ClubSelectAdd/ClubSelectFieldAdd';
@@ -97,6 +97,8 @@ const StaffFormNew = forwardRef<StaffFormHandle, Props>(function EmployeeForm(
   { mode, staffId, defaultValues, onSubmitCreate, onSubmitUpdate, setIsChanged, busy },
   ref
 ) {
+
+  const [isPasswordChangeEnabled, setPasswordChangeEnabled] = useState(false);
   // сьогодні у форматі yyyy-mm-dd для min у даті
   const todayStr = useMemo(() => new Date().toISOString().slice(0, 10), []);
 
@@ -215,7 +217,12 @@ const StaffFormNew = forwardRef<StaffFormHandle, Props>(function EmployeeForm(
               }}
             />
 
-            <StaffActionsBar<FormValues> control={control} showRolesButton={mode === 'edit'} />
+            <StaffActionsBar<FormValues> 
+            staffId={staffId} 
+            control={control} 
+            showRolesButton={mode === 'edit'}
+            onEnablePasswordChangeAction={() => setPasswordChangeEnabled(!isPasswordChangeEnabled)}
+            />
           </div>
           <div className={styles.formGrid}>
             {/* First name */}
@@ -280,6 +287,7 @@ const StaffFormNew = forwardRef<StaffFormHandle, Props>(function EmployeeForm(
             </div>
 
             {/* Password */}
+            
             {mode === 'create' && (
               <div>
                 <label className={styles.label}>
@@ -310,6 +318,37 @@ const StaffFormNew = forwardRef<StaffFormHandle, Props>(function EmployeeForm(
                 {errors.password && <p className={styles.errorText}>{errors.password.message}</p>}
               </div>
             )}
+
+ {/*Change Password */}
+            {isPasswordChangeEnabled && (
+  <div>
+    <label className={styles.label}>Зміна паролю</label>
+    <input
+      className={`${styles.input} ${errors.password ? styles.errorInput : ''}`}
+      type="password"
+      autoComplete="new-password"
+      {...register('password', {
+        // !!! для зміни паролю він НЕ має бути required
+        validate: {
+          isEmptyOrValid: (v: string) => {
+            if (!v) return true;                  // нічого не ввели -> ок
+            if (v.length < 8) return 'Min 8 symbols';
+            if (v.length > 64) return 'Max 64 symbols';
+            if (!noWhitespace.test(v)) return 'Без пробілів';
+            if (!hasDigit.test(v)) return 'Має бути цифра';
+            if (!hasUpper.test(v)) return 'Має бути велика літера';
+            if (!hasLower.test(v)) return 'Має бути мала літера';
+            if (!hasSpecial.test(v)) return 'Має бути спецсимвол';
+            return true;
+          },
+        },
+      })}
+    />
+    {errors.password && (
+      <p className={styles.errorText}>{errors.password.message}</p>
+    )}
+  </div>
+)}
 
             {/* Title */}
             <div>

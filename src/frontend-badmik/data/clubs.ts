@@ -20,7 +20,7 @@ export interface Club {
 
 export const clubs: Club[] = [
   {
-    id: '991834b1-2d08-430c-9cbd-ddf17226c1ae',
+    id: '2672dab8-b42d-4c58-a67b-7e39e2fb0e5e',
     name: 'Energy Fit',
     status: 'Активний',
     statusColor: 'green',

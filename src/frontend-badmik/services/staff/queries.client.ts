@@ -11,7 +11,7 @@ import {
 } from '@tanstack/react-query';
 import { qk } from '../_shared/queryKeys';
 import { staffApiClient } from './api.client';
-import type { Staff, StaffRegisterDto, UpdateStaffDto } from '../types/staff.dto';
+import type { Staff, StaffRegisterDto, UpdateStaffDto, ChangeStaffPasswordDto } from '../types/staff.dto';
 
 
 export function useStaffList(
@@ -92,6 +92,15 @@ export function useUpdateStaff() {
       qc.invalidateQueries({ queryKey: qk.staff.list() });
       qc.invalidateQueries({ queryKey: qk.staff.byId(id) });
     },
+  });
+}
+
+
+export function useChangeStaffPassword() {
+  return useMutation({
+    mutationKey: ['staff', 'changePassword'],
+    mutationFn: (dto: ChangeStaffPasswordDto) =>
+      staffApiClient.changePassword(dto),
   });
 }
 

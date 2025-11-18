@@ -21,7 +21,7 @@ const AccessPage = async ({
   const t = await getTranslations({locale, namespace: 'ActionHeader.title'});
 
     const state = await prefetch([
-    roleServerQueries.list(),
+    // roleServerQueries.list(),
     // staffServerQueries.list(),
     staffServerQueries.list(/* clubId */ undefined),
   ]);

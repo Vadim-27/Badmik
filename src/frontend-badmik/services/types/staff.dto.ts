@@ -134,3 +134,9 @@ data: Staff[];
 total: number; // total rows for server-side pagination
 };
 export type StaffDetailsResponse = Staff;
+
+
+export type ChangeStaffPasswordDto = {
+  staffId: string;
+  password: string;
+};
