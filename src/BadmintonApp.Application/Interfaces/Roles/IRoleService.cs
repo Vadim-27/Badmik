@@ -10,7 +10,7 @@ public interface IRoleService
 {
     Task AssignRoleForStaff(Guid staffId, Guid clubId, Guid roleId, CancellationToken cancellationToken);
     Task<List<Role>> GetAll(Guid clubId, CancellationToken cancellationToken);
-    Task RoleBindPermission(Guid roleId, Guid permissionId, CancellationToken cancellationToken);
-    Task RoleDeletePermission(Guid roleId, Guid permissionId, CancellationToken cancellationToken);
-    Task<List<Role>> GetRolesByStaffId(Guid staffId, Guid clubId, CancellationToken cancellationToken);
+    Task RoleBindPermission(Guid userId, Guid clubId, Guid roleId, Guid permissionId, CancellationToken cancellationToken);
+    Task RoleDeletePermission(Guid userId, Guid clubId, Guid roleId, Guid permissionId, CancellationToken cancellationToken);
+    Task<List<Role>> GetRolesByStaffId(Guid staffId, CancellationToken cancellationToken);
 }

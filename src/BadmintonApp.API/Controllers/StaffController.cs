@@ -27,7 +27,7 @@ namespace BadmintonApp.API.Controllers
         [HttpPost("")]
         public async Task<ActionResult> Register([FromBody] StaffRegisterDto dto, CancellationToken cancellationToken)
         {
-            await _usersService.RegisterStaffAsync(dto, cancellationToken);
+            await _staffService.RegisterStaffAsync(dto, cancellationToken);
             return Ok();
         }
 

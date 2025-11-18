@@ -52,7 +52,7 @@ namespace BadmintonApp.Api.Tests.Tests.Live
         public async Task GetAll_Unauthorized_Returns401()
         {
             using var http = NewAnonymousClient();
-            var resp = await http.GetAsync("/api/staff/GetAll");
+            var resp = await http.GetAsync("/api/staff/");
             resp.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
         }
 
@@ -63,7 +63,7 @@ namespace BadmintonApp.Api.Tests.Tests.Live
             var token = await LoginAndGetTokenAsync(email, pwd);
             using var http = NewBearerClient(token);
 
-            var resp = await http.GetAsync("/api/staff/GetAll");
+            var resp = await http.GetAsync("/api/staff/");
             resp.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
@@ -102,7 +102,7 @@ namespace BadmintonApp.Api.Tests.Tests.Live
                 WorkingHours = new { }
             };
 
-            var resp = await http.PostAsJsonAsync("/api/staff/Register", payload);
+            var resp = await http.PostAsJsonAsync("/api/staff/", payload);
             resp.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
@@ -166,7 +166,7 @@ namespace BadmintonApp.Api.Tests.Tests.Live
             registerResp.StatusCode.Should().Be(HttpStatusCode.OK);
 
             // 4) fetch GetAll (зробимо більший pageSize на випадок пагінації)
-            var listResp = await http.GetAsync("/api/staff/GetAll?PageNumber=1&PageSize=200");
+            var listResp = await http.GetAsync("/api/staffs/?PageNumber=1&PageSize=200");
             listResp.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var listJson = await listResp.Content.ReadAsStringAsync();

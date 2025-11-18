@@ -36,7 +36,7 @@ public class StaffRepository : IStaffRepository
             .FirstAsync(x => x.Id == staff.Id, cancellationToken);
 
         staff.CreatedAt = currentStaff.CreatedAt;
-        staff.UpdatedAt = DateTime.Now;
+        staff.UpdatedAt = DateTime.UtcNow;
         staff.UserId = currentStaff.UserId;
 
         _dbContext.Staffs.Update(staff);

@@ -23,9 +23,7 @@ namespace BadmintonApp.Application.Services
         IStaffRepository staffRepository,
         IPasswordHasher<User> passwordHasher,
         IValidator<PlayerRegisterDto> playerRegisterValidation,
-        IMapper mapper,
-        IValidator<StaffRegisterDto> staffRegisterValidation,
-        IWorkingHourRepository workingHourRepository) : IUsersService
+        IMapper mapper) : IUsersService
     {
         private readonly IUserRepository _userRepository = userRepository;
         private readonly IPlayerRepository _playerRepository = playerRepository;
@@ -34,8 +32,7 @@ namespace BadmintonApp.Application.Services
         private readonly IValidator<PlayerRegisterDto> _playerRegisterValidation = playerRegisterValidation;
 
         private readonly IMapper _mapper = mapper;
-        private readonly IValidator<StaffRegisterDto> _staffRegisterValidation = staffRegisterValidation;
-        private readonly IWorkingHourRepository _workingHourRepository = workingHourRepository;
+        
 
         public async Task RegisterPlayerAsync(PlayerRegisterDto dto, CancellationToken cancellationToken)
         {
@@ -58,43 +55,6 @@ namespace BadmintonApp.Application.Services
 
             await _playerRepository.Registration(user.Id, dto.Level, cancellationToken);
 
-        }
-
-        public async Task RegisterStaffAsync(StaffRegisterDto dto, CancellationToken cancellationToken)
-        {
-            await _staffRegisterValidation.ValidateAndThrowAsync(dto, cancellationToken);
-
-            var user = new User
-            {
-                Id = Guid.NewGuid(),
-                Email = dto.Email,
-                FirstName = dto.FirstName,
-                LastName = dto.LastName,
-                PhoneNumber = dto.PhoneNumber,
-                ImageUrl = dto.ImageUrl,
-                DoB = dto.DoB,
-                ClubId = dto.ClubId,
-                CreatedAt = DateTime.UtcNow,
-                IsActive = true
-
-            };
-
-            Staff staff = _mapper.Map<Staff>(dto);
-            staff.UserId = user.Id;
-
-            staff.Id = Guid.NewGuid();
-
-            var workingHours = staff.WorkingHours;
-            staff.WorkingHours = null;
-            workingHours.ForEach(x => x.StaffId = staff.Id);
-
-            user.PasswordHash = _passwordHasher.HashPassword(user, dto.Password);
-
-            await _userRepository.CreateAsync(user, cancellationToken);
-
-            await _staffRepository.Registration(staff, cancellationToken);
-
-            await _workingHourRepository.AddWorkingHour(workingHours, cancellationToken);
         }
 
         public async Task<UserResultDto> GetByIdAsync(Guid userId, CancellationToken cancellationToken)
