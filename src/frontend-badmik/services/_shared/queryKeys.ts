@@ -6,8 +6,15 @@ export const qk = {
     byId: (id: string) => ['staff', 'byId', id] as const,
   },
   role: {
-    list: () => ['role', 'list'] as const,
-    // byId: (id: string) => ['role', 'byId', id] as const, 
+  
+    listByClub: (clubId: string) => ['role', 'byClub', clubId] as const,
+
+
+    listByStaff: (staffId: string, clubId: string) =>
+      ['role', 'byStaff', staffId, clubId] as const,
+
+  
+    listAll: () => ['role', 'list'] as const,
   },
   clubs: {
     list: () => ['clubs', 'list'] as const,

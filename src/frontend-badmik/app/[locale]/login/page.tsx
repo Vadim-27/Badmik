@@ -249,7 +249,7 @@ const data = await r.json();
     if (user?.role === "club_admin" && user?.clubId) {
       router.replace(`/admin/${user.clubId}`);
     } else {
-      router.replace("/admin");
+      router.replace("/admin/dashboard");
     }
     router.refresh();
   }

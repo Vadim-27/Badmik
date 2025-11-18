@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import React, { useRef, useState } from 'react';
@@ -16,11 +14,12 @@ import { useStaffById } from '@/services/staff/queries.client';
 import { useUpdateStaff } from '@/services/staff/queries.client';
 import { useAssignRoleForUser } from '@/services/role/queries.client';
 import { getApiErrorMessage } from '@/lib/http/utils';
-import css from "./EditStaff.module.scss";
+import css from './EditStaff.module.scss';
 import AppBreadcrumbs from '@/app/components/ui/Breadcrumbs/AppBreadcrumbs';
 
 // import type { UpdateStaffDto, WorkingHours } from '@/services/types/staff.dto';
 import type { UpdateStaffDto, WorkingHoursDto } from '@/services/types/staff.dto';
+import { useChangeStaffPassword } from '@/services/staff/queries.client';
 
 function parseWorkingHours(
   input: string | Record<string, any> | null | undefined
@@ -111,7 +110,7 @@ function mapFromDtoToForm(dto: Staff) {
     notes: dto.notes ?? null,
     staffStatus: dto.staffStatus,
     workingHoursObj: parseWorkingHours(dto.workingHours),
-    roleId: (dto as any).roleId ?? null, 
+    roleId: (dto as any).roleId ?? null,
     endDate: (dto as any).endDate ?? null,
   };
 }
@@ -144,10 +143,12 @@ export default function EditStaff({ staffId, initialData }: Props) {
   const updateStaff = useUpdateStaff();
   const assignRole = useAssignRoleForUser();
 
+  const changePassword = useChangeStaffPassword();
+
   const defaultValues = { ...mapFromDtoToForm(q.data as Staff), userId };
 
   const buildUpdateDto = (formValues: any): UpdateStaffDto => {
-    const wh = formValues.workingHoursObj as WorkingHoursDto; 
+    const wh = formValues.workingHoursObj as WorkingHoursDto;
     return {
       id: staffId,
       email: formValues.email || undefined,
@@ -156,7 +157,7 @@ export default function EditStaff({ staffId, initialData }: Props) {
       phoneNumber: formValues.phone ?? null,
       imageUrl: formValues.imageUrl || undefined,
       clubId: formValues.clubId || undefined,
-      doB: toDateTimeISO(formValues.doB) || undefined, 
+      doB: toDateTimeISO(formValues.doB) || undefined,
       staffStatus: formValues.staffStatus,
       employmentType: formValues.employmentType,
       title: formValues.title || undefined,
@@ -186,14 +187,14 @@ export default function EditStaff({ staffId, initialData }: Props) {
         />
       </ActionHeader>
       <div className={css.wrapperBreadcrumbs}>
-       <AppBreadcrumbs
-      items={[
-        { label: 'Admin', href: '/admin/dashboard' },
-        {label: 'Access Control', href: '/admin/access-control' },
-        { label: 'Edit Staff' },
-      ]}
-    />
-    </div>
+        <AppBreadcrumbs
+          items={[
+            { label: 'Admin', href: '/admin/dashboard' },
+            { label: 'Access Control', href: '/admin/access-control' },
+            { label: 'Edit Staff' },
+          ]}
+        />
+      </div>
 
       <StaffFormNew
         ref={formRef}
@@ -204,15 +205,15 @@ export default function EditStaff({ staffId, initialData }: Props) {
         defaultValues={defaultValues}
         onSubmitUpdate={async (_id, formValues) => {
           try {
+           
+
             const newRoleId = formValues.roleId ?? null;
             const clubId = formValues.clubId ?? null;
             const uId = formValues.userId ?? userId;
 
-            
             const dto = buildUpdateDto(formValues);
             await updateStaff.mutateAsync({ id: staffId, dto });
 
-           
             if (newRoleId && clubId && uId) {
               try {
                 await assignRole.mutateAsync({
@@ -223,6 +224,22 @@ export default function EditStaff({ staffId, initialData }: Props) {
                 setSnack({ open: true, severity: 'success', message: 'Роль заасайнено' });
               } catch (e) {
                 setSnack({ open: true, severity: 'error', message: 'Не вдалось асайнити роль' });
+              }
+            }
+
+             const newPassword = (formValues as any).password as string | undefined;
+            if (newPassword && newPassword.trim().length > 0) {
+              try {
+                const payload = {
+                  staffId,
+                  password: newPassword.trim(),
+                };
+
+                console.log('ChangePassword payload:', payload);
+                await changePassword.mutateAsync(payload);
+                setSnack({ open: true, severity: 'success', message: 'Пароль змінено' });
+              } catch (e) {
+                setSnack({ open: true, severity: 'error', message: 'Не вдалось змінити пароль' });
               }
             }
 
