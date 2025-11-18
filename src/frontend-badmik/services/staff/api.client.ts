@@ -58,7 +58,7 @@
 import { api } from '@/lib/http/api';
 import { ENDPOINTS } from '@/lib/endpoints';
 import { unwrap } from '@/lib/http/utils';
-import type { Staff, StaffRegisterDto, UpdateStaffDto } from '../types/staff.dto';
+import type { Staff, StaffRegisterDto, UpdateStaffDto, ChangeStaffPasswordDto } from '../types/staff.dto';
 import { withQuery } from '@/lib/http/qs';
 
 type ListParams = { clubId?: string; page?: number; pageSize?: number };
@@ -104,6 +104,13 @@ export const staffApiClient = {
         throw err;
       });
   },
+
+  changePassword: (dto: ChangeStaffPasswordDto, signal?: AbortSignal) =>
+    unwrap<void>(
+      api.put(ENDPOINTS.staff.changePassword, dto, { signal }),
+    ),
+
+  
 
   // якщо додаси delete на бекові:
   // remove: (id: string, signal?: AbortSignal) =>

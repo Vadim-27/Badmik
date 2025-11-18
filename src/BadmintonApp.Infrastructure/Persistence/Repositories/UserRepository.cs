@@ -1,6 +1,7 @@
 ﻿using BadmintonApp.Application.DTOs.Common;
 using BadmintonApp.Application.Interfaces.Repositories;
 using BadmintonApp.Domain.Core;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -57,6 +58,17 @@ namespace BadmintonApp.Infrastructure.Persistence.Repositories
             await _context.SaveChangesAsync(cancellationToken);
         }
 
+        public async Task UpdatePasswordAsync(Guid id, string passwordHash, CancellationToken cancellationToken)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
+            if (user == null) {
+                throw new KeyNotFoundException("User not found");
+            }
+
+            user.PasswordHash = passwordHash;
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
 
     }
 }

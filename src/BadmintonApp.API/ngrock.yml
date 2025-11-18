@@ -1,0 +1,11 @@
+﻿version: "2"
+authtoken: ${NGROK_AUTHTOKEN}
+region: ${NGROK_REGION}
+
+tunnels:
+  api:
+    addr: api:5001
+    proto: http
+    schemes: [https]
+    basic_auth:
+      - ${NGROK_BASIC_AUTH}

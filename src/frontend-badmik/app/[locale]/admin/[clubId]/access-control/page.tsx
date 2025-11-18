@@ -15,7 +15,7 @@ import { buildHrefServer } from '@/lib/club-scope.server';
 
 type Params = {
   locale: string;
-  clubId?: string; 
+  clubId: string; 
 };
 
 
@@ -28,7 +28,7 @@ const AccessPage = async ({
   const t = await getTranslations({locale, namespace: 'ActionHeader.title'});
 
     const state = await prefetch([
-    roleServerQueries.list(),
+   roleServerQueries.listByClub(clubId),
     // staffServerQueries.list(),
     staffServerQueries.list(clubId),
   ]);

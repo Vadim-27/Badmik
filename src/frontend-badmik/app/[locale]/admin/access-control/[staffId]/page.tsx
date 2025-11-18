@@ -15,8 +15,8 @@ type PageProps = {
 };
 
 export default async function StaffPage({ params: { locale, staffId } }: PageProps) {
-   const state = await prefetch([ roleServerQueries.list() ]);
-  console.log('[SSR] params:', { locale, staffId });
+  //  const state = await prefetch([ roleServerQueries.list() ]);
+  // console.log('[SSR] params:', { locale, staffId });
 
   // const t = await getTranslations({ locale, namespace: 'ActionHeader.title' });
 
@@ -28,6 +28,12 @@ export default async function StaffPage({ params: { locale, staffId } }: PagePro
   console.log('[SSR] staff:', staff);
 
   if (!staff) return notFound();
+
+   const clubId: string | null = staff.clubId ?? null;
+     const state = await prefetch(
+    clubId ? [roleServerQueries.listByClub(clubId)] : []
+  );
+  console.log('[SSR] params:', { locale, staffId });
 
   return (
     <RQHydrate state={state}>

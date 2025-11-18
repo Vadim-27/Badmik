@@ -1,6 +1,6 @@
 ﻿using BadmintonApp.Domain.Clubs;
 using BadmintonApp.Domain.Core;
-using BadmintonApp.Domain.Enums;
+using BadmintonApp.Domain.Enums.Staff;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,5 +1,5 @@
 ﻿using BadmintonApp.Application.DTOs.WorkingHourDtos;
-using BadmintonApp.Domain.Enums;
+using BadmintonApp.Domain.Enums.Staff;
 using System;
 
 namespace BadmintonApp.Application.DTOs.Staff;
