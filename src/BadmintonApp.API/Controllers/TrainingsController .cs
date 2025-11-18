@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace BadmintonApp.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/trainings")]
     public class TrainingsController : ControllerBase
     {
         private readonly ITrainingsService _trainingsService;
@@ -51,7 +51,7 @@ namespace BadmintonApp.API.Controllers
             return Ok(training);
         }
 
-        [HttpPost("Create")]
+        [HttpPost("")]
         [Authorize]
         public async Task<IActionResult> Create([FromBody] CreateTrainingDto dto, CancellationToken cancellationToken)
         {
@@ -63,7 +63,7 @@ namespace BadmintonApp.API.Controllers
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
-        [HttpPut("{id}/Update")]
+        [HttpPut("{id:guid}")]
         public async Task<IActionResult> Update(Guid id, [FromBody] UpdateTrainingDto dto, CancellationToken cancellationToken)
         {
             await _updateTrainingValidator.ValidateAndThrowAsync(dto, cancellationToken);
@@ -75,7 +75,7 @@ namespace BadmintonApp.API.Controllers
             return Ok(updated);
         }
 
-        [HttpDelete("{id}/Delete")]
+        [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
         {
             var userId = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);

@@ -10,4 +10,9 @@ public static class ClaimsPrincipalExtensions
     {
         return new Guid (claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier));
     }
+
+    public static Guid GetClubId(this ClaimsPrincipal claimsPrincipal)
+    {
+        return new Guid(claimsPrincipal.FindFirstValue("clubId"));
+    }
 }

@@ -36,7 +36,7 @@ public class StaffRepository : IStaffRepository
             .FirstAsync(x => x.Id == staff.Id, cancellationToken);
 
         staff.CreatedAt = currentStaff.CreatedAt;
-        staff.UpdatedAt = DateTime.Now;
+        staff.UpdatedAt = DateTime.UtcNow;
         staff.UserId = currentStaff.UserId;
 
         _dbContext.Staffs.Update(staff);
@@ -50,6 +50,14 @@ public class StaffRepository : IStaffRepository
            .AsNoTracking()
            .Include(x => x.User)
            .FirstAsync(x => x.Id == id, cancellationToken);
+    }
+
+    public async Task<Staff> GetByUserId(Guid id, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Staffs
+           .AsNoTracking()
+           .Include(x => x.User)
+           .FirstAsync(x => x.UserId == id, cancellationToken);
     }
 
     public async Task<Staff> GetByUserAndClubId(Guid userId, Guid clubId, CancellationToken cancellationToken)
@@ -66,6 +74,7 @@ public class StaffRepository : IStaffRepository
         var query = _dbContext.Staffs
             .AsNoTracking()
             .Include(x => x.User)
+            .Include(x => x.WorkingHours)
             .OrderBy(x => x.User.LastName)
             .AsQueryable();
 

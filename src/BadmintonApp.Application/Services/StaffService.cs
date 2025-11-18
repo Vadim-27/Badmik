@@ -6,6 +6,7 @@ using BadmintonApp.Application.Interfaces.Repositories;
 using BadmintonApp.Application.Interfaces.Staffs;
 using BadmintonApp.Application.Interfaces.Transactions;
 using BadmintonApp.Domain.Core;
+using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -21,14 +22,22 @@ public class StaffService : IStaffService
     private readonly IUserRepository _userRepository;
     private readonly ITransactionService _transactionService;
     private readonly IPasswordHasher<User> _passwordHasher;
+    private readonly IValidator<StaffRegisterDto> _staffRegisterValidation;
+    private readonly IWorkingHourRepository _workingHourRepository;
 
-    public StaffService(IStaffRepository staffRepository, IPasswordHasher<User> passwordHasher, IMapper mapper, IUserRepository userRepository, ITransactionService transactionService)
+    public StaffService(IStaffRepository staffRepository, 
+        IPasswordHasher<User> passwordHasher, IMapper mapper, 
+        IUserRepository userRepository, ITransactionService transactionService,
+        IValidator<StaffRegisterDto> staffRegisterValidation, IWorkingHourRepository workingHourRepository)
     {
         _staffRepository = staffRepository;
         _mapper = mapper;
         _userRepository = userRepository;
         _transactionService = transactionService;
         _passwordHasher = passwordHasher;
+        _staffRegisterValidation = staffRegisterValidation;
+        _workingHourRepository = workingHourRepository;
+
     }
 
     public async Task<PaginationListDto<StaffDto>> GetAll(ClubPaginationFilterDto paginationFilterDto, CancellationToken cancellationToken)
@@ -49,6 +58,13 @@ public class StaffService : IStaffService
     public async Task<StaffDto> GetById(Guid id, CancellationToken cancellationToken)
     {
         var staff = await _staffRepository.GetById(id, cancellationToken);
+
+        return _mapper.Map<StaffDto>(staff);
+    }
+
+    public async Task<StaffDto> GetByUserId(Guid id, CancellationToken cancellationToken)
+    {
+        var staff = await _staffRepository.GetByUserId(id, cancellationToken);
 
         return _mapper.Map<StaffDto>(staff);
     }
@@ -79,6 +95,43 @@ public class StaffService : IStaffService
 
             throw;
         }
+    }
+
+    public async Task RegisterStaffAsync(StaffRegisterDto dto, CancellationToken cancellationToken)
+    {
+        await _staffRegisterValidation.ValidateAndThrowAsync(dto, cancellationToken);
+
+        var user = new User
+        {
+            Id = Guid.NewGuid(),
+            Email = dto.Email,
+            FirstName = dto.FirstName,
+            LastName = dto.LastName,
+            PhoneNumber = dto.PhoneNumber,
+            ImageUrl = dto.ImageUrl,
+            DoB = dto.DoB,
+            ClubId = dto.ClubId,
+            CreatedAt = DateTime.UtcNow,
+            IsActive = true
+
+        };
+
+        Staff staff = _mapper.Map<Staff>(dto);
+        staff.UserId = user.Id;
+
+        staff.Id = Guid.NewGuid();
+
+        var workingHours = staff.WorkingHours;
+        staff.WorkingHours = null;
+        workingHours.ForEach(x => x.StaffId = staff.Id);
+
+        user.PasswordHash = _passwordHasher.HashPassword(user, dto.Password);
+
+        await _userRepository.CreateAsync(user, cancellationToken);
+
+        await _staffRepository.Registration(staff, cancellationToken);
+
+        await _workingHourRepository.AddWorkingHour(workingHours, cancellationToken);
     }
 
 

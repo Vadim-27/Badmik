@@ -34,6 +34,12 @@ public class PlayerService : IPlayerService
         return _mapper.Map<PlayerDto>(player);
     }
 
+    public async Task<PlayerDto> GetByUserId(Guid Id, CancellationToken cancellationToken)
+    {
+        var player = await _playerRepository.GetByUserId(Id, cancellationToken);
+        return _mapper.Map<PlayerDto>(player);
+    }
+
     public async Task Update(PlayerUpdateDto dto, CancellationToken cancellationToken)
     {       
         var player = _mapper.Map<Player>(dto);       

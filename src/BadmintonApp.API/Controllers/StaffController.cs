@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace BadmintonApp.API.Controllers
 {
     [ApiController]
-    [Route("api/staff")]
+    [Route("api/staffs")]
     public class StaffController : ControllerBase
     {
         private readonly IUsersService _usersService;
@@ -24,21 +24,21 @@ namespace BadmintonApp.API.Controllers
             _staffService = staffService;
         }
 
-        [HttpPost("Register")]
+        [HttpPost("")]
         public async Task<ActionResult> Register([FromBody] StaffRegisterDto dto, CancellationToken cancellationToken)
         {
-            await _usersService.RegisterStaffAsync(dto, cancellationToken);
+            await _staffService.RegisterStaffAsync(dto, cancellationToken);
             return Ok();
         }
 
-        [HttpPut("Update")]
+        [HttpPut("{id:guid}")]
         public async Task<ActionResult> Update([FromBody] StaffUpdateDto dto, CancellationToken cancellationToken)
         {
             await _staffService.Update(dto, cancellationToken);
             return Ok();
         }
 
-        [HttpGet("{id}/GetById")]
+        [HttpGet("{id:guid}")]
         public async Task<ActionResult> GetById(Guid id, CancellationToken cancellationToken)
         {
             StaffDto staff = await _staffService.GetById(id, cancellationToken);
@@ -47,7 +47,16 @@ namespace BadmintonApp.API.Controllers
             return Ok(staff);
         }
 
-        [HttpGet("GetAll")]
+        [HttpGet("user/{id:guid}")]
+        public async Task<ActionResult> GetByUserId(Guid id, CancellationToken cancellationToken)
+        {
+            StaffDto staff = await _staffService.GetByUserId(id, cancellationToken);
+            if (staff == null)
+                return NotFound();
+            return Ok(staff);
+        }
+
+        [HttpGet("")]
         public async Task<ActionResult> GetAll([FromQuery]ClubPaginationFilterDto paginationFilterDto, CancellationToken cancellationToken)
         {
             var result = await _staffService.GetAll(paginationFilterDto, cancellationToken);
