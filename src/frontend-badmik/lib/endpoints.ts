@@ -37,7 +37,7 @@ export const ENDPOINTS = {
   },
   player: {
     register: '/Player/Register', // POST
-    getAll: '/Player/GetAll', // GET
+    getAll: '/players', // GET
     getById: (id: string) => `/Player/${id}/GetById`, // GET
     update: (id: string) => `/Player/${id}/Update`, // PUT
   },
