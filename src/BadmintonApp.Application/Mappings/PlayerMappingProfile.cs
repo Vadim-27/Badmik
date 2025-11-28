@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BadmintonApp.Application.DTOs.Player;
 using BadmintonApp.Application.DTOs.Staff;
-using BadmintonApp.Domain.Core;
+using BadmintonApp.Domain.Players;
 
 namespace BadmintonApp.Application.Mappings;
 

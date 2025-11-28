@@ -1,5 +1,5 @@
 ﻿using BadmintonApp.Application.DTOs.Trainings;
-using BadmintonApp.Domain.Trainings.Enums;
+using BadmintonApp.Domain.Enums.Training;
 using FluentValidation;
 using System;
 using System.Collections.Generic;

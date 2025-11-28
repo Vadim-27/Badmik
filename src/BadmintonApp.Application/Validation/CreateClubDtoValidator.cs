@@ -16,17 +16,11 @@ public sealed class CreateClubDtoValidator : AbstractValidator<CreateClubDto>
             .MinimumLength(2).WithMessage("Name is too short.").WithErrorCode("Name.TooShort")
             .MaximumLength(100).WithMessage("Name is too long.").WithErrorCode("Name.TooLong");
         
-        RuleFor(x => x.Location)
-            .NotNull().WithMessage("Location is required.").WithErrorCode("Location.Empty")
-            .SetValidator(new LocationValidator());
-       
-        RuleFor(x => x.CourtCount)
-            .GreaterThan(0).WithMessage("CourtCount must be greater than 0.").WithErrorCode("CourtCount.ZeroOrNegative")
-            .LessThanOrEqualTo(MaxCourtsAllowed).WithMessage($"CourtCount must be ≤ {MaxCourtsAllowed}.").WithErrorCode("CourtCount.TooMany");        
+        
     }
 }
 
-public sealed class LocationValidator : AbstractValidator<Location>
+public sealed class LocationValidator : AbstractValidator<CreateLocationDto>
 {
     public LocationValidator()
     {

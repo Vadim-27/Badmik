@@ -17,5 +17,6 @@ namespace BadmintonApp.Application.Interfaces.Repositories
         Task<Club> UpdateAsync(Club club, CancellationToken cancellationToken);
         Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken);
         Task<bool> IsExist(Guid id, CancellationToken cancellationToken);
+        Task<Club> GetByAliasAsync(string alias, CancellationToken cancellationToken);
     }
 }

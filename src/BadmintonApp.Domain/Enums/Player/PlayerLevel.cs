@@ -1,4 +1,4 @@
-﻿namespace BadmintonApp.Domain.Trainings.Enums;
+﻿namespace BadmintonApp.Domain.Enums.Player;
 
 public enum PlayerLevel
 {

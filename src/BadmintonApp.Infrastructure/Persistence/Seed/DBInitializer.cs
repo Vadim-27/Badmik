@@ -1,6 +1,6 @@
 ﻿using BadmintonApp.Domain.Clubs;
 using BadmintonApp.Domain.Core;
-using BadmintonApp.Domain.Trainings.Enums;
+using BadmintonApp.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -13,19 +13,33 @@ namespace BadmintonApp.Infrastructure.Persistence.Seed
         public static async Task SeedAsync(ApplicationDbContext context)
         {
             var clubId = Guid.Parse("2672dab8-b42d-4c58-a67b-7e39e2fb0e5e");
+            var now = DateTime.UtcNow;
 
             // Ensure club exists
             var club = await context.Clubs.FirstOrDefaultAsync(c => c.Id == clubId);
+
             if (club == null)
             {
+                // Create a new default club with all required fields
                 club = new Club
                 {
                     Id = clubId,
                     Name = "Default Club",
+                    Alias = "default-club",              // important for GetByAlias
                     City = "Kyiv",
                     Address = "Main Hall 1",
-                    TotalCourts = 4
+
+                    Email = "admin@badmik.com.ua",
+                    Phone = "+380000000000",             // put a real phone or dummy
+                    Website = "https://badmik.com.ua",   // or null if you prefer
+                    Description = "Seeded default club",
+
+                    Order = 0,
+                    IsActive = true,
+                    CreatedAt = now,
+                    UpdatedAt = now
                 };
+
                 context.Clubs.Add(club);
                 await context.SaveChangesAsync();
             }

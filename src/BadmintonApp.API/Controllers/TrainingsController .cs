@@ -1,7 +1,8 @@
 ﻿using BadmintonApp.Application.DTOs.Trainings;
 using BadmintonApp.Application.Interfaces.Trainings;
 using BadmintonApp.Application.Validation;
-using BadmintonApp.Domain.Trainings.Enums;
+using BadmintonApp.Domain.Enums.Player;
+using BadmintonApp.Domain.Enums.Training;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

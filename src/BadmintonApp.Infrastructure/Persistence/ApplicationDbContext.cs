@@ -1,6 +1,8 @@
 ﻿using BadmintonApp.Domain.Clubs;
 using BadmintonApp.Domain.Core;
+using BadmintonApp.Domain.Enums.Permission;
 using BadmintonApp.Domain.Logs;
+using BadmintonApp.Domain.Players;
 using BadmintonApp.Domain.Trainings;
 using BadmintonApp.Domain.WorkingHours;
 using Microsoft.EntityFrameworkCore;

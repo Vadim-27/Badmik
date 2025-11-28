@@ -9,7 +9,7 @@ public sealed class WorkingHourDtoValidator : AbstractValidator<WorkingHourDto>
 {
     public WorkingHourDtoValidator()
     {
-        // Дозволяємо день бути null (клуб закритий цього дня).
+        
         RuleFor(x => x.Monday).SetValidator(new TimeRangeDtoValidator()).When(x => x.Monday != null);
         RuleFor(x => x.Tuesday).SetValidator(new TimeRangeDtoValidator()).When(x => x.Tuesday != null);
         RuleFor(x => x.Wednesday).SetValidator(new TimeRangeDtoValidator()).When(x => x.Wednesday != null);
@@ -18,7 +18,7 @@ public sealed class WorkingHourDtoValidator : AbstractValidator<WorkingHourDto>
         RuleFor(x => x.Saturday).SetValidator(new TimeRangeDtoValidator()).When(x => x.Saturday != null);
         RuleFor(x => x.Sunday).SetValidator(new TimeRangeDtoValidator()).When(x => x.Sunday != null);
 
-        // Щонайменше один робочий день має бути заданий
+        
         RuleFor(x => x).Must(h =>
                h.Monday != null || h.Tuesday != null || h.Wednesday != null ||
                h.Thursday != null || h.Friday != null || h.Saturday != null ||

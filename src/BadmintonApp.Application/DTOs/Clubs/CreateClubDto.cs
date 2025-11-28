@@ -6,16 +6,14 @@ namespace BadmintonApp.Application.DTOs.Clubs;
 public class CreateClubDto
 {
     public string Name { get; set; }
-
-    public Location Location { get; set; }
-    
-    public int CourtCount { get; set; }
-    
-    public WorkingHourDto WorkingHours { get; set; } = new();
-}
-
-public class Location
-{
+    public string Alias { get; set; }
     public string City { get; set; }
     public string Address { get; set; }
+
+    public string Email { get; set; }
+    public string Phone { get; set; }
+    public string Website { get; set; }
+    public string Description { get; set; }
+
+    public int Order { get; set; } = 0;
 }

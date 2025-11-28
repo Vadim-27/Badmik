@@ -5,6 +5,8 @@ using BadmintonApp.Application.Validation;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -28,44 +30,78 @@ namespace BadmintonApp.API.Controllers
             _workingHourDtoValidator = workingHourDtoValidator;
         }
 
-        [HttpPost("{id}/Create")]
-        public async Task<ActionResult> Create([FromBody] CreateClubDto create, CancellationToken cancellationToken)
+        [HttpPost]
+        public async Task<ActionResult<ClubResultDto>> Create(
+        [FromBody] CreateClubDto dto,
+        CancellationToken cancellationToken)
         {
-            await _createClubValidation.ValidateAndThrowAsync(create, cancellationToken);
+            // All validation is done inside the service (FluentValidation)
+            var result = await _clubsService.CreateAsync(dto, cancellationToken);
 
-            await _workingHourDtoValidator.ValidateAndThrowAsync(create.WorkingHours, cancellationToken);
+            // Returns 201 Created with location header
+            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+        }
 
-            var result = await _clubsService.CreateAsync(create, cancellationToken);
-
+        [HttpGet]
+        public async Task<ActionResult<List<ClubResultDto>>> GetAll(
+        [FromQuery] string? filter,
+        CancellationToken cancellationToken)
+        {
+            var result = await _clubsService.GetAllAsync(filter, cancellationToken);
             return Ok(result);
         }
 
-        [HttpGet("GetAll")]
-        public async Task<ActionResult> GetAll([FromQuery] string? filter, CancellationToken cancellationToken)
+        [HttpPut("{id:guid}")]
+        public async Task<ActionResult<ClubResultDto>> Update(
+        Guid id,
+        [FromBody] UpdateClubDto dto,
+        CancellationToken cancellationToken)
         {
-            var res = await _clubsService.GetAllAsync(filter, cancellationToken); //?
-
-            return Ok(res);
-        }
-
-        [HttpPut("{id}/Update")]
-        public async Task<ActionResult> Update(Guid id, [FromBody] UpdateClubDto dto, CancellationToken cancellationToken)
-        {
-            await _updateClubValidation.ValidateAndThrowAsync(dto, cancellationToken);
-
-            await _workingHourDtoValidator.ValidateAndThrowAsync(dto.WorkingHours, cancellationToken);
-            
+            // Validation is done inside the service
             var result = await _clubsService.UpdateAsync(id, dto, cancellationToken);
             return Ok(result);
         }
 
-        [HttpDelete("{id}/Delete")]
-        public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
+        [HttpGet("{id:guid}")]
+        public async Task<ActionResult<ClubResultDto>> GetById(
+        Guid id,
+        CancellationToken cancellationToken)
+        {
+            var clubs = await _clubsService.GetAllAsync(null, cancellationToken);
+            var club = clubs.FirstOrDefault(c => c.Id == id);
+
+            if (club == null)
+                return NotFound();
+
+            return Ok(club);
+        }
+
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> Delete(
+        Guid id,
+        CancellationToken cancellationToken)
         {
             await _clubsService.DeleteAsync(id, cancellationToken);
-
-            return Ok(); // 204
+            return NoContent(); // 204
         }
-        
+
+        [HttpPost("{id:guid}/deactivate")]
+        public async Task<IActionResult> Deactivate(
+        Guid id,
+        CancellationToken cancellationToken)
+        {
+            await _clubsService.DeactivateAsync(id, cancellationToken);
+            return NoContent();
+        }
+
+        [HttpPost("{id:guid}/activate")]
+        public async Task<IActionResult> Activate(
+        Guid id,
+        CancellationToken cancellationToken)
+        {
+            await _clubsService.ActivateAsync(id, cancellationToken);
+            return NoContent();
+        }
+
     }
 }

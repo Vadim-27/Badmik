@@ -30,13 +30,5 @@ public sealed class UpdateClubDtoValidator : AbstractValidator<UpdateClubDto>
             .NotEmpty().WithMessage("Address is required.").WithErrorCode("Address.Empty")
             .MinimumLength(3).WithMessage("Address is too short.").WithErrorCode("Address.TooShort")
             .MaximumLength(200).WithMessage("Address is too long.").WithErrorCode("Address.TooLong");
-        
-        RuleFor(x => x.TotalCourts)
-            .GreaterThan(0).WithMessage("TotalCourts must be greater than 0.").WithErrorCode("TotalCourts.ZeroOrNegative")
-            .LessThanOrEqualTo(MaxCourtsAllowed).WithMessage($"TotalCourts must be ≤ {MaxCourtsAllowed}.").WithErrorCode("TotalCourts.TooMany");
-        
-        RuleFor(x => x.WorkingHours)
-            .NotNull().WithMessage("WorkingHours is required.").WithErrorCode("WorkingHours.Empty")
-            .SetValidator(new WorkingHourDtoValidator());
     }
 }
