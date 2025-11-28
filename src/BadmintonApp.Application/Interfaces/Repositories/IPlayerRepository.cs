@@ -1,7 +1,7 @@
 ﻿using BadmintonApp.Application.DTOs.Logs;
-using BadmintonApp.Domain.Core;
+using BadmintonApp.Domain.Enums.Player;
 using BadmintonApp.Domain.Logs;
-using BadmintonApp.Domain.Trainings.Enums;
+using BadmintonApp.Domain.Players;
 using System;
 using System.Linq;
 using System.Threading;

@@ -1,6 +1,6 @@
 ﻿using BadmintonApp.Application.Interfaces.Repositories;
-using BadmintonApp.Domain.Core;
-using BadmintonApp.Domain.Trainings.Enums;
+using BadmintonApp.Domain.Enums.Player;
+using BadmintonApp.Domain.Players;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading;

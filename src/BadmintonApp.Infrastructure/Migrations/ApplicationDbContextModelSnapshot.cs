@@ -31,18 +31,144 @@ namespace BadmintonApp.Infrastructure.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("text");
 
+                    b.Property<string>("Alias")
+                        .HasColumnType("text");
+
                     b.Property<string>("City")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Website")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Clubs");
+                });
+
+            modelBuilder.Entity("BadmintonApp.Domain.Clubs.Court", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Index")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("LocationId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Sport")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LocationId");
+
+                    b.ToTable("Court");
+                });
+
+            modelBuilder.Entity("BadmintonApp.Domain.Clubs.Location", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("text");
+
+                    b.Property<string>("City")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("ClubId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("Label")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Logo")
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<int>("TotalCourts")
+                    b.Property<int>("Order")
                         .HasColumnType("integer");
+
+                    b.Property<string>("PriceFrom")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ShortDescription")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Clubs");
+                    b.HasIndex("ClubId");
+
+                    b.ToTable("Location");
+                });
+
+            modelBuilder.Entity("BadmintonApp.Domain.Clubs.LocationImage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("LocationId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LocationId");
+
+                    b.ToTable("LocationImage");
                 });
 
             modelBuilder.Entity("BadmintonApp.Domain.Core.Permission", b =>
@@ -194,25 +320,6 @@ namespace BadmintonApp.Infrastructure.Migrations
                             Id = new Guid("d474449e-3045-4418-89c7-5a7599e58033"),
                             Type = 181
                         });
-                });
-
-            modelBuilder.Entity("BadmintonApp.Domain.Core.Player", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Level")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Players");
                 });
 
             modelBuilder.Entity("BadmintonApp.Domain.Core.Role", b =>
@@ -600,6 +707,25 @@ namespace BadmintonApp.Infrastructure.Migrations
                     b.ToTable("Logs");
                 });
 
+            modelBuilder.Entity("BadmintonApp.Domain.Players.Player", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Players");
+                });
+
             modelBuilder.Entity("BadmintonApp.Domain.Trainings.Training", b =>
                 {
                     b.Property<Guid>("Id")
@@ -703,6 +829,9 @@ namespace BadmintonApp.Infrastructure.Migrations
                     b.Property<TimeOnly?>("EndTime")
                         .HasColumnType("time without time zone");
 
+                    b.Property<Guid?>("LocationId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid?>("StaffId")
                         .HasColumnType("uuid");
 
@@ -713,20 +842,42 @@ namespace BadmintonApp.Infrastructure.Migrations
 
                     b.HasIndex("ClubId");
 
+                    b.HasIndex("LocationId");
+
                     b.HasIndex("StaffId");
 
                     b.ToTable("WorkingHours");
                 });
 
-            modelBuilder.Entity("BadmintonApp.Domain.Core.Player", b =>
+            modelBuilder.Entity("BadmintonApp.Domain.Clubs.Court", b =>
                 {
-                    b.HasOne("BadmintonApp.Domain.Core.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
+                    b.HasOne("BadmintonApp.Domain.Clubs.Location", "Location")
+                        .WithMany("Courts")
+                        .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("Location");
+                });
+
+            modelBuilder.Entity("BadmintonApp.Domain.Clubs.Location", b =>
+                {
+                    b.HasOne("BadmintonApp.Domain.Clubs.Club", "Club")
+                        .WithMany("Locations")
+                        .HasForeignKey("ClubId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Club");
+                });
+
+            modelBuilder.Entity("BadmintonApp.Domain.Clubs.LocationImage", b =>
+                {
+                    b.HasOne("BadmintonApp.Domain.Clubs.Location", null)
+                        .WithMany("Images")
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("BadmintonApp.Domain.Core.RolePermission", b =>
@@ -770,7 +921,7 @@ namespace BadmintonApp.Infrastructure.Migrations
             modelBuilder.Entity("BadmintonApp.Domain.Core.StaffClubRole", b =>
                 {
                     b.HasOne("BadmintonApp.Domain.Clubs.Club", "Club")
-                        .WithMany("UserRoles")
+                        .WithMany()
                         .HasForeignKey("ClubId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -794,6 +945,17 @@ namespace BadmintonApp.Infrastructure.Migrations
                     b.Navigation("Staff");
                 });
 
+            modelBuilder.Entity("BadmintonApp.Domain.Players.Player", b =>
+                {
+                    b.HasOne("BadmintonApp.Domain.Core.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("BadmintonApp.Domain.Trainings.TrainingParticipant", b =>
                 {
                     b.HasOne("BadmintonApp.Domain.Trainings.Training", null)
@@ -811,8 +973,12 @@ namespace BadmintonApp.Infrastructure.Migrations
             modelBuilder.Entity("BadmintonApp.Domain.WorkingHours.WorkingHour", b =>
                 {
                     b.HasOne("BadmintonApp.Domain.Clubs.Club", "Club")
-                        .WithMany("WorkingHours")
+                        .WithMany()
                         .HasForeignKey("ClubId");
+
+                    b.HasOne("BadmintonApp.Domain.Clubs.Location", null)
+                        .WithMany("WorkingHours")
+                        .HasForeignKey("LocationId");
 
                     b.HasOne("BadmintonApp.Domain.Core.Staff", "Staff")
                         .WithMany("WorkingHours")
@@ -825,7 +991,14 @@ namespace BadmintonApp.Infrastructure.Migrations
 
             modelBuilder.Entity("BadmintonApp.Domain.Clubs.Club", b =>
                 {
-                    b.Navigation("UserRoles");
+                    b.Navigation("Locations");
+                });
+
+            modelBuilder.Entity("BadmintonApp.Domain.Clubs.Location", b =>
+                {
+                    b.Navigation("Courts");
+
+                    b.Navigation("Images");
 
                     b.Navigation("WorkingHours");
                 });
