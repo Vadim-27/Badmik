@@ -30,7 +30,7 @@ public class ClubsService(
     private readonly IValidator<WorkingHourDto> _workingHourValidation = workingHourValidation;
     private readonly IValidator<UpdateClubDto> _updateClubValidation = updateClubValidation;
     private readonly IWorkingHourRepository _workingHourRepository = workingHourRepository;
-    private readonly IMapper _mapper;
+    private readonly IMapper _mapper = mapper;
 
     public async Task<ClubResultDto> CreateAsync(
         CreateClubDto dto,

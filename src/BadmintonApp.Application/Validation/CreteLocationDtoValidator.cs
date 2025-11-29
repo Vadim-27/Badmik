@@ -95,14 +95,8 @@ namespace BadmintonApp.Application.Validation
                 .WithErrorCode("WorkingHours.Null");
 
             // кожен елемент (ти можеш мати 0 або більше профілів розкладу)
-            RuleForEach(x => x.WorkingHours)
+            RuleFor(x => x.WorkingHours)
                 .SetValidator(new WorkingHourDtoValidator());
-
-            // Якщо хочеш, можеш додати правило "принаймні один розклад":
-            // RuleFor(x => x.WorkingHours)
-            //     .Must(list => list != null && list.Count > 0)
-            //     .WithMessage("At least one working hours profile must be provided.")
-            //     .WithErrorCode("WorkingHours.Empty");
         }
     }
 }

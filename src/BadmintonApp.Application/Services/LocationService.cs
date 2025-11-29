@@ -3,6 +3,7 @@ using BadmintonApp.Application.DTOs.Clubs;
 using BadmintonApp.Application.DTOs.WorkingHourDtos;
 using BadmintonApp.Application.Interfaces.Clubs;
 using BadmintonApp.Application.Interfaces.Repositories;
+using BadmintonApp.Application.Mappings;
 using BadmintonApp.Domain.Clubs;
 using BadmintonApp.Domain.Enums;
 using BadmintonApp.Domain.WorkingHours;
@@ -18,14 +19,14 @@ namespace BadmintonApp.Application.Services
 {
     public class LocationService : ILocationService
     {
-        private readonly ILocationsRepository _locationsRepository;
+        private readonly ILocationRepository _locationsRepository;
         private readonly IValidator<CreateLocationDto> _createLocationValidation;
         private readonly IValidator<UpdateLocationDto> _updateLocationValidation;
         private readonly IValidator<WorkingHourDto> _workingHourValidation;
         private readonly IMapper _mapper;
         private readonly ICourtsService _courtsService;
 
-        public LocationService(ILocationsRepository locationsRepository,
+        public LocationService(ILocationRepository locationsRepository,
         IValidator<CreateLocationDto> createLocationValidation,
         IValidator<UpdateLocationDto> updateLocationValidation,
         IValidator<WorkingHourDto> workingHourValidation,
@@ -57,7 +58,7 @@ namespace BadmintonApp.Application.Services
         Guid clubId,
         CancellationToken cancellationToken = default)
         {
-            var entities = await _locationsRepository.GetByClubAsync(clubId, cancellationToken);
+            var entities = await _locationsRepository.GetByClubIdAsync(clubId, cancellationToken);
             return _mapper.Map<List<LocationResultDto>>(entities);
         }
 
@@ -67,18 +68,13 @@ namespace BadmintonApp.Application.Services
         {
             await _createLocationValidation.ValidateAndThrowAsync(dto, cancellationToken);
 
-            if (dto.WorkingHours is not null && dto.WorkingHours.Count > 0)
-            {
-                foreach (var wh in dto.WorkingHours)
-                {
-                    await _workingHourValidation.ValidateAndThrowAsync(wh, cancellationToken);
-                }
-            }
+            await _workingHourValidation.ValidateAndThrowAsync(dto.WorkingHours, cancellationToken);
+             
             
             var entity = _mapper.Map<Location>(dto);
             entity.Id = Guid.NewGuid();
             
-            await _locationsRepository.AddAsync(entity, cancellationToken);
+            await _locationsRepository.CreateAsync(entity, cancellationToken);
 
             // Sync courts for sports
             if (dto.Sports is not null && dto.Sports.Count > 0)
@@ -87,7 +83,10 @@ namespace BadmintonApp.Application.Services
             }
 
             var withCourts = await _locationsRepository.GetByIdAsync(entity.Id, cancellationToken);
-            return _mapper.Map<LocationResultDto>(withCourts);
+            var resultDto = _mapper.Map<LocationResultDto>(withCourts);
+            resultDto.WorkingHours = WHM.MapToWorkingHours(withCourts.WorkingHours);
+
+            return resultDto;
         }
 
         public async Task<LocationResultDto> UpdateAsync(
@@ -103,18 +102,16 @@ namespace BadmintonApp.Application.Services
 
             await _updateLocationValidation.ValidateAndThrowAsync(dto, cancellationToken);
 
-            if (dto.WorkingHours is not null && dto.WorkingHours.Count > 0)
-            {
-                foreach (var wh in dto.WorkingHours)
-                {
-                    await _workingHourValidation.ValidateAndThrowAsync(wh, cancellationToken);
-                }
-            }
+            await _workingHourValidation.ValidateAndThrowAsync(dto.WorkingHours, cancellationToken);
 
             _mapper.Map(dto, entity);
             await _locationsRepository.UpdateAsync(entity, cancellationToken);
 
-            return _mapper.Map<LocationResultDto>(entity);
+            var withCourts = await _locationsRepository.GetByIdAsync(entity.Id, cancellationToken);
+            var resultDto = _mapper.Map<LocationResultDto>(withCourts);
+            resultDto.WorkingHours = WHM.MapToWorkingHours(withCourts.WorkingHours);
+
+            return resultDto;
         }
 
         public async Task DeleteAsync(
@@ -127,7 +124,7 @@ namespace BadmintonApp.Application.Services
                 throw new InvalidOperationException("Location not found.");
             }
 
-            await _locationsRepository.DeleteAsync(entity, cancellationToken);
+            await _locationsRepository.DeleteAsync(id, cancellationToken);
         }
     }
 }

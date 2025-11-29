@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BadmintonApp.Domain.Clubs
+namespace BadmintonApp.Application.DTOs.Clubs
 {
-    public class LocationImage
+    public class LocationImageDto
     {
         public Guid Id { get; set; }
-        public Guid LocationId { get; set; }
-        public Location Location { get; set; }
-        public string Url { get; set; }
+        public string Url { get; set; } = default!;
         public int Order { get; set; }
+        public bool IsMain { get; set; }
     }
 }

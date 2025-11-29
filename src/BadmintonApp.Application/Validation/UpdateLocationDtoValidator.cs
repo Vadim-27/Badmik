@@ -86,7 +86,7 @@ namespace BadmintonApp.Application.Validation
                 .WithMessage("WorkingHours collection must be provided (can be empty).")
                 .WithErrorCode("WorkingHours.Null");
 
-            RuleForEach(x => x.WorkingHours)
+            RuleFor(x => x.WorkingHours)
                 .SetValidator(new WorkingHourDtoValidator());
         }
     }

@@ -12,7 +12,7 @@ namespace BadmintonApp.API.Controllers
     using BadmintonApp.Application.Interfaces.Clubs;
 
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/locations")]
     public class LocationsController : ControllerBase
     {
         private readonly ILocationService _locationsService;
@@ -35,19 +35,15 @@ namespace BadmintonApp.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("by-club/{clubId:guid}")]
-        public async Task<ActionResult<List<LocationResultDto>>> GetByClub(
-            Guid clubId,
-            CancellationToken cancellationToken)
+        [HttpGet("byclub/{clubId:guid}")]
+        public async Task<ActionResult<List<LocationResultDto>>> GetByClub(Guid clubId, CancellationToken cancellationToken)
         {
             var result = await _locationsService.GetByClubIdAsync(clubId, cancellationToken);
             return Ok(result);
         }
 
         [HttpPost]
-        public async Task<ActionResult<LocationResultDto>> Create(
-            [FromBody] CreateLocationDto dto,
-            CancellationToken cancellationToken)
+        public async Task<ActionResult<LocationResultDto>> Create([FromBody] CreateLocationDto dto, CancellationToken cancellationToken)
         {
             // All validation (including WorkingHours, Courts, etc.) is done inside the service
             var result = await _locationsService.CreateAsync(dto, cancellationToken);
