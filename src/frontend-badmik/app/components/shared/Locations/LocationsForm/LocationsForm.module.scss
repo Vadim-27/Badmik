@@ -1,0 +1,422 @@
+@use '../../../../styles/mixins' as *;
+
+$focus-ring: rgba(147, 197, 253, 0.35);
+
+.wrapper {
+  min-height: 77vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 24px 0;
+  overflow: hidden;
+ 
+}
+
+.formBox {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  padding-right: 4px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  max-height: 70vh;
+
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  position: relative;
+
+  @include media-rules(laptop) {
+    width: 80%;
+  }
+}
+
+.formScroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable both-edges;
+}
+
+.form {
+  display: grid;
+  gap: 24px;
+  padding-right: 14px;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.row3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 14px;
+  align-items: center;
+}
+
+.label {
+  display: block;
+  font-size: 18px;
+  color: var(--muted);
+  margin: 0 0 8px;
+}
+
+.input,
+.select,
+.textarea {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--text);
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s, background 0.2s;
+  line-height: 1.4;
+
+  &:focus {
+    border-color: var(--focus);
+    box-shadow: 0 0 0 4px $focus-ring;
+  }
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 96px;
+}
+
+.checkboxRow {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  color: #334155;
+  cursor: pointer;
+  font-weight: 700;
+
+  input {
+    display: none;
+  }
+}
+
+.chipActive {
+  background: #e9f1ff;
+  border-color: #c7d2fe;
+  color: #0b3b8c;
+}
+
+.errorInput {
+  border: 1px solid #e63946 !important;
+  background-color: #fff5f5;
+
+  &:focus {
+    box-shadow: 0 0 0 4px rgba(230, 57, 70, 0.2);
+  }
+}
+
+.errorText {
+  color: #e63946;
+  font-size: 12px;
+  margin-top: 4px;
+  font-weight: 500;
+
+  @include media-rules(tablet) {
+    font-size: 13px;
+  }
+}
+
+.help {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+/* комбобокс, як у StaffForm */
+.comboRoot {
+  position: relative;
+}
+
+.inputChevron {
+  padding-right: 40px;
+}
+
+.comboChevron {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: auto;
+  color: var(--muted);
+}
+
+.options {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 1000;
+
+  max-height: 240px;
+  overflow-y: auto;
+
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
+}
+
+.option {
+  padding: 10px 12px;
+  box-sizing: border-box;
+  cursor: pointer;
+  font-size: 14px;
+  background: #fff;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid #f1f5f9;
+  }
+}
+
+// .optionActive {
+//   background: #eef3ff;
+// }
+
+// .activeRow {
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-between;
+// }
+
+.radioGroup {
+  display: flex;
+  gap: 12px;
+}
+
+.radioBtn {
+  display: inline-flex;
+  align-items: center;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: #f8fafc;
+  cursor: pointer;
+  user-select: none;
+  font-weight: 600;
+  color: #64748b;
+  transition: 0.15s ease;
+
+  input {
+    display: none;
+  }
+
+  &:hover {
+    background: #f1f5f9;
+  }
+}
+
+.radioBtnActive {
+  background: #e9f1ff;
+    border-color: #c7d2fe;
+    color: #0b3b8c;
+}
+
+
+/* щоб дропдаун не обрізався */
+.wrapper,
+.formBox,
+.form {
+  overflow: visible;
+}
+
+/* спорт-блоки */
+.sportGrid {
+  display: grid;
+//   grid-template-rows: repeat(3, minmax(0, 1fr));
+grid-template-columns: 1fr;
+  gap: 12px;
+
+  @include media-rules(mobile) {
+    grid-template-columns: 1fr;
+  }
+  @include media-rules(tablet) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+   @include media-rules(laptop) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @include media-rules(desktop) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.sportItem {
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  padding: 10px 12px;
+  background: #f9fafb;
+  display: flex;
+  justify-content: space-between;
+//   flex-direction: column;
+  gap: 8px;
+}
+
+//==================================================== новий спортивний елемент
+
+.sportBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+  padding: 10px 14px;
+
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+
+  color: #334155;
+  font-weight: 600;
+  cursor: pointer;
+
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+
+  input {
+    display: none;
+  }
+}
+
+.sportBtnActive {
+  background: #e9f1ff;
+  border-color: #c7d2fe;
+  color: #0b3b8c;
+}
+
+/* Рядок зі значенням */
+.sportInputRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sportUnits {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.sportInput {
+  width: 72px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+  outline: none;
+
+  &:disabled {
+    background: #f3f4f6;
+    opacity: 0.6;
+  }
+}
+
+
+//====================================================
+
+// .sportInputRow {
+//   display: flex;
+//   align-items: center;
+//   gap: 8px;
+// }
+
+// .sportUnits {
+//   font-size: 13px;
+//   color: var(--muted);
+// }
+
+// .sportInput {
+//   width: 72px;
+//   padding: 8px 10px;
+//   border-radius: 10px;
+//   border: 1px solid var(--border);
+//   background: #fff;
+//   outline: none;
+
+//   &:focus {
+//     border-color: var(--focus);
+//     box-shadow: 0 0 0 3px $focus-ring;
+//   }
+// }
+
+.checkboxLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  cursor: pointer;
+
+  input[type='checkbox'] {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.activeCell {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.busyOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.busySpinner {
+  width: 48px;
+  height: 48px;
+  border: 6px solid var(--muted);
+  border-top-color: var(--focus);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}
+
+.amenitiesRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+
+//========================================================
+
+/* спортивний елемент */
+// .sportItem {
+//   display: flex;
+// //   flex-direction: column;
+//   gap: 10px;
+// }
+
+/* Стилізована кнопка-чекбокс */

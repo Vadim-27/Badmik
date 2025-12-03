@@ -18,17 +18,41 @@ type Props = {
   role?: string;
   userId?: string;
   email?: string;
+  isAdmin?: boolean;
+  clubId?: string;
 };
 
 const drawerWidthOpen = 240;
 const drawerWidthClosed = 70;
 
-export default function SidebarClient({ role, userId, email }: Props) {
+export default function SidebarClient({ role, userId, email, isAdmin, clubId }: Props) {
+  const clubIdByToken = !isAdmin ? clubId : undefined;
+  const clubLink = (!isAdmin && clubIdByToken) ? `` : 'clubs';
   const [open, setOpen] = useState(true);
   const params = useParams();
   const t = useTranslations("Sidebar");
 
-  const { buildHref } = useClubScope();
+  // const { buildHref } = useClubScope();
+
+   // Локальний buildHref, більше не юзаємо useClubScope
+  const buildHref = (path: string) => {
+    const clean = path.startsWith('/') ? path.slice(1) : path;
+    const base = '/admin';
+
+    // Якщо це клубний персонал і є clubId в токені →
+    // будуємо /admin/:clubId/...
+    if (clubIdByToken) {
+      return `${base}/${clubIdByToken}/${clean}`.replace(/\/+$/, '/');
+    }
+
+    // Якщо супер-адмін → глобальні шляхи /admin/...
+    return `${base}/${clean}`.replace(/\/+$/, '/');
+  };
+
+  // далі все як було, просто всі href через buildHref(...)
+
+
+
   
 
   // якщо немає ролі — взагалі не рендеримо
@@ -37,12 +61,16 @@ export default function SidebarClient({ role, userId, email }: Props) {
   const toggleDrawer = () => setOpen((v) => !v);
 
   // якщо у вас clubId у роуті /admin/[clubId]/..., витягуємо його з params
-  const clubIdFromRoute =
-    typeof params.clubId === "string" ? params.clubId : undefined;
+  // const clubIdFromRoute =
+  //   typeof params.clubId === "string" ? params.clubId : undefined;
 
-  // якщо адмiн — можете брати clubId з токена (передати з сервера, коли з’явиться),
-  // або використовувати той, що в роуті — залежно від вашої бізнес-логіки
-  const effectiveClubId = clubIdFromRoute;
+  // // якщо адмiн — можете брати clubId з токена (передати з сервера, коли з’явиться),
+  // // або використовувати той, що в роуті — залежно від вашої бізнес-логіки
+  // const effectiveClubId = clubIdFromRoute;
+  // console.log(" effectiveClubId:", effectiveClubId);
+
+
+  
 
   return (
     <aside
@@ -95,7 +123,7 @@ export default function SidebarClient({ role, userId, email }: Props) {
               )}
             </SidebarLink>
 
-            <SidebarLink  href="/admin/clubs" open={open} count={6}>
+            <SidebarLink  href={buildHref(`${clubLink}`)} open={open} count={6}>
               <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                 <rect x="3" y="4" width="7" height="7" />
                 <rect x="14" y="4" width="7" height="7" />
@@ -103,6 +131,16 @@ export default function SidebarClient({ role, userId, email }: Props) {
                 <rect x="3" y="15" width="7" height="7" />
               </svg>
               {open && (<span>{t('Clubs')}</span>
+              )}
+            </SidebarLink>
+            <SidebarLink  href={buildHref(`locations`)} open={open} count={6}>
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                <rect x="3" y="4" width="7" height="7" />
+                <rect x="14" y="4" width="7" height="7" />
+                <rect x="14" y="15" width="7" height="7" />
+                <rect x="3" y="15" width="7" height="7" />
+              </svg>
+              {open && (<span>Локації</span>
               )}
             </SidebarLink>
 

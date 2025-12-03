@@ -149,6 +149,7 @@
   "UI": {
     "buttons": {
       "addClub": "Add club",
+      "addLocation": "Add location",
       "addUser": "Add user",
       "addPlayer": "Add Player",
       "addTraining": "Add training",
