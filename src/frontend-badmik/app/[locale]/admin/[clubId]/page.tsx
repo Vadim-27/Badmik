@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { clubs } from '@/data/clubs';
 import { ClubDetails } from '@/app/components/shared/Clubs/ClubDetails/ClubDetails';
-import { ClubPageHeader } from '@/app/components/shared/Clubs/ClubPageHeader/ClubPageHeader';
+// import { ClubPageHeader } from '@/app/components/shared/Clubs/ClubPageHeader/ClubPageHeader';
 import {Link} from '@/i18n/navigation';
 
 // type Props = {
