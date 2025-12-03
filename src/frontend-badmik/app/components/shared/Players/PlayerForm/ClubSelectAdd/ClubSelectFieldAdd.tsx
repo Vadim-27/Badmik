@@ -67,7 +67,7 @@ export default function ClubSelectFieldAdd<TFieldValues extends FieldValues>({
     if (!q) return clubs;
     return clubs.filter(
       (c) =>
-        c.name.toLowerCase().includes(q) ||
+        (c.name ?? '').toLowerCase().includes(q) ||
         (c.address ?? '').toLowerCase().includes(q)
     );
   }, [clubs, query]);
@@ -121,7 +121,9 @@ export default function ClubSelectFieldAdd<TFieldValues extends FieldValues>({
                 >
                   <Combobox.Options className={optionsClassName}>
                     {isLoading && <div className={optionClassName}>Завантаження…</div>}
-                    {error && !isLoading && <div className={optionClassName}>Помилка завантаження</div>}
+                    {!!error && !isLoading && (
+  <div className={optionClassName}>Помилка завантаження</div>
+)}
 
                     {!isLoading && !error && filtered.length === 0 && query !== '' && (
                       <div className={optionClassName}>Нічого не знайдено</div>
