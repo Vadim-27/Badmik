@@ -15,7 +15,7 @@ const nextConfig = {
   skipTrailingSlashRedirect: true,
   skipMiddlewareUrlNormalize: true,
    turbopack: { rules: { "*.svg": { loaders: ["@svgr/webpack"], as: "*.js" } } },
-  webpack: (config) => {
+  webpack: (config: any) => {
     config.module.rules.push({
       test: /\.svg$/i,
       issuer: /\.[jt]sx?$/,
