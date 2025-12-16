@@ -24,6 +24,14 @@ public class PlayerRepository : IPlayerRepository
             .FirstAsync(x => x.Id == id);
     }
 
+    public async Task<Player> GetByUserId(Guid id, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Players
+            .AsNoTracking()
+            .Include(x => x.User)
+            .FirstAsync(x => x.UserId == id);
+    }
+
     public async Task Registration(Guid userId, PlayerLevel playerLevel, CancellationToken cancellationToken)
     {
         Player player = new Player

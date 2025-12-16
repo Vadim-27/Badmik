@@ -1,0 +1,83 @@
+@use '../../../../../styles/mixins' as *;
+
+.sportGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+
+  @include media-rules(mobile) {
+    grid-template-columns: 1fr;
+  }
+  @include media-rules(tablet) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @include media-rules(laptop) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @include media-rules(desktop) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.sportItem {
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  padding: 10px 12px;
+  background: #f9fafb;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.sportBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 14px;
+
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+
+  color: #334155;
+  font-weight: 600;
+  cursor: pointer;
+
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+
+  input {
+    display: none;
+  }
+}
+
+.sportBtnActive {
+  background: #e9f1ff;
+  border-color: #c7d2fe;
+  color: #0b3b8c;
+}
+
+.sportInputRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sportUnits {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.sportInput {
+  width: 72px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+  outline: none;
+
+  &:disabled {
+    background: #f3f4f6;
+    opacity: 0.6;
+  }
+}

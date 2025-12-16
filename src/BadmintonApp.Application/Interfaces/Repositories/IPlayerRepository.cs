@@ -14,5 +14,6 @@ public interface IPlayerRepository
     Task Registration(Guid userId, PlayerLevel playerLevel, CancellationToken cancellationToken);
     Task Update(Player player, CancellationToken cancellationToken);
     Task<Player> GetById(Guid id, CancellationToken cancellationToken);
+    Task<Player> GetByUserId(Guid id, CancellationToken cancellationToken);
 }
     

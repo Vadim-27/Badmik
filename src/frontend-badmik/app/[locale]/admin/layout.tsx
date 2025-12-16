@@ -16,9 +16,9 @@ export default async function  AdminLayout({ children }: { children: React.React
     <div className="containerPage">
     <div className=" flex ">
        
-      <ClientOnly>
+      {/* <ClientOnly> */}
         <Sidebar />
-      </ClientOnly>
+      {/* </ClientOnly> */}
       <RQHydrate state={state}>
       <main className="w-full font-geist-sans">{children}</main>
       </RQHydrate>

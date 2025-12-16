@@ -2,31 +2,28 @@
 import 'server-only';
 import { serverFetch } from '@/lib/http/serverFetch';
 import { ENDPOINTS } from '@/lib/endpoints';
-import type { Club, CreateClubDto, UpdateClubDto } from '../types/clubs.dto';
+import { withQuery } from '@/lib/http/qs';
+import type { Club } from '@/services/types/clubs.dto';
+
+type ListParams = { filter?: string };
 
 export const clubsApiServer = {
-  async list(): Promise<Club[]> {
-    const res = await serverFetch(ENDPOINTS.clubs.getAll, {}, { revalidate: 60, tags: ['clubs'] });
-    return res.json();
-  },
-
-  async create(dto: CreateClubDto): Promise<Club> {
-    const res = await serverFetch(ENDPOINTS.clubs.create, {
-      method: 'POST',
-      body: JSON.stringify(dto),
+  async list(params: ListParams = {}): Promise<Club[]> {
+    const url = withQuery(ENDPOINTS.clubs.getAll, {
+      filter: params.filter,
     });
+
+    const res = await serverFetch(url, {}, { revalidate: 60, tags: ['clubs'] });
     return res.json();
   },
 
-  async update(id: string, dto: UpdateClubDto): Promise<Club> {
-    const res = await serverFetch(ENDPOINTS.clubs.update(id), {
-      method: 'PUT',
-      body: JSON.stringify(dto),
-    });
+  async byId(id: string): Promise<Club> {
+    const res = await serverFetch(
+      ENDPOINTS.clubs.getById(id),
+      {},
+      { revalidate: 60, tags: [`club:${id}`] },
+    );
     return res.json();
-  },
-
-  async remove(id: string): Promise<void> {
-    await serverFetch(ENDPOINTS.clubs.delete(id), { method: 'DELETE' });
   },
 } as const;
+

@@ -1,0 +1,39 @@
+@use '../../../../../styles/mixins' as *;
+
+.amenitiesRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  color: #334155;
+  cursor: pointer;
+  font-weight: 700;
+
+  input {
+    display: none;
+  }
+}
+
+.chipActive {
+  background: #e9f1ff;
+  border-color: #c7d2fe;
+  color: #0b3b8c;
+}
+.errorInput {
+  border: 1px solid #e63946 !important;
+  background-color: #fff5f5;
+
+  &:focus {
+    border-color: #e63946;
+    box-shadow: 0 0 0 4px rgba(230, 57, 70, 0.3);
+  }
+}

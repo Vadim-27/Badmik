@@ -22,7 +22,8 @@ public class StaffRepository : IStaffRepository
 
     public async Task Registration(Staff staff, CancellationToken cancellationToken)
     {
-        staff.CreatedAt = DateTime.Now;
+        staff.CreatedAt = DateTime.UtcNow;
+        
         await _dbContext.AddAsync(staff, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
@@ -35,7 +36,7 @@ public class StaffRepository : IStaffRepository
             .FirstAsync(x => x.Id == staff.Id, cancellationToken);
 
         staff.CreatedAt = currentStaff.CreatedAt;
-        staff.UpdatedAt = DateTime.Now;
+        staff.UpdatedAt = DateTime.UtcNow;
         staff.UserId = currentStaff.UserId;
 
         _dbContext.Staffs.Update(staff);
@@ -51,6 +52,14 @@ public class StaffRepository : IStaffRepository
            .FirstAsync(x => x.Id == id, cancellationToken);
     }
 
+    public async Task<Staff> GetByUserId(Guid id, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Staffs
+           .AsNoTracking()
+           .Include(x => x.User)
+           .FirstAsync(x => x.UserId == id, cancellationToken);
+    }
+
     public async Task<Staff> GetByUserAndClubId(Guid userId, Guid clubId, CancellationToken cancellationToken)
     {
         return await _dbContext.Staffs
@@ -63,11 +72,17 @@ public class StaffRepository : IStaffRepository
     public async Task<PaginationListDto<Staff>> GetAll(ClubPaginationFilterDto paginationFilterDto, CancellationToken cancellationToken)
     {
         var query = _dbContext.Staffs
-               .AsNoTracking()
-               .Where(x => x.ClubId == paginationFilterDto.ClubId)
-               .Include(x => x.User)
-               .OrderBy(x => x.User.LastName)
-               .AsQueryable();
+            .AsNoTracking()
+            .Include(x => x.User)
+            .Include(x => x.WorkingHours)
+            .OrderBy(x => x.User.LastName)
+            .AsQueryable();
+
+        if (paginationFilterDto.ClubId.HasValue)
+        {
+            query = query.Where(x => x.ClubId == paginationFilterDto.ClubId.Value);
+        }
+        
 
         var totalCount = await query.CountAsync(cancellationToken);
 

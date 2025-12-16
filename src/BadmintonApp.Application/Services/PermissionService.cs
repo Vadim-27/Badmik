@@ -16,16 +16,32 @@ namespace BadmintonApp.Application.Services
     {
         private readonly IStaffRoleRepository _staffRoleRepository;
         private readonly IPermissionRepository _permissionRepository;
+        private readonly IStaffRepository _staffRepository;
+        
         private readonly IMapper _mapper;
 
-        public PermissionService(IStaffRoleRepository staffRoleRepository, IPermissionRepository permissionRepository, IMapper mapper)
+        public PermissionService(IStaffRoleRepository staffRoleRepository, IPermissionRepository permissionRepository, IStaffRepository staffRepository, IMapper mapper)
         {
             _staffRoleRepository = staffRoleRepository;
             _permissionRepository = permissionRepository;
+            _staffRepository = staffRepository;
             _mapper = mapper;
         }
         public async Task<bool> HasPermission(Guid staffId, Guid clubId, PermissionType permission, CancellationToken cancellationToken)
         {
+            var staff = await _staffRepository.GetById(staffId, cancellationToken);
+            if (staff == null)
+            {
+                return false;
+            }
+            if (staff.User.IsActive == false)
+            {
+                return false;
+            }
+            if (staff.User.IsAdmin == true)
+            {
+                return true;
+            }
             var role = await _staffRoleRepository.GetStaffRoleForClubAsync(staffId, clubId, cancellationToken);           
             if (role == null || !role.Any())
             {

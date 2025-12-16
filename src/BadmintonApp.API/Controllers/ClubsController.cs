@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace BadmintonApp.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/clubs")]
     public class ClubsController : ControllerBase
     {
         private readonly IClubsService _clubsService;

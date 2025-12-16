@@ -1,4 +1,5 @@
-﻿using BadmintonApp.Application.DTOs.Role;
+﻿using BadmintonApp.API.Extensions;
+using BadmintonApp.Application.DTOs.Role;
 using BadmintonApp.Application.Interfaces.Roles;
 using BadmintonApp.Domain.Core;
 using Microsoft.AspNetCore.Authorization;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 namespace BadmintonApp.API.Controllers
 {
     [ApiController]
-    [Route("api/role")]
+    [Route("api/roles")]
     //[Authorize]
     public class RoleController : ControllerBase
     {
@@ -21,18 +22,19 @@ namespace BadmintonApp.API.Controllers
         {
             _roleService = roleService;
         }
-        [HttpPost("AssignRoleForUser")]
-        public async Task<ActionResult> AssignRoleForUser([FromBody] AssignRoleForUserDto assignRoleForUserDto, CancellationToken cancellationToken)
+        [HttpPost("AssignRoleForStaff")]
+        public async Task<ActionResult> AssignRoleForStaff([FromBody] AssignRoleForUserDto assignRoleForUserDto, CancellationToken cancellationToken)
         {
-            await _roleService.AssignRoleForUser(assignRoleForUserDto.UserId, assignRoleForUserDto.ClubId, assignRoleForUserDto.RoleId, cancellationToken);
+            await _roleService.AssignRoleForStaff(assignRoleForUserDto.UserId, assignRoleForUserDto.ClubId, assignRoleForUserDto.RoleId, cancellationToken);
 
             return Ok();
         }
 
-        [HttpGet("GetAll")]
-        public async Task<ActionResult> GetAll(Guid clubId, CancellationToken cancellationToken)
+
+        [HttpGet("club/{id:guid}")]
+        public async Task<ActionResult> GetAllByClubId(Guid id, CancellationToken cancellationToken)
         {
-            List<Role> roles = await _roleService.GetAll(clubId, cancellationToken);
+            List<Role> roles = await _roleService.GetAll(id, cancellationToken);
 
             return Ok(roles);
         }
@@ -40,7 +42,7 @@ namespace BadmintonApp.API.Controllers
         [HttpPut("BindPermission")]
         public async Task<ActionResult> BindPermission([FromBody] RoleBindPermissionDto dto, CancellationToken cancellationToken)
         {
-            await _roleService.RoleBindPermission(dto.RoleId, dto.PermissionId, cancellationToken);
+            await _roleService.RoleBindPermission(User.GetUserId(), User.GetClubId(), dto.RoleId, dto.PermissionId, cancellationToken);
 
             return Ok();
         }
@@ -48,15 +50,15 @@ namespace BadmintonApp.API.Controllers
         [HttpDelete("DeletePermission")]
         public async Task<ActionResult> DeletePermission([FromBody] RoleBindPermissionDto dtoDelete, CancellationToken cancellationToken)
         {
-            await _roleService.RoleDeletePermission(dtoDelete.RoleId, dtoDelete.PermissionId, cancellationToken);
+            await _roleService.RoleDeletePermission(User.GetUserId(), User.GetClubId(), dtoDelete.RoleId, dtoDelete.PermissionId, cancellationToken);
 
             return Ok();
         }
 
-        [HttpGet("GetRolesByStaffId")]
-        public async Task<ActionResult> GetRolesByStaffId(Guid staffId, Guid clubId, CancellationToken cancellationToken)
+        [HttpGet("staff/{id:guid}")]
+        public async Task<ActionResult> GetRolesByStaffId(Guid staffId, CancellationToken cancellationToken)
         {
-            List<Role> roles = await _roleService.GetRolesByStaffId(staffId, clubId, cancellationToken);
+            List<Role> roles = await _roleService.GetRolesByStaffId(staffId, cancellationToken);
 
             return Ok(roles);
         }

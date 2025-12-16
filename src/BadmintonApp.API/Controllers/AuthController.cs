@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace BadmintonApp.API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/auth")]
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;

@@ -6,6 +6,7 @@ using BadmintonApp.Domain.WorkingHours;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BadmintonApp.Infrastructure.Persistence
 {
@@ -15,7 +16,23 @@ namespace BadmintonApp.Infrastructure.Persistence
             : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {            
+        {
+            modelBuilder.Entity<Staff>(e =>
+            {
+                e.Property(x => x.CreatedAt)
+                    .HasColumnType("timestamptz") // "timestamp with time zone"
+                    .HasDefaultValueSql("timezone('utc', now())");
+
+                e.Property(x => x.UpdatedAt)
+                    .HasColumnType("timestamptz");
+
+                e.Property(x => x.StartDate)
+                    .HasColumnType("date");
+
+                e.Property(x => x.EndDate)
+                    .HasColumnType("date");
+            });
+
             modelBuilder.Entity<RolePermission>().HasKey( c => new 
             {
                 c.RoleId,
@@ -45,7 +62,7 @@ namespace BadmintonApp.Infrastructure.Persistence
         public DbSet<Log> Logs => Set<Log>();
         public DbSet<Player> Players => Set<Player>();
         public DbSet<Staff> Staffs => Set<Staff>();
-        
+
 
         private void SeedData(ModelBuilder modelBuilder)
         {
@@ -54,23 +71,21 @@ namespace BadmintonApp.Infrastructure.Persistence
             {
                 new Role
                 {
-                    Id = Guid.Parse("45225223-0e47-4c7a-b045-38de629412e5"),
-                    Name = "SuperAdmin",
-                },
-                new Role
-                {
                     Id = Guid.Parse("98e5cfcd-cada-486a-96bb-30b6a9a60174"),
                     Name = "ClubAdmin",
+                    IsSystem = true,
                 },
                 new Role
                 {
                     Id = Guid.Parse("bb074c39-08df-45d9-8e74-5b6a07257883"),
                     Name = "ClubManager",
+                    IsSystem = true,
                 },
                 new Role
                 {
                     Id = Guid.Parse("5b0ac8d3-e270-422f-af95-99e8be79e47a"),
-                    Name = "Player",
+                    Name = "ClubTrainer",
+                    IsSystem = true,
                 }
             };
             modelBuilder.Entity<Role>().HasData(roles);
@@ -124,47 +139,63 @@ namespace BadmintonApp.Infrastructure.Persistence
                     PermissionId = permission.Id
                 });
             }
-            rolePermissions.AddRange
-                (
-                new RolePermission { RoleId = roles[1].Id, PermissionId = permissions[0].Id },  // ClubView
-                new RolePermission { RoleId = roles[1].Id, PermissionId = permissions[1].Id },  // ClubSettingsManage
-                new RolePermission { RoleId = roles[1].Id, PermissionId = permissions[2].Id },  // LocationsView
-                new RolePermission { RoleId = roles[1].Id, PermissionId = permissions[3].Id },  // LocationsManage
-                new RolePermission { RoleId = roles[1].Id, PermissionId = permissions[4].Id },  // CourtsManage
 
-                new RolePermission { RoleId = roles[1].Id, PermissionId = permissions[5].Id },  // TrainingsView
-                new RolePermission { RoleId = roles[1].Id, PermissionId = permissions[6].Id },  // TrainingsManage
-                new RolePermission { RoleId = roles[1].Id, PermissionId = permissions[7].Id },  // TrainingsRegisterPlayer
-                new RolePermission { RoleId = roles[1].Id, PermissionId = permissions[8].Id },  // TrainingsCancelPlayer
-                new RolePermission { RoleId = roles[1].Id, PermissionId = permissions[9].Id },  // TrainingsQueueManage
-                new RolePermission { RoleId = roles[1].Id, PermissionId = permissions[10].Id }, // TrainingsAttendanceMark
-                new RolePermission { RoleId = roles[1].Id, PermissionId = permissions[11].Id }, // TrainingsLevelOverride
-
-                new RolePermission { RoleId = roles[1].Id, PermissionId = permissions[12].Id }, // PlayersView
-                new RolePermission { RoleId = roles[1].Id, PermissionId = permissions[13].Id }, // PlayersManage
-                new RolePermission { RoleId = roles[1].Id, PermissionId = permissions[14].Id }, // PlayersBalanceManage
-
-                new RolePermission { RoleId = roles[1].Id, PermissionId = permissions[15].Id }, // StaffView
-                new RolePermission { RoleId = roles[1].Id, PermissionId = permissions[16].Id }, // StaffManage
-                new RolePermission { RoleId = roles[1].Id, PermissionId = permissions[17].Id }, // RolesView
-                new RolePermission { RoleId = roles[1].Id, PermissionId = permissions[18].Id }, // RolesManage
-                new RolePermission { RoleId = roles[1].Id, PermissionId = permissions[19].Id }, // RolePermissionsAssign
-
-                new RolePermission { RoleId = roles[1].Id, PermissionId = permissions[20].Id }, // NotificationsView
-                new RolePermission { RoleId = roles[1].Id, PermissionId = permissions[21].Id }, // NotificationsManage
-
-                new RolePermission { RoleId = roles[1].Id, PermissionId = permissions[22].Id }, // AnalyticsView
-
-                new RolePermission { RoleId = roles[1].Id, PermissionId = permissions[23].Id }, // MediaManage
-
-                new RolePermission { RoleId = roles[1].Id, PermissionId = permissions[24].Id }, // LogsView
-
-                new RolePermission { RoleId = roles[1].Id, PermissionId = permissions[25].Id }, // FinanceView
-                new RolePermission { RoleId = roles[1].Id, PermissionId = permissions[26].Id }  // FinanceManage
-                );
+            void AddUnique(Guid roleId, Guid permissionId)
+            {
+                if (!rolePermissions.Any(rp => rp.RoleId == roleId && rp.PermissionId == permissionId))
+                    rolePermissions.Add(new RolePermission { RoleId = roleId, PermissionId = permissionId });
+            }
 
 
+            AddUnique(Guid.Parse("98e5cfcd-cada-486a-96bb-30b6a9a60174"), permissions[0].Id);  // ClubView
+            AddUnique(Guid.Parse("98e5cfcd-cada-486a-96bb-30b6a9a60174"), permissions[1].Id);  // ClubSettingsManage
+            AddUnique(Guid.Parse("98e5cfcd-cada-486a-96bb-30b6a9a60174"), permissions[2].Id);  // LocationsView
+            AddUnique(Guid.Parse("98e5cfcd-cada-486a-96bb-30b6a9a60174"), permissions[3].Id);  // LocationsManage
+            AddUnique(Guid.Parse("98e5cfcd-cada-486a-96bb-30b6a9a60174"), permissions[4].Id);  // CourtsManage
+
+            AddUnique(Guid.Parse("98e5cfcd-cada-486a-96bb-30b6a9a60174"), permissions[5].Id);  // TrainingsView
+            AddUnique(Guid.Parse("98e5cfcd-cada-486a-96bb-30b6a9a60174"), permissions[6].Id);  // TrainingsManage
+            AddUnique(Guid.Parse("98e5cfcd-cada-486a-96bb-30b6a9a60174"), permissions[7].Id);  // TrainingsRegisterPlayer
+            AddUnique(Guid.Parse("98e5cfcd-cada-486a-96bb-30b6a9a60174"), permissions[8].Id);  // TrainingsCancelPlayer
+            AddUnique(Guid.Parse("98e5cfcd-cada-486a-96bb-30b6a9a60174"), permissions[9].Id);  // TrainingsQueueManage
+            AddUnique(Guid.Parse("98e5cfcd-cada-486a-96bb-30b6a9a60174"), permissions[10].Id); // TrainingsAttendanceMark
+            AddUnique(Guid.Parse("98e5cfcd-cada-486a-96bb-30b6a9a60174"), permissions[11].Id); // TrainingsLevelOverride
+
+            AddUnique(Guid.Parse("98e5cfcd-cada-486a-96bb-30b6a9a60174"), permissions[12].Id); // PlayersView
+            AddUnique(Guid.Parse("98e5cfcd-cada-486a-96bb-30b6a9a60174"), permissions[13].Id); // PlayersManage
+            AddUnique(Guid.Parse("98e5cfcd-cada-486a-96bb-30b6a9a60174"), permissions[14].Id); // PlayersBalanceManage
+
+            AddUnique(Guid.Parse("98e5cfcd-cada-486a-96bb-30b6a9a60174"), permissions[15].Id); // StaffView
+            AddUnique(Guid.Parse("98e5cfcd-cada-486a-96bb-30b6a9a60174"), permissions[16].Id); // StaffManage
+            AddUnique(Guid.Parse("98e5cfcd-cada-486a-96bb-30b6a9a60174"), permissions[17].Id); // RolesView
+            AddUnique(Guid.Parse("98e5cfcd-cada-486a-96bb-30b6a9a60174"), permissions[18].Id); // RolesManage
+            AddUnique(Guid.Parse("98e5cfcd-cada-486a-96bb-30b6a9a60174"), permissions[19].Id); // RolePermissionsAssign
+
+            AddUnique(Guid.Parse("98e5cfcd-cada-486a-96bb-30b6a9a60174"), permissions[20].Id); // NotificationsView
+            AddUnique(Guid.Parse("98e5cfcd-cada-486a-96bb-30b6a9a60174"), permissions[21].Id); // NotificationsManage
+
+            AddUnique(Guid.Parse("98e5cfcd-cada-486a-96bb-30b6a9a60174"), permissions[22].Id); // AnalyticsView
+
+            AddUnique(Guid.Parse("98e5cfcd-cada-486a-96bb-30b6a9a60174"), permissions[23].Id); // MediaManage
+
+            AddUnique(Guid.Parse("98e5cfcd-cada-486a-96bb-30b6a9a60174"), permissions[24].Id); // LogsView
+
+            AddUnique(Guid.Parse("98e5cfcd-cada-486a-96bb-30b6a9a60174"), permissions[25].Id); // FinanceView
+            AddUnique(Guid.Parse("98e5cfcd-cada-486a-96bb-30b6a9a60174"), permissions[26].Id);  // FinanceManage
+
+
+
+            //Club trainer 
+            AddUnique(Guid.Parse("5b0ac8d3-e270-422f-af95-99e8be79e47a"), permissions[5].Id);  // TrainingsView
+            AddUnique(Guid.Parse("5b0ac8d3-e270-422f-af95-99e8be79e47a"), permissions[6].Id);  // TrainingsManage
+            AddUnique(Guid.Parse("5b0ac8d3-e270-422f-af95-99e8be79e47a"), permissions[7].Id);  // TrainingsRegisterPlayer
+            AddUnique(Guid.Parse("5b0ac8d3-e270-422f-af95-99e8be79e47a"), permissions[8].Id);  // TrainingsCancelPlayer
+            AddUnique(Guid.Parse("5b0ac8d3-e270-422f-af95-99e8be79e47a"), permissions[9].Id);  // TrainingsQueueManage
+            AddUnique(Guid.Parse("5b0ac8d3-e270-422f-af95-99e8be79e47a"), permissions[10].Id); // TrainingsAttendanceMark
+            AddUnique(Guid.Parse("5b0ac8d3-e270-422f-af95-99e8be79e47a"), permissions[11].Id); // TrainingsLevelOverride
+            
             modelBuilder.Entity<RolePermission>().HasData(rolePermissions);
         }
+
     }
 }

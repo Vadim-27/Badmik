@@ -8,5 +8,6 @@ public class Role
 {
     public Guid Id { get; set; }    
     public string Name { get; set; } = null!;
+    public bool IsSystem { get; set; } = false!;
     public List<RolePermission> RolePermissions { get; set; }
 }

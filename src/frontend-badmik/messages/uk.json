@@ -151,6 +151,7 @@
   "UI": {
     "buttons": {
       "addClub": "Додати клуб",
+      "addLocation": "Додати локацію",
       "addUser": "Додати користувача",
       "addPlayer": "Додати гравця",
       "addTraining": "Додати тренування",

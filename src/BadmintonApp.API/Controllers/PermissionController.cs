@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace BadmintonApp.API.Controllers
 {
     [ApiController]
-    [Route("api/permission")]
+    [Route("api/permissions")]
     //[Authorize]
     public class PermissionController : ControllerBase
     {
@@ -21,7 +21,7 @@ namespace BadmintonApp.API.Controllers
             _permissionService = permissionService;
         }
 
-        [HttpGet("GetAll")]
+        [HttpGet("")]
         public async Task<ActionResult> GetAll(CancellationToken cancellationToken)
         {            
             return Ok(await _permissionService.GetAll(cancellationToken));

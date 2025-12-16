@@ -22,6 +22,8 @@ import type { Role } from '@/services/types/role.dto';
 
 type StaffStatus = 'New' | 'Active' | 'Disabled' | 'Deleted';
 
+type StaffPositionType = 'Trainer' | 'Manager' | 'Administrator' | 'Accountant';
+
 type Props<TFieldValues extends FieldValues> = {
   control: Control<TFieldValues>;
   
@@ -32,6 +34,7 @@ type Props<TFieldValues extends FieldValues> = {
   roleFieldName?: Path<TFieldValues>;
    staffId?: string | null;
     onEnablePasswordChangeAction?: () => void;
+  positionFieldName?: Path<TFieldValues>;
 };
 
 const STATUSES: ReadonlyArray<{ value: StaffStatus; label: string }> = [
@@ -41,6 +44,13 @@ const STATUSES: ReadonlyArray<{ value: StaffStatus; label: string }> = [
   { value: 'Deleted', label: 'Deleted' },
 ];
 
+const POSITIONS = [
+  { value: 'Trainer', label: 'Тренер' },
+  { value: 'Manager', label: 'Менеджер' },
+  { value: 'Administrator', label: 'Адміністратор' },
+  { value: 'Accountant', label: 'Бухгалтер' },
+] as const;
+
 export default function StaffActionsBar<TFieldValues extends FieldValues>({
   control,
   name,
@@ -48,6 +58,7 @@ export default function StaffActionsBar<TFieldValues extends FieldValues>({
   roleFieldName,
   staffId,
   onEnablePasswordChangeAction,
+  positionFieldName,
 }: Props<TFieldValues>) {
 
   // const rolesQuery = useRoleList();
@@ -78,10 +89,64 @@ console.log('roles:', roles);
 
   // const roles = rolesQuery.data ?? [];
 
+
+  const positionName = (positionFieldName ??
+    ('staffPositionType' as Path<TFieldValues>)) as Path<TFieldValues>;
+
+  const { field: positionField } = useController({
+    control,
+    name: positionName,
+  });
+
+  const currentPosition = positionField.value as StaffPositionType | null;
  
 
   return (
     <div className={styles.actionsBar}>
+
+      {/* ==== ПОПОВЕР "ПОСАДА" ==== */}
+      <Popover className={styles.popoverRoot}>
+        <Popover.Button className={clsx(styles.button, styles.buttonGhost)}>
+          Посада
+        </Popover.Button>
+
+        <Transition
+          as={Fragment}
+          enter="transition ease-out duration-100"
+          enterFrom="opacity-0 translate-y-1"
+          enterTo="opacity-100 translate-y-0"
+          leave="transition ease-in duration-75"
+          leaveFrom="opacity-100 translate-y-0"
+          leaveTo="opacity-0 translate-y-1"
+        >
+          <Popover.Panel className={styles.popoverPanel}>
+            {({ close }) => (
+              <div className={styles.chipsRow}>
+                {POSITIONS.map((opt) => {
+                  const active = currentPosition === opt.value;
+                  return (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      className={clsx(styles.chip, active && styles.chipActive)}
+                      onClick={() => {
+                        positionField.onChange(
+                          opt.value as FieldPathValue<TFieldValues, typeof positionName>
+                        );
+                        close();
+                      }}
+                    >
+                      {opt.label}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </Popover.Panel>
+        </Transition>
+      </Popover>
+
+
       {/* ==== Поповер ролей (тільки в edit) ==== */}
       {showRolesButton && (
         <Popover className={styles.popoverRoot}>

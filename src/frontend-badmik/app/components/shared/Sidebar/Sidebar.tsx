@@ -223,17 +223,26 @@ export default async function Sidebar() {
   let role: string | undefined;
   let userId: string | undefined;
   let email: string | undefined;
+  let isAdmin: boolean | undefined;
+  let clubId: string | undefined;
 
   if (token) {
     try {
-      const payload: any = decodeJwt(token); // лише читаємо payload
-      role   = payload[ROLE_CLAIM] ?? payload.role;
-      userId = payload[NAMEID_CLAIM] ?? payload.sub;
-      email  = payload.email;
-    } catch {
+    const payload: any = decodeJwt(token);
+
+    role   = payload[ROLE_CLAIM] ?? payload.role;
+    userId = payload[NAMEID_CLAIM] ?? payload.sub;
+    clubId = payload.clubId as string | undefined;   
+    isAdmin =
+      payload.isAdmin === true ||
+      payload.isAdmin === 'True' ||
+      payload.isAdmin === 'true';
+
+    email  = payload.email;
+  }  catch {
       // токен битий/прострочений — можна повернути null, і хай клієнтський сайдбар сховається
     }
   }
 
-  return <SidebarClient role={role} userId={userId} email={email} />;
+  return <SidebarClient role={role} userId={userId} isAdmin={isAdmin} clubId={clubId} email={email} />;
 }

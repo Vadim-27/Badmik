@@ -18,6 +18,7 @@ namespace BadmintonApp.Domain.Core
         public DateTime CreatedAt { get; set; }
           
         public Guid? ClubId { get; set; }
-        public string ImageUrl { get; set; }        
+        public string ImageUrl { get; set; }
+        public bool IsAdmin { get; set; }
     }
 }
