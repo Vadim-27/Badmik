@@ -680,7 +680,13 @@ import WorkingHoursField, {
 import SportsSelector from './SportsSelector/SportsSelector';
 import AmenitiesSelector from './AmenitiesSelector/AmenitiesSelector';
 
-export type LocationLabel = 'None' | 'Main' | 'Secondary' | 'Promo';
+export type LocationLabel =
+  | 'None'
+  | 'New'
+  | 'Popular'
+  | 'Recommended'
+  | 'Promotion'
+  | 'Verified';
 
 export type LocationFormValues = {
   clubId: string;
@@ -738,10 +744,12 @@ export type LocationFormHandle = {
 };
 
 const LABEL_OPTIONS: { value: LocationLabel | ''; label: string }[] = [
-  { value: '',        label: 'None' },
-  { value: 'Main',    label: 'Main' },
-  { value: 'Secondary', label: 'Secondary' },
-  { value: 'Promo',   label: 'Promo' },
+  { value: '',           label: 'None' },
+  { value: 'New',        label: 'New' },
+  { value: 'Popular',    label: 'Popular' },
+  { value: 'Recommended', label: 'Recommended' },
+  { value: 'Promotion',  label: 'Promotion' },
+  { value: 'Verified',   label: 'Verified' },
 ];
 
 const EMPTY_WORKING_HOURS: WorkingHourDto = {

@@ -27,9 +27,9 @@ $focus-ring: rgba(147, 197, 253, 0.35);
   min-height: 0;
   position: relative;
 
-  @include media-rules(laptop) {
-    width: 80%;
-  }
+//   @include media-rules(laptop) {
+//     width: 80%;
+//   }
 }
 
 .formScroll {

@@ -1,38 +1,13 @@
 @use '../../../../styles/mixins' as *;
 
-.wrapperBreadcrumbs{
-    padding-left: 24px;
-    margin-bottom: 24px;
-    // width: 35%;
-    // margin-left: auto;
-    // margin-right: auto;
+.wrapperBreadcrumbs {
+  padding-left: 24px;
+  margin-bottom: 24px;
 }
-
-
-
-
-
-$focus-ring: rgba(147, 197, 253, 0.35);
 
 .wrapper {
   padding: 16px 0 24px;
   font-family: var(--font-geist-sans);
-}
-
-.statusActiveWrapper {
-    padding-left: 24px;
-//   display: flex;
-//   flex-wrap: wrap;
-//   gap: 12px;
-//   align-items: flex-start;
-//   justify-content: space-between;
-  margin-bottom: 16px;
-}
-
-.titleBlock {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
 }
 
 .title {
@@ -46,21 +21,9 @@ $focus-ring: rgba(147, 197, 253, 0.35);
   }
 }
 
-.subtitle {
-  margin: 0;
-  font-size: 14px;
-  color: var(--muted);
-}
-
-.headerRight {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 4px;
-
-  @include media-rules(mobile) {
-    align-items: flex-start;
-  }
+.statusActiveWrapper {
+  padding-left: 24px;
+  margin-bottom: 16px;
 }
 
 .statusPill {
@@ -82,16 +45,6 @@ $focus-ring: rgba(147, 197, 253, 0.35);
   @extend .statusPill;
   background: #fee2e2;
   color: #b91c1c;
-}
-
-.smallMeta {
-  font-size: 16px;
-  color: var(--muted);
-}
-
-.bold {
-  font-weight: 600;
-  color: var(--text);
 }
 
 .card {
@@ -137,13 +90,4 @@ $focus-ring: rgba(147, 197, 253, 0.35);
 
 .valueMultiline {
   white-space: pre-wrap;
-}
-
-.link {
-  color: #2563eb;
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
 }

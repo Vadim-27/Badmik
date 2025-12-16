@@ -10,7 +10,7 @@ import EmploymentTypeSelectField, {
   type EmploymentType,
 } from '@/app/components/shared/Staff/StaffForm/EmploymentTypeSelectField/EmploymentTypeSelectField';
 import AvatarUploadField from '@/app/components/shared/Staff/StaffForm/AvatarUploadField/AvatarUploadField';
-import WorkingHoursField from '@/app/components/shared/Staff/StaffForm/WorkingHoursField/WorkingHoursField';
+import WorkingHoursField from '@/app/components/ui/WorkingHoursField/WorkingHoursField';
 import StaffActionsBar from '@/app/components/shared/Staff/StaffForm/StaffActionsBar/StaffActionsBar';
 import SalaryField from '@/app/components/shared/Staff/StaffForm/SalaryField/SalaryField';
 
@@ -499,7 +499,7 @@ const StaffFormNew = forwardRef<StaffFormHandle, Props>(function EmployeeForm(
             </div>
           </div>
           {/* Working hours */}
-         
+         {/* <WorkingHoursField control={control} name="workingHours" /> */}
           <WorkingHoursField control={control} name="workingHoursObj" />
           <SalaryField<FormValues> control={control} />
           {/* Нотатки для бухгалтерії */}

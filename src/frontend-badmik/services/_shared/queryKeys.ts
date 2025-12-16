@@ -21,6 +21,11 @@ export const qk = {
     list: (filter?: string) => ['clubs', 'list', filter ?? ''] as const,
     byId: (id: string) => ['clubs', 'byId', id] as const,
   },
+   locations: {
+    list: (clubId?: string) => ['locations', 'list', clubId ?? 'all'] as const,
+    byId: (id: string) => ['locations', 'byId', id] as const,
+    byClub: (clubId: string) => ['locations', 'byClub', clubId] as const,
+  },
   players: {
     list: () => ['players', 'list'] as const,
     byId: (id: string) => ['players', 'byId', id] as const,

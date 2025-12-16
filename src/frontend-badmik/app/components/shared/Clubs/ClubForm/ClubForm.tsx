@@ -693,21 +693,7 @@ const ClubForm = forwardRef<ClubFormHandle, Props>(function ClubForm(
         </ScrollArea>
       </div>
 
-      {/* {busy && (
-        <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(255,255,255,0.6)',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            zIndex: 1000,
-          }}
-        >
-          <div className="spinner" />
-        </div>
-      )} */}
+    
        {busy && <SpinnerOverlay fullscreen={false} />}
     </div>
   );
