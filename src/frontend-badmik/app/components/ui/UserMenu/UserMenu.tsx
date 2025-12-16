@@ -34,7 +34,7 @@ export default function UserMenu({ avatarUrl, onLogout }: UserMenuProps) {
     <div className={styles.userMenu} ref={dropdownRef}>
       <button
         onClick={() => setIsOpen((prev) => !prev)}
-        className="avatarButton"
+        className={styles.avatarButton}
         type="button"
       >
         <img
