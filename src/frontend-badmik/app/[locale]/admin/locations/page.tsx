@@ -35,7 +35,7 @@ const LocationsPage = async ({
         <AddButton href="/admin/locations/add-location"
              label="buttons.addLocation" />
         </ActionHeader>
-        <AppBreadcrumbs className="pl-[10px] pb-6"
+        <AppBreadcrumbs 
                       items={[
                         { label: 'Admin', href: '/admin/dashboard' },
                         { label: 'Locations' },

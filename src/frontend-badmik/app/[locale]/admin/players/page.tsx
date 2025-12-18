@@ -23,7 +23,7 @@ const UsersClub = async ({
         <AddButton href={`/admin/players/add-player`} label="buttons.addPlayer" />
         </ActionHeader>
 
-        <AppBreadcrumbs className="pl-[10px] pb-6"
+        <AppBreadcrumbs 
                       items={[
                         { label: 'Admin', href: '/admin/players' },
                         { label: 'Players' },
