@@ -170,7 +170,7 @@ const handleConfirmDelete = async () => {
                     <td>
                       <div className={styles.actionsWrapper}>
                         <Link
-                          href={`${club.id}`}
+                          href={`/admin/${club.id}`}
                           className={styles.iconBtn}
                           title="Переглянути"
                           aria-label="Переглянути"

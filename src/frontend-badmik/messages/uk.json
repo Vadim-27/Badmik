@@ -11,7 +11,9 @@
       "trainingsHeader":"Тренування",
       "editStaffHeader":"Редагування персоналу",
       "addStaffHeader":"Додати персонал",
-      "employeeHeader": "Робітники клубів"
+      "employeeHeader": "Робітники клубів",
+      "editLocationHeader": "Редагування локації",
+      "addLocationHeader": "Додавання локації"
     }
   },
   "Sidebar": {

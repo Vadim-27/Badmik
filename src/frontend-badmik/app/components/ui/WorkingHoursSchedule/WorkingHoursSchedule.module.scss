@@ -1,0 +1,87 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.title {
+  font-size: 14px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.table {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 14px;
+}
+
+.rowActive {
+  border-color: rgba(21, 128, 61, 0.25);
+  background: rgba(220, 252, 231, 0.35); // green-ish
+}
+
+.rowInactive {
+  background: #fff;
+}
+
+.rowBad {
+  border-color: rgba(185, 28, 28, 0.35);
+  background: rgba(254, 226, 226, 0.45);
+}
+
+.dayCell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dayLabel {
+  font-size: 14px;
+  color: var(--text);
+}
+
+.timeCell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.timeText {
+  font-size: 14px;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.timeOff {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.dotActive,
+.dotInactive {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+
+.dotActive {
+  background: #22c55e;
+  border-color: rgba(21, 128, 61, 0.35);
+}
+
+.dotInactive {
+  background: #e2e8f0;
+}

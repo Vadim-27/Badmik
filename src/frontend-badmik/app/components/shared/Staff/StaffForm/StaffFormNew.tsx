@@ -54,7 +54,7 @@ export type FormValues = {
   roleId: string | null;
   userId?: string | null;
 
-  workingHoursObj: WorkingHourDto;
+  workingHours: WorkingHourDto;
 };
 
 type Props = {
@@ -125,7 +125,7 @@ const StaffFormNew = forwardRef<StaffFormHandle, Props>(function EmployeeForm(
       startDate: todayStr, 
       employmentType: 'Employee',
       // workingHours: '',
-      workingHoursObj: {
+      workingHours: {
         monday: { from: null, to: null },
         tuesday: { from: null, to: null },
         wednesday: { from: null, to: null },
@@ -499,8 +499,8 @@ const StaffFormNew = forwardRef<StaffFormHandle, Props>(function EmployeeForm(
             </div>
           </div>
           {/* Working hours */}
-         {/* <WorkingHoursField control={control} name="workingHours" /> */}
-          <WorkingHoursField control={control} name="workingHoursObj" />
+         <WorkingHoursField control={control} name="workingHours" />
+          
           <SalaryField<FormValues> control={control} />
           {/* Нотатки для бухгалтерії */}
           <div>

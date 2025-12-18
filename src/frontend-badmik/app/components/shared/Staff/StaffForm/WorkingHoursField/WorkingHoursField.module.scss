@@ -1,66 +1,66 @@
-@use '../../../../../styles/mixins' as *;
+// @use '../../../../../styles/mixins' as *;
 
-.wrapper { 
-  margin-top: 54px;
-  display: flex; flex-direction: column; gap: 12px; }
-.label { 
-  display: block;
-  font-size: 14px;
-  color: var(--muted);
-  margin: 0 0 8px; 
-}
+// .wrapper { 
+//   margin-top: 54px;
+//   display: flex; flex-direction: column; gap: 12px; }
+// .label { 
+//   display: block;
+//   font-size: 14px;
+//   color: var(--muted);
+//   margin: 0 0 8px; 
+// }
 
-/* 🔹 верхній блочок */
-.bulkBar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 10px 14px;
-}
-.bulkInputs { display: flex; align-items: center; gap: 8px; }
-.bulkButtons { display: flex; gap: 8px; }
+// /* 🔹 верхній блочок */
+// .bulkBar {
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-between;
+//   gap: 12px;
+//   background: var(--card);
+//   border: 1px solid var(--border);
+//   border-radius: 12px;
+//   padding: 10px 14px;
+// }
+// .bulkInputs { display: flex; align-items: center; gap: 8px; }
+// .bulkButtons { display: flex; gap: 8px; }
 
-.button {
-  appearance: none;
-  border: 1px solid var(--btn-primary-border);
-  background: var(--btn-primary-bg);
-  color: var(--btn-primary-text);
-  border-radius: 12px;
-  padding: 10px 14px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: transform .02s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease;
-  &:active { transform: translateY(1px); }
-  &:disabled { opacity: .6; cursor: not-allowed; }
-}
-.buttonGhost {
-  @extend .button;
-  background: #fff;
-  color: var(--text);
-  border: 1px solid var(--border);
-}
+// .button {
+//   appearance: none;
+//   border: 1px solid var(--btn-primary-border);
+//   background: var(--btn-primary-bg);
+//   color: var(--btn-primary-text);
+//   border-radius: 12px;
+//   padding: 10px 14px;
+//   font-weight: 700;
+//   cursor: pointer;
+//   transition: transform .02s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease;
+//   &:active { transform: translateY(1px); }
+//   &:disabled { opacity: .6; cursor: not-allowed; }
+// }
+// .buttonGhost {
+//   @extend .button;
+//   background: #fff;
+//   color: var(--text);
+//   border: 1px solid var(--border);
+// }
 
-.table { display: flex; flex-direction: column; gap: 8px; }
-.row {
-  display: flex; justify-content: space-between; align-items: center;
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: 12px; padding: 10px 14px;
-}
-.dayCell { display: flex; align-items: center; gap: 10px;
-  input[type='checkbox'] { width: 16px; height: 16px; accent-color: var(--focus); cursor: pointer; }
-}
-.dayLabel { font-size: 14px; color: var(--text); }
-.timeCell { display: flex; align-items: center; gap: 8px; }
+// .table { display: flex; flex-direction: column; gap: 8px; }
+// .row {
+//   display: flex; justify-content: space-between; align-items: center;
+//   background: var(--card); border: 1px solid var(--border);
+//   border-radius: 12px; padding: 10px 14px;
+// }
+// .dayCell { display: flex; align-items: center; gap: 10px;
+//   input[type='checkbox'] { width: 16px; height: 16px; accent-color: var(--focus); cursor: pointer; }
+// }
+// .dayLabel { font-size: 14px; color: var(--text); }
+// .timeCell { display: flex; align-items: center; gap: 8px; }
 
-.input {
-  padding: 6px 10px; border-radius: 8px; border: 1px solid var(--border);
-  background: #fff; color: var(--text); font-size: 14px; min-width: 100px;
-  &:disabled { opacity: .6; cursor: not-allowed; }
-  &:focus { border-color: var(--focus); box-shadow: 0 0 0 3px rgba(147,197,253,.35); outline: none; }
-}
-.errorInput { border-color: #e63946 !important; background: #fff5f5; }
-.errorText { color: #e63946; font-size: 12px; margin-top: 4px; font-weight: 500; }
+// .input {
+//   padding: 6px 10px; border-radius: 8px; border: 1px solid var(--border);
+//   background: #fff; color: var(--text); font-size: 14px; min-width: 100px;
+//   &:disabled { opacity: .6; cursor: not-allowed; }
+//   &:focus { border-color: var(--focus); box-shadow: 0 0 0 3px rgba(147,197,253,.35); outline: none; }
+// }
+// .errorInput { border-color: #e63946 !important; background: #fff5f5; }
+// .errorText { color: #e63946; font-size: 12px; margin-top: 4px; font-weight: 500; }
