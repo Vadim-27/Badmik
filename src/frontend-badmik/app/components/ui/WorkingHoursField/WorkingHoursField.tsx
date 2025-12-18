@@ -24,13 +24,14 @@ type Props<TFieldValues extends FieldValues> = {
 
   name: Path<TFieldValues>;
   
-  onSerializedChange?: (json: string) => void;
+  onSerializedChangeAction?: (json: string) => void;
+
 };
 
 export default function WorkingHoursField<TFieldValues extends FieldValues>({
   control,
   name,
-  onSerializedChange,
+  onSerializedChangeAction,
 }: Props<TFieldValues>) {
   const [bulkFrom, setBulkFrom] = useState('09:00');
   const [bulkTo, setBulkTo] = useState('18:00');
@@ -58,7 +59,7 @@ export default function WorkingHoursField<TFieldValues extends FieldValues>({
 
         const emit = (next: WorkingHourDto) => {
           onChange(next as any);
-          onSerializedChange?.(JSON.stringify(next));
+          onSerializedChangeAction?.(JSON.stringify(next));
         };
 
         const setDay = (day: DayKey, patch: Partial<TimeRangeDto>) => {

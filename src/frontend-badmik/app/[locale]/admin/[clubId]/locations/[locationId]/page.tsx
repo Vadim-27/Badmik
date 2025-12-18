@@ -12,7 +12,7 @@ type Params = {
 };
 
 export default async function LocationPage({ params }: { params: Params }) {
-  const { locationId } = params;
+  const { locationId } = await params;
 
   let location: Location | null = null;
 

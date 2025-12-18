@@ -1,7 +1,9 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import styles from './LocationDetails.module.scss';
+
+import WorkingHoursSchedule from '@/app/components/ui/WorkingHoursSchedule/WorkingHoursSchedule';
 
 import ActionHeader from '@/app/components/ui/Layout/ActionHeader/ActionHeader';
 import BackButton from '@/app/components/ui/Buttons/BackButton/BackButton';
@@ -10,18 +12,15 @@ import AppBreadcrumbs from '@/app/components/ui/Breadcrumbs/AppBreadcrumbs';
 
 import type { Location } from '@/services/types/locations.dto';
 import type { Club } from '@/services/types/clubs.dto';
+import SafeDate from '@/app/components/ui/SafeDate/SafeDate';
+import SportsBadges from '@/app/components/ui/SportsBadges/SportsBadges';
 
 type Props = {
   location: Location;
   club?: Club | null;
 };
 
-function fmtDate(v?: string | null) {
-  if (!v) return '—';
-  const d = new Date(v);
-  if (Number.isNaN(d.getTime())) return v;
-  return d.toLocaleDateString('uk-UA', { year: 'numeric', month: '2-digit', day: '2-digit' });
-}
+
 
 function formatWorkingHours(wh: any) {
   if (!wh) return null;
@@ -66,6 +65,8 @@ const LocationDetails: React.FC<Props> = ({ location, club }) => {
     updatedAt,
   } = location as any;
 
+  const [showSchedule, setShowSchedule] = useState(false);
+
   const sportsText = useMemo(() => {
     if (sports?.length) {
       return sports
@@ -81,15 +82,15 @@ const LocationDetails: React.FC<Props> = ({ location, club }) => {
     return amenities.join(', ');
   }, [amenities]);
 
-  const whText = useMemo(() => formatWorkingHours(workingHours), [workingHours]);
+//   const whText = useMemo(() => formatWorkingHours(workingHours), [workingHours]);
 
   return (
     <section className={styles.wrapper}>
       <ActionHeader>
         <BackButton label="buttons.back" />
-        <h1 className="text-lg font-semibold">
+        <div className="text-lg font-semibold">
           <h1 className={styles.title}>{name || 'Локація без назви'}</h1>
-        </h1>
+        </div>
 
         {/* ✅ поправ шлях, якщо у тебе інша структура */}
         <EditButton href={`/admin/locations/${id}/edit-location`} label="buttons.update" />
@@ -119,9 +120,7 @@ const LocationDetails: React.FC<Props> = ({ location, club }) => {
 
         <div className={styles.row}>
           <div className={styles.label}>Club</div>
-          <div className={styles.value}>
-            {club?.name ? club.name : clubId ? clubId : '—'}
-          </div>
+          <div className={styles.value}>{club?.name ? club.name : clubId ? clubId : '—'}</div>
         </div>
 
         <div className={styles.row}>
@@ -151,7 +150,9 @@ const LocationDetails: React.FC<Props> = ({ location, club }) => {
 
         <div className={styles.row}>
           <div className={styles.label}>Sports</div>
-          <div className={styles.value}>{sportsText}</div>
+          <div className={styles.value}>
+             <SportsBadges sports={location.sports} sportTypes={location.sportTypes} />
+          </div>
         </div>
 
         <div className={styles.row}>
@@ -168,19 +169,32 @@ const LocationDetails: React.FC<Props> = ({ location, club }) => {
 
         <div className={`${styles.row} ${styles.rowDescription}`}>
           <div className={styles.label}>Working hours</div>
-          <div className={`${styles.value} ${styles.valueMultiline}`}>
-            {whText || '—'}
+
+          <div className={styles.value}>
+            <button
+              type="button"
+              className={`${styles.toggleBtn} ${showSchedule ? styles.toggleBtnActive : ''}`}
+              onClick={() => setShowSchedule((v) => !v)}
+            >
+              {showSchedule ? 'Сховати графік роботи' : 'Показати графік роботи'}
+            </button>
+
+            {showSchedule && (
+              <div className={styles.scheduleBox}>
+                <WorkingHoursSchedule value={workingHours} />
+              </div>
+            )}
           </div>
         </div>
 
         <div className={styles.row}>
           <div className={styles.label}>Created</div>
-          <div className={styles.value}>{fmtDate(createdAt)}</div>
+          <div className={styles.value}><SafeDate value={location.createdAt} /></div>
         </div>
 
         <div className={styles.row}>
           <div className={styles.label}>Updated</div>
-          <div className={styles.value}>{fmtDate(updatedAt)}</div>
+          <div className={styles.value}><SafeDate value={location.updatedAt} /></div>
         </div>
       </div>
     </section>

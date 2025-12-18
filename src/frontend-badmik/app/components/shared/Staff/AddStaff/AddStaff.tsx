@@ -74,7 +74,7 @@ export default function NewStaff() {
     //   sunday:    { from: wh.sunday.from || null,    to: wh.sunday.to || null },
     // });
 
-    const buildWorkingHours = (wh: FormValues['workingHoursObj']) => {
+    const buildWorkingHours = (wh: FormValues['workingHours']) => {
       const days = [
         'monday',
         'tuesday',
@@ -144,7 +144,7 @@ export default function NewStaff() {
 
       timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
 
-      workingHours: buildWorkingHours(v.workingHoursObj),
+      workingHours: buildWorkingHours(v.workingHours),
 
       workingHoursExceptions: null,
     };

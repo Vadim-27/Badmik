@@ -20,7 +20,7 @@ const AdminPage = async () => {
     <div className="admin-page bg-gray-100 p-6">
      
         <ClubListHeader />
-        <AppBreadcrumbs className="pl-[10px] pb-6"
+        <AppBreadcrumbs 
               items={[
                 { label: 'Admin', href: '/admin/clubs' },
                 { label: 'Clubs' },

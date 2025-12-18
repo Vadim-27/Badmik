@@ -3,13 +3,12 @@ import type { Location } from '@/services/types/locations.dto';
 import { locationsApiServer } from '@/services/locations/api.server';
 import EditLocation from '@/app/components/shared/Locations/EditLocation/EditLocation';
 
-type PageProps = {
-  params: { locale: string; locationId: string };
+type Params = {
+  locationId: string;
 };
 
-export default async function EditLocationPage({
-  params: { locale, locationId },
-}: PageProps) {
+export default async function EditLocationPage({ params }: { params: Params }) {
+  const { locationId } = await params;
   let location: Location | null = null;
 
   try {
