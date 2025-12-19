@@ -39,6 +39,7 @@ public class ClubRepository : IClubsRepository
     public async Task<List<Club>> GetAllAsync(string? filter, CancellationToken cancellationToken)
     {
         var query = _context.Clubs
+            .Include(c => c.Locations)
             .AsNoTracking();
 
         if (!string.IsNullOrWhiteSpace(filter))

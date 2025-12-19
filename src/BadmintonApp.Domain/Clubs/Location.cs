@@ -30,6 +30,7 @@ namespace BadmintonApp.Domain.Clubs
         public List<Court> Courts { get; set; } = new();
 
         public string Logo { get; set; }
+        public List<LocationAmenity> Amenities { get; set; } = new();
         public List<LocationImage> Images { get; set; } = new();
         public List<WorkingHour> WorkingHours { get; set; } = new();
 

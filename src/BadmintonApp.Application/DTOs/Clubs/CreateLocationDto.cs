@@ -22,9 +22,11 @@ namespace BadmintonApp.Application.DTOs.Clubs
 
         public string? PriceText { get; set; }
         public string? Description { get; set; }
+        public string? Logo { get; set; }
+        public List<AmenityType> Amenities { get; set; } = new();
 
         public List<LocationSportDto> Sports { get; set; } = new();
 
-        public List<WorkingHourDto> WorkingHours { get; set; } = new();
+        public WorkingHourDto WorkingHours { get; set; } = new();
     }
 }

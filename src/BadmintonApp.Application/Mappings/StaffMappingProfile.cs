@@ -12,7 +12,16 @@ public class StaffMappingProfile : Profile
 {
     public StaffMappingProfile()
     {
-        CreateMap<StaffUpdateDto, Staff>();
+        CreateMap<StaffUpdateDto, Staff>().ForMember(dest => dest.WorkingHours, s => s.MapFrom(x => new List<WorkingHour>
+                {
+                    WHM.CreateWorkingHour(DayOfWeek.Monday, x.WorkingHours.Monday),
+                    WHM.CreateWorkingHour(DayOfWeek.Tuesday, x.WorkingHours.Tuesday),
+                    WHM.CreateWorkingHour(DayOfWeek.Wednesday, x.WorkingHours.Wednesday),
+                    WHM.CreateWorkingHour(DayOfWeek.Thursday, x.WorkingHours.Thursday),
+                    WHM.CreateWorkingHour(DayOfWeek.Friday, x.WorkingHours.Friday),
+                    WHM.CreateWorkingHour(DayOfWeek.Saturday, x.WorkingHours.Saturday),
+                    WHM.CreateWorkingHour(DayOfWeek.Sunday, x.WorkingHours.Sunday),
+                }.Where(x => x != null).ToList()));
 
         CreateMap<Staff, StaffDto>()
             .ForMember(dest => dest.FirstName, s => s.MapFrom(x => x.User.FirstName))
