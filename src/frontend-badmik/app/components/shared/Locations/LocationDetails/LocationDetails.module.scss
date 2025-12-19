@@ -1,0 +1,124 @@
+@use '../../../../styles/mixins' as *;
+
+.wrapperBreadcrumbs {
+  padding-left: 24px;
+  margin-bottom: 24px;
+}
+
+.wrapper {
+  padding: 16px 0 24px;
+  font-family: var(--font-geist-sans);
+}
+
+.title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+
+  @include media-rules(tablet) {
+    font-size: 28px;
+  }
+}
+
+.statusActiveWrapper {
+  padding-left: 24px;
+  margin-bottom: 16px;
+}
+
+.statusPill {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.statusActive {
+  @extend .statusPill;
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.statusInactive {
+  @extend .statusPill;
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+  padding: 20px 20px 18px;
+
+  @include media-rules(tablet) {
+    padding: 24px 24px 20px;
+  }
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(110px, 160px) minmax(0, 1fr);
+  grid-template-rows: minmax(30px, auto);
+ align-items: center;
+  column-gap: 40px;
+  row-gap: 4px;
+  padding: 10px 0;
+  border-bottom: 1px solid #eef2f7;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+// .rowDescription {
+//   align-items: flex-start;
+// }
+
+.label {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.value {
+  font-size: 16px;
+  color: var(--text-gray);
+  word-break: break-word;
+}
+
+.valueMultiline {
+  white-space: pre-wrap;
+}
+
+.toggleBtn {
+  appearance: none;
+  border: 1px solid var(--btn-primary-border);
+  background: var(--btn-secondary-bg);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .15s, border-color .15s, transform .05s;
+
+  &:active { transform: translateY(1px); }
+  &:hover {
+    background: var(--btn-primary-bg);
+  }
+}
+
+.toggleBtnActive {
+  background: var(--btn-primary-bg);
+  border-color: #c7d2fe;
+  color: #0b3b8c;
+}
+
+.scheduleBox {
+  margin-top: 12px;
+}
+

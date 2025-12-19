@@ -7,3 +7,51 @@
     &:hover { text-decoration: underline; }
   }
 }
+/* AppBreadcrumbs.module.scss */
+
+.root {
+  padding-left: 24px;
+  padding-bottom: 24px;
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.link {
+  color: var(--text-second-color, #2563eb);
+  text-decoration: none;
+  font-weight: 400;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.current {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.sep {
+  display: inline-flex;
+  align-items: center;
+  margin: 0 8px;
+  color: var(--muted);
+  user-select: none;
+}
+

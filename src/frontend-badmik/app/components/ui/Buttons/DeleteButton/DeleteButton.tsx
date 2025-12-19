@@ -16,7 +16,7 @@ export default function DeleteButton({ onClick, label = 'Видалити' }: De
       onClick={onClick}
       type="button"
     >
-      🗑️ {tUI(label)}
+      {tUI(label)}
     </button>
   );
 }

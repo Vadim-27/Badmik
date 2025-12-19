@@ -10,7 +10,7 @@ import EmploymentTypeSelectField, {
   type EmploymentType,
 } from '@/app/components/shared/Staff/StaffForm/EmploymentTypeSelectField/EmploymentTypeSelectField';
 import AvatarUploadField from '@/app/components/shared/Staff/StaffForm/AvatarUploadField/AvatarUploadField';
-import WorkingHoursField from '@/app/components/shared/Staff/StaffForm/WorkingHoursField/WorkingHoursField';
+import WorkingHoursField from '@/app/components/ui/WorkingHoursField/WorkingHoursField';
 import StaffActionsBar from '@/app/components/shared/Staff/StaffForm/StaffActionsBar/StaffActionsBar';
 import SalaryField from '@/app/components/shared/Staff/StaffForm/SalaryField/SalaryField';
 
@@ -54,7 +54,7 @@ export type FormValues = {
   roleId: string | null;
   userId?: string | null;
 
-  workingHoursObj: WorkingHourDto;
+  workingHours: WorkingHourDto;
 };
 
 type Props = {
@@ -125,7 +125,7 @@ const StaffFormNew = forwardRef<StaffFormHandle, Props>(function EmployeeForm(
       startDate: todayStr, 
       employmentType: 'Employee',
       // workingHours: '',
-      workingHoursObj: {
+      workingHours: {
         monday: { from: null, to: null },
         tuesday: { from: null, to: null },
         wednesday: { from: null, to: null },
@@ -499,8 +499,8 @@ const StaffFormNew = forwardRef<StaffFormHandle, Props>(function EmployeeForm(
             </div>
           </div>
           {/* Working hours */}
-         
-          <WorkingHoursField control={control} name="workingHoursObj" />
+         <WorkingHoursField control={control} name="workingHours" />
+          
           <SalaryField<FormValues> control={control} />
           {/* Нотатки для бухгалтерії */}
           <div>
