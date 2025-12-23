@@ -79,8 +79,29 @@ export const staffApiClient = {
   byId: (id: string, signal?: AbortSignal) =>
     unwrap<Staff>(api.get(ENDPOINTS.staff.getById(id), { signal })),
 
-  create: (dto: StaffRegisterDto, signal?: AbortSignal) =>
-    unwrap<Staff>(api.post(ENDPOINTS.staff.register, dto, { signal })),
+  // create: (dto: StaffRegisterDto, signal?: AbortSignal) =>
+  //   unwrap<Staff>(api.post(ENDPOINTS.staff.register, dto, { signal })),
+  create: (dto: StaffRegisterDto, signal?: AbortSignal) => {
+  console.log(
+    '%c[STAFF.CREATE → PAYLOAD2]',
+    'color:red;font-weight:bold;',
+    dto
+  );
+
+  return unwrap<Staff>(
+    api.post(ENDPOINTS.staff.register, dto, { signal })
+  );
+},
+// create: (dto: StaffRegisterDto, signal?: AbortSignal) => {
+//   console.log('%c[STAFF.CREATE]', 'color:red;font-weight:bold;', {
+//     endpoint: ENDPOINTS.staff.register,
+//     baseURL: (api as any).defaults?.baseURL,
+//     fullUrlGuess: `${(api as any).defaults?.baseURL ?? ''}${ENDPOINTS.staff.register}`,
+//     payload: dto,
+//   });
+
+//   return unwrap<Staff>(api.post(ENDPOINTS.staff.register, dto, { signal }));
+// },
 
 //   update: (id: string, dto: UpdateStaffDto, signal?: AbortSignal) =>
 //     unwrap<Staff>(api.put(ENDPOINTS.staff.update(id), dto, { signal })),

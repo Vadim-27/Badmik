@@ -6,7 +6,7 @@ import { Select, MenuItem } from '@mui/material';
 import ActionHeader from '@/app/components/ui/Layout/ActionHeader/ActionHeader';
 import BackButton from '@/app/components/ui/Buttons/BackButton/BackButton';
 import DeleteButton from '@/app/components/ui/Buttons/DeleteButton/DeleteButton';
-import { ConfirmDialog } from '@/app/components/ui/DeleteModal/ConfirmDialog';
+// import { ConfirmDialog } from '@/app/components/ui/DeleteModal/ConfirmDialog';
 import SaveButton from '@/app/components/ui/Buttons/SaveButton/SaveButton';
 import { useTranslations } from 'next-intl';
 
@@ -170,13 +170,13 @@ const PlayerDetail: React.FC<PlayerDetailProps> = ({ playerId }) => {
         </ul>
       </div>
 
-      <ConfirmDialog
+      {/* <ConfirmDialog
         open={openConfirm}
         onClose={() => setOpenConfirm(false)}
         onConfirm={handleConfirmDelete}
         title={t('ConfirmDialog.title')}
         description={t('ConfirmDialog.description')}
-      />
+      /> */}
     </div>
   );
 };

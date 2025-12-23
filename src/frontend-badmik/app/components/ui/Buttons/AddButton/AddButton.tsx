@@ -14,7 +14,7 @@ const AddButton: React.FC<AddButtonProps> = ({ href, label }) => {
   const tUI = useTranslations('UI');
   return (
     <Link href={href} className={css.addButton}>
-      ➕ {tUI(label)}
+      {tUI(label)}
     </Link>
   );
 };

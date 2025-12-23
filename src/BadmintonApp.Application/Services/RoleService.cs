@@ -4,6 +4,7 @@ using BadmintonApp.Application.Interfaces.Repositories;
 using BadmintonApp.Application.Interfaces.Roles;
 using BadmintonApp.Domain.Clubs;
 using BadmintonApp.Domain.Core;
+using BadmintonApp.Domain.Enums.Permission;
 using System;
 using System.Collections.Generic;
 using System.Security;

@@ -1,5 +1,6 @@
 ﻿using BadmintonApp.Application.Interfaces.Auth;
 using BadmintonApp.Domain.Core;
+using BadmintonApp.Domain.Enums.Permission;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;

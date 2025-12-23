@@ -10,7 +10,9 @@
       "trainingsHeader": "Trainings",
       "editStaffHeader": "Editing the Staff",
       "addStaffHeader": "Adding a Staff",
-      "employeeHeader": "Club employees"
+      "employeeHeader": "Club employees",
+      "editLocationHeader": "Editing location",
+      "addLocationHeader": "Adding location"
     }
   },
   "Sidebar": {
@@ -149,6 +151,7 @@
   "UI": {
     "buttons": {
       "addClub": "Add club",
+      "addLocation": "Add location",
       "addUser": "Add user",
       "addPlayer": "Add Player",
       "addTraining": "Add training",

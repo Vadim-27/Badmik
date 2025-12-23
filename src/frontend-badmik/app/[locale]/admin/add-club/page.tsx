@@ -1,4 +1,4 @@
-import AddClub from "@/app/components/shared/AddClub/AddClub";
+import AddClub from "@/app/components/shared/Clubs/AddClub/AddClub";
 
 
 const AddClubPage = () => {

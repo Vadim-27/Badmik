@@ -36,7 +36,7 @@ const AccessPage = async ({
         <h2 className="text-lg font-semibold">{t('employeeHeader')}</h2>
         <AddButton href={`/admin/access-control/add-staff`} label="buttons.addUser" />
         </ActionHeader>
-        <AppBreadcrumbs className="pl-[10px] pb-6"
+        <AppBreadcrumbs 
       items={[
         { label: 'Admin', href: '/admin/access-control' },
         { label: 'Access Control' },

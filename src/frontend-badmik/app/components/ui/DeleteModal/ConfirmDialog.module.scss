@@ -1,0 +1,113 @@
+@use '../../../styles/mixins' as *;
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(15, 23, 42, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.dialog {
+  width: 100%;
+  max-width: 420px;
+  background: var(--card);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  box-shadow: 0 24px 64px rgba(15, 23, 42, 0.22);
+  padding: 20px 20px 18px;
+  display: grid;
+  gap: 12px;
+  font-family: var(--font-geist-sans);
+}
+
+.title {
+    text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 4px;
+
+  @include media-rules(tablet) {
+    font-size: 20px;
+  }
+}
+
+.message {
+  font-size: 14px;
+  color: var(--text-gray);
+  margin: 0;
+
+  @include media-rules(tablet) {
+    font-size: 15px;
+  }
+}
+
+.actions {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn {
+  appearance: none;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  padding: 10px 16px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition:
+    transform 0.02s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    color 0.2s ease;
+  font-family: var(--font-geist-sans);
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+.btnPrimary {
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  border-color: var(--btn-primary-border);
+
+  &:hover:not(:disabled) {
+    background: var(--btn-primary-bg-hover);
+  }
+
+  &:active:not(:disabled) {
+    background: var(--btn-primary-bg-active);
+  }
+}
+
+.btnSecondary {
+  background: var(--btn-secondary-bg);
+  color: var(--btn-secondary-text);
+  border-color: var(--border);
+
+  &:hover:not(:disabled) {
+    background: var(--btn-secondary-bg-hover);
+  }
+
+  &:active:not(:disabled) {
+    background: var(--btn-secondary-bg-active);
+  }
+}

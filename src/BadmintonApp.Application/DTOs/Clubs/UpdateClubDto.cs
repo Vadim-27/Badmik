@@ -12,8 +12,11 @@ public class UpdateClubDto
     public string Name { get; set; }
     public string City { get; set; }
     public string Address { get; set; }
-    public int TotalCourts { get; set; }
+    public string Email { get; set; }
+    public string Phone { get; set; }
+    public string Website { get; set; }
+    public string Description { get; set; }
 
-    //public List<WorkingHourDto> WorkingHours { get; set; } = new();
-    public WorkingHourDto WorkingHours { get; set; } = new();
+    public bool IsActive { get; set; }
+    public int Order { get; set; }
 }

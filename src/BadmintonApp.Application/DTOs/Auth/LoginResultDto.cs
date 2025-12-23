@@ -1,4 +1,4 @@
-﻿using BadmintonApp.Domain.Core;
+﻿using BadmintonApp.Domain.Enums.Permission;
 using System;
 using System.Collections.Generic;
 

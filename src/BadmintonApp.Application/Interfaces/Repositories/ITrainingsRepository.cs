@@ -1,5 +1,6 @@
-﻿using BadmintonApp.Domain.Trainings;
-using BadmintonApp.Domain.Trainings.Enums;
+﻿using BadmintonApp.Domain.Enums.Player;
+using BadmintonApp.Domain.Enums.Training;
+using BadmintonApp.Domain.Trainings;
 using System;
 using System.Collections.Generic;
 using System.Linq;

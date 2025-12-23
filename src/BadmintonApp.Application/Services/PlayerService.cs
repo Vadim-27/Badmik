@@ -4,7 +4,7 @@ using BadmintonApp.Application.Interfaces.Players;
 using BadmintonApp.Application.Interfaces.Repositories;
 using BadmintonApp.Application.Interfaces.Transactions;
 using BadmintonApp.Application.Interfaces.Users;
-using BadmintonApp.Domain.Core;
+using BadmintonApp.Domain.Players;
 using System;
 using System.Threading;
 using System.Threading.Tasks;

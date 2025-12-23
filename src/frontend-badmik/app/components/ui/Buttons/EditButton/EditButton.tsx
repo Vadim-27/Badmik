@@ -11,7 +11,7 @@ const EditButton: React.FC<EditButtonProps> = ({ href, label = 'Редагува
   const tUI = useTranslations('UI');
   return (
     <Link href={href} className={css.editButton}>
-      ✏️ {tUI(label)}
+      {tUI(label)}
     </Link>
   );
 };
