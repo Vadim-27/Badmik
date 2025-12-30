@@ -179,7 +179,7 @@ export default function SidebarClient({ role, userId, email, isAdmin, clubId }: 
             </SidebarLink>
             <SidebarLink  
             // href="/admin/access-control/"
-            href={buildHref('access-control')} 
+            href={buildHref('staff')} 
             open={open} >
               <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                 <rect x="3" y="4" width="7" height="7" />
@@ -187,7 +187,7 @@ export default function SidebarClient({ role, userId, email, isAdmin, clubId }: 
                 <rect x="14" y="15" width="7" height="7" />
                 <rect x="3" y="15" width="7" height="7" />
               </svg>
-              {open && (<span>{t('AccessControl')}</span>
+              {open && (<span>{t('Staff')}</span>
               )}
             </SidebarLink>
             <SidebarLink  href="/admin/messages/" open={open} count={115}>

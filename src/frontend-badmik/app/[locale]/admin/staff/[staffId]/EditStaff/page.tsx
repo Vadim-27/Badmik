@@ -1,4 +1,5 @@
-// app/[locale]/admin/access-control/[staffId]/page.tsx
+
+// app/[locale]/admin/Staff/[staffId]/page.tsx
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import EditStaff from '@/app/components/shared/Staff/EditStaff/EditStaff';
@@ -15,7 +16,8 @@ type PageProps = {
 };
 
 export default async function StaffPage({ params: { locale, staffId } }: PageProps) {
-
+  //  const state = await prefetch([ roleServerQueries.list() ]);
+  // console.log('[SSR] params:', { locale, staffId });
 
   // const t = await getTranslations({ locale, namespace: 'ActionHeader.title' });
 
@@ -28,7 +30,7 @@ export default async function StaffPage({ params: { locale, staffId } }: PagePro
 
   if (!staff) return notFound();
 
-  const clubId: string | null = staff.clubId ?? null;
+   const clubId: string | null = staff.clubId ?? null;
      const state = await prefetch(
     clubId ? [roleServerQueries.listByClub(clubId)] : []
   );
@@ -44,5 +46,3 @@ export default async function StaffPage({ params: { locale, staffId } }: PagePro
     </RQHydrate>
   );
 }
-
-

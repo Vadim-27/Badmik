@@ -5,6 +5,13 @@ import { ENDPOINTS } from '@/lib/endpoints';
 import { withQuery } from '@/lib/http/qs';
 import type { Staff, StaffRegisterDto, UpdateStaffDto } from '../types/staff.dto';
 
+export type PagedResult<T> = {
+  items: T[];
+  totalCount: number;
+  page: number;
+  pageSize: number;
+};
+
 type ListParams = { clubId?: string; page?: number; pageSize?: number };
 
 // export const staffApiServer = {
@@ -13,8 +20,7 @@ type ListParams = { clubId?: string; page?: number; pageSize?: number };
 //     return res.json();
 //   },
 export const staffApiServer = {
-  async list(params: ListParams = {}): Promise<Staff[]> {
-    // бек чекає ClubId у query → підставляємо лише якщо є
+  async list(params: ListParams = {}): Promise<PagedResult<Staff>> {
     const url = withQuery(ENDPOINTS.staff.getAll, {
       ClubId: params.clubId,
       Page: params.page,

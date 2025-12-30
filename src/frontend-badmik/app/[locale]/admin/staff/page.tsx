@@ -12,7 +12,7 @@ import { roleServerQueries } from '@/services/role/queries.server';
 import { staffServerQueries } from '@/services/staff/queries.server';
 import AppBreadcrumbs from '@/app/components/ui/Breadcrumbs/AppBreadcrumbs';
 
-const AccessPage = async ({
+const StaffPage = async ({
   params,
 }: {
   params: { locale: string};
@@ -34,12 +34,12 @@ const AccessPage = async ({
         <ActionHeader>
         <BackButton label="buttons.back"/>
         <h2 className="text-lg font-semibold">{t('employeeHeader')}</h2>
-        <AddButton href={`/admin/access-control/add-staff`} label="buttons.addUser" />
+        <AddButton href={`/admin/staff/add-staff`} label="buttons.addUser" />
         </ActionHeader>
         <AppBreadcrumbs 
       items={[
-        { label: 'Admin', href: '/admin/access-control' },
-        { label: 'Access Control' },
+        { label: 'Admin', href: '/admin/staff' },
+        { label: 'Staff' },
       ]}
     />
         <StaffTable />
@@ -47,4 +47,4 @@ const AccessPage = async ({
     </RQHydrate>
 );
 }
-export default AccessPage;
+export default StaffPage;

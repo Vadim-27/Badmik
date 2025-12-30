@@ -19,12 +19,14 @@ import LocationForm, {
 import type { Location, UpdateLocationDto } from '@/services/types/locations.dto';
 import { useLocationById, useUpdateLocation } from '@/services/locations/queries.client';
 import { getApiErrorMessage } from '@/lib/http/utils';
+import { buildHrefServer } from '@/lib/club-scope.server';
 
 import css from './EditLocation.module.scss';
 
 type Props = {
   locationId: string;
   initialData: Location;
+  clubId?: string;
 };
 
 /** helper: з DTO → у форму */
@@ -86,7 +88,7 @@ function mapFromDtoToForm(dto: Location): LocationFormValues {
   };
 }
 
-export default function EditLocation({ locationId, initialData }: Props) {
+export default function EditLocation({ locationId, initialData, clubId }: Props) {
   const tAH = useTranslations('ActionHeader');
 
   const formRef = useRef<LocationFormHandle | null>(null);
@@ -203,6 +205,7 @@ export default function EditLocation({ locationId, initialData }: Props) {
   };
 
   const anyPending = updateLocation.isPending;
+  const Locations = buildHrefServer(clubId, '/locations');
 
   return (
     <>
@@ -222,7 +225,7 @@ export default function EditLocation({ locationId, initialData }: Props) {
         <AppBreadcrumbs
           items={[
             { label: 'Admin', href: '/admin/dashboard' },
-            { label: 'Locations', href: '/admin/locations' },
+            { label: 'Locations', href: Locations },
             { label: 'Edit Location' },
           ]}
         />

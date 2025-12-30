@@ -1,4 +1,5 @@
-// app/[locale]/admin/access-control/[staffId]/page.tsx
+
+// app/[locale]/admin/[clubId]/Staff/[staffId]/EditStaff/page.tsx
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import EditStaff from '@/app/components/shared/Staff/EditStaff/EditStaff';
@@ -10,13 +11,14 @@ import { prefetch } from '@/services/_shared/prefetch';
 import { roleServerQueries } from '@/services/role/queries.server';
 //==========================================================================
 
-type PageProps = {
-  params: { locale: string; staffId: string }; // ⬅️ НЕ Promise!
+type Params = {
+  staffId: string;
+  clubId: string;
 };
-
-export default async function StaffPage({ params: { locale, staffId } }: PageProps) {
+export default async function StaffEditPage({ params }: { params: Params }) {
   //  const state = await prefetch([ roleServerQueries.list() ]);
-  // console.log('[SSR] params:', { locale, staffId });
+  const { staffId, clubId } = await params;
+  console.log('[SSR] params:прпр', {  staffId });
 
   // const t = await getTranslations({ locale, namespace: 'ActionHeader.title' });
 
@@ -29,11 +31,11 @@ export default async function StaffPage({ params: { locale, staffId } }: PagePro
 
   if (!staff) return notFound();
 
-   const clubId: string | null = staff.clubId ?? null;
+  //  const clubId: string | null = staff.clubId ?? null;
      const state = await prefetch(
     clubId ? [roleServerQueries.listByClub(clubId)] : []
   );
-  console.log('[SSR] params:', { locale, staffId });
+  console.log('[SSR] params:', { staffId, clubId });
 
   return (
     <RQHydrate state={state}>
@@ -45,5 +47,3 @@ export default async function StaffPage({ params: { locale, staffId } }: PagePro
     </RQHydrate>
   );
 }
-
-

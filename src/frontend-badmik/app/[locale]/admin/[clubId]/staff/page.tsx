@@ -19,7 +19,7 @@ type Params = {
 };
 
 
-const AccessPage = async ({
+const StaffPage = async ({
   params,
 }: {
   params: Params; 
@@ -30,10 +30,10 @@ const AccessPage = async ({
     const state = await prefetch([
    roleServerQueries.listByClub(clubId),
     // staffServerQueries.list(),
-    staffServerQueries.list(clubId),
+    staffServerQueries.list({ clubId, page: 1, pageSize: 10 }),
   ]);
   
-  const addHref = buildHrefServer(clubId, 'access-control/add-staff');
+  const addHref = buildHrefServer(clubId, 'staff/add-staff');
 
     return (
       <RQHydrate state={state}>
@@ -43,12 +43,11 @@ const AccessPage = async ({
         <h2 className="text-lg font-semibold">{t('employeeHeader')}</h2>
         <AddButton 
         href={addHref}
-        // href={`/admin/access-control/add-staff`} 
         label="buttons.addUser" />
         </ActionHeader>
-        <StaffTable />
+        <StaffTable clubId={clubId} />
     </div>
     </RQHydrate>
 );
 }
-export default AccessPage;
+export default StaffPage;

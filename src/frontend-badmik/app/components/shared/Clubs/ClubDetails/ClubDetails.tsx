@@ -127,10 +127,10 @@ const ClubDetails: React.FC<Props> = ({ club }) => {
     <section className={styles.wrapper}>
        <ActionHeader>
         <BackButton label="buttons.back" />
-        <h1 className="text-lg font-semibold">
+        <div className="text-lg font-semibold">
           <h1 className={styles.title}>{name || 'Клуб без назви'}</h1>
           {/* {tHeader('title.addClubHeader')} */}
-        </h1>
+        </div>
         <div className="flex flex-wrap gap-2">
           {/* <SaveButton
             onClick={handleSaveClick}
