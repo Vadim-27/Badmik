@@ -38,6 +38,22 @@ type UseLocationByIdOptions = Partial<
   initialData?: Location;
 };
 
+export function useLocationsListByClub(
+  clubId: string,
+  options?: Partial<UseQueryOptions<Location[], unknown, Location[], QueryKey>>,
+) {
+  return useQuery({
+    queryKey: qk.locations.list(clubId),
+    queryFn: ({ signal }) => locationsApiClient.listByClub(clubId, signal),
+    enabled: !!clubId,
+    placeholderData: keepPreviousData,
+    staleTime: 5 * 60 * 1000,
+    retry: 1,
+    refetchOnWindowFocus: false,
+    ...(options ?? {}),
+  });
+}
+
 export function useLocationById(id: string, options?: UseLocationByIdOptions) {
   return useQuery({
     queryKey: qk.locations.byId(id),

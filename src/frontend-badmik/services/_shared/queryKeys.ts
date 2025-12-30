@@ -1,8 +1,21 @@
 // src/services/_shared/queryKeys.ts
+type StaffListParams = {
+  clubId?: string;
+  page?: number;
+  pageSize?: number;
+};
+
+
 export const qk = {
   staff: {
     // list: (params?: unknown) => ['staff', 'list', params ?? {}] as const,
-    list: (clubId?: string) => ['staff', 'list', clubId ?? 'all'] as const,
+    list: (params: StaffListParams = {}) => [
+      'staff',
+      'list',
+      params.clubId ?? 'all',
+      params.page ?? 1,
+      params.pageSize ?? 10,
+    ]  as const,
     byId: (id: string) => ['staff', 'byId', id] as const,
   },
   role: {

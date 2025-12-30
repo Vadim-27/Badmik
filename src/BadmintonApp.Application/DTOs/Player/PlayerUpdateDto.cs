@@ -1,5 +1,5 @@
 ﻿using BadmintonApp.Application.DTOs.WorkingHourDtos;
-using BadmintonApp.Domain.Trainings.Enums;
+using BadmintonApp.Domain.Enums.Player;
 using System;
 using System.Collections.Generic;
 

@@ -1,6 +1,8 @@
 ﻿using BadmintonApp.Domain.Clubs;
 using BadmintonApp.Domain.Core;
+using BadmintonApp.Domain.Enums.Permission;
 using BadmintonApp.Domain.Logs;
+using BadmintonApp.Domain.Players;
 using BadmintonApp.Domain.Trainings;
 using BadmintonApp.Domain.WorkingHours;
 using Microsoft.EntityFrameworkCore;
@@ -44,6 +46,47 @@ namespace BadmintonApp.Infrastructure.Persistence
                 c.RoleId,
                 c.ClubId
             });
+
+            modelBuilder.Entity<Location>(e =>
+            {
+                e.Property(x => x.CreatedAt)
+                    .HasColumnType("timestamptz")
+                    .HasDefaultValueSql("timezone('utc', now())");
+
+                e.Property(x => x.UpdatedAt)
+                    .HasColumnType("timestamptz");
+
+                e.HasOne(x => x.Club)
+                    .WithMany(c => c.Locations)
+                    .HasForeignKey(x => x.ClubId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // Location -> Courts (1:N)
+            modelBuilder.Entity<Court>(e =>
+            {
+                e.HasOne(c => c.Location)
+                    .WithMany(l => l.Courts)
+                    .HasForeignKey(c => c.LocationId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<LocationAmenity>(e =>
+            {
+                e.HasOne(a => a.Location)
+                    .WithMany(l => l.Amenities)
+                    .HasForeignKey(a => a.LocationId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<LocationImage>(e =>
+            {
+                e.HasOne(i => i.Location)
+                    .WithMany(l => l.Images)
+                    .HasForeignKey(i => i.LocationId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
             SeedData(modelBuilder);            
 
             base.OnModelCreating(modelBuilder);
@@ -62,6 +105,10 @@ namespace BadmintonApp.Infrastructure.Persistence
         public DbSet<Log> Logs => Set<Log>();
         public DbSet<Player> Players => Set<Player>();
         public DbSet<Staff> Staffs => Set<Staff>();
+        public DbSet<Location> Locations => Set<Location>();
+        public DbSet<Court> Courts => Set<Court>();
+        public DbSet<LocationAmenity> LocationAmenities => Set<LocationAmenity>();
+        public DbSet<LocationImage> LocationImages => Set<LocationImage>();
 
 
         private void SeedData(ModelBuilder modelBuilder)

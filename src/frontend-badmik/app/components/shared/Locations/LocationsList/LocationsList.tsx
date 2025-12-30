@@ -21,7 +21,13 @@ import TrashIcon from '@/app/assets/icons/Trash.svg';
 import ConfirmDialog from '@/app/components/ui/DeleteModal/ConfirmDialog';
 import SportsBadges from '@/app/components/ui/SportsBadges/SportsBadges';
 
-const LocationsList = () => {
+type LocationsListProps = {
+  clubId?: string;
+};
+
+const LocationsList = ({ clubId }: LocationsListProps) => {
+
+  const isClubScoped = !!clubId;
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
   const [clubFilter, setClubFilter] = useState<string>('all'); 
 
@@ -43,11 +49,24 @@ const LocationsList = () => {
   }, [search]);
 
 
+  const effectiveClubId = isClubScoped
+    ? clubId
+    : clubFilter === 'all'
+      ? undefined
+      : clubFilter;
+
   const {
     data: locationsData = [],
     isLoading,
     isFetching,
-  } = useLocationsList(clubFilter === 'all' ? undefined : clubFilter);
+  } = useLocationsList(effectiveClubId);
+
+
+  // const {
+  //   data: locationsData = [],
+  //   isLoading,
+  //   isFetching,
+  // } = useLocationsList(clubFilter === 'all' ? undefined : clubFilter);
 
   const deleteLocation = useDeleteLocation();
   const locations: Location[] = locationsData ?? [];

@@ -1,7 +1,8 @@
 ﻿using BadmintonApp.Application.Exceptions;
 using BadmintonApp.Application.Interfaces.Repositories;
+using BadmintonApp.Domain.Enums.Player;
+using BadmintonApp.Domain.Enums.Training;
 using BadmintonApp.Domain.Trainings;
-using BadmintonApp.Domain.Trainings.Enums;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

@@ -41,6 +41,8 @@ namespace BadmintonApp.Infrastructure
             services.AddScoped<ITrainingsRepository, TrainingsRepository>();
             services.AddScoped<ITransactionService, TransactionService>();
             services.AddScoped<IWorkingHourRepository, WorkingHourRepository>();
+            services.AddScoped<ILocationRepository, LocationRepository>();
+            services.AddScoped<ICourtsRepository, CourtsRepository>();
 
             return services;
         }

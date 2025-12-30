@@ -30,28 +30,28 @@ export const ENDPOINTS = {
       `/roles/GetRolesByStaffId?staffId=${staffId}&clubId=${clubId}`,
   },
    clubs: {
-    getAll: '/clubs',                         // GET /api/clubs
-    getById: (id: string) => `/clubs/${id}`,  // GET /api/clubs/{id}
-    create: '/clubs',                         // POST /api/clubs
-    update: (id: string) => `/clubs/${id}`,   // PUT /api/clubs/{id}
-    delete: (id: string) => `/clubs/${id}`,   // DELETE /api/clubs/{id}
+    getAll: '/clubs',                         
+    getById: (id: string) => `/clubs/${id}`,  
+    create: '/clubs',                         
+    update: (id: string) => `/clubs/${id}`,   
+    delete: (id: string) => `/clubs/${id}`,   
     activate: (id: string) => `/clubs/${id}/activate`,
     deactivate: (id: string) => `/clubs/${id}/deactivate`,
   },
    locations: {
-    getAll: '/locations',                               // GET /api/locations
-    getById: (id: string) => `/locations/${id}`,        // GET /api/locations/{id}
-    create: '/locations',                               // POST /api/locations
-    update: (id: string) => `/locations/${id}`,         // PUT /api/locations/{id}
-    delete: (id: string) => `/locations/${id}`,         // DELETE /api/locations/{id}
-    byClub: (clubId: string) => `/locations/byclub/${clubId}`, // GET /api/locations/byclub/{clubId}
+    getAll: '/locations',                               
+    getById: (id: string) => `/locations/${id}`,        
+    create: '/locations',                              
+    update: (id: string) => `/locations/${id}`,        
+    delete: (id: string) => `/locations/${id}`,      
+    byClub: (clubId: string) => `/locations/byclub/${clubId}`, 
   },
 
   player: {
-    register: '/Player/Register', // POST
-    getAll: '/players', // GET
-    getById: (id: string) => `/Player/${id}/GetById`, // GET
-    update: (id: string) => `/Player/${id}/Update`, // PUT
+    register: '/Player/Register', 
+    getAll: '/players', 
+    getById: (id: string) => `/Player/${id}/GetById`, 
+    update: (id: string) => `/Player/${id}/Update`, 
   },
   trainings: {
     getAll: '/Trainings/GetAll',

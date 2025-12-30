@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BadmintonApp.Domain.Core
+namespace BadmintonApp.Domain.Enums.Permission
 {
     public enum PermissionType
     {

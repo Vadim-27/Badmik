@@ -7,12 +7,18 @@ import type { Club } from '@/services/types/clubs.dto';
 import { locationsApiServer } from '@/services/locations/api.server';
 import { clubsApiServer } from '@/services/clubs/api.server';
 
+import ActionHeader from '@/app/components/ui/Layout/ActionHeader/ActionHeader';
+import BackButton from '@/app/components/ui/Buttons/BackButton/BackButton';
+import EditButton from '@/app/components/ui/Buttons/EditButton/EditButton';
+import AppBreadcrumbs from '@/app/components/ui/Breadcrumbs/AppBreadcrumbs';
+
 type Params = {
   locationId: string;
+  clubId: string;
 };
 
 export default async function LocationPage({ params }: { params: Params }) {
-  const { locationId } = await params;
+  const { locationId, clubId } = await params;
 
   let location: Location | null = null;
 
@@ -38,6 +44,25 @@ export default async function LocationPage({ params }: { params: Params }) {
 
   return (
     <main className="p-6 bg-gray-100 min-h-screen">
+      <ActionHeader>
+        <BackButton label="buttons.back" />
+        <h1 className="text-lg font-semibold">
+          {location.name || 'Локація без назви'}
+        </h1>
+
+        {/* ✅ поправ шлях, якщо у тебе інша структура */}
+        <EditButton href={`/admin/${clubId}/locations/${locationId}/edit-location`} label="buttons.update" />
+      </ActionHeader>
+
+      
+        <AppBreadcrumbs
+          items={[
+            { label: 'Admin', href: '/admin/dashboard' },
+            { label: 'Locations', href: `/admin/${clubId}/locations/` },
+            { label: 'Location' },
+          ]}
+        />
+     
       <LocationDetails location={location} club={club} />
     </main>
   );

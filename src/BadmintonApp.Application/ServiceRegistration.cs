@@ -34,6 +34,8 @@ namespace BadmintonApp.Application
             services.AddScoped<IPermissionService, PermissionService>();
             services.AddScoped<IStaffService, StaffService>();
             services.AddScoped<IPlayerService, PlayerService>();
+            services.AddScoped<ILocationService, LocationService>();
+            services.AddScoped<ICourtsService, CourtsService>();
 
             return services;
         }

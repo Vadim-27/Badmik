@@ -11,17 +11,28 @@ import BackButton from '@/app/components/ui/Buttons/BackButton/BackButton';
 
 import { getTranslations } from 'next-intl/server';
 import AddButton from '@/app/components/ui/Buttons/AddButton/AddButton';
+import { buildHrefServer } from '@/lib/club-scope.server';
+
+type Params = {
+  locale: string;
+  clubId: string; 
+};
 
 const LocationsPage = async ({
   params,
 }: {
-  params: { locale: string};
-}) => {
-    const {  locale } = await params;
+  params: Params;
+}
+) => {
+    const {  locale, clubId } = await params;
   const t = await getTranslations({locale, namespace: 'ActionHeader.title'});
+ 
+
   const state = await prefetch([
-    locationsServerQueries.list(/* clubId */ undefined),
+    locationsServerQueries.listByClub(clubId),
   ]);
+
+  const addHref = buildHrefServer(clubId, 'locations/add-location');
 
   return (
     <RQHydrate state={state}>
@@ -32,7 +43,7 @@ const LocationsPage = async ({
             Локації
             {/* {t('employeeHeader')} */}
             </h2>
-        <AddButton href="/admin/locations/add-location"
+        <AddButton href={addHref}
              label="buttons.addLocation" />
         </ActionHeader>
         <AppBreadcrumbs 
@@ -42,7 +53,7 @@ const LocationsPage = async ({
                       ]}
                     />
        
-        <LocationsList />
+        <LocationsList clubId={clubId} />
       </div>
     </RQHydrate>
   );

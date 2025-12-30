@@ -1,7 +1,8 @@
-﻿using BadmintonApp.Domain.Trainings.Enums;
+﻿using BadmintonApp.Domain.Core;
+using BadmintonApp.Domain.Enums.Player;
 using System;
 
-namespace BadmintonApp.Domain.Core;
+namespace BadmintonApp.Domain.Players;
 
 public class Player 
 {

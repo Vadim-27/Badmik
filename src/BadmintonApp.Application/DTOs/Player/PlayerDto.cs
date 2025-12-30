@@ -1,5 +1,5 @@
 ﻿using BadmintonApp.Domain.Core;
-using BadmintonApp.Domain.Trainings.Enums;
+using BadmintonApp.Domain.Enums.Player;
 using System;
 
 namespace BadmintonApp.Application.DTOs.Player;
