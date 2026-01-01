@@ -3,10 +3,16 @@ import 'server-only';
 import { qk } from '../_shared/queryKeys';
 import { staffApiServer } from './api.server';
 
+type ListParams = {
+  clubId?: string;
+  page?: number;
+  pageSize?: number;
+};
+
 export const staffServerQueries = {
-    list: (clubId?: string) => ({
-    queryKey: qk.staff.list(clubId),
-    queryFn: () => staffApiServer.list({ clubId }),
+    list: (params: ListParams = {}) => ({
+    queryKey: qk.staff.list(params),
+    queryFn: () => staffApiServer.list(params),
   }),
   // list: () => ({
   //   queryKey: qk.staff.list(),
@@ -16,4 +22,5 @@ export const staffServerQueries = {
     queryKey: qk.staff.byId(id),
     queryFn: () => staffApiServer.byId(id),
   }),
+
 };

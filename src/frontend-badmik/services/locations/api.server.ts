@@ -20,6 +20,19 @@ export const locationsApiServer = {
     return res.json();
   },
 
+  async listByClub(clubId: string): Promise<Location[]> {
+    const res = await serverFetch(
+      ENDPOINTS.locations.byClub(clubId),
+      {},
+      {
+        revalidate: 60,
+        tags: [`locations:club:${clubId}`],
+      },
+    );
+
+    return res.json();
+  },
+
   async byId(id: string): Promise<Location> {
     const res = await serverFetch(
       ENDPOINTS.locations.getById(id),

@@ -23,6 +23,10 @@ export const locationsApiClient = {
     }
     return unwrap<Location[]>(api.get(ENDPOINTS.locations.getAll, { signal }));
   },
+   listByClub: (clubId: string, signal?: AbortSignal) =>
+    unwrap<Location[]>(
+      api.get(ENDPOINTS.locations.byClub(clubId), { signal }),
+    ),
 
   byId: (id: string, signal?: AbortSignal) =>
     unwrap<Location>(api.get(ENDPOINTS.locations.getById(id), { signal })),

@@ -5,10 +5,7 @@ import styles from './LocationDetails.module.scss';
 
 import WorkingHoursSchedule from '@/app/components/ui/WorkingHoursSchedule/WorkingHoursSchedule';
 
-import ActionHeader from '@/app/components/ui/Layout/ActionHeader/ActionHeader';
-import BackButton from '@/app/components/ui/Buttons/BackButton/BackButton';
-import EditButton from '@/app/components/ui/Buttons/EditButton/EditButton';
-import AppBreadcrumbs from '@/app/components/ui/Breadcrumbs/AppBreadcrumbs';
+
 
 import type { Location } from '@/services/types/locations.dto';
 import type { Club } from '@/services/types/clubs.dto';
@@ -86,25 +83,7 @@ const LocationDetails: React.FC<Props> = ({ location, club }) => {
 
   return (
     <section className={styles.wrapper}>
-      <ActionHeader>
-        <BackButton label="buttons.back" />
-        <div className="text-lg font-semibold">
-          <h1 className={styles.title}>{name || 'Локація без назви'}</h1>
-        </div>
-
-        {/* ✅ поправ шлях, якщо у тебе інша структура */}
-        <EditButton href={`/admin/locations/${id}/edit-location`} label="buttons.update" />
-      </ActionHeader>
-
-      <div className={styles.wrapperBreadcrumbs}>
-        <AppBreadcrumbs
-          items={[
-            { label: 'Admin', href: '/admin/dashboard' },
-            { label: 'Locations', href: '/admin/locations' },
-            { label: 'Location' },
-          ]}
-        />
-      </div>
+      
 
       <div className={styles.statusActiveWrapper}>
         <span className={isActive ? styles.statusActive : styles.statusInactive}>

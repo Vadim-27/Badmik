@@ -189,7 +189,7 @@ export default function NewStaff() {
         <AppBreadcrumbs
           items={[
             { label: 'Admin', href: '/admin/dashboard' },
-            { label: 'Access Control', href: '/admin/access-control' },
+            { label: 'Staff', href: '/admin/staff' },
             { label: 'Add Staff' },
           ]}
         />

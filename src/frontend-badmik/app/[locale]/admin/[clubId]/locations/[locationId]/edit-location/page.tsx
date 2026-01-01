@@ -5,10 +5,11 @@ import EditLocation from '@/app/components/shared/Locations/EditLocation/EditLoc
 
 type Params = {
   locationId: string;
+  clubId: string;
 };
 
 export default async function EditLocationPage({ params }: { params: Params }) {
-  const { locationId } = await params;
+  const { locationId, clubId } = await params;
   let location: Location | null = null;
 
   try {
@@ -24,7 +25,7 @@ export default async function EditLocationPage({ params }: { params: Params }) {
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
-      <EditLocation locationId={locationId} initialData={location} />
+      <EditLocation clubId={clubId} locationId={locationId} initialData={location} />
     </div>
   );
 }

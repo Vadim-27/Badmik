@@ -13,14 +13,21 @@ import { qk } from '../_shared/queryKeys';
 import { staffApiClient } from './api.client';
 import type { Staff, StaffRegisterDto, UpdateStaffDto, ChangeStaffPasswordDto } from '../types/staff.dto';
 
+export type StaffListParams = {
+  clubId?: string;
+  page?: number;
+  pageSize?: number;
+};
+
+
 
 export function useStaffList(
-  params?: { clubId?: string },
-  options?: Partial<UseQueryOptions<Staff[], unknown, Staff[], QueryKey>>
+  params: StaffListParams = {},
+  options?: Partial<UseQueryOptions<any, unknown, any, QueryKey>>,
 ) {
   return useQuery({
-    queryKey: qk.staff.list(params?.clubId),
-    queryFn: ({ signal }) => staffApiClient.list({ clubId: params?.clubId }, signal),
+    queryKey: qk.staff.list(params),
+    queryFn: ({ signal }) => staffApiClient.list(params, signal),
     placeholderData: keepPreviousData,
     staleTime: 5 * 60 * 1000,
     retry: 1,
@@ -29,19 +36,13 @@ export function useStaffList(
   });
 }
 
-// export function useStaffList(
-//   options?: Partial<UseQueryOptions<Staff[], unknown, Staff[], QueryKey>>
-// ) {
+// export function useStaffList(params: StaffListParams = {}) {
 //   return useQuery({
-//     queryKey: qk.staff.list(),
-//     queryFn: ({ signal }) => staffApiClient.list(signal),
-//     placeholderData: keepPreviousData,
-//     staleTime: 5 * 60 * 1000,
-//     retry: 1,
-//     refetchOnWindowFocus: false,
-//     ...(options ?? {}),
+//     queryKey: qk.staff.list(params),
+//     queryFn: () => staffApiClient.list(params),
 //   });
 // }
+
 
 type UseStaffByIdOptions = Partial<
   UseQueryOptions<Staff, unknown, Staff, QueryKey>
@@ -68,18 +69,7 @@ export function useCreateStaff() {
   });
 }
 
-// export function useUpdateStaff(id: string) {
-//   const qc = useQueryClient();
-//   return useMutation({
-//     mutationKey: ['staff', 'update', id],
-//     mutationFn: (dto: UpdateStaffDto) => staffApiClient.update(id, dto),
-//     onSuccess: () => {
-//       qc.invalidateQueries({ queryKey: qk.staff.list() });
-//       qc.invalidateQueries({ queryKey: qk.staff.byId(id) });
-//     },
-//   });
-// }
-// src/services/staff/queries.client.ts
+
 
 
 export function useUpdateStaff() {
