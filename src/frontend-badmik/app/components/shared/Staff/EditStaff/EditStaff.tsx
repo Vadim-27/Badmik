@@ -115,11 +115,11 @@ function mapFromDtoToForm(dto: Staff) {
   };
 }
 
-type Props = { staffId: string; initialData: Staff; title?: string };
+type Props = { clubIdParams?: string; staffId: string; initialData: Staff; title?: string };
 
 const toDateTimeISO = (d?: string | null) => (d ? new Date(d + 'T00:00:00Z').toISOString() : null);
 
-export default function EditStaff({ staffId, initialData }: Props) {
+export default function EditStaff({ clubIdParams, staffId, initialData }: Props) {
   const tAH = useTranslations('ActionHeader');
   const formRef = useRef<StaffFormHandle | null>(null);
   const [isChanged, setIsChanged] = useState(false);
@@ -139,6 +139,8 @@ export default function EditStaff({ staffId, initialData }: Props) {
     refetchOnWindowFocus: false,
   });
   const userId = (q.data as Staff)?.userId || null;
+
+   const isClubScoped = Boolean(clubIdParams);
 
   const updateStaff = useUpdateStaff();
   const assignRole = useAssignRoleForUser();
@@ -203,6 +205,8 @@ export default function EditStaff({ staffId, initialData }: Props) {
         isChanged={isChanged}
         setIsChanged={setIsChanged}
         defaultValues={defaultValues}
+        scopedClubId={clubIdParams}
+          isClubScoped={isClubScoped}
         onSubmitUpdate={async (_id, formValues) => {
           try {
            

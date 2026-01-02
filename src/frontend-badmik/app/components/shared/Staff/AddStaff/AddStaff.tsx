@@ -19,6 +19,7 @@ import { useCreateStaff } from '@/services/staff/queries.client';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import AppBreadcrumbs from '@/app/components/ui/Breadcrumbs/AppBreadcrumbs';
+import { buildHrefServer } from '@/lib/club-scope.server';
 
 import StaffFormNew, { StaffFormHandle, FormValues } from '../StaffForm/StaffFormNew';
 
@@ -39,7 +40,7 @@ function toDateOnly(dateStr?: string) {
   return dt.toISOString().slice(0, 10);
 }
 
-export default function NewStaff() {
+export default function NewStaff({ clubIdParams }: { clubIdParams?: string }) {
   const tAH = useTranslations('ActionHeader');
 
   const formRef = useRef<StaffFormHandle | null>(null);
@@ -64,15 +65,7 @@ export default function NewStaff() {
       return;
     }
 
-    // const buildWorkingHours = (wh: FormValues['workingHoursObj']) => ({
-    //   monday:    { from: wh.monday.from || null,    to: wh.monday.to || null },
-    //   tuesday:   { from: wh.tuesday.from || null,   to: wh.tuesday.to || null },
-    //   wednesday: { from: wh.wednesday.from || null, to: wh.wednesday.to || null },
-    //   thursday:  { from: wh.thursday.from || null,  to: wh.thursday.to || null },
-    //   friday:    { from: wh.friday.from || null,    to: wh.friday.to || null },
-    //   saturday:  { from: wh.saturday.from || null,  to: wh.saturday.to || null },
-    //   sunday:    { from: wh.sunday.from || null,    to: wh.sunday.to || null },
-    // });
+    
 
     const buildWorkingHours = (wh: FormValues['workingHours']) => {
       const days = [
@@ -174,6 +167,10 @@ export default function NewStaff() {
     }
   };
 
+  const Staff = buildHrefServer(clubIdParams, '/staff');
+
+  const isClubScoped = Boolean(clubIdParams);
+
   return (
     <>
       <ActionHeader>
@@ -189,7 +186,7 @@ export default function NewStaff() {
         <AppBreadcrumbs
           items={[
             { label: 'Admin', href: '/admin/dashboard' },
-            { label: 'Staff', href: '/admin/staff' },
+            { label: 'Staff', href: Staff },
             { label: 'Add Staff' },
           ]}
         />
@@ -202,6 +199,11 @@ export default function NewStaff() {
         setIsChanged={setIsChanged}
         onSubmitCreate={handleCreate}
         busy={createStaff.isPending}
+        scopedClubId={clubIdParams}
+        isClubScoped={isClubScoped}
+        defaultValues={{
+          clubId: clubIdParams ?? '', // для адміна клубу заповнюєтся з бекенду
+        }}
       />
 
       <Snackbar

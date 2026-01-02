@@ -672,13 +672,14 @@ import { useForm } from 'react-hook-form';
 import styles from './LocationsForm.module.scss';
 
 import ScrollArea from '@/app/components/ui/Scroll/ScrollArea';
-import ClubSelectFieldAdd from '@/app/components/shared/Staff/StaffForm/ClubSelectAdd/ClubSelectFieldAdd';
+import ClubSelectFieldAdd from '@/app/components/ui/InputSelectClubs/ClubSelectAdd/ClubSelectFieldAdd';
 import WorkingHoursField, {
   type WorkingHourDto,
 } from '@/app/components/ui/WorkingHoursField/WorkingHoursField';
 
 import SportsSelector from './SportsSelector/SportsSelector';
 import AmenitiesSelector from './AmenitiesSelector/AmenitiesSelector';
+import ClubReadonlyField from '@/app/components/ui/InputSelectClubs/ClubReadonlyField/ClubReadonlyField';
 
 export type LocationLabel =
   | 'None'
@@ -735,6 +736,8 @@ type Props = {
   isChanged?: boolean;
   setIsChanged?: (v: boolean) => void;
   busy?: boolean;
+  scopedClubId?: string;
+  isClubScoped?: boolean;
 };
 
 export type LocationFormHandle = {
@@ -763,7 +766,8 @@ const EMPTY_WORKING_HOURS: WorkingHourDto = {
 };
 
 const LocationForm = forwardRef<LocationFormHandle, Props>(function LocationForm(
-  { mode, locationId, defaultValues, onSubmitCreate, onSubmitUpdate, setIsChanged, busy },
+  { mode, locationId, defaultValues, onSubmitCreate, onSubmitUpdate, setIsChanged, busy, scopedClubId,
+    isClubScoped, },
   ref
 ) {
   const {
@@ -873,6 +877,18 @@ const LocationForm = forwardRef<LocationFormHandle, Props>(function LocationForm
                 <label className={styles.label}>
                   Клуб <span style={{ color: '#e63946' }}>*</span>
                 </label>
+                  {isClubScoped ? (
+                  // 🔹 Адмін КОНКРЕТНОГО клубу: клуб зафіксований, без вибору
+                  <ClubReadonlyField
+                    control={control}
+                    name="clubId"
+                    rootClassName={styles.comboRoot}
+                    inputClassName={`${styles.input} ${styles.inputChevron} ${
+                      errors.clubId ? styles.errorInput : ''
+                    }`}
+                    forcedClubId={scopedClubId}
+                  />
+                ) : (
                 <ClubSelectFieldAdd
                   control={control}
                   name="clubId"
@@ -884,7 +900,7 @@ const LocationForm = forwardRef<LocationFormHandle, Props>(function LocationForm
                   optionClassName={styles.option}
                   optionActiveClassName={styles.optionActive}
                   chevronClassName={styles.comboChevron}
-                />
+                />)}
                 {errors.clubId && <p className={styles.errorText}>{errors.clubId.message}</p>}
               </div>
 

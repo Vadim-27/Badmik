@@ -26,7 +26,7 @@ import css from './EditLocation.module.scss';
 type Props = {
   locationId: string;
   initialData: Location;
-  clubId?: string;
+  clubIdParams?: string;
 };
 
 /** helper: з DTO → у форму */
@@ -88,7 +88,7 @@ function mapFromDtoToForm(dto: Location): LocationFormValues {
   };
 }
 
-export default function EditLocation({ locationId, initialData, clubId }: Props) {
+export default function EditLocation({ locationId, initialData, clubIdParams }: Props) {
   const tAH = useTranslations('ActionHeader');
 
   const formRef = useRef<LocationFormHandle | null>(null);
@@ -205,7 +205,8 @@ export default function EditLocation({ locationId, initialData, clubId }: Props)
   };
 
   const anyPending = updateLocation.isPending;
-  const Locations = buildHrefServer(clubId, '/locations');
+  const Locations = buildHrefServer(clubIdParams, '/locations');
+  const isClubScoped = Boolean(clubIdParams);
 
   return (
     <>
@@ -240,6 +241,9 @@ export default function EditLocation({ locationId, initialData, clubId }: Props)
         setIsChanged={setIsChanged}
         onSubmitUpdate={handleUpdate}
         busy={anyPending}
+        scopedClubId={clubIdParams}
+        isClubScoped={isClubScoped}
+       
       />
 
       <Snackbar

@@ -25,7 +25,7 @@ export default async function EditLocationPage({ params }: { params: Params }) {
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
-      <EditLocation clubId={clubId} locationId={locationId} initialData={location} />
+      <EditLocation clubIdParams={clubId} locationId={locationId} initialData={location} />
     </div>
   );
 }
