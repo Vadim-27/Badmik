@@ -1,10 +1,15 @@
 import AddEmployee from '@/app/components/shared/Staff/AddStaff/AddStaff';
 
-const AddEmployeePage = () => {
-    return (
+type Params = {
+  clubId: string;
+};
+
+const AddEmployeePage = async ({ params }: { params: Params }) => {
+    const {   clubId } = await params;
+  return (
     <div>
-        <AddEmployee />
+      <AddEmployee clubIdParams={clubId} />
     </div>
-);
+  );
 };
 export default AddEmployeePage;

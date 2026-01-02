@@ -42,7 +42,7 @@ export default async function StaffEditPage({ params }: { params: Params }) {
     <div className="p-4 w-full min-h-screen">
       {/* передаємо початкові дані в клієнтський компонент */}
       {/* <EditStaff staffId={staffId} initialData={staff} title={t('editUserHeader')} /> */}
-      <EditStaff staffId={staffId} initialData={staff}  />
+      <EditStaff clubIdParams={clubId} staffId={staffId} initialData={staff}  />
     </div>
     </RQHydrate>
   );
