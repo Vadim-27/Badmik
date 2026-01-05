@@ -25,7 +25,7 @@ const LocationsPage = async ({
 
   return (
     <RQHydrate state={state}>
-      <div className="bg-gray-100 p-6 min-h-screen">
+      <div className="bg-gray-100 pt-0 p-4">
         <ActionHeader>
         <BackButton label="buttons.back"/>
         <h2 className="text-lg font-semibold">

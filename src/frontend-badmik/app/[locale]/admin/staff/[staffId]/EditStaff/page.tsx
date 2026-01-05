@@ -38,7 +38,7 @@ export default async function StaffPage({ params: { locale, staffId } }: PagePro
 
   return (
     <RQHydrate state={state}>
-    <div className="p-4 w-full min-h-screen">
+    <div className="pt-0 p-4 w-full ">
       {/* передаємо початкові дані в клієнтський компонент */}
       {/* <EditStaff staffId={staffId} initialData={staff} title={t('editUserHeader')} /> */}
       <EditStaff staffId={staffId} initialData={staff}  />

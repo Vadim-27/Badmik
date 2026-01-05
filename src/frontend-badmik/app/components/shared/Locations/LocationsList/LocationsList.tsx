@@ -1,14 +1,10 @@
-
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
 import styles from './LocationsList.module.scss';
 import Link from 'next/link';
 
-import {
-  useLocationsList,
-  useDeleteLocation,
-} from '@/services/locations/queries.client';
+import { useLocationsList, useDeleteLocation } from '@/services/locations/queries.client';
 import { useClubsList } from '@/services/clubs/queries.client';
 
 import type { Location } from '@/services/types/locations.dto';
@@ -20,16 +16,16 @@ import EditIcon from '@/app/assets/icons/Edit.svg';
 import TrashIcon from '@/app/assets/icons/Trash.svg';
 import ConfirmDialog from '@/app/components/ui/DeleteModal/ConfirmDialog';
 import SportsBadges from '@/app/components/ui/SportsBadges/SportsBadges';
+import Tooltip from '@/app/components/ui/Tooltip/Tooltip';
 
 type LocationsListProps = {
   clubId?: string;
 };
 
 const LocationsList = ({ clubId }: LocationsListProps) => {
-
   const isClubScoped = !!clubId;
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
-  const [clubFilter, setClubFilter] = useState<string>('all'); 
+  const [clubFilter, setClubFilter] = useState<string>('all');
 
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
@@ -40,7 +36,6 @@ const LocationsList = ({ clubId }: LocationsListProps) => {
   } | null>(null);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
-  
   useEffect(() => {
     const id = setTimeout(() => {
       setDebouncedSearch(search.trim());
@@ -48,19 +43,9 @@ const LocationsList = ({ clubId }: LocationsListProps) => {
     return () => clearTimeout(id);
   }, [search]);
 
+  const effectiveClubId = isClubScoped ? clubId : clubFilter === 'all' ? undefined : clubFilter;
 
-  const effectiveClubId = isClubScoped
-    ? clubId
-    : clubFilter === 'all'
-      ? undefined
-      : clubFilter;
-
-  const {
-    data: locationsData = [],
-    isLoading,
-    isFetching,
-  } = useLocationsList(effectiveClubId);
-
+  const { data: locationsData = [], isLoading, isFetching } = useLocationsList(effectiveClubId);
 
   // const {
   //   data: locationsData = [],
@@ -71,7 +56,6 @@ const LocationsList = ({ clubId }: LocationsListProps) => {
   const deleteLocation = useDeleteLocation();
   const locations: Location[] = locationsData ?? [];
 
- 
   const { data: clubsData = [] } = useClubsList(undefined, {
     staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
@@ -97,9 +81,7 @@ const LocationsList = ({ clubId }: LocationsListProps) => {
 
       // пошук
       if (debouncedSearch) {
-        const haystack = `${loc.name ?? ''} ${loc.city ?? ''} ${
-          loc.address ?? ''
-        }`.toLowerCase();
+        const haystack = `${loc.name ?? ''} ${loc.city ?? ''} ${loc.address ?? ''}`.toLowerCase();
         if (!haystack.includes(debouncedSearch.toLowerCase())) return false;
       }
 
@@ -178,7 +160,7 @@ const LocationsList = ({ clubId }: LocationsListProps) => {
       {/* Таблиця */}
       <div className={styles.tableOuter}>
         <div className={styles.tableWrapper}>
-            {busy && <SpinnerOverlay fullscreen={false} />}
+          {busy && <SpinnerOverlay fullscreen={false} />}
           <table className={styles.table}>
             <thead>
               <tr>
@@ -204,42 +186,28 @@ const LocationsList = ({ clubId }: LocationsListProps) => {
                   const sportsText =
                     loc.sports && loc.sports.length
                       ? loc.sports
-                          .map(
-                            (s) =>
-                              `${s.sportType}${
-                                s.courtCount ? ` (${s.courtCount})` : ''
-                              }`,
-                          )
+                          .map((s) => `${s.sportType}${s.courtCount ? ` (${s.courtCount})` : ''}`)
                           .join(', ')
                       : loc.sportTypes && loc.sportTypes.length
                         ? loc.sportTypes.join(', ')
                         : '—';
 
-                  const clubName =
-                    (loc.clubId && clubNameById[loc.clubId]) || '—';
+                  const clubName = (loc.clubId && clubNameById[loc.clubId]) || '—';
 
                   return (
                     <tr key={loc.id}>
                       {/* Локація */}
                       <td>
-                        <div className={styles.locationName}>
-                          {loc.name || 'Без назви'}
-                        </div>
+                        <div className={styles.locationName}>{loc.name || 'Без назви'}</div>
                         {loc.priceText && (
-                          <div className={styles.locationSub}>
-                            Ціна: {loc.priceText}
-                          </div>
+                          <div className={styles.locationSub}>Ціна: {loc.priceText}</div>
                         )}
                       </td>
 
                       {/* Адреса */}
                       <td>
                         {loc.city || '—'}
-                        {loc.address && (
-                          <div className={styles.cellSubtitle}>
-                            {loc.address}
-                          </div>
-                        )}
+                        {loc.address && <div className={styles.cellSubtitle}>{loc.address}</div>}
                       </td>
 
                       {/* Клуб */}
@@ -249,17 +217,13 @@ const LocationsList = ({ clubId }: LocationsListProps) => {
                       <td>
                         <div className={styles.sportsCell}>
                           <SportsBadges sports={loc.sports} sportTypes={loc.sportTypes} />
-                          </div>
+                        </div>
                       </td>
 
                       {/* Статус */}
                       <td>
                         <span
-                          className={
-                            loc.isActive
-                              ? styles.statusActive
-                              : styles.statusInactive
-                          }
+                          className={loc.isActive ? styles.statusActive : styles.statusInactive}
                         >
                           {loc.isActive ? 'Активна' : 'Неактивна'}
                         </span>
@@ -277,34 +241,40 @@ const LocationsList = ({ clubId }: LocationsListProps) => {
                       {/* Дії */}
                       <td>
                         <div className={styles.actionsWrapper}>
-                          <Link
-                            href={`/admin/${loc.clubId}/locations/${loc.id}`}
-                            className={styles.iconBtn}
-                            title="Переглянути"
-                            aria-label="Переглянути"
-                          >
-                            <EyeIcon className={styles.icon} aria-hidden />
-                          </Link>
+                          <Tooltip content="Переглянути">
+                            <Link
+                              href={`/admin/${loc.clubId}/locations/${loc.id}`}
+                              className={styles.iconBtn}
+                              title="Переглянути"
+                              aria-label="Переглянути"
+                            >
+                              <EyeIcon className={styles.icon} aria-hidden />
+                            </Link>
+                          </Tooltip>
 
-                          <Link
-                            href={`/admin/${loc.clubId}/locations/${loc.id}/edit-location`}
-                            className={styles.iconBtn}
-                            title="Редагувати"
-                            aria-label="Редагувати"
-                          >
-                            <EditIcon className={styles.icon} aria-hidden />
-                          </Link>
+                          <Tooltip content="Редагувати">
+                            <Link
+                              href={`/admin/${loc.clubId}/locations/${loc.id}/edit-location`}
+                              className={styles.iconBtn}
+                              title="Редагувати"
+                              aria-label="Редагувати"
+                            >
+                              <EditIcon className={styles.icon} aria-hidden />
+                            </Link>
+                          </Tooltip>
 
-                          <button
-                            type="button"
-                            className={styles.iconBtn}
-                            title="Видалити"
-                            aria-label="Видалити"
-                            onClick={() => askDelete(loc.id, loc.name)}
-                            disabled={deleteLocation.isPending}
-                          >
-                            <TrashIcon className={styles.icon} aria-hidden />
-                          </button>
+                          <Tooltip content="Видалити">
+                            <button
+                              type="button"
+                              className={styles.iconBtn}
+                              title="Видалити"
+                              aria-label="Видалити"
+                              onClick={() => askDelete(loc.id, loc.name)}
+                              disabled={deleteLocation.isPending}
+                            >
+                              <TrashIcon className={styles.icon} aria-hidden />
+                            </button>
+                          </Tooltip>
                         </div>
                       </td>
                     </tr>
@@ -315,8 +285,6 @@ const LocationsList = ({ clubId }: LocationsListProps) => {
           </table>
         </div>
       </div>
-
-      
 
       <ConfirmDialog
         open={isConfirmOpen}
@@ -335,4 +303,3 @@ const LocationsList = ({ clubId }: LocationsListProps) => {
 };
 
 export default LocationsList;
-

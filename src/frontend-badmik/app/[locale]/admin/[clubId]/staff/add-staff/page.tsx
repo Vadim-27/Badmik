@@ -7,7 +7,7 @@ type Params = {
 const AddEmployeePage = async ({ params }: { params: Params }) => {
     const {   clubId } = await params;
   return (
-    <div>
+    <div className="pt-0 p-4 w-full ">
       <AddEmployee clubIdParams={clubId} />
     </div>
   );
