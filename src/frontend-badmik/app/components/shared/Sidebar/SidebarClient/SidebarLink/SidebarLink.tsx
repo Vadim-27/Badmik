@@ -10,15 +10,22 @@ type Props = {
   children: React.ReactNode;
   open: boolean;
   count?: number;
-
+  exact?: boolean;
 };
 
-const SidebarLink = ({ href, children, open,  count}: Props) => {
+const SidebarLink = ({ href, children, open, exact , count}: Props) => {
   const pathname = usePathname();
  
+  const normalize = (s: string) => s.replace(/\/+$/, '');
   // const isActive = pathname === href;
   const pathnameWithoutLocale = pathname.replace(/^\/(uk|en)/, '');
-  const isActive = pathnameWithoutLocale.startsWith(href);
+  // const isActive = pathnameWithoutLocale.startsWith(href);
+   const cur = normalize(pathnameWithoutLocale);
+  const target = normalize(href);
+
+  const isActive = exact
+    ? cur === target
+    : cur === target || cur.startsWith(target + '/');
   
 
   return (

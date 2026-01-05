@@ -17,7 +17,7 @@ const AdminPage = async () => {
   ]);
   return (
      <RQHydrate state={state}>
-    <div className="admin-page bg-gray-100 p-6">
+    <div className="admin-page bg-gray-100 pt-0 p-4 ">
      
         <ClubListHeader />
         <AppBreadcrumbs 

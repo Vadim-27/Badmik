@@ -27,11 +27,11 @@ const drawerWidthClosed = 70;
 
 export default function SidebarClient({ role, userId, email, isAdmin, clubId }: Props) {
   const clubIdByToken = !isAdmin ? clubId : undefined;
-  const clubLink = (!isAdmin && clubIdByToken) ? `` : 'clubs';
+  // const clubLink = (!isAdmin && clubIdByToken) ? `` : 'clubs';
   const [open, setOpen] = useState(true);
   const params = useParams();
   const t = useTranslations("Sidebar");
-
+  
   // const { buildHref } = useClubScope();
 
    // Локальний buildHref, більше не юзаємо useClubScope
@@ -123,7 +123,19 @@ export default function SidebarClient({ role, userId, email, isAdmin, clubId }: 
               )}
             </SidebarLink>
 
-            <SidebarLink  href={buildHref(`${clubLink}`)} open={open} count={6}>
+            {isAdmin && (
+  <SidebarLink href={buildHref('clubs')} open={open} count={6}>
+    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+      <rect x="3" y="4" width="7" height="7" />
+      <rect x="14" y="4" width="7" height="7" />
+      <rect x="14" y="15" width="7" height="7" />
+      <rect x="3" y="15" width="7" height="7" />
+    </svg>
+    {open && <span>{t('Clubs')}</span>}
+  </SidebarLink>
+)}
+
+            {/* <SidebarLink  href={buildHref(`${clubLink}`)} open={open} count={6}>
               <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                 <rect x="3" y="4" width="7" height="7" />
                 <rect x="14" y="4" width="7" height="7" />
@@ -132,7 +144,15 @@ export default function SidebarClient({ role, userId, email, isAdmin, clubId }: 
               </svg>
               {open && (<span>{t('Clubs')}</span>
               )}
-            </SidebarLink>
+            </SidebarLink> */}
+            {!isAdmin && clubIdByToken && (
+  <SidebarLink href={buildHref('')} open={open} exact>
+    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+      <path d="M4 6h16M4 12h16M4 18h16" />
+    </svg>
+    {open && <span>Клуб</span>}
+  </SidebarLink>
+)}
             <SidebarLink  href={buildHref(`locations`)} open={open} count={6}>
               <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                 <rect x="3" y="4" width="7" height="7" />

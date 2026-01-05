@@ -16,7 +16,7 @@ const UsersClub = async ({
   
 
   return (
-    <div className="p-4 w-full h-screen">
+    <div className="pt-0 p-4 w-full h-screen">
       <ActionHeader>
         <BackButton label="buttons.back"/>
         <h2 className="text-lg font-semibold">{t('usersHeader')}</h2>

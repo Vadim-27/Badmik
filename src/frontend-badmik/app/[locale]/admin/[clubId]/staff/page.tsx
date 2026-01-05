@@ -37,7 +37,7 @@ const StaffPage = async ({
 
     return (
       <RQHydrate state={state}>
-    <div className="p-4 w-full h-screen">
+    <div className="pt-0 p-4 w-full ">
         <ActionHeader>
         <BackButton label="buttons.back"/>
         <h2 className="text-lg font-semibold">{t('employeeHeader')}</h2>
