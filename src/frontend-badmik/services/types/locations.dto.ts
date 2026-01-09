@@ -1,6 +1,7 @@
 // src/services/types/locations.dto.ts
+import type { WorkingHoursDto } from '@/services/types/working-hours.dto';
 
-import type { WorkingHourDto } from '@/app/components/ui/WorkingHoursField/WorkingHoursField';
+// import type { WorkingHourDto } from '@/app/components/ui/WorkingHoursField/WorkingHoursField';
 
 export type SportType =
   | 'Badminton'
@@ -61,7 +62,7 @@ export type Location = {
   logo: string | null;
   amenities: AmenityType[] | null;
   images: LocationImageDto[] | null;
-  workingHours: WorkingHourDto;
+  workingHours: WorkingHoursDto;
   createdAt: string;
   updatedAt: string;
 };
@@ -80,7 +81,7 @@ export type CreateLocationDto = {
   logo: string | null;
   amenities: AmenityType[] | null;
   sports: LocationSportDto[] | null;
-  workingHours: WorkingHourDto;
+  workingHours: WorkingHoursDto;
 };
 
 // DTO для оновлення

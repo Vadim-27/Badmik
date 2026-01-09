@@ -3,7 +3,7 @@
 'use client';
 
 import { forwardRef, useImperativeHandle, useCallback, useEffect, useMemo, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch  } from 'react-hook-form';
 import styles from './StaffFormNew.module.scss';
 import ClubSelectFieldAdd from '@/app/components/ui/InputSelectClubs/ClubSelectAdd/ClubSelectFieldAdd';
 import EmploymentTypeSelectField, {
@@ -11,9 +11,16 @@ import EmploymentTypeSelectField, {
 } from '@/app/components/shared/Staff/StaffForm/EmploymentTypeSelectField/EmploymentTypeSelectField';
 import AvatarUploadField from '@/app/components/shared/Staff/StaffForm/AvatarUploadField/AvatarUploadField';
 import WorkingHoursField from '@/app/components/ui/WorkingHoursField/WorkingHoursField';
-import StaffActionsBar from '@/app/components/shared/Staff/StaffForm/StaffActionsBar/StaffActionsBar';
+// import StaffActionsBar from '@/app/components/shared/Staff/StaffForm/StaffActionsBar/StaffActionsBar';
 import SalaryField from '@/app/components/shared/Staff/StaffForm/SalaryField/SalaryField';
 import ClubReadonlyField from '@/app/components/ui/InputSelectClubs/ClubReadonlyField/ClubReadonlyField';
+import StaffPositionSelectField, {
+  type StaffPositionType,
+} from '@/app/components/shared/Staff/StaffForm/StaffPositionSelectField/StaffPositionSelectField';
+import StaffStatusSelectField from '@/app/components/shared/Staff/StaffForm/StaffStatusSelectField/StaffStatusSelectField';
+import PasswordChangeModal from '@/app/components/shared/Staff/StaffForm/PasswordChangeModal/PasswordChangeModal';
+import { useChangeStaffPassword } from '@/services/staff/queries.client';
+import RoleSelectField from '@/app/components/shared/Staff/StaffForm/RoleSelectField/RoleSelectField';
 
 import ScrollArea from '@/app/components/ui/Scroll/ScrollArea';
 
@@ -32,6 +39,7 @@ export type WorkingHourDto = {
 
 export type FormValues = {
   employmentType: EmploymentType;
+  positionType: StaffPositionType | null;
   email: string;
   password: string;
   firstName: string;
@@ -110,9 +118,12 @@ const StaffFormNew = forwardRef<StaffFormHandle, Props>(function EmployeeForm(
   }: Props,
   ref
 ) {
-  const [isPasswordChangeEnabled, setPasswordChangeEnabled] = useState(false);
+  // const [isPasswordChangeEnabled, setPasswordChangeEnabled] = useState(false);
+  const [isPasswordModalOpen, setPasswordModalOpen] = useState(false);
+
   // сьогодні у форматі yyyy-mm-dd для min у даті
   const todayStr = useMemo(() => new Date().toISOString().slice(0, 10), []);
+  const changePassword = useChangeStaffPassword();
 
   const {
     register,
@@ -137,6 +148,7 @@ const StaffFormNew = forwardRef<StaffFormHandle, Props>(function EmployeeForm(
       startDate: todayStr,
       employmentType: 'Employee',
       clubId: scopedClubId ?? '',
+      positionType: null,
 
       // workingHours: '',
       workingHours: {
@@ -162,6 +174,8 @@ const StaffFormNew = forwardRef<StaffFormHandle, Props>(function EmployeeForm(
       ...defaultValues,
     },
   });
+
+const clubId = useWatch({ control, name: 'clubId' });
 
   useEffect(() => {
     setIsChanged?.(isDirty && isValid);
@@ -231,14 +245,16 @@ const StaffFormNew = forwardRef<StaffFormHandle, Props>(function EmployeeForm(
                 }}
               />
 
-              <StaffActionsBar<FormValues>
-                staffId={staffId}
-                control={control}
-                showRolesButton={mode === 'edit'}
-                onEnablePasswordChangeAction={() =>
-                  setPasswordChangeEnabled(!isPasswordChangeEnabled)
-                }
-              />
+              {/* {mode === 'edit' && (
+                <StaffActionsBar<FormValues>
+                  staffId={staffId}
+                  control={control}
+                  showRolesButton={mode === 'edit'}
+                  onEnablePasswordChangeAction={() =>
+                    setPasswordChangeEnabled(!isPasswordChangeEnabled)
+                  }
+                />
+              )} */}
             </div>
             <div className={styles.formGrid}>
               {/* First name */}
@@ -337,9 +353,47 @@ const StaffFormNew = forwardRef<StaffFormHandle, Props>(function EmployeeForm(
                   {errors.password && <p className={styles.errorText}>{errors.password.message}</p>}
                 </div>
               )}
+              
+              {/* Role */}
+{mode === 'edit' && (
+  <div>
+    <label className={styles.label}>Роль</label>
+
+    <RoleSelectField<FormValues>
+      control={control}
+      name="roleId"
+      clubId={clubId}
+      rootClassName={styles.comboRoot}
+      inputClassName={`${styles.input} ${styles.inputChevron}`}
+      optionsClassName={styles.options}
+      optionClassName={styles.option}
+      optionActiveClassName={styles.optionActive}
+      chevronClassName={styles.comboChevron}
+      placeholder="Оберіть роль…"
+    />
+  </div>
+)}
+
 
               {/*Change Password */}
-              {isPasswordChangeEnabled && (
+
+              {mode === 'edit' && (
+                <div>
+                  <label className={styles.label}>Пароль</label>
+                  <div
+                    className={styles.inputButton}
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => setPasswordModalOpen(true)}
+                    onKeyDown={(e) => e.key === 'Enter' && setPasswordModalOpen(true)}
+                  >
+                    <span className={styles.inputButtonHint}>Змінити пароль</span>
+                    <span className={styles.inputButtonIcon}>✎</span>
+                  </div>
+                </div>
+              )}
+
+              {/* {isPasswordChangeEnabled && (
                 <div>
                   <label className={styles.label}>Зміна паролю</label>
                   <input
@@ -365,7 +419,7 @@ const StaffFormNew = forwardRef<StaffFormHandle, Props>(function EmployeeForm(
                   />
                   {errors.password && <p className={styles.errorText}>{errors.password.message}</p>}
                 </div>
-              )}
+              )} */}
 
               {/* Title */}
               <div>
@@ -438,6 +492,46 @@ const StaffFormNew = forwardRef<StaffFormHandle, Props>(function EmployeeForm(
                     chevronClassName={styles.comboChevron}
                   />
                 )}
+              </div>
+
+              {/* staff status*/}
+
+              {mode === 'edit' && (
+                <div>
+                  <label className={styles.label}>Активність</label>
+
+                  <StaffStatusSelectField<FormValues>
+                    control={control}
+                    name="staffStatus"
+                    rootClassName={styles.comboRoot}
+                    inputClassName={`${styles.input} ${styles.inputChevron}`}
+                    optionsClassName={styles.options}
+                    optionClassName={styles.option}
+                    optionActiveClassName={styles.optionActive}
+                    chevronClassName={styles.comboChevron}
+                  />
+                </div>
+              )}
+
+              {/* Staff Position */}
+              <div>
+                <label className={styles.label}>
+                  Position <span style={{ color: '#e63946' }}>*</span>
+                </label>
+
+                <StaffPositionSelectField<FormValues>
+                  control={control}
+                  name="positionType"
+                  rootClassName={styles.comboRoot}
+                  inputClassName={`${styles.input} ${styles.inputChevron} ${
+                    errors.positionType ? styles.errorInput : ''
+                  }`}
+                  optionsClassName={styles.options}
+                  optionClassName={styles.option}
+                  optionActiveClassName={styles.optionActive}
+                  chevronClassName={styles.comboChevron}
+                  placeholder="Оберіть посаду…"
+                />
               </div>
 
               {/* Date of Birth */}
@@ -572,6 +666,14 @@ const StaffFormNew = forwardRef<StaffFormHandle, Props>(function EmployeeForm(
               />
               {errors.notes && <p className={styles.errorText}>{errors.notes.message}</p>}
             </div>
+            {/* <PasswordChangeModal
+  open={isPasswordModalOpen}
+  onClose={() => setPasswordModalOpen(false)}
+  staffEmail={getValues('email')}
+  onSubmit={async (newPassword) => {
+    // Тут або викликаєш пропс, або напряму мутацію (краще — наверху в EditStaff)
+  }}
+/> */}
           </form>
         </ScrollArea>
       </div>
@@ -590,6 +692,15 @@ const StaffFormNew = forwardRef<StaffFormHandle, Props>(function EmployeeForm(
           <div className="spinner" />
         </div>
       )}
+      <PasswordChangeModal
+  open={isPasswordModalOpen}
+  onClose={() => setPasswordModalOpen(false)}
+  onSubmit={async (newPassword) => {
+     if (!staffId) return; // або throw new Error('No staffId')
+    await changePassword.mutateAsync({ staffId, password: newPassword });
+    setPasswordModalOpen(false);
+  }}
+/>
     </div>
   );
 });

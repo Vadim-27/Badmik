@@ -420,9 +420,24 @@ const ClubForm = forwardRef<ClubFormHandle, Props>(function ClubForm(
         await onSubmitCreate(normalized);
       }
 
+      // if (mode === 'create') {
+      //   reset(normalized);
+      // }
+
       if (mode === 'create') {
-        reset(normalized);
-      }
+  reset({
+    name: '',
+    alias: '',
+    city: '',
+    address: '',
+    email: '',
+    phone: '',
+    website: '',
+    description: '',
+    isActive: true,
+    sortOrder: 1,
+  });
+}
 
       setIsChanged?.(false);
     },

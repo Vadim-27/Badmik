@@ -4,6 +4,8 @@
 export type StaffStatus = "New" | "Active" | "Disabled" | "Deleted";
 export type StaffEmploymentType = "Employee" | "Contractor" | "PartTime" | "Volunteer";
 export type SalaryType = "Hourly" | "Salary" | "PerTraining";
+export type StaffPositionType = "Trainer" | "Manager" | "Administrator" | "Accountant";
+
 
 export type TimeRangeDto = { from: string | null; to: string | null };
 export type WorkingHoursDto = {
@@ -45,6 +47,8 @@ export interface Staff {
   currency: string;
 
   payrollNotes: string;
+  positionType?: StaffPositionType | null;
+
   timeZone: string;
   workingHours: string;
   workingHoursExceptions: string;
@@ -81,6 +85,7 @@ export interface StaffRegisterDto {
   monthlySalary?: number;
   currency?: string | null;
   payrollNotes?: string | null;
+  positionType?: StaffPositionType | null;
 
   timeZone?: string | null;
 
@@ -120,6 +125,7 @@ export interface UpdateStaffDto {
   monthlySalary?: number;
   currency?: string | null;
   payrollNotes?: string | null;
+  positionType?: StaffPositionType | null;
 
   timeZone?: string | null;
   workingHours?: WorkingHoursDto | null; // ⬅️ було string, треба об’єкт

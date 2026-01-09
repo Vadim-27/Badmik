@@ -120,6 +120,7 @@ export default function NewStaff({ clubIdParams }: { clubIdParams?: string }) {
 
       staffStatus: (v.staffStatus as StaffRegisterDto['staffStatus']) ?? 'New',
       employmentType: (v.employmentType as StaffRegisterDto['employmentType']) ?? 'Employee',
+      positionType: v.positionType ?? null,
 
       title: v.title || null,
       startDate: toDateOnly(v.startDate),
