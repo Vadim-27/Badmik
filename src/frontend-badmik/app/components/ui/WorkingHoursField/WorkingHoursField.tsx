@@ -1,6 +1,7 @@
 'use client';
 
 import { Controller, type Control, type FieldValues, type Path } from 'react-hook-form';
+import type { WorkingHoursDto, TimeRangeDto } from '@/services/types/working-hours.dto';
 import { useState } from 'react';
 import styles from './WorkingHoursField.module.scss';
 
@@ -16,8 +17,8 @@ const DAYS = [
 
 type DayKey = typeof DAYS[number]['key'];
 
-export type TimeRangeDto = { from: string | null; to: string | null };
-export type WorkingHourDto = Record<DayKey, TimeRangeDto>;
+// export type TimeRangeDto = { from: string | null; to: string | null };
+// export type WorkingHourDto = Record<DayKey, TimeRangeDto>;
 
 type Props<TFieldValues extends FieldValues> = {
   control: Control<TFieldValues>;
@@ -39,15 +40,15 @@ export default function WorkingHoursField<TFieldValues extends FieldValues>({
   const isValidRange = (from: string | null, to: string | null) =>
     Boolean(from && to && from < to);
 
-  const EMPTY: WorkingHourDto = {
-    monday: { from: null, to: null },
-    tuesday: { from: null, to: null },
-    wednesday: { from: null, to: null },
-    thursday: { from: null, to: null },
-    friday: { from: null, to: null },
-    saturday: { from: null, to: null },
-    sunday: { from: null, to: null },
-  };
+const EMPTY: WorkingHoursDto = {
+  monday: { from: null, to: null },
+  tuesday: { from: null, to: null },
+  wednesday: { from: null, to: null },
+  thursday: { from: null, to: null },
+  friday: { from: null, to: null },
+  saturday: { from: null, to: null },
+  sunday: { from: null, to: null },
+};
 
   return (
     <Controller
@@ -55,21 +56,21 @@ export default function WorkingHoursField<TFieldValues extends FieldValues>({
       name={name}
       defaultValue={EMPTY as any}
       render={({ field: { value, onChange }, fieldState }) => {
-        const hours: WorkingHourDto = (value as WorkingHourDto) ?? EMPTY;
+        const hours: WorkingHoursDto = (value as WorkingHoursDto) ?? EMPTY;
 
-        const emit = (next: WorkingHourDto) => {
+        const emit = (next: WorkingHoursDto) => {
           onChange(next as any);
           onSerializedChangeAction?.(JSON.stringify(next));
         };
 
         const setDay = (day: DayKey, patch: Partial<TimeRangeDto>) => {
           const prev = hours[day] ?? { from: null, to: null };
-          const next: WorkingHourDto = { ...hours, [day]: { ...prev, ...patch } };
+          const next: WorkingHoursDto = { ...hours, [day]: { ...prev, ...patch } };
           emit(next);
         };
 
         const applyWeekdays = () => {
-          const next: WorkingHourDto = { ...hours };
+          const next: WorkingHoursDto = { ...hours };
           for (const d of ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'] as const) {
             next[d] = { from: bulkFrom, to: bulkTo };
           }

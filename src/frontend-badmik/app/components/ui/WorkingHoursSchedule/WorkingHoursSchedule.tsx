@@ -2,7 +2,8 @@
 
 import React from 'react';
 import styles from './WorkingHoursSchedule.module.scss';
-import type { WorkingHourDto } from '@/app/components/ui/WorkingHoursField/WorkingHoursField';
+// import type { WorkingHourDto } from '@/app/components/ui/WorkingHoursField/WorkingHoursField';
+import type { WorkingHoursDto, TimeRangeDto } from '@/services/types/working-hours.dto';
 
 const DAYS = [
   { key: 'monday',    label: 'Понеділок' },
@@ -17,11 +18,11 @@ const DAYS = [
 type DayKey = typeof DAYS[number]['key'];
 
 type Props = {
-  value?: WorkingHourDto | null;
+  value?: WorkingHoursDto | null;
   title?: string;
 };
 
-const EMPTY: WorkingHourDto = {
+const EMPTY: WorkingHoursDto = {
   monday: { from: null, to: null },
   tuesday: { from: null, to: null },
   wednesday: { from: null, to: null },

@@ -16,9 +16,9 @@ import styles from './LocationsForm.module.scss';
 
 import ScrollArea from '@/app/components/ui/Scroll/ScrollArea';
 import ClubSelectFieldAdd from '@/app/components/ui/InputSelectClubs/ClubSelectAdd/ClubSelectFieldAdd';
-import WorkingHoursField, {
-  type WorkingHourDto,
-} from '@/app/components/ui/WorkingHoursField/WorkingHoursField';
+import WorkingHoursField from '@/app/components/ui/WorkingHoursField/WorkingHoursField';
+// import type { WorkingHoursDto } from '@/services/types/working-hours.dto';
+import type { WorkingHoursDto, TimeRangeDto } from '@/services/types/working-hours.dto';
 
 import SportsSelector from './SportsSelector/SportsSelector';
 import AmenitiesSelector from './AmenitiesSelector/AmenitiesSelector';
@@ -67,7 +67,7 @@ export type LocationFormValues = {
   };
 
   shortDescription?: string;
-  workingHours: WorkingHourDto;
+  workingHours: WorkingHoursDto;
 };
 
 type Props = {
@@ -98,7 +98,7 @@ const LABEL_OPTIONS: { value: LocationLabel | ''; label: string }[] = [
   { value: 'Verified',   label: 'Verified' },
 ];
 
-const EMPTY_WORKING_HOURS: WorkingHourDto = {
+const EMPTY_WORKING_HOURS: WorkingHoursDto = {
   monday:    { from: null, to: null },
   tuesday:   { from: null, to: null },
   wednesday: { from: null, to: null },
@@ -107,6 +107,33 @@ const EMPTY_WORKING_HOURS: WorkingHourDto = {
   saturday:  { from: null, to: null },
   sunday:    { from: null, to: null },
 };
+
+const normalizeTime = (v: string | null) => {
+  const t = v?.trim();
+  return t ? t : null;
+};
+
+const normalizeDay = (d: TimeRangeDto | null): TimeRangeDto | null => {
+  if (!d) return null;
+
+  const from = normalizeTime(d.from);
+  const to = normalizeTime(d.to);
+
+  // якщо день НЕ заповнений повністю — для API це вихідний => null
+  if (!from || !to) return null;
+
+  return { from, to };
+};
+
+const normalizeWorkingHours = (wh: WorkingHoursDto): WorkingHoursDto => ({
+  monday: normalizeDay(wh.monday),
+  tuesday: normalizeDay(wh.tuesday),
+  wednesday: normalizeDay(wh.wednesday),
+  thursday: normalizeDay(wh.thursday),
+  friday: normalizeDay(wh.friday),
+  saturday: normalizeDay(wh.saturday),
+  sunday: normalizeDay(wh.sunday),
+});
 
 const LocationForm = forwardRef<LocationFormHandle, Props>(function LocationForm(
   { mode, locationId, defaultValues, onSubmitCreate, onSubmitUpdate, setIsChanged, busy, scopedClubId,
@@ -169,6 +196,7 @@ const LocationForm = forwardRef<LocationFormHandle, Props>(function LocationForm
         ...raw,
         priceText: raw.priceText?.trim() || '',
         order: Number.isFinite(raw.order) ? raw.order : 1,
+        workingHours: normalizeWorkingHours(raw.workingHours),
         sports: {
           ...raw.sports,
           badmintonCourts: Number(raw.sports.badmintonCourts) || 0,
@@ -186,8 +214,43 @@ const LocationForm = forwardRef<LocationFormHandle, Props>(function LocationForm
         await onSubmitCreate(normalized);
       }
 
-      if (mode === 'create') {
-        reset(normalized);
+      // if (mode === 'create') {
+      //   reset(normalized);
+      // }
+      if(mode === 'create'){
+        reset({
+          clubId: '',
+          label: '',
+          name: '',
+          city: '',
+          address: '',
+          priceText: '',
+          order: 1,
+          isActive: true,
+          sports: {
+            badmintonEnabled: true,
+            badmintonCourts: 1,
+            squashEnabled: false,
+            squashCourts: 0,
+            padelEnabled: false,
+            padelCourts: 0,
+            pickleballEnabled: false,
+            pickleballCourts: 0,
+            tableTennisEnabled: false,
+            tableTennisTables: 0,
+            tennisEnabled: false,
+            tennisCourts: 0,
+          },
+          amenities: {
+            parking: false,
+            water: false,
+            conditioner: false,
+            shower: false,
+            wifi: false,
+          },
+          shortDescription: '',
+          workingHours: EMPTY_WORKING_HOURS,
+        });
       }
 
       setIsChanged?.(false);
