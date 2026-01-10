@@ -100,6 +100,7 @@ function mapFromDtoToForm(dto: Staff) {
     phone: (dto as any).phoneNumber ?? null,
     startDate: dto.startDate ? dto.startDate.slice(0, 10) : '',
     employmentType: dto.employmentType,
+    positionType: dto.positionType ?? null,
     imageUrl: (dto as any).imageUrl ?? '',
     salaryType: dto.salaryType,
     hourlyRate: dto.hourlyRate ?? 0,
@@ -115,11 +116,11 @@ function mapFromDtoToForm(dto: Staff) {
   };
 }
 
-type Props = { staffId: string; initialData: Staff; title?: string };
+type Props = { clubIdParams?: string; staffId: string; initialData: Staff; title?: string };
 
 const toDateTimeISO = (d?: string | null) => (d ? new Date(d + 'T00:00:00Z').toISOString() : null);
 
-export default function EditStaff({ staffId, initialData }: Props) {
+export default function EditStaff({ clubIdParams, staffId, initialData }: Props) {
   const tAH = useTranslations('ActionHeader');
   const formRef = useRef<StaffFormHandle | null>(null);
   const [isChanged, setIsChanged] = useState(false);
@@ -139,6 +140,8 @@ export default function EditStaff({ staffId, initialData }: Props) {
     refetchOnWindowFocus: false,
   });
   const userId = (q.data as Staff)?.userId || null;
+
+   const isClubScoped = Boolean(clubIdParams);
 
   const updateStaff = useUpdateStaff();
   const assignRole = useAssignRoleForUser();
@@ -168,6 +171,7 @@ export default function EditStaff({ staffId, initialData }: Props) {
       hourlyRate: formValues.hourlyRate ?? 0,
       monthlySalary: formValues.monthlySalary ?? 0,
       currency: formValues.currency ?? null,
+      positionType: formValues.positionType ?? null,
       // perTrainingRate: formValues.perTrainingRate ?? 0,
       payrollNotes: formValues.payrollNotes ?? null,
       timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone ?? 'UTC',
@@ -203,6 +207,8 @@ export default function EditStaff({ staffId, initialData }: Props) {
         isChanged={isChanged}
         setIsChanged={setIsChanged}
         defaultValues={defaultValues}
+        scopedClubId={clubIdParams}
+          isClubScoped={isClubScoped}
         onSubmitUpdate={async (_id, formValues) => {
           try {
            
@@ -212,6 +218,8 @@ export default function EditStaff({ staffId, initialData }: Props) {
             const uId = formValues.userId ?? userId;
 
             const dto = buildUpdateDto(formValues);
+            console.log('DTO SENT TO mutateAsync:', dto, 'positionType=', dto.positionType);
+
             await updateStaff.mutateAsync({ id: staffId, dto });
 
             if (newRoleId && clubId && uId) {

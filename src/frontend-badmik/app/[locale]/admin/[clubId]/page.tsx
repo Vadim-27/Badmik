@@ -25,7 +25,7 @@ export default async function ClubAdminPage({ params }: { params: Params }) {
   }
 
   return (
-    <main className="p-6 bg-gray-100 min-h-screen">
+    <main className="pt-0 p-4 bg-gray-100 ">
       <ClubDetails club={club} />
     
     </main>

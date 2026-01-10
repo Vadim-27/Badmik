@@ -1,4 +1,3 @@
-
 //====================
 
 // import createIntlMiddleware from 'next-intl/middleware';
@@ -72,7 +71,6 @@
 //     }
 
 //     try {
-      
 
 //       const payload: any = decodeJwt(token);
 
@@ -90,8 +88,6 @@
 //       console.log('clubId', clubId);
 //       const isAdmin =
 //         payload.isAdmin === true || payload.isAdmin === 'True' || payload.isAdmin === 'true';
-
-      
 
 //       if (isAdmin) {
 //         if (pathname === '/') {
@@ -135,21 +131,18 @@
 //   matcher: ['/((?!api|_next|.*\\..*|favicon.ico).*)', '/admin', '/admin/:path*'],
 // };
 
-
-
 //========================================================
 
-
 // middleware.ts
-import {NextRequest, NextResponse} from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import createIntlMiddleware from 'next-intl/middleware';
-import {decodeJwt} from 'jose';
-import {routing} from './i18n/routing';
+import { decodeJwt } from 'jose';
+import { routing } from './i18n/routing';
 
 const intlMiddleware = createIntlMiddleware(routing);
 
 // Клейми з JWT
-const ROLE_CLAIM   = 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role';
+const ROLE_CLAIM = 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role';
 const NAMEID_CLAIM = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier';
 
 const locales = routing.locales as readonly string[];
@@ -168,7 +161,7 @@ function stripLocale(pathname: string) {
 }
 
 export async function middleware(request: NextRequest) {
-  const {pathname: rawPathname} = request.nextUrl;
+  const { pathname: rawPathname } = request.nextUrl;
 
   // 0) Пропускаємо API та статику
   if (
@@ -189,7 +182,7 @@ export async function middleware(request: NextRequest) {
   // 2) path без локалі + нормалізація хвостового /
   let pathname = stripLocale(rawPathname); // напр. /login/ → /login/
   if (pathname !== '/' && pathname.endsWith('/')) {
-    pathname = pathname.slice(0, -1);     // /login/ → /login
+    pathname = pathname.slice(0, -1); // /login/ → /login
   }
 
   // 3) Визначаємо локаль для побудови login URL
@@ -216,19 +209,15 @@ export async function middleware(request: NextRequest) {
     const payload: any = decodeJwt(token);
 
     const role =
-      (payload[ROLE_CLAIM] as string | undefined) ??
-      (payload.role as string | undefined);
+      (payload[ROLE_CLAIM] as string | undefined) ?? (payload.role as string | undefined);
 
     const userId =
-      (payload[NAMEID_CLAIM] as string | undefined) ??
-      (payload.sub as string | undefined);
+      (payload[NAMEID_CLAIM] as string | undefined) ?? (payload.sub as string | undefined);
 
     const clubId = payload.clubId as string | undefined;
 
     const isAdmin =
-      payload.isAdmin === true ||
-      payload.isAdmin === 'True' ||
-      payload.isAdmin === 'true';
+      payload.isAdmin === true || payload.isAdmin === 'True' || payload.isAdmin === 'true';
 
     // === 6) SUPER ADMIN / GLOBAL ADMIN ==========================
     if (isAdmin) {
@@ -256,12 +245,12 @@ export async function middleware(request: NextRequest) {
     // === 8) CLUB ADMIN (НЕ супер адмін, але є clubId) ============
     if (clubId && !isAdmin) {
       const clubBase = `/admin/${clubId}`;
+      const clubDashboard = `${clubBase}/dashboard`;
 
-      // "/" або "/admin" → редірект в /admin/:clubId
+      // "/" або "/admin" → редірект в /admin/:clubId/dashboard
       if (pathname === '/' || pathname === '/admin') {
         const url = request.nextUrl.clone();
-        url.pathname = locale ? `/${locale}${clubBase}` : clubBase;
-        // можна додати слеш в кінці, якщо любиш: + '/'
+        url.pathname = locale ? `/${locale}${clubDashboard}` : clubDashboard;
         return NextResponse.redirect(url);
       }
 
@@ -270,9 +259,9 @@ export async function middleware(request: NextRequest) {
         return NextResponse.next();
       }
 
-      // все інше → форсимо в його /admin/:clubId
+      // все інше → форсимо в /admin/:clubId/dashboard
       const url = request.nextUrl.clone();
-      url.pathname = locale ? `/${locale}${clubBase}` : clubBase;
+      url.pathname = locale ? `/${locale}${clubDashboard}` : clubDashboard;
       return NextResponse.redirect(url);
     }
 

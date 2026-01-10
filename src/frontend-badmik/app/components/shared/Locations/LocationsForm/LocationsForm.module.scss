@@ -3,11 +3,11 @@
 $focus-ring: rgba(147, 197, 253, 0.35);
 
 .wrapper {
-  min-height: 77vh;
+  // min-height: 77vh;
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding: 24px 0;
+  padding-top: 24px;
   overflow: hidden;
  
 }

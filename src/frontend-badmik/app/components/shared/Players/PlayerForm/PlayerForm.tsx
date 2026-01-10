@@ -6,7 +6,7 @@
 import { forwardRef, useImperativeHandle, useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import styles from './PlayerForm.module.scss';
-import ClubSelectFieldAdd from '@/app/components/shared/Staff/StaffForm/ClubSelectAdd/ClubSelectFieldAdd';
+import ClubSelectFieldAdd from '@/app/components/ui/InputSelectClubs/ClubSelectAdd/ClubSelectFieldAdd';
 import CircularProgress from "@mui/material/CircularProgress";
 
 export type FormValues = {

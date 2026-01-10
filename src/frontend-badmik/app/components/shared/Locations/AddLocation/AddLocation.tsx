@@ -26,7 +26,7 @@ import SpinnerOverlay from '@/app/components/ui/SpinnerOverlay/SpinnerOverlay';
 
 import css from './AddLocation.module.scss';
 
-const AddLocation = () => {
+const AddLocation = ({ clubIdParams }: { clubIdParams?: string }) => {
   const tHeader = useTranslations('ActionHeader');
 
   const formRef = useRef<LocationFormHandle | null>(null);
@@ -126,6 +126,7 @@ const AddLocation = () => {
   const handleSaveClick = () => {
     formRef.current?.submit();
   };
+  const isClubScoped = Boolean(clubIdParams);
 
   return (
     <div className="font-geist-sans">
@@ -160,6 +161,11 @@ const AddLocation = () => {
         setIsChanged={setIsChanged}
         onSubmitCreate={handleCreate}
         busy={createLocation.isPending}
+        scopedClubId={clubIdParams}
+        isClubScoped={isClubScoped}
+        defaultValues={{
+          clubId: clubIdParams ?? '', // для адміна клубу заповнюєтся з бекенду
+        }}
       />
 
       {createLocation.isPending && <SpinnerOverlay fullscreen={false} />}

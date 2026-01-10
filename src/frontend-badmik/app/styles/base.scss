@@ -2,25 +2,25 @@
 
 .containerPage {
   box-sizing: border-box;
-  padding: 32px 24px;
-  // margin-left: auto;
+  padding: 24px 8px 0 32px;
+  margin-left: auto;
   margin-right: auto;
   background: var(--bg);
-  min-height: 91vh;
+  min-height: 90.5vh;
 
    @include media-rules(mobile) {
-    padding: 0.5rem 1rem;
+    padding: 24px 8px 0 32px;
   }
 
   @include media-rules(tablet) {
-    padding: 0.75rem 1.5rem;
+    padding: 24px 8px 0 32px;
   }
 
   @include media-rules(laptop) {
-    padding: 20px 32px;
+   padding: 24px 8px 0 32px;
   }
   
   @include media-rules(desktop) {
-    padding: 20px 32px;
+    padding: 24px 8px 0 32px;
   }
 }

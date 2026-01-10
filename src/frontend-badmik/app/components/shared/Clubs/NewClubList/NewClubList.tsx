@@ -11,6 +11,7 @@ import EyeIcon from '@/app/assets/icons/Eye.svg';
 import EditIcon from '@/app/assets/icons/Edit.svg';
 import TrashIcon from '@/app/assets/icons/Trash.svg';
 import ConfirmDialog from '@/app/components/ui/DeleteModal/ConfirmDialog';
+import Tooltip from '@/app/components/ui/Tooltip/Tooltip';
 
 const NewClubList = () => {
   const [filter, setFilter] = useState<'all' | 'active' | 'inactive'>('all');
@@ -169,6 +170,7 @@ const handleConfirmDelete = async () => {
                     </td>
                     <td>
                       <div className={styles.actionsWrapper}>
+                        <Tooltip content="Переглянути клуб">
                         <Link
                           href={`/admin/${club.id}`}
                           className={styles.iconBtn}
@@ -177,7 +179,9 @@ const handleConfirmDelete = async () => {
                         >
                           <EyeIcon className={styles.icon} aria-hidden />
                         </Link>
+                        </Tooltip>
 
+                        <Tooltip content="Редагувати клуб">
                         <Link
                           href={`/admin/${club.id}/edit`}
                           className={styles.iconBtn}
@@ -186,7 +190,9 @@ const handleConfirmDelete = async () => {
                         >
                           <EditIcon className={styles.icon} aria-hidden />
                         </Link>
+                        </Tooltip>
 
+                        <Tooltip content="Видалити клуб">
                         <button
                           type="button"
                           className={styles.iconBtn}
@@ -197,6 +203,7 @@ const handleConfirmDelete = async () => {
                         >
                           <TrashIcon className={styles.icon} aria-hidden />
                         </button>
+                        </Tooltip>
                       </div>
                     </td>
                   </tr>

@@ -13,6 +13,7 @@ import ConfirmDialog from '@/app/components/ui/DeleteModal/ConfirmDialog';
 import EyeIcon from '@/app/assets/icons/Eye.svg';
 import EditIcon from '@/app/assets/icons/Edit.svg';
 import TrashIcon from '@/app/assets/icons/Trash.svg';
+import Tooltip from '@/app/components/ui/Tooltip/Tooltip';
 
 const EMPTY_LABEL = 'дані ще не заповнені';
 
@@ -252,14 +253,19 @@ export default function StaffTable({ clubId }: Props) {
 
                       <td>
                         <div className={styles.actionsWrapper}>
+                          <Tooltip content="Переглянути">
                           <Link href={viewHref} className={styles.iconBtn} title="Переглянути" aria-label="Переглянути">
                             <EyeIcon className={styles.icon} aria-hidden />
                           </Link>
+                          </Tooltip>
 
+                          <Tooltip content="Редагувати">
                           <Link href={editHref} className={styles.iconBtn} title="Редагувати" aria-label="Редагувати">
                             <EditIcon className={styles.icon} aria-hidden />
                           </Link>
+                          </Tooltip>
 
+                         <Tooltip content="Видалити">
                           <button
                             type="button"
                             className={styles.iconBtn}
@@ -269,6 +275,7 @@ export default function StaffTable({ clubId }: Props) {
                           >
                             <TrashIcon className={styles.icon} aria-hidden />
                           </button>
+                          </Tooltip>
                         </div>
                       </td>
                     </tr>
@@ -285,6 +292,7 @@ export default function StaffTable({ clubId }: Props) {
             </div>
 
             <div className={styles.pageControls}>
+              <Tooltip content="Перша сторінка">
               <button
                 type="button"
                 className={styles.pageBtn}
@@ -294,7 +302,9 @@ export default function StaffTable({ clubId }: Props) {
               >
                 «
               </button>
-
+              </Tooltip>
+ 
+              <Tooltip content="Попередня сторінка">
               <button
                 type="button"
                 className={styles.pageBtn}
@@ -304,11 +314,13 @@ export default function StaffTable({ clubId }: Props) {
               >
                 ←
               </button>
+              </Tooltip>
 
               <span className={styles.pageInfo}>
                 {page} / {totalPages}
               </span>
 
+              <Tooltip content="Наступна сторінка">
               <button
                 type="button"
                 className={styles.pageBtn}
@@ -318,7 +330,9 @@ export default function StaffTable({ clubId }: Props) {
               >
                 →
               </button>
+              </Tooltip>
 
+              <Tooltip content="Остання сторінка">
               <button
                 type="button"
                 className={styles.pageBtn}
@@ -328,7 +342,9 @@ export default function StaffTable({ clubId }: Props) {
               >
                 »
               </button>
+              </Tooltip>
 
+              <Tooltip content="Кількість рядків">
               <select
                 className={styles.pageSizeSelect}
                 value={pageSize}
@@ -341,6 +357,7 @@ export default function StaffTable({ clubId }: Props) {
                   </option>
                 ))}
               </select>
+              </Tooltip>
             </div>
           </div>
 

@@ -1,111 +1,111 @@
 
 
-'use client';
+// 'use client';
 
 
 
-import { Popover, Transition } from '@headlessui/react';
-import { Fragment } from 'react';
-import {
-  useController,
-  useWatch,
-  type Control,
-  type FieldValues,
-  type Path,
-  type FieldPathValue,
-} from 'react-hook-form';
-import styles from './StaffActionsBar.module.scss';
-import clsx from 'clsx';
-import { useRoleListByClub  } from '@/services/role/queries.client';
-import type { Role } from '@/services/types/role.dto';
+// import { Popover, Transition } from '@headlessui/react';
+// import { Fragment } from 'react';
+// import {
+//   useController,
+//   useWatch,
+//   type Control,
+//   type FieldValues,
+//   type Path,
+//   type FieldPathValue,
+// } from 'react-hook-form';
+// import styles from './StaffActionsBar.module.scss';
+// import clsx from 'clsx';
+// import { useRoleListByClub  } from '@/services/role/queries.client';
+// import type { Role } from '@/services/types/role.dto';
 
 
-type StaffStatus = 'New' | 'Active' | 'Disabled' | 'Deleted';
+// type StaffStatus = 'New' | 'Active' | 'Disabled' | 'Deleted';
 
-type StaffPositionType = 'Trainer' | 'Manager' | 'Administrator' | 'Accountant';
+// type StaffPositionType = 'Trainer' | 'Manager' | 'Administrator' | 'Accountant';
 
-type Props<TFieldValues extends FieldValues> = {
-  control: Control<TFieldValues>;
+// type Props<TFieldValues extends FieldValues> = {
+//   control: Control<TFieldValues>;
   
-  name?: Path<TFieldValues>;
+//   name?: Path<TFieldValues>;
 
-  showRolesButton?: boolean;
+//   showRolesButton?: boolean;
 
-  roleFieldName?: Path<TFieldValues>;
-   staffId?: string | null;
-    onEnablePasswordChangeAction?: () => void;
-  positionFieldName?: Path<TFieldValues>;
-};
+//   roleFieldName?: Path<TFieldValues>;
+//    staffId?: string | null;
+//     onEnablePasswordChangeAction?: () => void;
+//   positionFieldName?: Path<TFieldValues>;
+// };
 
-const STATUSES: ReadonlyArray<{ value: StaffStatus; label: string }> = [
-  { value: 'New', label: 'New' },
-  { value: 'Active', label: 'Active' },
-  { value: 'Disabled', label: 'Disabled' },
-  { value: 'Deleted', label: 'Deleted' },
-];
+// const STATUSES: ReadonlyArray<{ value: StaffStatus; label: string }> = [
+//   { value: 'New', label: 'New' },
+//   { value: 'Active', label: 'Active' },
+//   { value: 'Disabled', label: 'Disabled' },
+//   { value: 'Deleted', label: 'Deleted' },
+// ];
 
-const POSITIONS = [
-  { value: 'Trainer', label: 'Тренер' },
-  { value: 'Manager', label: 'Менеджер' },
-  { value: 'Administrator', label: 'Адміністратор' },
-  { value: 'Accountant', label: 'Бухгалтер' },
-] as const;
+// const POSITIONS = [
+//   { value: 'Trainer', label: 'Тренер' },
+//   { value: 'Manager', label: 'Менеджер' },
+//   { value: 'Administrator', label: 'Адміністратор' },
+//   { value: 'Accountant', label: 'Бухгалтер' },
+// ] as const;
 
-export default function StaffActionsBar<TFieldValues extends FieldValues>({
-  control,
-  name,
-  showRolesButton = false,
-  roleFieldName,
-  staffId,
-  onEnablePasswordChangeAction,
-  positionFieldName,
-}: Props<TFieldValues>) {
+// export default function StaffActionsBar<TFieldValues extends FieldValues>({
+//   control,
+//   name,
+//   showRolesButton = false,
+//   roleFieldName,
+//   staffId,
+//   onEnablePasswordChangeAction,
+//   positionFieldName,
+// }: Props<TFieldValues>) {
 
-  // const rolesQuery = useRoleList();
-  // const staff = await srvStaffById(staffId);
-  const clubId = useWatch({ control, name: 'clubId' as Path<TFieldValues> }) as string | undefined;
+//   // const rolesQuery = useRoleList();
+//   // const staff = await srvStaffById(staffId);
+//   const clubId = useWatch({ control, name: 'clubId' as Path<TFieldValues> }) as string | undefined;
 
-  const { data: rolesData } = useRoleListByClub(clubId);
- const roles: Role[] = rolesData ?? [];
-console.log('clubId in StaffActionsBar:', clubId);
-console.log('rolesData:', rolesData);
-console.log('roles:', roles);
-// console.log('roles loading/error:', { isLoading, isError, error });
-
-
-  const statusName = (name ?? ('staffStatus' as Path<TFieldValues>)) as Path<TFieldValues>;
-  const { field: statusField } = useController<TFieldValues, Path<TFieldValues>>({
-    control,
-    name: statusName,
-  });
-  const currentStatus: StaffStatus =
-    (typeof statusField.value === 'string' ? (statusField.value as StaffStatus) : 'New');
+//   const { data: rolesData } = useRoleListByClub(clubId);
+//  const roles: Role[] = rolesData ?? [];
+// console.log('clubId in StaffActionsBar:', clubId);
+// console.log('rolesData:', rolesData);
+// console.log('roles:', roles);
+// // console.log('roles loading/error:', { isLoading, isError, error });
 
 
+//   const statusName = (name ?? ('staffStatus' as Path<TFieldValues>)) as Path<TFieldValues>;
+//   const { field: statusField } = useController<TFieldValues, Path<TFieldValues>>({
+//     control,
+//     name: statusName,
+//   });
+//   const currentStatus: StaffStatus =
+//     (typeof statusField.value === 'string' ? (statusField.value as StaffStatus) : 'New');
 
-    const roleName = (roleFieldName ?? ('roleId' as Path<TFieldValues>)) as Path<TFieldValues>;
-  const { field: roleField } = useController({ control, name: roleName });
-  const currentRoleId = roleField.value as string | null;
-
-  // const roles = rolesQuery.data ?? [];
 
 
-  const positionName = (positionFieldName ??
-    ('staffPositionType' as Path<TFieldValues>)) as Path<TFieldValues>;
+//     const roleName = (roleFieldName ?? ('roleId' as Path<TFieldValues>)) as Path<TFieldValues>;
+//   const { field: roleField } = useController({ control, name: roleName });
+//   const currentRoleId = roleField.value as string | null;
 
-  const { field: positionField } = useController({
-    control,
-    name: positionName,
-  });
+//   // const roles = rolesQuery.data ?? [];
 
-  const currentPosition = positionField.value as StaffPositionType | null;
+
+//   const positionName = (positionFieldName ??
+//     ('staffPositionType' as Path<TFieldValues>)) as Path<TFieldValues>;
+
+//   const { field: positionField } = useController({
+//     control,
+//     name: positionName,
+//   });
+
+//   const currentPosition = positionField.value as StaffPositionType | null;
  
 
-  return (
-    <div className={styles.actionsBar}>
+//   return (
+//     <div className={styles.actionsBar}>
 
       {/* ==== ПОПОВЕР "ПОСАДА" ==== */}
-      <Popover className={styles.popoverRoot}>
+      {/* <Popover className={styles.popoverRoot}>
         <Popover.Button className={clsx(styles.button, styles.buttonGhost)}>
           Посада
         </Popover.Button>
@@ -144,11 +144,11 @@ console.log('roles:', roles);
             )}
           </Popover.Panel>
         </Transition>
-      </Popover>
+      </Popover> */}
 
 
       {/* ==== Поповер ролей (тільки в edit) ==== */}
-      {showRolesButton && (
+      {/* {showRolesButton && (
         <Popover className={styles.popoverRoot}>
           <Popover.Button className={clsx(styles.button, styles.buttonGhost)}>Ролі</Popover.Button>
           <Transition as={Fragment} enter="ease-out duration-100" leave="ease-in duration-75">
@@ -181,18 +181,18 @@ console.log('roles:', roles);
       )}
 
        {/* ==== Кнопка "Змінити пароль" ==== */}
-      {staffId && onEnablePasswordChangeAction && (
-        <button
-          type="button"
-          className={clsx(styles.button, styles.buttonGhost)}
-          onClick={onEnablePasswordChangeAction}
-        >
-          Змінити пароль
-        </button>
-      )}
+      // {staffId && onEnablePasswordChangeAction && (
+      //   <button
+      //     type="button"
+      //     className={clsx(styles.button, styles.buttonGhost)}
+      //     onClick={onEnablePasswordChangeAction}
+      //   >
+      //     Змінити пароль
+      //   </button>
+      // )} */}
 
       {/* ==== Поповер статусів — як було ==== */}
-      <Popover className={styles.popoverRoot}>
+      {/* <Popover className={styles.popoverRoot}>
         <Popover.Button className={clsx(styles.button, styles.buttonGhost)}>
           Активність
         </Popover.Button>
@@ -233,10 +233,10 @@ console.log('roles:', roles);
             )}
           </Popover.Panel>
         </Transition>
-      </Popover>
-    </div>
-  );
-}
+      </Popover> */}
+//     </div>
+//   );
+// }
 
 
 //==========
