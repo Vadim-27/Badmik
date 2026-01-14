@@ -1,0 +1,27 @@
+services:
+  api:
+    container_name: badmik-api
+    image: mcr.microsoft.com/dotnet/aspnet:9.0
+    command: ["dotnet", "BadmintonApp.API.dll"]
+    working_dir: /app
+    restart: unless-stopped
+
+    environment:
+      ASPNETCORE_ENVIRONMENT: Staging
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__DefaultConnection: Host=infra-postgres;Port=5432;Database=${BADMIK_DB};Username=${BADMIK_DB_USER};Password=${BADMIK_DB_PASSWORD};Include Error Detail=true
+      Media__RootPath: /storage
+      Media__PublicBasePath: /media
+    volumes:
+      - /opt/apps/badmik/publish:/app:ro
+      - /opt/apps/badmik/storage:/storage
+
+    networks:
+      - proxy
+      - shared
+
+networks:
+  proxy:
+    external: true
+  shared:
+    external: true

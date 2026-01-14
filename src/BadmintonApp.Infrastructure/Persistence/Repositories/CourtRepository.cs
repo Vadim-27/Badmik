@@ -25,7 +25,6 @@ namespace BadmintonApp.Infrastructure.Persistence.Repositories
             CancellationToken cancellationToken)
         {
             return await _context.Courts
-                .AsNoTracking()
                 .Where(c => c.LocationId == locationId)
                 .ToListAsync(cancellationToken);
         }

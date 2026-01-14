@@ -1,12 +1,14 @@
 ﻿using BadmintonApp.Application.Interfaces.Auth;
 using BadmintonApp.Application.Interfaces.Clubs;
 using BadmintonApp.Application.Interfaces.Logs;
+using BadmintonApp.Application.Interfaces.Media;
 using BadmintonApp.Application.Interfaces.Repositories;
 using BadmintonApp.Application.Interfaces.Transactions;
 using BadmintonApp.Application.Interfaces.Users;
 using BadmintonApp.Application.Services;
 using BadmintonApp.Domain.Core;
 using BadmintonApp.Infrastructure.Auth;
+using BadmintonApp.Infrastructure.Media;
 using BadmintonApp.Infrastructure.Persistence;
 using BadmintonApp.Infrastructure.Persistence.Repositories;
 using Microsoft.AspNetCore.Identity;
@@ -43,6 +45,8 @@ namespace BadmintonApp.Infrastructure
             services.AddScoped<IWorkingHourRepository, WorkingHourRepository>();
             services.AddScoped<ILocationRepository, LocationRepository>();
             services.AddScoped<ICourtsRepository, CourtsRepository>();
+            services.AddScoped<IMediaRepository, MediaRepository>();
+            services.AddScoped<IMediaStorage, FileSystemMediaStorage>();
 
             return services;
         }

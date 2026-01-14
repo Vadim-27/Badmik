@@ -43,3 +43,4 @@ node_modules/
 .yarn/
 .pnp.*
 wwwroot/js/
+/deploy/test/publish
