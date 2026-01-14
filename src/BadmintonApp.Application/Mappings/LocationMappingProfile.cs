@@ -43,7 +43,7 @@ namespace BadmintonApp.Application.Mappings
             .ForMember(d => d.WorkingHours, opt => opt.Ignore())
 
             // Sports/SportTypes are derived values – keep them for service to fill
-            .ForMember(d => d.Sports, opt => opt.MapFrom<LocationSportTypesResolver>());
+            .ForMember(d => d.Sports, opt => opt.Ignore());
 
 
             
@@ -52,6 +52,8 @@ namespace BadmintonApp.Application.Mappings
                 .ForMember(d => d.Id, opt => opt.Ignore())
                 .ForMember(d => d.Courts, opt => opt.Ignore())
                 .ForMember(d => d.WorkingHours, opt => opt.Ignore())
+                .ForMember(d => d.Amenities, opt => opt.MapFrom(s => s.Amenities
+                        .Select(a => new LocationAmenity { Amenity = a })))
                 .ForMember(dest => dest.WorkingHours, s => s.MapFrom(x => new List<WorkingHour>
                 {
                     WHM.CreateWorkingHour(DayOfWeek.Monday, x.WorkingHours.Monday),
@@ -62,12 +64,13 @@ namespace BadmintonApp.Application.Mappings
                     WHM.CreateWorkingHour(DayOfWeek.Saturday, x.WorkingHours.Saturday),
                     WHM.CreateWorkingHour(DayOfWeek.Sunday, x.WorkingHours.Sunday),
                 }.Where(x => x != null).ToList()));
-            ;
 
             CreateMap<UpdateLocationDto, Location>()
                 .ForMember(d => d.Id, opt => opt.Ignore())
                 .ForMember(d => d.ClubId, opt => opt.Ignore()) // should not be changed
                 .ForMember(d => d.Courts, opt => opt.Ignore())
+                .ForMember(d => d.Amenities, opt => opt.MapFrom(s => s.Amenities
+                        .Select(a => new LocationAmenity { Amenity = a })))
                 .ForMember(dest => dest.WorkingHours, s => s.MapFrom(x => new List<WorkingHour>
                 {
                     WHM.CreateWorkingHour(DayOfWeek.Monday, x.WorkingHours.Monday),
@@ -78,6 +81,9 @@ namespace BadmintonApp.Application.Mappings
                     WHM.CreateWorkingHour(DayOfWeek.Saturday, x.WorkingHours.Saturday),
                     WHM.CreateWorkingHour(DayOfWeek.Sunday, x.WorkingHours.Sunday),
                 }.Where(x => x != null).ToList()));
+
+            CreateMap<AmenityType, LocationAmenity>()
+                .ForMember(d => d.Amenity, opt => opt.MapFrom(s => s));
         }
     }
 }

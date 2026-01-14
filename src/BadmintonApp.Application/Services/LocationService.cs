@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BadmintonApp.Application.DTOs.Clubs;
 using BadmintonApp.Application.DTOs.WorkingHourDtos;
+using BadmintonApp.Application.Exceptions;
 using BadmintonApp.Application.Interfaces.Clubs;
 using BadmintonApp.Application.Interfaces.Repositories;
 using BadmintonApp.Application.Mappings;
@@ -48,10 +49,10 @@ namespace BadmintonApp.Application.Services
             var entity = await _locationsRepository.GetByIdAsync(id, cancellationToken);
             if (entity is null)
             {
-                throw new InvalidOperationException("Location not found.");
+                throw new NotFoundException("Location not found.");
             }
 
-            return _mapper.Map<LocationResultDto>(entity);
+            return MapLocation(entity);
         }
 
         public async Task<List<LocationResultDto>> GetByClubIdAsync(
@@ -59,7 +60,9 @@ namespace BadmintonApp.Application.Services
         CancellationToken cancellationToken = default)
         {
             var entities = await _locationsRepository.GetByClubIdAsync(clubId, cancellationToken);
-            return _mapper.Map<List<LocationResultDto>>(entities);
+            return entities
+                .Select(MapLocation)
+                .ToList();
         }
 
         public async Task<LocationResultDto> CreateAsync(
@@ -83,9 +86,8 @@ namespace BadmintonApp.Application.Services
             }
 
             var withCourts = await _locationsRepository.GetByIdAsync(entity.Id, cancellationToken);
-            var resultDto = _mapper.Map<LocationResultDto>(withCourts);
-            resultDto.WorkingHours = WHM.MapToWorkingHours(withCourts.WorkingHours);
-
+            var resultDto = MapLocation(entity);
+            
             return resultDto;
         }
 
@@ -94,7 +96,7 @@ namespace BadmintonApp.Application.Services
         UpdateLocationDto dto,
         CancellationToken cancellationToken = default)
         {
-            var entity = await _locationsRepository.GetByIdAsync(id, cancellationToken);
+            var entity = await _locationsRepository.GetByIdForUpdateAsync(id, cancellationToken);
             if (entity is null)
             {
                 throw new InvalidOperationException("Location not found.");
@@ -107,9 +109,14 @@ namespace BadmintonApp.Application.Services
             _mapper.Map(dto, entity);
             await _locationsRepository.UpdateAsync(entity, cancellationToken);
 
+            // Sync courts for sports
+            if (dto.Sports is not null && dto.Sports.Count > 0)
+            {
+                await _courtsService.SyncForLocationAsync(entity.Id, dto.Sports, cancellationToken);
+            }
+
             var withCourts = await _locationsRepository.GetByIdAsync(entity.Id, cancellationToken);
-            var resultDto = _mapper.Map<LocationResultDto>(withCourts);
-            resultDto.WorkingHours = WHM.MapToWorkingHours(withCourts.WorkingHours);
+            var resultDto = MapLocation(entity);
 
             return resultDto;
         }
@@ -125,6 +132,51 @@ namespace BadmintonApp.Application.Services
             }
 
             await _locationsRepository.DeleteAsync(id, cancellationToken);
+        }
+
+        private LocationResultDto MapLocation(Location location)
+        {
+            var dto = _mapper.Map<LocationResultDto>(location);
+
+            dto.WorkingHours = WHM.MapToWorkingHours(location.WorkingHours);
+            dto.Sports = BuildLocationSports(location.Courts);
+            dto.SportTypes = BuildSportTypes(location.Courts);
+
+            return dto;
+        }
+
+        private static List<LocationSportDto> BuildLocationSports(List<Court> courts)
+        {
+            if (courts == null || courts.Count == 0)
+                return new List<LocationSportDto>();
+
+            return courts
+                .GroupBy(c => c.Sport)
+                .Select(g => new LocationSportDto
+                {
+                    SportType = g.Key,
+                    CourtCount = g.Count()
+                })
+                .ToList();
+        }
+
+        private static SportType[] BuildSportTypes(List<Court> courts)
+        {
+            if (courts == null || courts.Count == 0)
+                return Array.Empty<SportType>();
+
+            return courts
+                .Select(c => c.Sport)
+                .Distinct()
+                .ToArray();
+        }
+
+        public async Task<List<LocationResultDto>> GetAllAsync(CancellationToken cancellationToken = default)
+        {
+            var entities = await _locationsRepository.GetAllAsync(cancellationToken);
+            return entities
+                .Select(MapLocation)
+                .ToList();
         }
     }
 }

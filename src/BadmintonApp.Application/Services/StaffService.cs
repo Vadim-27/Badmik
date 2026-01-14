@@ -146,6 +146,5 @@ public class StaffService : IStaffService
 
         var passwordHash = _passwordHasher.HashPassword(user, staffUpdateDto.Password);
         await _userRepository.UpdatePasswordAsync(user.Id, passwordHash, cancellationToken);
-
     }
 }

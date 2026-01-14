@@ -56,9 +56,9 @@ namespace BadmintonApp.API.Controllers
         }
 
         [HttpGet("staff/{id:guid}")]
-        public async Task<ActionResult> GetRolesByStaffId(Guid staffId, CancellationToken cancellationToken)
+        public async Task<ActionResult> GetRolesByStaffId(Guid id, CancellationToken cancellationToken)
         {
-            List<Role> roles = await _roleService.GetRolesByStaffId(staffId, cancellationToken);
+            List<Role> roles = await _roleService.GetRolesByStaffId(id, cancellationToken);
 
             return Ok(roles);
         }

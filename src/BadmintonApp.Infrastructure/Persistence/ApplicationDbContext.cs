@@ -5,6 +5,7 @@ using BadmintonApp.Domain.Logs;
 using BadmintonApp.Domain.Players;
 using BadmintonApp.Domain.Trainings;
 using BadmintonApp.Domain.WorkingHours;
+using BadmintonApp.Infrastructure.Persistence.Configurations;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -90,6 +91,7 @@ namespace BadmintonApp.Infrastructure.Persistence
             SeedData(modelBuilder);            
 
             base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfiguration(new MediaConfiguration());
         }
 
         public DbSet<RolePermission> RolePermissions { get; set; }
@@ -109,6 +111,7 @@ namespace BadmintonApp.Infrastructure.Persistence
         public DbSet<Court> Courts => Set<Court>();
         public DbSet<LocationAmenity> LocationAmenities => Set<LocationAmenity>();
         public DbSet<LocationImage> LocationImages => Set<LocationImage>();
+        public DbSet<Domain.Media.MediaItem> Media => Set<Domain.Media.MediaItem>();
 
 
         private void SeedData(ModelBuilder modelBuilder)

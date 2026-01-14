@@ -15,5 +15,6 @@ namespace BadmintonApp.Application.Interfaces.Clubs
         Task<LocationResultDto> CreateAsync(CreateLocationDto dto, CancellationToken cancellationToken = default);
         Task<LocationResultDto> UpdateAsync(Guid id, UpdateLocationDto dto, CancellationToken cancellationToken = default);
         Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
+        Task<List<LocationResultDto>> GetAllAsync(CancellationToken cancellationToken = default);
     }
 }

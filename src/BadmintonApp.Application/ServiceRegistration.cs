@@ -1,8 +1,10 @@
 ﻿using BadmintonApp.Application.Interfaces.Auth;
 using BadmintonApp.Application.Interfaces.Clubs;
 using BadmintonApp.Application.Interfaces.Logs;
+using BadmintonApp.Application.Interfaces.Media;
 using BadmintonApp.Application.Interfaces.Permissions;
 using BadmintonApp.Application.Interfaces.Players;
+using BadmintonApp.Application.Interfaces.Repositories;
 using BadmintonApp.Application.Interfaces.Roles;
 using BadmintonApp.Application.Interfaces.Staffs;
 using BadmintonApp.Application.Interfaces.Trainings;
@@ -36,6 +38,8 @@ namespace BadmintonApp.Application
             services.AddScoped<IPlayerService, PlayerService>();
             services.AddScoped<ILocationService, LocationService>();
             services.AddScoped<ICourtsService, CourtsService>();
+            services.AddScoped<IMediaService, MediaService>();
+            
 
             return services;
         }
