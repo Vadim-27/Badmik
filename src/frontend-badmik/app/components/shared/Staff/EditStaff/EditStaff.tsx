@@ -20,6 +20,7 @@ import AppBreadcrumbs from '@/app/components/ui/Breadcrumbs/AppBreadcrumbs';
 // import type { UpdateStaffDto, WorkingHours } from '@/services/types/staff.dto';
 import type { UpdateStaffDto, WorkingHoursDto } from '@/services/types/staff.dto';
 import { useChangeStaffPassword } from '@/services/staff/queries.client';
+import { useRolesByStaff } from '@/services/role/queries.client';
 
 function parseWorkingHours(
   input: string | Record<string, any> | null | undefined
@@ -122,6 +123,7 @@ const toDateTimeISO = (d?: string | null) => (d ? new Date(d + 'T00:00:00Z').toI
 
 export default function EditStaff({ clubIdParams, staffId, initialData }: Props) {
   const tAH = useTranslations('ActionHeader');
+  const tSB = useTranslations('staffBreadcrumbs');
   const formRef = useRef<StaffFormHandle | null>(null);
   const [isChanged, setIsChanged] = useState(false);
   const [snack, setSnack] = useState<{
@@ -140,15 +142,18 @@ export default function EditStaff({ clubIdParams, staffId, initialData }: Props)
     refetchOnWindowFocus: false,
   });
   const userId = (q.data as Staff)?.userId || null;
+  console.log('EditStaff render', { staffId, userId });
 
    const isClubScoped = Boolean(clubIdParams);
 
   const updateStaff = useUpdateStaff();
   const assignRole = useAssignRoleForUser();
+  const rolesByStaff = useRolesByStaff(staffId);
+const assignedRoleId = rolesByStaff.data?.[0]?.id ?? null;
 
   const changePassword = useChangeStaffPassword();
 
-  const defaultValues = { ...mapFromDtoToForm(q.data as Staff), userId };
+  const defaultValues = { ...mapFromDtoToForm(q.data as Staff), userId, roleId: assignedRoleId };
 
   const buildUpdateDto = (formValues: any): UpdateStaffDto => {
     const wh = formValues.workingHoursObj as WorkingHoursDto;
@@ -172,7 +177,7 @@ export default function EditStaff({ clubIdParams, staffId, initialData }: Props)
       monthlySalary: formValues.monthlySalary ?? 0,
       currency: formValues.currency ?? null,
       positionType: formValues.positionType ?? null,
-      // perTrainingRate: formValues.perTrainingRate ?? 0,
+      perTrainingRate: formValues.perTrainingRate ?? 0,
       payrollNotes: formValues.payrollNotes ?? null,
       timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone ?? 'UTC',
       workingHours: buildWorkingHoursForApi(wh),
@@ -193,9 +198,9 @@ export default function EditStaff({ clubIdParams, staffId, initialData }: Props)
       <div className={css.wrapperBreadcrumbs}>
         <AppBreadcrumbs
           items={[
-            { label: 'Admin', href: '/admin/dashboard' },
-            { label: 'Staff', href: '/admin/staff' },
-            { label: 'Edit Staff' },
+            { label: tSB('Admin'), href: '/admin/dashboard' },
+            { label: tSB('Staff'), href: '/admin/staff' },
+            { label: tSB('EditStaff') },
           ]}
         />
       </div>
@@ -209,6 +214,7 @@ export default function EditStaff({ clubIdParams, staffId, initialData }: Props)
         defaultValues={defaultValues}
         scopedClubId={clubIdParams}
           isClubScoped={isClubScoped}
+          // canManageRoles={canManageRoles}
         onSubmitUpdate={async (_id, formValues) => {
           try {
            
@@ -225,10 +231,10 @@ export default function EditStaff({ clubIdParams, staffId, initialData }: Props)
             if (newRoleId && clubId && uId) {
               try {
                 await assignRole.mutateAsync({
-                  userId: uId,
-                  roleId: newRoleId,
-                  clubId,
-                });
+  staffId,          
+  roleId: newRoleId,
+  clubId,
+});
                 setSnack({ open: true, severity: 'success', message: 'Роль заасайнено' });
               } catch (e) {
                 setSnack({ open: true, severity: 'error', message: 'Не вдалось асайнити роль' });

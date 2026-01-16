@@ -2,7 +2,7 @@
 
 import { useMemo, useState, useEffect } from 'react';
 import styles from './ClubList.module.scss';
-import Link from 'next/link';
+import {Link} from '@/i18n/navigation';
 
 import { useClubsList, useDeleteClub } from '@/services/clubs/queries.client';
 import type { Club } from '@/services/types/clubs.dto';

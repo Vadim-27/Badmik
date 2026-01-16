@@ -246,15 +246,264 @@
     "submitCreate": "Create user",
     "submitUpdate": "Update user"
   },
-  "EmployeeTable": {
-    
-    "firstName": "First name",
-    "lastName": "Last name",
-    "role": "Role",
-    "actions": "Actions",
-    "view": "View",
-    "edit": "Edit",
-    "delete": "Delete",
-    "confirmDelete": "Are you sure you want to delete this user?"
+  "StaffTable": {
+    "filters": {
+      "status": {
+        "label": "Status",
+        "all": "All",
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "search": {
+        "placeholder": "Search by full name / email / phone..."
+      }
+    },
+    "columns": {
+      "fio": "Full Name",
+      "email": "Email",
+      "phone": "Phone",
+      "position": "Position",
+      "status": "Status",
+      "employment": "Employment",
+      "salaryType": "Salary Type",
+      "sum": "Amount",
+      "currency": "Currency",
+      "actions": "Actions"
+    },
+    "empty": "No employees to display.",
+    "error": "Error loading employees",
+    "actions": {
+      "view": "View",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "pagination": {
+      "summary": "{from}-{to} of {total}",
+      "first": "First Page",
+      "prev": "Previous Page",
+      "next": "Next Page",
+      "last": "Last Page",
+      "rows": "Rows",
+      "perPage": "{n} / page"
+    },
+    "confirmDelete": {
+      "title": "Delete Employee",
+      "noName": "Unnamed",
+      "message": "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+      "confirm": "Yes, delete",
+      "cancel": "No"
+    }
+  },
+  "staffBreadcrumbs": {
+    "Admin": "Admin",
+    "Staff": "Staff",
+    "EditStaff": "Edit Staff",
+    "AddStaff": "Add Staff",
+    "StaffOne": "Staff Member"
+  },
+  "RoleFormSelectField": {
+    "ClubTrainer": "Club Trainer",
+    "ClubAdmin": "Club Admin",
+    "ClubManager": "Club Manager"
+  },
+  "StaffPosition": {
+    "Trainer": "Trainer",
+    "Manager": "Manager",
+    "Administrator": "Administrator",
+    "Accountant": "Accountant"
+  },
+  "StaffStatus": {
+    "New": "New",
+    "Active": "Active",
+    "Disabled": "Disabled",
+    "Deleted": "Deleted"
+  },
+  "EmploymentType": {
+    "Employee": "Employee",
+    "Contractor": "Contractor",
+    "PartTime": "Part Time",
+    "Volunteer": "Volunteer"
+  },
+  "WorkingHoursField": {
+    "label": "Working Hours",
+    "weekdayButton": "Mon–Fri",
+    "clearAll": "Clear All",
+    "dash": "–",
+    "days": {
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday",
+      "sunday": "Sunday"
+    }
+  },
+  "StaffForm": {
+    "avatar": {
+      "placeholder": "Avatar",
+      "alt": "Avatar",
+      "upload": "Upload",
+      "uploading": "Uploading...",
+      "remove": "Remove",
+      "errors": {
+        "notImage": "Image is required.",
+        "tooLarge": "Maximum size {max}MB.",
+        "uploadFailed": "Failed to upload file."
+      }
+    },
+    "fields": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "password": "Password",
+      "PasswordChangeModal": {
+        "title": "Change Password",
+        "fields": {
+          "new": "New Password",
+          "confirm": "Confirm Password"
+        },
+        "placeholders": {
+          "new": "Enter new password",
+          "confirm": "Repeat password"
+        },
+        "buttons": {
+          "cancel": "Cancel",
+          "save": "Save"
+        },
+       
+        "tooltip": {
+          "title": "Password must contain:",
+          "items": ["8+ characters", "uppercase and lowercase letters", "digit", "special character", "no spaces"]
+        },
+        "aria": {
+          "show": "Show password",
+          "hide": "Hide password",
+          "close": "Close",
+          "rules": "Password requirements"
+        }
+      },
+      "role": "Role",
+      "title": "Title (text)",
+      "phone": "Phone Number",
+      "club": "Club",
+      "activity": "Activity",
+      "positionType": "Position",
+      "dob": "Date of Birth",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "employmentType": "Employment Type",
+      "payrollNotes": "Payroll Notes",
+      "notes": "General Notes"
+    },
+    "actions": {
+      "changePassword": "Change Password"
+    },
+    "placeholders": {
+      "role": "Select role…",
+      "positionType": "Select position…",
+      "employmentType": "Select employment type…",
+      "titleExample": "For example: coach, administrator",
+      "phone": "+380XXXXXXXXX",
+      "payrollNotes": "Payment details, agreements, etc.",
+      "notes": "Any internal notes"
+    }
+  },
+  "StaffErrors": {
+    "firstName": {
+      "required": "First name is required.",
+      "min": "First name is too short.",
+      "max": "First name is too long.",
+      "pattern": "First name contains invalid characters."
+    },
+
+    "lastName": {
+      "required": "Last name is required.",
+      "min": "Last name is too short.",
+      "max": "Last name is too long.",
+      "pattern": "Last name contains invalid characters."
+    },
+
+    "email": {
+      "required": "Email is required.",
+      "min": "Email is too short.",
+      "max": "Email is too long.",
+      "pattern": "Invalid email format."
+    },
+
+  "password": {
+      "required": "Password is required.",
+      "min": "Password must be at least 8 characters.",
+      "max": "Password must be no more than 64 characters.",
+      "noSpace": "Password cannot contain spaces.",
+      "hasDigit": "Password must contain at least one digit.",
+      "hasUpper": "Password must contain at least one uppercase letter.",
+      "hasLower": "Password must contain at least one lowercase letter.",
+      "hasSpecial": "Password must contain at least one special character.",
+      "confirmRequired": "Confirm password.",
+      "mismatch": "Passwords do not match."
+
+       
+      
+    },
+
+    "title": {
+      "required": "Title is required.",
+      "min": "Title is too short.",
+      "max": "Title is too long.",
+      "pattern": "Title can only contain letters and spaces."
+    },
+
+    "phone": {
+      "required": "Phone number is required.",
+      "pattern": "Phone number must be in the format +380XXXXXXXXX."
+    },
+
+    "dob": {
+      "required": "Date of birth is required.",
+      "validate": "Age must be at least 8 years."
+    },
+
+    "startDate": {
+      "required": "Start date is required.",
+      "validate": "Start date cannot be in the past."
+    },
+
+    "endDate": {
+      "required": "End date is required.",
+      "validate": "End date cannot be in the past."
+    },
+
+    "notes": {
+      "validate": "Text is too long (max. 2000 characters)."
+    },
+
+    "payrollNotes": {
+      "validate": "Text is too long (max. 2000 characters)."
+    }
+  },
+   "SalaryField": {
+    "payTypeLabel": "Payment Type",
+    "payTypeAria": "Payment Type",
+    "types": {
+      "Hourly": "Hourly",
+      "Salary": "Salary",
+      "PerTraining": "Per Training"
+    },
+    "rateLabels": {
+      "Hourly": "Hourly Rate",
+      "Salary": "Monthly Salary",
+      "PerTraining": "Rate (Per Training)"
+    },
+    "currency": {
+      "UAH": "₴ UAH",
+      "USD": "$ USD"
+    },
+    "placeholders": {
+      "rate": "0"
+    },
+    "errors": {
+      "nonNegative": "Rate cannot be negative."
+    }
   }
 }

@@ -11,6 +11,7 @@ import { prefetch } from '@/services/_shared/prefetch';
 import { roleServerQueries } from '@/services/role/queries.server';
 import { staffServerQueries } from '@/services/staff/queries.server';
 import { buildHrefServer } from '@/lib/club-scope.server';
+import AppBreadcrumbs from '@/app/components/ui/Breadcrumbs/AppBreadcrumbs';
 
 
 type Params = {
@@ -26,6 +27,7 @@ const StaffPage = async ({
 }) => {
   const {  locale, clubId } = await params;
   const t = await getTranslations({locale, namespace: 'ActionHeader.title'});
+  const tSB = await getTranslations({locale, namespace: 'staffBreadcrumbs'});
 
     const state = await prefetch([
    roleServerQueries.listByClub(clubId),
@@ -45,6 +47,12 @@ const StaffPage = async ({
         href={addHref}
         label="buttons.addUser" />
         </ActionHeader>
+        <AppBreadcrumbs 
+              items={[
+                { label: tSB('Admin'), href: '/admin/staff' },
+                { label: tSB('Staff') },
+              ]}
+            />
         <StaffTable clubId={clubId} />
     </div>
     </RQHydrate>

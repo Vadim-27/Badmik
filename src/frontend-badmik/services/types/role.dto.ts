@@ -8,11 +8,11 @@ export interface Role {
   permissions?: { id: UUID; name: string }[];
 }
 
-export interface AssignRoleForUserDto {
-  userId: UUID;
-  clubId: UUID;
-  roleId: UUID;
-}
+export type AssignRoleForUserDto = {
+  staffId: string;  
+  roleId: string;
+  clubId: string;
+};
 
 
 export interface BindPermissionDto {

@@ -13,8 +13,7 @@ type Params = {
 export default async function StaffPage({ params }: { params: Params }) {
   const { staffId, clubId } = await params;
 
-  // debug на 1 раз:
-  console.log('[SSR] staffId:', staffId, 'clubId:', clubId);
+ 
 
   const qc = new QueryClient();
 

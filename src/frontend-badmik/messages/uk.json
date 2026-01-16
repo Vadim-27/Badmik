@@ -1,16 +1,15 @@
-
 {
   "ActionHeader": {
     "title": {
-      "adminHeader":"Клуби",
-      "editClubHeader":"Редагування клубу",
-      "addClubHeader":"Додати клуб",
-      "addPlayerHeader":"Додати Гравця",
-      "addTrainingHeader":"Додати тренування",
-      "usersHeader":"Гравці клубу",
-      "trainingsHeader":"Тренування",
-      "editStaffHeader":"Редагування персоналу",
-      "addStaffHeader":"Додати персонал",
+      "adminHeader": "Клуби",
+      "editClubHeader": "Редагування клубу",
+      "addClubHeader": "Додати клуб",
+      "addPlayerHeader": "Додати Гравця",
+      "addTrainingHeader": "Додати тренування",
+      "usersHeader": "Гравці клубу",
+      "trainingsHeader": "Тренування",
+      "editStaffHeader": "Редагування персоналу",
+      "addStaffHeader": "Додати персонал",
       "employeeHeader": "Робітники клубів",
       "editLocationHeader": "Редагування локації",
       "addLocationHeader": "Додавання локації"
@@ -20,7 +19,7 @@
     "Admin": "Адмін",
     "DashboardMain": "Дашбоард",
     "Workout": "Тренування",
-    "Clubs":"Клуби",
+    "Clubs": "Клуби",
     "UsersClub": "Гравці клубу",
     "Players": "Гравці",
     "Settings": "Налаштування",
@@ -77,23 +76,23 @@
     "repeatCountMax": "Максимум 8",
     "weekday": "День тижня",
     "daysShort": {
-    "monday": "Пн",
-    "tuesday": "Вт",
-    "wednesday": "Ср",
-    "thursday": "Чт",
-    "friday": "Пт",
-    "saturday": "Сб",
-    "sunday": "Нд"
-  },
+      "monday": "Пн",
+      "tuesday": "Вт",
+      "wednesday": "Ср",
+      "thursday": "Чт",
+      "friday": "Пт",
+      "saturday": "Сб",
+      "sunday": "Нд"
+    },
     "selectDays": {
-    "monday": "Понеділок",
-    "tuesday": "Вівторок",
-    "wednesday": "Середа",
-    "thursday": "Четвер",
-    "friday": "П'ятниця",
-    "saturday": "Субота",
-    "sunday": "Неділя",
-    "select": "-- Оберіть день --"
+      "monday": "Понеділок",
+      "tuesday": "Вівторок",
+      "wednesday": "Середа",
+      "thursday": "Четвер",
+      "friday": "П'ятниця",
+      "saturday": "Субота",
+      "sunday": "Неділя",
+      "select": "-- Оберіть день --"
     },
     "weekdayRequired": "Оберіть день тижня",
     "repeatTip": "При публікації створюються лише найближчі заняття (напр., на 14 днів). Решта додаються автоматично до досягнення ліміту повторів.",
@@ -107,16 +106,16 @@
     "priceMinError": "ціна не може бути менешою 1 грн",
     "priceRequiredError": "Вкажіть ціну"
   },
-"Bookings": {
+  "Bookings": {
     "date": "Дата",
     "time": "Час",
     "trainingName": "Назва тренування",
-    
+
     "types": {
-  "type": "Тип",
-  "group": "Групове",
-  "individual": "Індивідуальне"
-},
+      "type": "Тип",
+      "group": "Групове",
+      "individual": "Індивідуальне"
+    },
     "level": "Рівень",
     "club": "Клуб",
     "participantsLimit": "Записані / Ліміт",
@@ -148,7 +147,7 @@
       "cancelled": "Відмінено",
       "finished": "Завершене"
     },
-  "addTraining": "Додати тренування"
+    "addTraining": "Додати тренування"
   },
   "UI": {
     "buttons": {
@@ -178,9 +177,9 @@
       "delete": "Видалити"
     },
     "ConfirmDialog": {
-    "title": "Підтвердження",
-    "description": "Ви дійсно хочете видалити цей клуб?"
-  }
+      "title": "Підтвердження",
+      "description": "Ви дійсно хочете видалити цей клуб?"
+    }
   },
   "AddClubForm": {
     "name": "Назва залу",
@@ -202,9 +201,9 @@
     "level": "Рівень",
     "club": "Клуб",
     "ConfirmDialog": {
-    "title": "Підтвердження",
-    "description": "Ви дійсно хочете видалити цього користувача?"
-  }
+      "title": "Підтвердження",
+      "description": "Ви дійсно хочете видалити цього користувача?"
+    }
   },
   "UserTable": {
     "fullName": "Повне ім'я",
@@ -227,6 +226,13 @@
     "confirm": "Так",
     "cancel": "Ні"
   },
+  "staffBreadcrumbs": {
+    "Admin": "Адмін",
+    "Staff": "Співробітники",
+    "EditStaff": "Редагувати співробітника",
+    "AddStaff": "Додати співробітника",
+    "StaffOne": "Співробітник"
+  },
   "EmployeeForm": {
     "email": "Електронна пошта",
     "emailRequired": "Електронна пошта обов'язкова",
@@ -247,15 +253,252 @@
     "submitCreate": "Створити користувача",
     "submitUpdate": "Оновити користувача"
   },
-  "EmployeeTable": {
-    
-    "firstName": "Ім'я",
-    "lastName": "Прізвище",
-    "role": "Роль",
-    "actions": "Дії",
-    "view": "Переглянути",
-    "edit": "Редагувати",
-    "delete": "Видалити",
-    "confirmDelete": "Ви дійсно хочете видалити цього користувача?"
-}
+  "StaffTable": {
+    "filters": {
+      "status": {
+        "label": "Статус",
+        "all": "Усі",
+        "active": "Активні",
+        "inactive": "Неактивні"
+      },
+      "search": {
+        "placeholder": "Пошук за ПІБ / email / телефоном..."
+      }
+    },
+    "columns": {
+      "fio": "ФІО",
+      "email": "Email",
+      "phone": "Телефон",
+      "position": "Посада",
+      "status": "Статус",
+      "employment": "Оформлення",
+      "salaryType": "Вид оплати",
+      "sum": "Сума",
+      "currency": "Валюта",
+      "actions": "Дії"
+    },
+    "empty": "Немає співробітників для відображення.",
+    "error": "Помилка завантаження співробітників",
+    "actions": {
+      "view": "Переглянути",
+      "edit": "Редагувати",
+      "delete": "Видалити"
+    },
+    "pagination": {
+      "summary": "{from}-{to} з {total}",
+      "first": "Перша сторінка",
+      "prev": "Попередня сторінка",
+      "next": "Наступна сторінка",
+      "last": "Остання сторінка",
+      "rows": "Кількість рядків",
+      "perPage": "{n} / стор."
+    },
+    "confirmDelete": {
+      "title": "Видалити співробітника",
+      "noName": "без імені",
+      "message": "Ви дійсно бажаєте видалити \"{name}\"? Дію не можна буде скасувати.",
+      "confirm": "Так, видалити",
+      "cancel": "Ні"
+    }
+  },
+  "RoleFormSelectField": {
+    "ClubTrainer": "Тренер клубу",
+    "ClubAdmin": "Адміністратор клубу",
+    "ClubManager": "Менеджер клубу"
+  },
+  "StaffPosition": {
+    "Trainer": "Тренер",
+    "Manager": "Менеджер",
+    "Administrator": "Адміністратор",
+    "Accountant": "Бухгалтер"
+  },
+  "StaffStatus": {
+    "New": "Новий",
+    "Active": "Активний",
+    "Disabled": "Деактивований",
+    "Deleted": "Видалений"
+  },
+  "EmploymentType": {
+    "Employee": "Працівник",
+    "Contractor": "Підрядник",
+    "PartTime": "Неповна зайнятість",
+    "Volunteer": "Волонтер"
+  },
+  "WorkingHoursField": {
+    "label": "Робочі години",
+    "weekdayButton": "Пн–Пт",
+    "clearAll": "Очистити все",
+    "dash": "–",
+    "days": {
+      "monday": "Понеділок",
+      "tuesday": "Вівторок",
+      "wednesday": "Середа",
+      "thursday": "Четвер",
+      "friday": "П'ятниця",
+      "saturday": "Субота",
+      "sunday": "Неділя"
+    }
+  },
+  "StaffForm": {
+     "avatar": {
+      "placeholder": "Аватар",
+      "alt": "Аватар",
+      "upload": "Завантажити",
+      "uploading": "Завантаження…",
+      "remove": "Прибрати",
+      "errors": {
+        "notImage": "Потрібне зображення.",
+        "tooLarge": "Максимальний розмір {max}MB.",
+        "uploadFailed": "Не вдалося завантажити файл."
+      }
+    },
+    "fields": {
+      "firstName": "Імʼя",
+      "lastName": "Прізвище",
+      "email": "Email",
+      "password": "Пароль",
+      "PasswordChangeModal": {
+        "title": "Змінити пароль",
+        "fields": {
+          "new": "Новий пароль",
+          "confirm": "Підтвердіть пароль"
+        },
+        "placeholders": {
+          "new": "Введіть новий пароль",
+          "confirm": "Повторіть пароль"
+        },
+        "buttons": {
+          "cancel": "Скасувати",
+          "save": "Зберегти"
+        },
+
+        "tooltip": {
+          "title": "Пароль має містити:",
+          "items": ["8+ символів", "велику і малу літери", "цифру", "спецсимвол", "без пробілів"]
+        },
+        "aria": {
+          "show": "Показати пароль",
+          "hide": "Сховати пароль",
+          "close": "Закрити",
+          "rules": "Вимоги до пароля"
+        }
+      },
+      "role": "Роль",
+      "title": "Посада (текст)",
+      "phone": "Номер телефону",
+      "club": "Клуб",
+      "activity": "Активність",
+      "positionType": "Оберіть посаду",
+      "dob": "Дата народження",
+      "startDate": "Дата початку роботи",
+      "endDate": "Дата завершення роботи",
+      "employmentType": "Тип зайнятості",
+      "payrollNotes": "Нотатки для бухгалтерії",
+      "notes": "Загальні нотатки"
+    },
+    "actions": {
+      "changePassword": "Змінити пароль"
+    },
+    "placeholders": {
+      "role": "Оберіть роль…",
+      "positionType": "Оберіть посаду…",
+      "employmentType": "Оберіть тип зайнятості…",
+      "titleExample": "Наприклад: тренер, адміністратор",
+      "phone": "+380XXXXXXXXX",
+      "payrollNotes": "Деталі виплат, домовленості тощо",
+      "notes": "Будь-які службові помітки"
+    }
+  },
+  "StaffErrors": {
+    "firstName": {
+      "required": "Імʼя обовʼязкове.",
+      "min": "Імʼя занадто коротке.",
+      "max": "Імʼя занадто довге.",
+      "pattern": "Імʼя містить недопустимі символи."
+    },
+    "lastName": {
+      "required": "Прізвище обовʼязкове.",
+      "min": "Прізвище занадто коротке.",
+      "max": "Прізвище занадто довге.",
+      "pattern": "Прізвище містить недопустимі символи."
+    },
+
+    "email": {
+      "required": "Email обовʼязковий.",
+      "min": "Email занадто короткий.",
+      "max": "Email занадто довгий.",
+      "pattern": "Невірний формат Email."
+    },
+
+    "password": {
+      "required": "Пароль обовʼязковий.",
+      "min": "Пароль має бути щонайменше 8 символів.",
+      "max": "Пароль має бути не більше 64 символів.",
+      "noSpace": "Пароль не може містити пробіли.",
+      "hasDigit": "Пароль має містити хоча б одну цифру.",
+      "hasUpper": "Пароль має містити хоча б одну велику літеру.",
+      "hasLower": "Пароль має містити хоча б одну малу літеру.",
+      "hasSpecial": "Пароль має містити хоча б один спецсимвол.",
+
+      "confirmRequired": "Підтвердіть пароль.",
+      "mismatch": "Паролі не співпадають."
+    },
+
+    "title": {
+      "required": "Посада обовʼязкова.",
+      "min": "Назва посади занадто коротка.",
+      "max": "Назва посади занадто довга.",
+      "pattern": "Посада може містити лише літери та пробіли."
+    },
+
+    "phone": {
+      "required": "Телефон обовʼязковий.",
+      "pattern": "Номер має бути у форматі +380XXXXXXXXX."
+    },
+
+    "dob": {
+      "required": "Дата народження обовʼязкова.",
+      "validate": "Вік має бути не менше 8 років."
+    },
+
+    "startDate": {
+      "required": "Дата початку є обовʼязковою.",
+      "validate": "Не можна обирати дату в минулому."
+    },
+
+    "endDate": {
+      "validate": "Не можна обирати дату в минулому."
+    },
+
+    "notes": {
+      "validate": "Занадто довгий текст (макс. 2000 символів)."
+    },
+    "payrollNotes": {
+      "validate": "Занадто довгий текст (макс. 2000 символів)."
+    }
+  },
+  "SalaryField": {
+    "payTypeLabel": "Тип оплати",
+    "payTypeAria": "Тип оплати",
+    "types": {
+      "Hourly": "Погодинна",
+      "Salary": "Місячна",
+      "PerTraining": "За тренування"
+    },
+    "rateLabels": {
+      "Hourly": "Ставка (за годину)",
+      "Salary": "Місячна зарплата",
+      "PerTraining": "Ставка (за тренування)"
+    },
+    "currency": {
+      "UAH": "₴ UAH",
+      "USD": "$ USD"
+    },
+    "placeholders": {
+      "rate": "0"
+    },
+    "errors": {
+      "nonNegative": "Ставка не може бути відʼємною."
+    }
+  }
 }

@@ -62,11 +62,11 @@ export const roleApiServer = {
   },
 
   // GET /api/roles/GetRolesByStaffId
-  async listByStaff(staffId: string, clubId: string): Promise<Role[]> {
+  async listByStaff(staffId: string): Promise<Role[]> {
     const res = await serverFetch(
-      ENDPOINTS.role.getByStaffId(staffId, clubId),
+      ENDPOINTS.role.getByStaffId(staffId),
       {},
-      { revalidate: 30, tags: ['role', `staff:${staffId}`, `club:${clubId}`] },
+      { revalidate: 30, tags: ['role', `staff:${staffId}`] },
     );
     return res.json();
   },

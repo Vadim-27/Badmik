@@ -1,11 +1,472 @@
+// 'use client';
+
+// import { useEffect, useMemo, useState } from 'react';
+// import styles from './StaffTable.module.scss';
+// import Link from 'next/link';
+
+// import { useStaffList } from '@/services/staff/queries.client';
+// import type {
+//   Staff,
+//   StaffEmploymentType,
+//   StaffStatus,
+//   SalaryType,
+//   StaffPositionType,
+// } from '@/services/types/staff.dto';
+
+// import SpinnerOverlay from '@/app/components/ui/SpinnerOverlay/SpinnerOverlay';
+// import ConfirmDialog from '@/app/components/ui/DeleteModal/ConfirmDialog';
+
+// import EyeIcon from '@/app/assets/icons/Eye.svg';
+// import EditIcon from '@/app/assets/icons/Edit.svg';
+// import TrashIcon from '@/app/assets/icons/Trash.svg';
+// import Tooltip from '@/app/components/ui/Tooltip/Tooltip';
+// import { useTranslations } from 'next-intl';
+
+// const EMPTY_LABEL = 'дані ще не заповнені';
+// type TranslateFn = (key: string, values?: Record<string, unknown>) => string;
+
+// const displayOrDefault = (v: unknown) => {
+//   if (v === null || v === undefined) return EMPTY_LABEL;
+//   const s = String(v);
+//   return s.trim() === '' ? EMPTY_LABEL : s;
+// };
+
+// const toNameCase = (v: unknown) =>
+//   String(v ?? '')
+//     .trim()
+//     .toLocaleLowerCase('uk-UA')
+//     .replace(/(^|\s|-)\p{L}/gu, (m) => m.toLocaleUpperCase('uk-UA'));
+
+// function fullName(first?: unknown, last?: unknown) {
+//   const f = String(first ?? '').trim();
+//   const l = String(last ?? '').trim();
+//   if (!f && !l) return EMPTY_LABEL;
+//   return `${f}${f && l ? ' ' : ''}${l}`;
+// }
+
+// type StaffFromApi = Pick<
+//   Staff,
+//   'id' | 'clubId' | 'email' | 'firstName' | 'lastName' | 'title' | 'staffStatus' | 'employmentType' | 'salaryType' | 'currency'
+// > & {
+//   phoneNumber?: string | null;
+//   positionType?: StaffPositionType | null;
+
+//   hourlyRate?: number | null;
+//   monthlySalary?: number | null;
+//   perTrainingRate?: number | null; // бо в DTO Staff його нема, але бек може віддавати
+// };
+
+// // function calcSum(u: StaffFromApi): number | null {
+// //   const salaryType = String(u.salaryType ?? '');
+// //   const monthlySalary = u.monthlySalary;
+// //   const hourlyRate = u.hourlyRate;
+// //   const perTrainingRate = (u as any).perTrainingRate;
+
+// //   if (salaryType === 'Salary') return typeof monthlySalary === 'number' ? monthlySalary : null;
+// //   if (salaryType === 'Hourly') return typeof hourlyRate === 'number' ? hourlyRate : null;
+// //   if (salaryType === 'PerTraining')
+// //     return typeof perTrainingRate === 'number' ? perTrainingRate : null;
+// //   return null;
+// // }
+
+// function calcSum(u: StaffFromApi): number | null {
+//   const type: SalaryType | null = u.salaryType ?? null;
+
+//   if (type === 'Salary') return typeof u.monthlySalary === 'number' ? u.monthlySalary : null;
+//   if (type === 'Hourly') return typeof u.hourlyRate === 'number' ? u.hourlyRate : null;
+//   if (type === 'PerTraining')
+//     return typeof u.perTrainingRate === 'number' ? u.perTrainingRate : null;
+
+//   return null;
+// }
+
+
+// function statusTone(st: unknown) {
+//   const v = String(st ?? '').toLowerCase();
+//   if (v.includes('active') || v.includes('working') || v.includes('employed')) return 'active';
+//   if (v.includes('inactive') || v.includes('blocked') || v.includes('fired')) return 'inactive';
+//   return 'neutral';
+// }
+
+// type Props = {
+//   clubId?: string;
+// };
+
+// export default function StaffTable({ clubId }: Props) {
+//   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
+//   const [search, setSearch] = useState('');
+//   const [debouncedSearch, setDebouncedSearch] = useState('');
+
+//   // pagination (1-based як на бекові)
+//   const [page, setPage] = useState(1);
+//   const [pageSize, setPageSize] = useState(10);
+
+//   useEffect(() => {
+//     const id = setTimeout(() => setDebouncedSearch(search.trim()), 800);
+//     return () => clearTimeout(id);
+//   }, [search]);
+
+//   // delete modal
+//   const [staffToDelete, setStaffToDelete] = useState<{ id: string; name?: string | null } | null>(
+//     null
+//   );
+//   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+
+//   const t = useTranslations('StaffTable');
+//   const tCommon = useTranslations('Common');
+//   const tPos = useTranslations('StaffPosition');
+//   const tStatus = useTranslations('StaffStatus');
+//   const tEmp = useTranslations('EmploymentType');
+//   const tSalary = useTranslations('SalaryField');
+//   const tCur = useTranslations('Currency');
+
+//   const safeT = (tFn: TranslateFn, key?: string | null): string => {
+//     if (!key) return tCommon('dash');
+//     try {
+//       return tFn(key);
+//     } catch {
+//       return String(key);
+//     }
+//   };
+
+//   const askDelete = (id: string, name?: string | null) => {
+//     setStaffToDelete({ id, name });
+//     setIsConfirmOpen(true);
+//   };
+
+//   // ✅ запит: завжди однаково передаємо {clubId,page,pageSize}
+//   const staffQuery = useStaffList({ clubId, page, pageSize });
+//   const { data, isLoading, isFetching, isError } = staffQuery;
+//   const busy = isLoading || isFetching;
+
+//   // items (підтримуємо items/list/масив на випадок різних форматів)
+//   const items: StaffFromApi[] = useMemo(() => {
+//     const d: any = data;
+//     if (!d) return [];
+//     if (Array.isArray(d)) return d;
+//     if (Array.isArray(d.items)) return d.items;
+//     if (Array.isArray(d.list)) return d.list;
+//     return [];
+//   }, [data]);
+
+//   // meta (totalCount/page/pageSize)
+//   const meta = useMemo(() => {
+//     const d: any = data;
+//     const totalCount = Number(d?.totalCount ?? d?.total ?? items.length ?? 0);
+//     const serverPage = Number(d?.page ?? page);
+//     const serverPageSize = Number(d?.pageSize ?? pageSize);
+
+//     return { totalCount, page: serverPage, pageSize: serverPageSize };
+//   }, [data, items.length, page, pageSize]);
+
+//   const totalPages = Math.max(1, Math.ceil((meta.totalCount || 0) / pageSize));
+//   const from = meta.totalCount ? (page - 1) * pageSize + 1 : 0;
+//   const to = Math.min(page * pageSize, meta.totalCount || 0);
+
+//   // фільтри (фільтруємо тільки поточну сторінку, бо пагінація бекова)
+//   const filtered = useMemo(() => {
+//     if (!items.length) return [];
+
+//     return items.filter((u: any) => {
+//       const tone = statusTone(u.staffStatus);
+
+//       if (statusFilter === 'active' && tone !== 'active') return false;
+//       if (statusFilter === 'inactive' && tone !== 'inactive') return false;
+
+//       if (debouncedSearch) {
+//         const haystack =
+//           `${u.firstName ?? ''} ${u.lastName ?? ''} ${u.email ?? ''} ${u.phoneNumber ?? ''} ${u.title ?? ''}`.toLowerCase();
+//         if (!haystack.includes(debouncedSearch.toLowerCase())) return false;
+//       }
+
+//       return true;
+//     });
+//   }, [items, statusFilter, debouncedSearch]);
+
+//   useEffect(() => {
+//     setPage(1);
+//   }, [clubId, pageSize]);
+
+//   const handleConfirmDelete = async () => {
+//     if (!staffToDelete) return;
+//     try {
+//       console.warn('useDeleteStaff ще не підключено');
+//     } finally {
+//       setIsConfirmOpen(false);
+//       setStaffToDelete(null);
+//     }
+//   };
+
+//   const handleCancelDelete = () => {
+//     setIsConfirmOpen(false);
+//     setStaffToDelete(null);
+//   };
+
+//   return (
+//     <div className={styles.wrapper}>
+//       {/* filters */}
+//       <div className={styles.filterBar}>
+//         <div className={styles.filterGroup}>
+//           <span className={styles.filterLabelUpper}>{t('filters.status.label')}</span>
+//           <select
+//             className={styles.filterSelect}
+//             value={statusFilter}
+//             onChange={(e) => setStatusFilter(e.target.value as any)}
+//           >
+//             <option value="all">{t('filters.status.all')}</option>
+//             <option value="active">{t('filters.status.active')}</option>
+//             <option value="inactive">{t('filters.status.inactive')}</option>
+//           </select>
+//         </div>
+
+//         <input
+//           className={styles.searchInput}
+//           type="text"
+//           placeholder={t('filters.search.placeholder')}
+//           value={search}
+//           onChange={(e) => setSearch(e.target.value)}
+//         />
+//       </div>
+
+//       {/* table */}
+//       <div className={styles.tableOuter}>
+//         <div className={styles.tableWrapper}>
+//           {busy && <SpinnerOverlay fullscreen={false} />}
+
+//           <table className={styles.table}>
+//             <thead>
+//               <tr>
+//                 <th className={styles.colFio}>{t('columns.fio')}</th>
+//                 <th className={styles.colEmail}>{t('columns.email')}</th>
+//                 <th className={styles.colPhone}>{t('columns.phone')}</th>
+//                 <th className={styles.colTitle}>{t('columns.position')}</th>
+//                 <th className={styles.colStatus}>{t('columns.status')}</th>
+//                 <th className={styles.colEmployment}>{t('columns.employment')}</th>
+//                 <th className={styles.colSalaryType}>{t('columns.salaryType')}</th>
+//                 <th className={styles.colSum}>{t('columns.sum')}</th>
+//                 <th className={styles.colCurrency}>{t('columns.currency')}</th>
+//                 <th className={styles.colActions}>{t('columns.actions')}</th>
+//               </tr>
+//             </thead>
+
+//             <tbody>
+//               {filtered.length === 0 ? (
+//                 <tr>
+//                   <td colSpan={10} className={styles.emptyState}>
+//                     {t('empty')}
+//                   </td>
+//                 </tr>
+//               ) : (
+//                 filtered.map((u: any) => {
+//                   const first = toNameCase(u.firstName);
+//                   const last = toNameCase(u.lastName);
+//                   const fio = fullName(first, last);
+
+//                   const sum = calcSum(u);
+//                   const tone = statusTone(u.staffStatus);
+//                   const safeTPos = (key?: string | null) => {
+//                     if (!key) return '—';
+//                     try {
+//                       return tPos(key);
+//                     } catch {
+//                       return key;
+//                     }
+//                   };
+
+//                   const viewHref = `/admin/${u.clubId}/staff/${u.id}`;
+//                   const editHref = `/admin/${u.clubId}/staff/${u.id}/EditStaff`;
+
+//                   return (
+//                     <tr key={String(u.id)}>
+//                       <td>
+//                         <Link href={viewHref} className={styles.fioLink}>
+//                           <div className={styles.fioMain}>{fio}</div>
+//                           <div className={styles.fioSub}>{displayOrDefault(u.title)}</div>
+//                         </Link>
+//                       </td>
+
+//                       <td className={styles.muted}>{displayOrDefault(u.email)}</td>
+//                       <td className={styles.muted}>{displayOrDefault(u.phoneNumber)}</td>
+//                       <td className={styles.muted}>{safeTPos(u.positionType)}</td>
+
+//                       <td>
+//                         <span
+//                           className={
+//                             tone === 'active'
+//                               ? styles.statusActive
+//                               : tone === 'inactive'
+//                                 ? styles.statusInactive
+//                                 : styles.statusNeutral
+//                           }
+//                         >
+//                           {displayOrDefault(u.staffStatus)}
+//                         </span>
+//                       </td>
+
+//                       <td className={styles.muted}>
+//                         {displayOrDefault((u as any).employmentType)}
+//                       </td>
+//                       <td className={styles.muted}>{displayOrDefault(u.salaryType)}</td>
+//                       <td className={styles.muted}>{sum == null ? '—' : String(sum)}</td>
+//                       <td className={styles.muted}>{displayOrDefault(u.currency)}</td>
+
+//                       <td>
+//                         <div className={styles.actionsWrapper}>
+//                           <Tooltip content={t('actions.view')}>
+//                             <Link
+//                               href={viewHref}
+//                               className={styles.iconBtn}
+//                               title={t('actions.view')}
+//                               aria-label={t('actions.view')}
+//                             >
+//                               <EyeIcon className={styles.icon} aria-hidden />
+//                             </Link>
+//                           </Tooltip>
+
+//                           <Tooltip content={t('actions.edit')}>
+//                             <Link
+//                               href={editHref}
+//                               className={styles.iconBtn}
+//                               title={t('actions.edit')}
+//                               aria-label={t('actions.edit')}
+//                             >
+//                               <EditIcon className={styles.icon} aria-hidden />
+//                             </Link>
+//                           </Tooltip>
+
+//                           <Tooltip content={t('actions.delete')}>
+//                             <button
+//                               type="button"
+//                               className={styles.iconBtn}
+//                               title={t('actions.delete')}
+//                               aria-label={t('actions.delete')}
+//                               onClick={() => askDelete(String(u.id), fio)}
+//                             >
+//                               <TrashIcon className={styles.icon} aria-hidden />
+//                             </button>
+//                           </Tooltip>
+//                         </div>
+//                       </td>
+//                     </tr>
+//                   );
+//                 })
+//               )}
+//             </tbody>
+//           </table>
+
+//           {/* pagination */}
+//           <div className={styles.pagination}>
+//             <div className={styles.pageSummary}>
+//               {from}-{to} з {meta.totalCount}
+//             </div>
+
+//             <div className={styles.pageControls}>
+//               <Tooltip content="Перша сторінка">
+//                 <button
+//                   type="button"
+//                   className={styles.pageBtn}
+//                   onClick={() => setPage(1)}
+//                   disabled={page <= 1}
+//                   aria-label="Перша сторінка"
+//                 >
+//                   «
+//                 </button>
+//               </Tooltip>
+
+//               <Tooltip content="Попередня сторінка">
+//                 <button
+//                   type="button"
+//                   className={styles.pageBtn}
+//                   onClick={() => setPage((p) => Math.max(1, p - 1))}
+//                   disabled={page <= 1}
+//                   aria-label="Попередня сторінка"
+//                 >
+//                   ←
+//                 </button>
+//               </Tooltip>
+
+//               <span className={styles.pageInfo}>
+//                 {page} / {totalPages}
+//               </span>
+
+//               <Tooltip content="Наступна сторінка">
+//                 <button
+//                   type="button"
+//                   className={styles.pageBtn}
+//                   onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+//                   disabled={page >= totalPages}
+//                   aria-label="Наступна сторінка"
+//                 >
+//                   →
+//                 </button>
+//               </Tooltip>
+
+//               <Tooltip content="Остання сторінка">
+//                 <button
+//                   type="button"
+//                   className={styles.pageBtn}
+//                   onClick={() => setPage(totalPages)}
+//                   disabled={page >= totalPages}
+//                   aria-label="Остання сторінка"
+//                 >
+//                   »
+//                 </button>
+//               </Tooltip>
+
+//               <Tooltip content="Кількість рядків">
+//                 <select
+//                   className={styles.pageSizeSelect}
+//                   value={pageSize}
+//                   onChange={(e) => setPageSize(Number(e.target.value) || 10)}
+//                   aria-label="Кількість рядків"
+//                 >
+//                   {[10, 20, 50].map((n) => (
+//                     <option key={n} value={n}>
+//                       {n} / стор.
+//                     </option>
+//                   ))}
+//                 </select>
+//               </Tooltip>
+//             </div>
+//           </div>
+
+//           {isError && <div className={styles.errorNote}>{t('error')}</div>}
+//         </div>
+//       </div>
+
+//       <ConfirmDialog
+//         open={isConfirmOpen}
+//         title={t('confirmDelete.title')}
+//         message={t('confirmDelete.message', {
+//           name: staffToDelete?.name || t('confirmDelete.noName'),
+//         })}
+//         confirmLabel={t('confirmDelete.confirm')}
+//         cancelLabel={t('confirmDelete.cancel')}
+//         onConfirm={handleConfirmDelete}
+//         onCancel={handleCancelDelete}
+//         isLoading={false}
+//       />
+//     </div>
+//   );
+// }
+
+//==========================================
+
+
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
 import styles from './StaffTable.module.scss';
-import Link from 'next/link';
+import {Link} from '@/i18n/navigation';
 
 import { useStaffList } from '@/services/staff/queries.client';
-import type { Staff } from '@/services/types/staff.dto';
+import type {
+  Staff,
+  StaffStatus,
+  StaffEmploymentType,
+  SalaryType,
+  StaffPositionType,
+} from '@/services/types/staff.dto';
 
 import SpinnerOverlay from '@/app/components/ui/SpinnerOverlay/SpinnerOverlay';
 import ConfirmDialog from '@/app/components/ui/DeleteModal/ConfirmDialog';
@@ -14,10 +475,17 @@ import EyeIcon from '@/app/assets/icons/Eye.svg';
 import EditIcon from '@/app/assets/icons/Edit.svg';
 import TrashIcon from '@/app/assets/icons/Trash.svg';
 import Tooltip from '@/app/components/ui/Tooltip/Tooltip';
+import { useTranslations } from 'next-intl';
+import type { _Translator } from 'next-intl';
 
+type TranslateFn = _Translator<Record<string, never>>;
+
+// type TranslateFn = (key: string, values?: Record<string, unknown>) => string;
+
+const DASH = '—';
 const EMPTY_LABEL = 'дані ще не заповнені';
 
-const displayOrDefault = (v: unknown) => {
+const displayOrDefault = (v: unknown): string => {
   if (v === null || v === undefined) return EMPTY_LABEL;
   const s = String(v);
   return s.trim() === '' ? EMPTY_LABEL : s;
@@ -36,37 +504,140 @@ function fullName(first?: unknown, last?: unknown) {
   return `${f}${f && l ? ' ' : ''}${l}`;
 }
 
-type StaffFromApi = Staff & Partial<Record<string, unknown>>;
+/** ---------- type guards без any ---------- */
+type UnknownRecord = Record<string, unknown>;
 
-function calcSum(u: StaffFromApi): number | null {
-  const salaryType = String((u as any).salaryType ?? '');
-  const monthlySalary = (u as any).monthlySalary;
-  const hourlyRate = (u as any).hourlyRate;
-  const perTrainingRate = (u as any).perTrainingRate;
-
-  if (salaryType === 'Salary') return typeof monthlySalary === 'number' ? monthlySalary : null;
-  if (salaryType === 'Hourly') return typeof hourlyRate === 'number' ? hourlyRate : null;
-  if (salaryType === 'PerTraining') return typeof perTrainingRate === 'number' ? perTrainingRate : null;
-  return null;
+function isRecord(v: unknown): v is UnknownRecord {
+  return typeof v === 'object' && v !== null;
 }
+
+function getProp(v: UnknownRecord, k: string): unknown {
+  return v[k];
+}
+
+function isStaffArray(v: unknown): v is Staff[] {
+  return Array.isArray(v);
+}
+
+type StaffListShape = Staff[] | UnknownRecord;
+
+type Extracted = {
+  items: Staff[];
+  total: number;
+  page?: number;
+  pageSize?: number;
+};
+
+function extractStaffList(data: unknown): Extracted {
+  // 1) якщо бек віддає масив Staff[]
+  if (isStaffArray(data)) {
+    return { items: data, total: data.length };
+  }
+
+  // 2) якщо бек віддає обʼєкт
+  if (isRecord(data)) {
+    // можливі варіанти масиву
+    const dataField = getProp(data, 'data');
+    const itemsField = getProp(data, 'items');
+    const listField = getProp(data, 'list');
+
+    const items =
+      (isStaffArray(dataField) && dataField) ||
+      (isStaffArray(itemsField) && itemsField) ||
+      (isStaffArray(listField) && listField) ||
+      [];
+
+    // можливі варіанти total
+    const totalField = getProp(data, 'total');
+    const totalCountField = getProp(data, 'totalCount');
+
+    const total =
+      typeof totalCountField === 'number'
+        ? totalCountField
+        : typeof totalField === 'number'
+          ? totalField
+          : items.length;
+
+    // можливі варіанти page/pageSize (не обовʼязково)
+    const pageField = getProp(data, 'page');
+    const pageSizeField = getProp(data, 'pageSize');
+
+    const page = typeof pageField === 'number' ? pageField : undefined;
+    const pageSize = typeof pageSizeField === 'number' ? pageSizeField : undefined;
+
+    return { items, total, page, pageSize };
+  }
+
+  // 3) все інше
+  return { items: [], total: 0 };
+}
+
+/** ---------- переклад enum значень з бекенду ---------- */
+const safeEnumT = (tFn: TranslateFn, key?: string | null): string => {
+  if (!key) return DASH;
+  const raw = String(key);
+  try {
+    const out = tFn(raw);
+    // якщо перекладу нема — next-intl може повернути ключ або щось з крапкою
+    if (!out || out === raw || out.includes('.')) return raw;
+    return out;
+  } catch {
+    return raw;
+  }
+};
+
+const safeSalaryType = (tSalary: TranslateFn, key?: SalaryType | string | null): string => {
+  if (!key) return DASH;
+  const raw = String(key);
+  try {
+    const out = tSalary(`types.${raw}`);
+    if (!out || out === `types.${raw}` || out.includes('.')) return raw;
+    return out;
+  } catch {
+    return raw;
+  }
+};
+
+const safeCurrency = (tSalary: TranslateFn, key?: string | null): string => {
+  if (!key) return DASH;
+  const raw = String(key);
+  try {
+    const out = tSalary(`currency.${raw}`);
+    if (!out || out === `currency.${raw}` || out.includes('.')) return raw;
+    return out;
+  } catch {
+    return raw;
+  }
+};
 
 function statusTone(st: unknown) {
   const v = String(st ?? '').toLowerCase();
   if (v.includes('active') || v.includes('working') || v.includes('employed')) return 'active';
-  if (v.includes('inactive') || v.includes('blocked') || v.includes('fired')) return 'inactive';
+  if (v.includes('inactive') || v.includes('blocked') || v.includes('fired') || v.includes('disabled'))
+    return 'inactive';
   return 'neutral';
 }
 
-type Props = {
-  clubId?: string;
-};
+function calcSum(u: Staff): number | null {
+  if (u.salaryType === 'Salary') return typeof u.monthlySalary === 'number' ? u.monthlySalary : null;
+  if (u.salaryType === 'Hourly') return typeof u.hourlyRate === 'number' ? u.hourlyRate : null;
+
+  // перTrainingRate може бути не в Staff dto — читаємо як optional без any
+  if (u.salaryType === 'PerTraining') {
+    const maybe = (u as unknown as { perTrainingRate?: number | null }).perTrainingRate;
+    return typeof maybe === 'number' ? maybe : null;
+  }
+  return null;
+}
+
+type Props = { clubId?: string };
 
 export default function StaffTable({ clubId }: Props) {
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
 
-  // pagination (1-based як на бекові)
+  // pagination state (те що ти вже мав)
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
@@ -75,68 +646,59 @@ export default function StaffTable({ clubId }: Props) {
     return () => clearTimeout(id);
   }, [search]);
 
-  // delete modal
-  const [staffToDelete, setStaffToDelete] = useState<{ id: string; name?: string | null } | null>(null);
+  const [staffToDelete, setStaffToDelete] = useState<{ id: string; name?: string | null } | null>(
+    null
+  );
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+
+  // ✅ translations (твоя вкладеність)
+  const t = useTranslations('StaffTable');
+  const tPos = useTranslations('StaffPosition');
+  const tStatus = useTranslations('StaffStatus');
+  const tEmp = useTranslations('EmploymentType');
+  const tSalary = useTranslations('SalaryField');
 
   const askDelete = (id: string, name?: string | null) => {
     setStaffToDelete({ id, name });
     setIsConfirmOpen(true);
   };
 
-  // ✅ запит: завжди однаково передаємо {clubId,page,pageSize}
   const staffQuery = useStaffList({ clubId, page, pageSize });
   const { data, isLoading, isFetching, isError } = staffQuery;
   const busy = isLoading || isFetching;
 
-  // items (підтримуємо items/list/масив на випадок різних форматів)
-  const items: StaffFromApi[] = useMemo(() => {
-    const d: any = data;
-    if (!d) return [];
-    if (Array.isArray(d)) return d;
-    if (Array.isArray(d.items)) return d.items;
-    if (Array.isArray(d.list)) return d.list;
-    return [];
-  }, [data]);
+  // ✅ ВАЖЛИВО: extract без any і без припущень
+  const extracted = useMemo(() => extractStaffList(data), [data]);
+  const items = extracted.items;
+  const totalCount = extracted.total;
 
-  // meta (totalCount/page/pageSize)
-  const meta = useMemo(() => {
-    const d: any = data;
-    const totalCount = Number(d?.totalCount ?? d?.total ?? items.length ?? 0);
-    const serverPage = Number(d?.page ?? page);
-    const serverPageSize = Number(d?.pageSize ?? pageSize);
+  const totalPages = Math.max(1, Math.ceil((totalCount || 0) / pageSize));
+  const from = totalCount ? (page - 1) * pageSize + 1 : 0;
+  const to = Math.min(page * pageSize, totalCount || 0);
 
-    return { totalCount, page: serverPage, pageSize: serverPageSize };
-  }, [data, items.length, page, pageSize]);
+  useEffect(() => {
+    setPage(1);
+  }, [clubId, pageSize]);
 
-  const totalPages = Math.max(1, Math.ceil((meta.totalCount || 0) / pageSize));
-  const from = meta.totalCount ? (page - 1) * pageSize + 1 : 0;
-  const to = Math.min(page * pageSize, meta.totalCount || 0);
-
-  // фільтри (фільтруємо тільки поточну сторінку, бо пагінація бекова)
   const filtered = useMemo(() => {
     if (!items.length) return [];
 
-    return items.filter((u: any) => {
+    return items.filter((u) => {
       const tone = statusTone(u.staffStatus);
 
       if (statusFilter === 'active' && tone !== 'active') return false;
       if (statusFilter === 'inactive' && tone !== 'inactive') return false;
 
       if (debouncedSearch) {
-        const haystack = `${u.firstName ?? ''} ${u.lastName ?? ''} ${u.email ?? ''} ${u.phoneNumber ?? ''} ${u.title ?? ''}`.toLowerCase();
+        const phoneNumber = (u as unknown as { phoneNumber?: string | null }).phoneNumber ?? '';
+        const haystack =
+          `${u.firstName ?? ''} ${u.lastName ?? ''} ${u.email ?? ''} ${phoneNumber ?? ''} ${u.title ?? ''}`.toLowerCase();
         if (!haystack.includes(debouncedSearch.toLowerCase())) return false;
       }
 
       return true;
     });
   }, [items, statusFilter, debouncedSearch]);
-
-  // якщо змінив pageSize або clubId — логічно скинути на 1
-  useEffect(() => {
-    setPage(1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clubId, pageSize]);
 
   const handleConfirmDelete = async () => {
     if (!staffToDelete) return;
@@ -158,22 +720,22 @@ export default function StaffTable({ clubId }: Props) {
       {/* filters */}
       <div className={styles.filterBar}>
         <div className={styles.filterGroup}>
-          <span className={styles.filterLabelUpper}>СТАТУС</span>
+          <span className={styles.filterLabelUpper}>{t('filters.status.label')}</span>
           <select
             className={styles.filterSelect}
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value as any)}
+            onChange={(e) => setStatusFilter(e.target.value as 'all' | 'active' | 'inactive')}
           >
-            <option value="all">Усі</option>
-            <option value="active">Активні</option>
-            <option value="inactive">Неактивні</option>
+            <option value="all">{t('filters.status.all')}</option>
+            <option value="active">{t('filters.status.active')}</option>
+            <option value="inactive">{t('filters.status.inactive')}</option>
           </select>
         </div>
 
         <input
           className={styles.searchInput}
           type="text"
-          placeholder="Пошук за ПІБ / email / телефоном..."
+          placeholder={t('filters.search.placeholder')}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
@@ -187,16 +749,16 @@ export default function StaffTable({ clubId }: Props) {
           <table className={styles.table}>
             <thead>
               <tr>
-                <th className={styles.colFio}>ФІО</th>
-                <th className={styles.colEmail}>Email</th>
-                <th className={styles.colPhone}>Телефон</th>
-                <th className={styles.colTitle}>Посада</th>
-                <th className={styles.colStatus}>Статус</th>
-                <th className={styles.colEmployment}>Оформлення</th>
-                <th className={styles.colSalaryType}>Вид оплати</th>
-                <th className={styles.colSum}>Сума</th>
-                <th className={styles.colCurrency}>Валюта</th>
-                <th className={styles.colActions}>Дії</th>
+                <th className={styles.colFio}>{t('columns.fio')}</th>
+                <th className={styles.colEmail}>{t('columns.email')}</th>
+                <th className={styles.colPhone}>{t('columns.phone')}</th>
+                <th className={styles.colTitle}>{t('columns.position')}</th>
+                <th className={styles.colStatus}>{t('columns.status')}</th>
+                <th className={styles.colEmployment}>{t('columns.employment')}</th>
+                <th className={styles.colSalaryType}>{t('columns.salaryType')}</th>
+                <th className={styles.colSum}>{t('columns.sum')}</th>
+                <th className={styles.colCurrency}>{t('columns.currency')}</th>
+                <th className={styles.colActions}>{t('columns.actions')}</th>
               </tr>
             </thead>
 
@@ -204,11 +766,11 @@ export default function StaffTable({ clubId }: Props) {
               {filtered.length === 0 ? (
                 <tr>
                   <td colSpan={10} className={styles.emptyState}>
-                    Немає співробітників для відображення.
+                    {t('empty')}
                   </td>
                 </tr>
               ) : (
-                filtered.map((u: any) => {
+                filtered.map((u) => {
                   const first = toNameCase(u.firstName);
                   const last = toNameCase(u.lastName);
                   const fio = fullName(first, last);
@@ -216,11 +778,13 @@ export default function StaffTable({ clubId }: Props) {
                   const sum = calcSum(u);
                   const tone = statusTone(u.staffStatus);
 
+                  const phoneNumber = (u as unknown as { phoneNumber?: string | null }).phoneNumber ?? null;
+
                   const viewHref = `/admin/${u.clubId}/staff/${u.id}`;
                   const editHref = `/admin/${u.clubId}/staff/${u.id}/EditStaff`;
 
                   return (
-                    <tr key={String(u.id)}>
+                    <tr key={u.id}>
                       <td>
                         <Link href={viewHref} className={styles.fioLink}>
                           <div className={styles.fioMain}>{fio}</div>
@@ -229,9 +793,14 @@ export default function StaffTable({ clubId }: Props) {
                       </td>
 
                       <td className={styles.muted}>{displayOrDefault(u.email)}</td>
-                      <td className={styles.muted}>{displayOrDefault(u.phoneNumber)}</td>
-                      <td className={styles.muted}>{displayOrDefault(u.title)}</td>
+                      <td className={styles.muted}>{displayOrDefault(phoneNumber)}</td>
 
+                      {/* ✅ StaffPosition.* */}
+                      <td className={styles.muted}>
+                        {safeEnumT(tPos, (u.positionType ?? null) as StaffPositionType | null)}
+                      </td>
+
+                      {/* ✅ StaffStatus.* */}
                       <td>
                         <span
                           className={
@@ -242,39 +811,59 @@ export default function StaffTable({ clubId }: Props) {
                                 : styles.statusNeutral
                           }
                         >
-                          {displayOrDefault(u.staffStatus)}
+                          {safeEnumT(tStatus, u.staffStatus as StaffStatus)}
                         </span>
                       </td>
 
-                      <td className={styles.muted}>{displayOrDefault((u as any).employmentType)}</td>
-                      <td className={styles.muted}>{displayOrDefault((u as any).salaryType)}</td>
-                      <td className={styles.muted}>{sum == null ? '—' : String(sum)}</td>
-                      <td className={styles.muted}>{displayOrDefault((u as any).currency)}</td>
+                      {/* ✅ EmploymentType.* */}
+                      <td className={styles.muted}>
+                        {safeEnumT(tEmp, u.employmentType as StaffEmploymentType)}
+                      </td>
+
+                      {/* ✅ SalaryField.types.* */}
+                      <td className={styles.muted}>
+                        {safeSalaryType(tSalary, u.salaryType as SalaryType)}
+                      </td>
+
+                      <td className={styles.muted}>{sum == null ? DASH : String(sum)}</td>
+
+                      {/* ✅ SalaryField.currency.* */}
+                      <td className={styles.muted}>{safeCurrency(tSalary, u.currency ?? null)}</td>
 
                       <td>
                         <div className={styles.actionsWrapper}>
-                          <Tooltip content="Переглянути">
-                          <Link href={viewHref} className={styles.iconBtn} title="Переглянути" aria-label="Переглянути">
-                            <EyeIcon className={styles.icon} aria-hidden />
-                          </Link>
+                          <Tooltip content={t('actions.view')}>
+                            <Link
+                              href={viewHref}
+                              className={styles.iconBtn}
+                              title={t('actions.view')}
+                              aria-label={t('actions.view')}
+                            >
+                              <EyeIcon className={styles.icon} aria-hidden />
+                            </Link>
                           </Tooltip>
 
-                          <Tooltip content="Редагувати">
-                          <Link href={editHref} className={styles.iconBtn} title="Редагувати" aria-label="Редагувати">
-                            <EditIcon className={styles.icon} aria-hidden />
-                          </Link>
+                          <Tooltip content={t('actions.edit')}>
+                            <Link
+                              href={editHref}
+                              className={styles.iconBtn}
+                              title={t('actions.edit')}
+                              aria-label={t('actions.edit')}
+                            >
+                              <EditIcon className={styles.icon} aria-hidden />
+                            </Link>
                           </Tooltip>
 
-                         <Tooltip content="Видалити">
-                          <button
-                            type="button"
-                            className={styles.iconBtn}
-                            title="Видалити"
-                            aria-label="Видалити"
-                            onClick={() => askDelete(String(u.id), fio)}
-                          >
-                            <TrashIcon className={styles.icon} aria-hidden />
-                          </button>
+                          <Tooltip content={t('actions.delete')}>
+                            <button
+                              type="button"
+                              className={styles.iconBtn}
+                              title={t('actions.delete')}
+                              aria-label={t('actions.delete')}
+                              onClick={() => askDelete(u.id, fio)}
+                            >
+                              <TrashIcon className={styles.icon} aria-hidden />
+                            </button>
                           </Tooltip>
                         </div>
                       </td>
@@ -288,89 +877,89 @@ export default function StaffTable({ clubId }: Props) {
           {/* pagination */}
           <div className={styles.pagination}>
             <div className={styles.pageSummary}>
-              {from}-{to} з {meta.totalCount}
+              {t('pagination.summary', { from, to, total: totalCount })}
             </div>
 
             <div className={styles.pageControls}>
-              <Tooltip content="Перша сторінка">
-              <button
-                type="button"
-                className={styles.pageBtn}
-                onClick={() => setPage(1)}
-                disabled={page <= 1}
-                aria-label="Перша сторінка"
-              >
-                «
-              </button>
+              <Tooltip content={t('pagination.first')}>
+                <button
+                  type="button"
+                  className={styles.pageBtn}
+                  onClick={() => setPage(1)}
+                  disabled={page <= 1}
+                  aria-label={t('pagination.first')}
+                >
+                  «
+                </button>
               </Tooltip>
- 
-              <Tooltip content="Попередня сторінка">
-              <button
-                type="button"
-                className={styles.pageBtn}
-                onClick={() => setPage((p) => Math.max(1, p - 1))}
-                disabled={page <= 1}
-                aria-label="Попередня сторінка"
-              >
-                ←
-              </button>
+
+              <Tooltip content={t('pagination.prev')}>
+                <button
+                  type="button"
+                  className={styles.pageBtn}
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  disabled={page <= 1}
+                  aria-label={t('pagination.prev')}
+                >
+                  ←
+                </button>
               </Tooltip>
 
               <span className={styles.pageInfo}>
                 {page} / {totalPages}
               </span>
 
-              <Tooltip content="Наступна сторінка">
-              <button
-                type="button"
-                className={styles.pageBtn}
-                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                disabled={page >= totalPages}
-                aria-label="Наступна сторінка"
-              >
-                →
-              </button>
+              <Tooltip content={t('pagination.next')}>
+                <button
+                  type="button"
+                  className={styles.pageBtn}
+                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                  disabled={page >= totalPages}
+                  aria-label={t('pagination.next')}
+                >
+                  →
+                </button>
               </Tooltip>
 
-              <Tooltip content="Остання сторінка">
-              <button
-                type="button"
-                className={styles.pageBtn}
-                onClick={() => setPage(totalPages)}
-                disabled={page >= totalPages}
-                aria-label="Остання сторінка"
-              >
-                »
-              </button>
+              <Tooltip content={t('pagination.last')}>
+                <button
+                  type="button"
+                  className={styles.pageBtn}
+                  onClick={() => setPage(totalPages)}
+                  disabled={page >= totalPages}
+                  aria-label={t('pagination.last')}
+                >
+                  »
+                </button>
               </Tooltip>
 
-              <Tooltip content="Кількість рядків">
-              <select
-                className={styles.pageSizeSelect}
-                value={pageSize}
-                onChange={(e) => setPageSize(Number(e.target.value) || 10)}
-                aria-label="Кількість рядків"
-              >
-                {[10, 20, 50].map((n) => (
-                  <option key={n} value={n}>
-                    {n} / стор.
-                  </option>
-                ))}
-              </select>
+              <Tooltip content={t('pagination.rows')}>
+                <select
+                  className={styles.pageSizeSelect}
+                  value={pageSize}
+                  onChange={(e) => setPageSize(Number(e.target.value) || 10)}
+                  aria-label={t('pagination.rows')}
+                >
+                  {[10, 20, 50].map((n) => (
+                    <option key={n} value={n}>
+                      {t('pagination.perPage', { n })}
+                    </option>
+                  ))}
+                </select>
               </Tooltip>
             </div>
           </div>
 
-          {isError && <div className={styles.errorNote}>Помилка завантаження співробітників</div>}
+          {isError && <div className={styles.errorNote}>{t('error')}</div>}
         </div>
       </div>
 
       <ConfirmDialog
         open={isConfirmOpen}
-        title="Видалити співробітника"
-        message={`Ви дійсно бажаєте видалити "${staffToDelete?.name || 'без імені'}"? Дію не можна буде скасувати.`}
-        confirmLabel="Так, видалити"
-        cancelLabel="Ні"
+        title={t('confirmDelete.title')}
+        message={t('confirmDelete.message', { name: staffToDelete?.name || t('confirmDelete.noName') })}
+        confirmLabel={t('confirmDelete.confirm')}
+        cancelLabel={t('confirmDelete.cancel')}
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
         isLoading={false}
@@ -378,6 +967,3 @@ export default function StaffTable({ clubId }: Props) {
     </div>
   );
 }
-
-
-//==========================================
