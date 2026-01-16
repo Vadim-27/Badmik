@@ -23,6 +23,7 @@ import { useChangeStaffPassword } from '@/services/staff/queries.client';
 import RoleSelectField from '@/app/components/shared/Staff/StaffForm/RoleSelectField/RoleSelectField';
 
 import ScrollArea from '@/app/components/ui/Scroll/ScrollArea';
+import { useTranslations } from 'next-intl';
 
 export type StaffStatus = 'New' | 'Active' | 'Disabled' | 'Deleted';
 
@@ -76,8 +77,9 @@ type Props = {
   isChanged?: boolean;
   setIsChanged?: (v: boolean) => void;
   busy?: boolean;
-  scopedClubId?: string; // clubId з контексту клубного адміна (з URL/бекенду)
+  scopedClubId?: string; 
   isClubScoped?: boolean;
+  // canManageRoles?: boolean;
 };
 
 export type StaffFormHandle = {
@@ -115,11 +117,15 @@ const StaffFormNew = forwardRef<StaffFormHandle, Props>(function EmployeeForm(
     busy,
     scopedClubId,
     isClubScoped,
+    // canManageRoles,
   }: Props,
   ref
 ) {
   // const [isPasswordChangeEnabled, setPasswordChangeEnabled] = useState(false);
   const [isPasswordModalOpen, setPasswordModalOpen] = useState(false);
+
+  const t = useTranslations('StaffForm');       
+const tErr = useTranslations('StaffErrors'); 
 
   // сьогодні у форматі yyyy-mm-dd для min у даті
   const todayStr = useMemo(() => new Date().toISOString().slice(0, 10), []);
@@ -149,6 +155,7 @@ const StaffFormNew = forwardRef<StaffFormHandle, Props>(function EmployeeForm(
       employmentType: 'Employee',
       clubId: scopedClubId ?? '',
       positionType: null,
+     
 
       // workingHours: '',
       workingHours: {
@@ -176,6 +183,8 @@ const StaffFormNew = forwardRef<StaffFormHandle, Props>(function EmployeeForm(
   });
 
 const clubId = useWatch({ control, name: 'clubId' });
+
+
 
   useEffect(() => {
     setIsChanged?.(isDirty && isValid);
@@ -226,6 +235,16 @@ const clubId = useWatch({ control, name: 'clubId' });
     [handleSubmit, submitHandler, isValid, getValues]
   );
 
+  const errText = (msg?: unknown) => {
+  if (!msg) return '';
+  const key = String(msg);
+  try {
+    return tErr(key);
+  } catch {
+    return key; 
+  }
+};
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.formBox}>
@@ -260,62 +279,59 @@ const clubId = useWatch({ control, name: 'clubId' });
               {/* First name */}
               <div>
                 <label className={styles.label}>
-                  Імʼя <span style={{ color: '#e63946' }}>*</span>
+                  {t('fields.firstName')}<span style={{ color: '#e63946' }}>*</span>
                 </label>
-                <input
-                  className={`${styles.input} ${errors.firstName ? styles.errorInput : ''}`}
-                  {...register('firstName', {
-                    required: mode === 'create' ? 'First name is required.' : false,
-                    minLength: { value: 2, message: 'First name is too short.' },
-                    maxLength: { value: 60, message: 'First name is too long.' },
-                    pattern: {
-                      value: nameOnlyLetters,
-                      message: 'First name contains invalid characters.',
-                    },
-                  })}
-                />
-                {errors.firstName && <p className={styles.errorText}>{errors.firstName.message}</p>}
+               <input
+  className={`${styles.input} ${errors.firstName ? styles.errorInput : ''}`}
+  {...register('firstName', {
+    required: mode === 'create' ? 'firstName.required' : false,
+    minLength: { value: 2, message: 'firstName.min' },
+    maxLength: { value: 60, message: 'firstName.max' },
+    pattern: { value: nameOnlyLetters, message: 'firstName.pattern' },
+  })}
+/>
+                {errors.firstName && <p className={styles.errorText}>{errText(errors.firstName.message)}</p>}
               </div>
 
               {/* Last name */}
               <div>
                 <label className={styles.label}>
-                  Прізвище <span style={{ color: '#e63946' }}>*</span>
+                  {t('fields.lastName')} <span style={{ color: '#e63946' }}>*</span>
                 </label>
                 <input
                   className={`${styles.input} ${errors.lastName ? styles.errorInput : ''}`}
                   {...register('lastName', {
-                    required: mode === 'create' ? 'Last name is required.' : false,
-                    minLength: { value: 2, message: 'Last name is too short.' },
-                    maxLength: { value: 50, message: 'Last name is too long.' },
+                    required: mode === 'create' ? 'lastName.required.' : false,
+                    minLength: { value: 2, message: 'lastName.min' },
+                    maxLength: { value: 50, message: 'lastName.max' },
                     pattern: {
                       value: nameOnlyLetters,
-                      message: 'Last name contains invalid characters.',
+                      message: 'lastName.pattern',
                     },
                   })}
                 />
-                {errors.lastName && <p className={styles.errorText}>{errors.lastName.message}</p>}
+                {errors.lastName && <p className={styles.errorText}>{errText(errors.lastName.message)}</p>}
               </div>
 
               {/* Email */}
               <div>
                 <label className={styles.label}>
-                  Email <span style={{ color: '#e63946' }}>*</span>
+                  {t('fields.email')} <span style={{ color: '#e63946' }}>*</span>
                 </label>
                 <input
                   className={`${styles.input} ${errors.email ? styles.errorInput : ''}`}
                   type="email"
                   {...register('email', {
-                    required: mode === 'create' ? 'Email is required.' : false,
-                    minLength: { value: 5, message: 'Email is too short.' },
-                    maxLength: { value: 254, message: 'Email is too long.' },
+                    required: mode === 'create' ? 'email.required' : false,
+                    minLength: { value: 5, message: 'email.min' },
+                    maxLength: { value: 254, message: 'email.max' },
                     pattern: {
                       value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                      message: 'Email format is invalid.',
+                      message: 'email.pattern',
                     },
                   })}
                 />
-                {errors.email && <p className={styles.errorText}>{errors.email.message}</p>}
+                {errors.email && <p className={styles.errorText}>{errText(errors.email.message)}</p>}
               </div>
 
               {/* Password */}
@@ -323,39 +339,55 @@ const clubId = useWatch({ control, name: 'clubId' });
               {mode === 'create' && (
                 <div>
                   <label className={styles.label}>
-                    Пароль <span style={{ color: '#e63946' }}>*</span>
+                    {t('fields.password')} <span style={{ color: '#e63946' }}>*</span>
                   </label>
                   <input
                     className={`${styles.input} ${errors.password ? styles.errorInput : ''}`}
                     type="password"
                     autoComplete="new-password"
                     {...register('password', {
-                      required: 'Password is required.',
-                      minLength: { value: 8, message: 'Password must be at least 8 characters.' },
-                      maxLength: { value: 64, message: 'Password must be at most 64 characters.' },
+                      required: 'password.required',
+                      minLength: { value: 8, message: 'password.min' },
+                      maxLength: { value: 64, message: 'password.max' },
                       validate: {
                         noSpace: (v) =>
-                          noWhitespace.test(v) || 'Password cannot contain whitespace.',
+                          noWhitespace.test(v) || 'password.noSpace',
                         hasDigit: (v) =>
-                          hasDigit.test(v) || 'Password must contain at least one digit.',
+                          hasDigit.test(v) || 'password.hasDigit',
                         hasUpper: (v) =>
-                          hasUpper.test(v) ||
-                          'Password must contain at least one uppercase letter.',
+                          hasUpper.test(v) || 'password.hasUpper',
                         hasLower: (v) =>
-                          hasLower.test(v) ||
-                          'Password must contain at least one lowercase letter.',
+                          hasLower.test(v) || 'password.hasLower',
                         hasSpecial: (v) =>
-                          hasSpecial.test(v) ||
-                          'Password must contain at least one special character.',
+                          hasSpecial.test(v) || 'password.hasSpecial',
                       },
                     })}
                   />
-                  {errors.password && <p className={styles.errorText}>{errors.password.message}</p>}
+                  {errors.password && <p className={styles.errorText}>{errText(errors.password.message)}</p>}
                 </div>
               )}
               
               {/* Role */}
-{mode === 'edit' && (
+              {mode === 'edit' && 
+              // canManageRoles &&
+               (
+  <div>
+    <label className={styles.label}>{t('fields.role')}</label>
+    <RoleSelectField<FormValues>
+      control={control}
+      name="roleId"
+      clubId={clubId as string | null}
+      rootClassName={styles.comboRoot}
+      inputClassName={`${styles.input} ${styles.inputChevron}`}
+      optionsClassName={styles.options}
+      optionClassName={styles.option}
+      optionActiveClassName={styles.optionActive}
+      chevronClassName={styles.comboChevron}
+      placeholder={t('placeholders.role')}
+    />
+  </div>
+)}
+{/* {mode === 'edit' && (
   <div>
     <label className={styles.label}>Роль</label>
 
@@ -372,14 +404,27 @@ const clubId = useWatch({ control, name: 'clubId' });
       placeholder="Оберіть роль…"
     />
   </div>
-)}
+)} */}
+
+{/* {mode === 'edit' && !canManageRoles && (
+  <div>
+    <label className={styles.label}>Роль</label>
+    <input
+      className={styles.input}
+      value={getValues('roleId') ?? ''}
+      placeholder="—"
+      disabled
+      readOnly
+    />
+  </div>
+)} */}
 
 
               {/*Change Password */}
 
               {mode === 'edit' && (
                 <div>
-                  <label className={styles.label}>Пароль</label>
+                  <label className={styles.label}>{t('actions.changePassword')}</label>
                   <div
                     className={styles.inputButton}
                     role="button"
@@ -387,7 +432,7 @@ const clubId = useWatch({ control, name: 'clubId' });
                     onClick={() => setPasswordModalOpen(true)}
                     onKeyDown={(e) => e.key === 'Enter' && setPasswordModalOpen(true)}
                   >
-                    <span className={styles.inputButtonHint}>Змінити пароль</span>
+                    <span className={styles.inputButtonHint}>{t('actions.changePassword')}</span>
                     <span className={styles.inputButtonIcon}>✎</span>
                   </div>
                 </div>
@@ -424,49 +469,49 @@ const clubId = useWatch({ control, name: 'clubId' });
               {/* Title */}
               <div>
                 <label className={styles.label}>
-                  Посада {mode === 'create' && <span style={{ color: '#e63946' }}>*</span>}
+                  {t('fields.title')} {mode === 'create' && <span style={{ color: '#e63946' }}>*</span>}
                 </label>
                 <input
                   className={`${styles.input} ${errors.title ? styles.errorInput : ''}`}
                   type="text"
-                  placeholder="Наприклад: тренер, адміністратор"
+                  placeholder={t('placeholders.titleExample')}
                   {...register('title', {
-                    required: mode === 'create' ? 'Email is required.' : false,
-                    minLength: { value: 2, message: 'Назва посади занадто коротка.' },
-                    maxLength: { value: 60, message: 'Назва посади занадто довга.' },
+                    required: mode === 'create' ? 'title.required' : false,
+                    minLength: { value: 2, message: 'title.min' },
+                    maxLength: { value: 60, message: 'title.max' },
                     pattern: {
                       value: /^[\p{L}\s'’-]+$/u,
-                      message: 'Посада може містити лише літери та пробіли.',
+                      message: 'title.pattern',
                     },
                   })}
                 />
-                {errors.title && <p className={styles.errorText}>{errors.title.message}</p>}
+                {errors.title && <p className={styles.errorText}>{errText(errors.title.message)}</p>}
               </div>
 
               {/* Phone */}
               <div>
                 <label className={styles.label}>
-                  Номер телефону {mode === 'create' && <span style={{ color: '#e63946' }}>*</span>}
+                  {t('fields.phone')} {mode === 'create' && <span style={{ color: '#e63946' }}>*</span>}
                 </label>
                 <input
                   className={`${styles.input} ${errors.phone ? styles.errorInput : ''}`}
                   type="tel"
                   placeholder="+380XXXXXXXXX"
                   {...register('phone', {
-                    required: mode === 'create' ? 'Email is required.' : false,
+                    required: mode === 'create' ? 'phone.required' : false,
                     pattern: {
                       value: /^\+?380\d{9}$/,
-                      message: 'Номер має бути у форматі +380XXXXXXXXX.',
+                      message: 'phone.pattern',
                     },
                   })}
                 />
-                {errors.phone && <p className={styles.errorText}>{errors.phone.message}</p>}
+                {errors.phone && <p className={styles.errorText}>{errText(errors.phone.message)}</p>}
               </div>
 
               {/* Club ID (combobox) */}
               <div>
                 <label className={styles.label}>
-                  Клуб {mode === 'create' && <span style={{ color: '#e63946' }}>*</span>}
+                  {t('fields.club')} {mode === 'create' && <span style={{ color: '#e63946' }}>*</span>}
                 </label>
 
                 {isClubScoped ? (
@@ -498,7 +543,7 @@ const clubId = useWatch({ control, name: 'clubId' });
 
               {mode === 'edit' && (
                 <div>
-                  <label className={styles.label}>Активність</label>
+                  <label className={styles.label}>{t('fields.activity')}</label>
 
                   <StaffStatusSelectField<FormValues>
                     control={control}
@@ -516,7 +561,7 @@ const clubId = useWatch({ control, name: 'clubId' });
               {/* Staff Position */}
               <div>
                 <label className={styles.label}>
-                  Position <span style={{ color: '#e63946' }}>*</span>
+                  {t('fields.positionType')} <span style={{ color: '#e63946' }}>*</span>
                 </label>
 
                 <StaffPositionSelectField<FormValues>
@@ -530,31 +575,31 @@ const clubId = useWatch({ control, name: 'clubId' });
                   optionClassName={styles.option}
                   optionActiveClassName={styles.optionActive}
                   chevronClassName={styles.comboChevron}
-                  placeholder="Оберіть посаду…"
+                  placeholder={t('placeholders.positionType')}
                 />
               </div>
 
               {/* Date of Birth */}
               <div>
                 <label className={styles.label}>
-                  Дата народження {mode === 'create' && <span style={{ color: '#e63946' }}>*</span>}
+                  {t('fields.dob')} {mode === 'create' && <span style={{ color: '#e63946' }}>*</span>}
                 </label>
                 <input
                   className={`${styles.input} ${errors.doB ? styles.errorInput : ''}`}
                   type="date"
                   {...register('doB', {
-                    required: mode === 'create' ? 'Email is required.' : false,
-                    validate: (v) => isAtLeast8Years(v) || 'You must be at least 8 years old.',
+                    required: mode === 'create' ? 'dob.required' : false,
+                    validate: (v) => isAtLeast8Years(v) || 'dob.validate',
                   })}
                 />
-                {errors.doB && <p className={styles.errorText}>{errors.doB.message}</p>}
+                {errors.doB && <p className={styles.errorText}>{errText(errors.doB.message)}</p>}
               </div>
 
               {/* Start Date (no past dates) */}
               {mode === 'create' && (
                 <div>
                   <label className={styles.label}>
-                    Дата початку роботи{' '}
+                    {t('fields.startDate')}{' '}
                     {mode === 'create' && <span style={{ color: '#e63946' }}>*</span>}
                   </label>
                   <input
@@ -562,19 +607,19 @@ const clubId = useWatch({ control, name: 'clubId' });
                     type="date"
                     min={todayStr}
                     {...register('startDate', {
-                      required: 'Дата початку є обовʼязковою.',
-                      validate: (v) => !v || v >= todayStr || 'Не можна обирати дату в минулому.',
+                      required: 'startDate.required',
+                      validate: (v) => !v || v >= todayStr || 'startDate.validate',
                     })}
                   />
                   {errors.startDate && (
-                    <p className={styles.errorText}>{errors.startDate.message}</p>
+                    <p className={styles.errorText}>{errText(errors.startDate.message)}</p>
                   )}
                 </div>
               )}
               {mode === 'edit' && (
                 <div>
                   <label className={styles.label}>
-                    Дата початку роботи{' '}
+                    {t('fields.startDate')}{' '}
                     {mode !== 'edit' && <span style={{ color: '#e63946' }}>*</span>}
                   </label>
                   <input
@@ -595,23 +640,23 @@ const clubId = useWatch({ control, name: 'clubId' });
               {/* End Date (no past dates) */}
               {mode === 'edit' && (
                 <div>
-                  <label className={styles.label}>Дата завершення роботи</label>
+                  <label className={styles.label}>{t('fields.endDate')}</label>
                   <input
                     className={styles.input}
                     type="date"
                     min={todayStr}
                     {...register('endDate', {
-                      validate: (v) => !v || v >= todayStr || 'Не можна обирати дату в минулому.',
+                      validate: (v) => !v || v >= todayStr || 'endDate.validate',
                     })}
                   />
-                  {errors.endDate && <p className={styles.errorText}>{errors.endDate.message}</p>}
+                  {errors.endDate && <p className={styles.errorText}>{errText(errors.endDate.message)}</p>}
                 </div>
               )}
 
               {/* Employment Type (combobox like Club) */}
               <div>
                 <label className={styles.label}>
-                  Тип зайнятості <span style={{ color: '#e63946' }}>*</span>
+                  {t('fields.employmentType')} <span style={{ color: '#e63946' }}>*</span>
                 </label>
 
                 <EmploymentTypeSelectField<FormValues>
@@ -623,7 +668,7 @@ const clubId = useWatch({ control, name: 'clubId' });
                   optionClassName={styles.option}
                   optionActiveClassName={styles.optionActive}
                   chevronClassName={styles.comboChevron}
-                  placeholder="Оберіть тип зайнятості…"
+                  placeholder={t('placeholders.employmentType')}
                 />
               </div>
             </div>
@@ -633,38 +678,38 @@ const clubId = useWatch({ control, name: 'clubId' });
             <SalaryField<FormValues> control={control} />
             {/* Нотатки для бухгалтерії */}
             <div>
-              <label className={styles.label}>Нотатки для бухгалтерії</label>
+              <label className={styles.label}>{t('fields.payrollNotes')}</label>
               <textarea
                 className={`${styles.textarea} ${errors.payrollNotes ? styles.errorInput : ''}`}
                 rows={4}
-                placeholder="Деталі виплат, домовленості тощо"
+                placeholder={t('placeholders.payrollNotes')}
                 {...register('payrollNotes', {
                   maxLength: {
                     value: 2000,
-                    message: 'Занадто довгий текст (макс. 2000 символів).',
+                    message: 'payrollNotes.validate',
                   },
                 })}
               />
               {errors.payrollNotes && (
-                <p className={styles.errorText}>{errors.payrollNotes.message}</p>
+                <p className={styles.errorText}>{errText(errors.payrollNotes.message)}</p>
               )}
             </div>
 
             {/* Загальні нотатки */}
             <div>
-              <label className={styles.label}>Загальні нотатки</label>
+              <label className={styles.label}>{t('fields.notes')}</label>
               <textarea
                 className={`${styles.textarea} ${errors.notes ? styles.errorInput : ''}`}
                 rows={4}
-                placeholder="Будь-які службові помітки"
+                placeholder={t('placeholders.notes')}
                 {...register('notes', {
                   maxLength: {
                     value: 2000,
-                    message: 'Занадто довгий текст (макс. 2000 символів).',
+                    message: 'notes.validate',
                   },
                 })}
               />
-              {errors.notes && <p className={styles.errorText}>{errors.notes.message}</p>}
+              {errors.notes && <p className={styles.errorText}>{errText(errors.notes.message)}</p>}
             </div>
             {/* <PasswordChangeModal
   open={isPasswordModalOpen}

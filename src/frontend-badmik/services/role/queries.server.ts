@@ -26,9 +26,9 @@ export const roleServerQueries = {
   }),
 
   // ролі конкретного співробітника
-  listByStaff: (staffId: string, clubId: string) => ({
-    queryKey: qk.role.listByStaff(staffId, clubId),
-    queryFn: () => roleApiServer.listByStaff(staffId, clubId),
+  listByStaff: (staffId: string) => ({
+    queryKey: qk.role.listByStaff(staffId),
+    queryFn: () => roleApiServer.listByStaff(staffId),
   }),
 } as const;
 

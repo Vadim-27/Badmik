@@ -42,6 +42,7 @@ function toDateOnly(dateStr?: string) {
 
 export default function NewStaff({ clubIdParams }: { clubIdParams?: string }) {
   const tAH = useTranslations('ActionHeader');
+  const tSB = useTranslations('staffBreadcrumbs');
 
   const formRef = useRef<StaffFormHandle | null>(null);
   const [isChanged, setIsChanged] = useState(false);
@@ -133,6 +134,7 @@ export default function NewStaff({ clubIdParams }: { clubIdParams?: string }) {
       salaryType: (v.salaryType as StaffRegisterDto['salaryType']) ?? 'Hourly',
       hourlyRate: v.hourlyRate ?? 0,
       monthlySalary: v.monthlySalary ?? 0,
+      perTrainingRate: v.perTrainingRate ?? 0,
       currency: v.currency || null,
       payrollNotes: v.payrollNotes || null,
 
@@ -186,9 +188,9 @@ export default function NewStaff({ clubIdParams }: { clubIdParams?: string }) {
       <div className={css.wrapperBreadcrumbs}>
         <AppBreadcrumbs
           items={[
-            { label: 'Admin', href: '/admin/dashboard' },
-            { label: 'Staff', href: Staff },
-            { label: 'Add Staff' },
+            { label: tSB('Admin'), href: '/admin/dashboard' },
+            { label: tSB('Staff'), href: Staff },
+            { label: tSB('AddStaff') },
           ]}
         />
       </div>

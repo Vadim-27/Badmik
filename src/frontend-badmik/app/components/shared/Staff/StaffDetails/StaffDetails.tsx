@@ -12,6 +12,7 @@ import WorkingHoursSchedule from '@/app/components/ui/WorkingHoursSchedule/Worki
 
 import type { Staff } from '@/services/types/staff.dto';
 import type { Club } from '@/services/types/clubs.dto';
+import { useTranslations } from 'next-intl';
 
 type Props = {
   staff: Staff;
@@ -48,6 +49,7 @@ const StaffDetails: React.FC<Props> = ({ staff, club }) => {
   } = staff as any;
 
   const [showSchedule, setShowSchedule] = useState(false);
+  const tSB = useTranslations('staffBreadcrumbs');
 
   const fullName = useMemo(() => {
     const fn = (firstName ?? '').trim();
@@ -88,9 +90,9 @@ const StaffDetails: React.FC<Props> = ({ staff, club }) => {
       <div className={styles.wrapperBreadcrumbs}>
         <AppBreadcrumbs
           items={[
-            { label: 'Admin', href: '/admin/dashboard' },
-            { label: 'Staff', href: '/admin/staff' },
-            { label: 'Staff' },
+            { label: tSB('Admin'), href: '/admin/dashboard' },
+            { label: tSB('Staff'), href: '/admin/staff' },
+            { label: tSB('StaffOne') },
           ]}
         />
       </div>

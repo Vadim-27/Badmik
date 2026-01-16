@@ -44,6 +44,7 @@ export interface Staff {
   salaryType: SalaryType;
   hourlyRate: number;
   monthlySalary: number;
+  perTrainingRate: number;
   currency: string;
 
   payrollNotes: string;
@@ -83,6 +84,7 @@ export interface StaffRegisterDto {
   salaryType: SalaryType;
   hourlyRate?: number;
   monthlySalary?: number;
+  perTrainingRate?: number;
   currency?: string | null;
   payrollNotes?: string | null;
   positionType?: StaffPositionType | null;
@@ -123,6 +125,7 @@ export interface UpdateStaffDto {
   salaryType?: SalaryType;
   hourlyRate?: number;
   monthlySalary?: number;
+  perTrainingRate?: number;
   currency?: string | null;
   payrollNotes?: string | null;
   positionType?: StaffPositionType | null;

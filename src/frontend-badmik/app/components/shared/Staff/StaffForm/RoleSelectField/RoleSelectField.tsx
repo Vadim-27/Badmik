@@ -7,6 +7,7 @@ import clsx from 'clsx';
 
 import { useRoleListByClub } from '@/services/role/queries.client';
 import type { Role } from '@/services/types/role.dto';
+import { useTranslations } from 'next-intl';
 
 type Props<TFieldValues extends FieldValues> = {
   control: Control<TFieldValues>;
@@ -43,12 +44,14 @@ export default function RoleSelectField<TFieldValues extends FieldValues>({
   requiredMessage = 'Оберіть роль.',
   disabled,
 }: Props<TFieldValues>) {
+  const tR = useTranslations('RoleFormSelectField');
   const [query, setQuery] = useState('');
   const btnRef = useRef<HTMLButtonElement | null>(null);
 
   const enabled = Boolean(clubId) && !disabled;
   const { data } = useRoleListByClub(enabled ? clubId! : undefined);
   const roles: Role[] = data ?? [];
+  console.log('RoleSelectField render', { clubId, roles });
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -56,24 +59,27 @@ export default function RoleSelectField<TFieldValues extends FieldValues>({
     return roles.filter((r) => (r.name ?? '').toLowerCase().includes(q));
   }, [query, roles]);
 
+   console.log('RoleSe', filtered);
   const labelForValue = (roleId?: string | null) => {
-    if (!roleId) return '';
-    const found = roles.find((r) => r.id === roleId);
-    return found?.name ?? '';
-  };
+  if (!roleId) return '';
+  const found = roles.find((r) => r.id === roleId);
+  if (!found?.name) return '';
+  return tR(found.name); 
+};
+
+  console.log('Role name', labelForValue());
 
   return (
     <Controller
       control={control}
       name={name}
-      rules={{
-        // якщо хочеш required тільки коли є ролі:
-        validate: (v) => {
-          if (!enabled) return true; // поки нема clubId — не валідимо
-          if (!roles.length) return true; // нема ролей — теж не стопоримо
-          return Boolean(v) || requiredMessage;
-        },
-      }}
+     rules={{
+  validate: (v) => {
+    if (!enabled) return true;
+    if (!v) return true; // ✅ пусте значення дозволяємо
+    return roles.some((r) => r.id === v) || 'Невірна роль';
+  },
+}}
       render={({ field, fieldState }) => {
         const value: string | null = (field.value as string) ?? null;
         const isDisabled = disabled || !enabled || roles.length === 0;
@@ -139,7 +145,7 @@ export default function RoleSelectField<TFieldValues extends FieldValues>({
                         className={({ active }) => clsx(optionClassName, active && optionActiveClassName)}
                       >
                         <div className="flex justify-between gap-2">
-                          <div className="font-semibold">{r.name}</div>
+                          <div className="font-semibold">{tR(r.name)}</div>
                           {value === r.id && <span aria-hidden>✓</span>}
                         </div>
                       </Combobox.Option>

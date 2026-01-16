@@ -1,7 +1,7 @@
 
 
 
-import Link from 'next/link';
+import {Link} from '@/i18n/navigation';
 import styles from './AppBreadcrumbs.module.scss';
 
 type Crumb = { label: string; href?: string };

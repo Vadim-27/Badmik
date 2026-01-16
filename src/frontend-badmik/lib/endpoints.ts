@@ -26,8 +26,7 @@ export const ENDPOINTS = {
     bindPermission: '/roles/BindPermission',
 
     deletePermission: '/roles/DeletePermission',
-    getByStaffId: (staffId: string, clubId: string) =>
-      `/roles/GetRolesByStaffId?staffId=${staffId}&clubId=${clubId}`,
+    getByStaffId: (staffId: string) => `/roles/staff/${staffId}`,
   },
    clubs: {
     getAll: '/clubs',                         

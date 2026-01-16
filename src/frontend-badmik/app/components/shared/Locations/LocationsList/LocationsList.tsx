@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import styles from './LocationsList.module.scss';
-import Link from 'next/link';
+import {Link} from '@/i18n/navigation';
 
 import { useLocationsList, useDeleteLocation } from '@/services/locations/queries.client';
 import { useClubsList } from '@/services/clubs/queries.client';
