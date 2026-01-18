@@ -162,7 +162,7 @@ namespace BadmintonApp.Api.Tests.Tests.Live
                 WorkingHours = BuildWorkingHours()
             };
 
-            var registerResp = await http.PostAsJsonAsync("/api/staff/Register", payload);
+            var registerResp = await http.PostAsJsonAsync("/api/staffs/", payload);
             registerResp.StatusCode.Should().Be(HttpStatusCode.OK);
 
             // 4) fetch GetAll (зробимо більший pageSize на випадок пагінації)
@@ -207,7 +207,7 @@ namespace BadmintonApp.Api.Tests.Tests.Live
             foundId.Should().NotBeNull("created staff must appear in GetAll");
 
             // 6) перевірити GetById і співпадіння email
-            var byIdResp = await http.GetAsync($"/api/staff/{foundId!.Value}/GetById");
+            var byIdResp = await http.GetAsync($"/api/staffs/{foundId!.Value}");
             byIdResp.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var byIdJson = await byIdResp.Content.ReadAsStringAsync();

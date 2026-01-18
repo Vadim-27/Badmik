@@ -69,6 +69,13 @@ public class StaffService : IStaffService
         return _mapper.Map<StaffDto>(staff);
     }
 
+    public async Task<StaffDto> GetByUserAndClubId(Guid id, Guid clubId, CancellationToken cancellationToken)
+    {
+        var staff = await _staffRepository.GetByUserAndClubId(id, clubId, cancellationToken);
+
+        return _mapper.Map<StaffDto>(staff);
+    }
+
     public async Task Update(StaffUpdateDto dto, CancellationToken cancellationToken)
     {
 
@@ -108,7 +115,6 @@ public class StaffService : IStaffService
             FirstName = dto.FirstName,
             LastName = dto.LastName,
             PhoneNumber = dto.PhoneNumber,
-            ImageUrl = dto.ImageUrl,
             DoB = dto.DoB,
             ClubId = dto.ClubId,
             CreatedAt = DateTime.UtcNow,

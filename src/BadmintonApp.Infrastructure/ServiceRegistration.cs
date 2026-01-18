@@ -47,6 +47,7 @@ namespace BadmintonApp.Infrastructure
             services.AddScoped<ICourtsRepository, CourtsRepository>();
             services.AddScoped<IMediaRepository, MediaRepository>();
             services.AddScoped<IMediaStorage, FileSystemMediaStorage>();
+            services.AddScoped<IPlayerMembershipRepository, PlayerMembershipRepository>();
 
             return services;
         }

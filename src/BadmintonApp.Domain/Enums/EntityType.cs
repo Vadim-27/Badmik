@@ -12,6 +12,7 @@ namespace BadmintonApp.Domain.Enums
         Location = 2,
         Player = 3,
         Tournament = 4,
-        Training = 5
+        Training = 5,
+        Staff = 6
     }
 }

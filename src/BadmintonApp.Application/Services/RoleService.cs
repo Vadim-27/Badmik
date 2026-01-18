@@ -35,11 +35,29 @@ public class RoleService : IRoleService
         var club = await _clubsRepository.GetByIdAsync(clubId, cancellationToken);
         if (club == null) throw new BadRequestException("Club not found");
 
-        var staff = await _staffRepository
-            .GetById(staffId, cancellationToken);
+        var staff = await _staffRepository.GetById(staffId, cancellationToken);
         if (staff == null) throw new BadRequestException("Staff not found");
 
+        var hasAccess = await _permission.HasPermission(staffId, clubId, PermissionType.RolesManage, cancellationToken);
+        if (!hasAccess)
+            throw new ForbiddenException("You do not have permission to manage roles");
+
         await _roleRepository.AssignRoleForStaff(staffId, clubId, roleId, cancellationToken);
+    }
+
+    public async Task RemoveRoleFromStaff(Guid staffId, Guid clubId, Guid roleId, CancellationToken cancellationToken)
+    {
+        var club = await _clubsRepository.GetByIdAsync(clubId, cancellationToken);
+        if (club == null) throw new BadRequestException("Club not found");
+
+        var staff = await _staffRepository.GetById(staffId, cancellationToken);
+        if (staff == null) throw new BadRequestException("Staff not found");
+
+        var hasAccess = await _permission.HasPermission(staffId, clubId, PermissionType.RolesManage, cancellationToken);
+        if (!hasAccess)
+            throw new ForbiddenException("You do not have permission to manage roles");
+
+        await _roleRepository.RemoveRoleFromStaff(staffId, clubId, roleId, cancellationToken);
     }
 
     public async Task<List<Role>> GetAll(Guid clubId, CancellationToken cancellationToken)
@@ -49,9 +67,13 @@ public class RoleService : IRoleService
 
     public async Task RoleBindPermission(Guid userId, Guid clubId, Guid roleId, Guid permissionId, CancellationToken cancellationToken)
     {
-        var hasAccess = await _permission.HasPermission(userId, clubId, PermissionType.RolesManage, cancellationToken);
+        var staff = await _staffRepository.GetByUserId(userId, cancellationToken);
+        if (staff == null) throw new BadRequestException("Staff not found");
+
+        var hasAccess = await _permission.HasPermission(staff.Id, clubId, PermissionType.RolePermissionsAssign, cancellationToken);
         if (!hasAccess)
             throw new ForbiddenException("You do not have permission to manage roles");
+
         if (await _roleRepository.IsExist(roleId, permissionId, cancellationToken))
         {
             throw new BadRequestException("Role already has permission.");
@@ -62,9 +84,13 @@ public class RoleService : IRoleService
 
     public async Task RoleDeletePermission(Guid userId, Guid clubId, Guid roleId, Guid permissionId, CancellationToken cancellationToken)
     {
-        var hasAccess = await _permission.HasPermission(userId, clubId, PermissionType.RolesManage, cancellationToken);
+        var staff = await _staffRepository.GetByUserId(userId, cancellationToken);
+        if (staff == null) throw new BadRequestException("Staff not found");
+
+        var hasAccess = await _permission.HasPermission(staff.Id, clubId, PermissionType.RolePermissionsAssign, cancellationToken);
         if (!hasAccess)
             throw new ForbiddenException("You do not have permission to manage roles");
+
         if (await _roleRepository.IsExist(roleId, permissionId, cancellationToken))
         {
             throw new BadRequestException("Role has not permission.");

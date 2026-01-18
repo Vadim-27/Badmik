@@ -44,8 +44,7 @@ namespace BadmintonApp.Infrastructure.Persistence
             modelBuilder.Entity<StaffClubRole>().HasKey(c => new
             {
                 c.StaffId,
-                c.RoleId,
-                c.ClubId
+                c.RoleId
             });
 
             modelBuilder.Entity<Location>(e =>
@@ -88,6 +87,32 @@ namespace BadmintonApp.Infrastructure.Persistence
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
+            modelBuilder.Entity<PlayerSportProfile>(b =>
+            {
+                b.HasKey(x => new { x.PlayerId, x.Sport });
+
+                b.HasOne(x => x.Player)
+                    .WithMany(p => p.SportProfiles)
+                    .HasForeignKey(x => x.PlayerId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<PlayerSubscription>(b =>
+            {
+                b.HasKey(x => new { x.FollowerPlayerId, x.FollowingPlayerId });
+
+                b.HasOne(x => x.FollowerPlayer)
+                    .WithMany(p => p.Following)
+                    .HasForeignKey(x => x.FollowerPlayerId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                b.HasOne(x => x.FollowingPlayer)
+                    .WithMany(p => p.Followers)
+                    .HasForeignKey(x => x.FollowingPlayerId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+
             SeedData(modelBuilder);            
 
             base.OnModelCreating(modelBuilder);
@@ -112,6 +137,9 @@ namespace BadmintonApp.Infrastructure.Persistence
         public DbSet<LocationAmenity> LocationAmenities => Set<LocationAmenity>();
         public DbSet<LocationImage> LocationImages => Set<LocationImage>();
         public DbSet<Domain.Media.MediaItem> Media => Set<Domain.Media.MediaItem>();
+        public DbSet<PlayerSportProfile> PlayerSportProfiles => Set<PlayerSportProfile>();
+        public DbSet<PlayerSubscription> PlayerSubscriptions => Set<PlayerSubscription>();
+        public DbSet<PlayerClubMembership> PlayerClubMemberships => Set<PlayerClubMembership>();
 
 
         private void SeedData(ModelBuilder modelBuilder)

@@ -53,4 +53,26 @@ public static class TestConfig
         if (string.IsNullOrWhiteSpace(raw)) return null;
         return Guid.TryParse(raw, out var g) ? g : null;
     }
+
+    public static (string Email, string Password) GetClub1AdminCreds()
+    {
+        var email = Environment.GetEnvironmentVariable("TEST_CLUB1ADMIN_EMAIL")
+                    ?? Value["TestUsers:Club1Admin:Email"]
+                    ?? "club1admin@test.local";
+        var pwd = Environment.GetEnvironmentVariable("TEST_CLUB1ADMIN_PASSWORD")
+                    ?? Value["TestUsers:Club1Admin:Password"]
+                    ?? "P@ssw0rd!";
+        return (email, pwd);
+    }
+
+    public static (string Email, string Password) GetClub1TrainerCreds()
+    {
+        var email = Environment.GetEnvironmentVariable("TEST_CLUB1TRAINER_EMAIL")
+                    ?? Value["TestUsers:Club1Trainer:Email"]
+                    ?? "club1admin@test.local";
+        var pwd = Environment.GetEnvironmentVariable("TEST_CLUB1TRAINER_PASSWORD")
+                    ?? Value["TestUsers:Club1Trainer:Password"]
+                    ?? "P@ssw0rd!";
+        return (email, pwd);
+    }
 }
