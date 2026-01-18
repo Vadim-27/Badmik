@@ -22,21 +22,22 @@ namespace BadmintonApp.Application.Services
         IPlayerRepository playerRepository,
         IStaffRepository staffRepository,
         IPasswordHasher<User> passwordHasher,
-        IValidator<PlayerRegisterDto> playerRegisterValidation,
+        IValidator<CreateUserDto> userRegisterValidation,
         IMapper mapper) : IUsersService
     {
         private readonly IUserRepository _userRepository = userRepository;
         private readonly IPlayerRepository _playerRepository = playerRepository;
         private readonly IStaffRepository _staffRepository = staffRepository;
         private readonly IPasswordHasher<User> _passwordHasher = passwordHasher;
-        private readonly IValidator<PlayerRegisterDto> _playerRegisterValidation = playerRegisterValidation;
-
         private readonly IMapper _mapper = mapper;
-        
+        private readonly IValidator<CreateUserDto> _userRegisterValidation = userRegisterValidation;
 
-        public async Task RegisterPlayerAsync(PlayerRegisterDto dto, CancellationToken cancellationToken)
+
+
+        public async Task<UserResultDto> CreateAsync(CreateUserDto dto, CancellationToken cancellationToken)
         {
-            await _playerRegisterValidation.ValidateAndThrowAsync(dto, cancellationToken);
+            await _userRegisterValidation.ValidateAndThrowAsync(dto, cancellationToken);
+
             var user = new User
             {
                 Id = Guid.NewGuid(),
@@ -44,17 +45,16 @@ namespace BadmintonApp.Application.Services
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
                 PhoneNumber = dto.PhoneNumber,
-                ImageUrl = dto.ImageUrl,
                 DoB = dto.DoB,
                 ClubId = dto.ClubId,
                 CreatedAt = DateTime.UtcNow,
                 IsActive = true
+
             };
             user.PasswordHash = _passwordHasher.HashPassword(user, dto.Password);
+
             await _userRepository.CreateAsync(user, cancellationToken);
-
-            await _playerRepository.Registration(user.Id, dto.Level, cancellationToken);
-
+            return _mapper.Map<UserResultDto>(user);
         }
 
         public async Task<UserResultDto> GetByIdAsync(Guid userId, CancellationToken cancellationToken)
@@ -85,6 +85,9 @@ namespace BadmintonApp.Application.Services
 
             user.FirstName = dto.FirstName;
             user.LastName = dto.LastName;
+            user.Email = dto.Email;
+            user.PhoneNumber = dto.PhoneNumber;
+            user.DoB = dto.DoB;
 
             await _userRepository.UpdateAsync(user, cancellationToken);
 

@@ -35,8 +35,8 @@ public class Staff
     public decimal PerTrainingRate { get; set; }
     public string PayrollNotes  { get; set; }
 
-    public string TimeZone { get; set; }   
-    //public string WorkingHoursExceptions { get; set; }
-    public string StatusReason { get; set; }    
+    public string TimeZone { get; set; }
+    public string StatusReason { get; set; }
+    public ICollection<Role> Roles { get; set; } = new List<Role>();
 
 }

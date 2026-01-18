@@ -9,7 +9,7 @@ public class PlayerMappingProfile : Profile
 {
     public PlayerMappingProfile()
     {
-        CreateMap<PlayerUpdateDto, Player>();
+        CreateMap<UpdatePlayerDto, Player>();
         CreateMap<PlayerDto, Player>();
 
     }

@@ -14,10 +14,7 @@ public class StaffUpdateDto
     public string PhoneNumber { get; set; }
     public string ImageUrl { get; set; }
     public Guid ClubId { get; set; }
-
     public DateTime DoB { get; set; }
-
-
     public StaffStatus StaffStatus { get; set; }
     public StaffEmploymentType EmploymentType { get; set; }
     public StaffPositionType PositionType { get; set; }

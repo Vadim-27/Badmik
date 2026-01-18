@@ -1,5 +1,7 @@
-﻿using BadmintonApp.API.Middlewares;
+﻿using BadmintonApp.API.Auth;
+using BadmintonApp.API.Middlewares;
 using BadmintonApp.Application;
+using BadmintonApp.Application.Interfaces.Auth;
 using BadmintonApp.Domain.Logs;
 using BadmintonApp.Infrastructure;
 using BadmintonApp.Infrastructure.Logger;
@@ -68,6 +70,8 @@ builder.Services.AddSwaggerGen(opt =>
 
 builder.Services.AddControllers();
 
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUserContext, CurrentUserContext>();
 
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);

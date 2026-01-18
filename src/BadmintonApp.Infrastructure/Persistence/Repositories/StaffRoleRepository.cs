@@ -19,15 +19,13 @@ public class StaffRoleRepository : IStaffRoleRepository
     }
     public async Task<List<Role>> GetStaffRoleForClubAsync(Guid staffId, Guid clubId, CancellationToken cancellationToken)
     {
-        var staffClubRoles = await _dbContext.StaffClubRoles
+        return await _dbContext.StaffClubRoles
             .AsNoTracking()
-            .Include(x => x.Role)
-                .ThenInclude(x => x.RolePermissions)
-                .ThenInclude(x => x.Permission)
-            .Where(x => x.StaffId == staffId && x.ClubId == clubId)
+            .Where(x => x.StaffId == staffId && x.Staff.ClubId == clubId)
             .Select(x => x.Role)
+            .Where(r => r.ClubId == null || r.ClubId == clubId)
+            .Include(r => r.RolePermissions)
+                .ThenInclude(rp => rp.Permission)
             .ToListAsync(cancellationToken);
-
-        return staffClubRoles;
     }
 }

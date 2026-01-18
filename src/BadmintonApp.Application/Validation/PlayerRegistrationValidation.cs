@@ -5,11 +5,8 @@ using System;
 using System.Linq;
 namespace BadmintonApp.Application.Validation;
 
-public class PlayerRegistrationValidation : AbstractValidator<PlayerRegisterDto>
+public class PlayerRegistrationValidation : AbstractValidator<CreatePlayerDto>
 {
-    
-
-
     public PlayerRegistrationValidation(IUserRepository userRepository, IClubsRepository clubsRepository)
     {
 

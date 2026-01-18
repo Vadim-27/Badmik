@@ -1,4 +1,5 @@
-﻿using BadmintonApp.Application.Interfaces.Repositories;
+﻿using BadmintonApp.Application.Exceptions;
+using BadmintonApp.Application.Interfaces.Repositories;
 using BadmintonApp.Domain.Core;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -22,7 +23,6 @@ public class RoleRepository : IRoleRepository
 
         _context.StaffClubRoles.Add(new Domain.Core.StaffClubRole
         {
-            ClubId = clubId,
             RoleId = roleId,
             StaffId = staffId,
         });
@@ -30,20 +30,32 @@ public class RoleRepository : IRoleRepository
         await _context.SaveChangesAsync(cancellationToken);
     }
 
+    public async Task RemoveRoleFromStaff(Guid staffId, Guid clubId, Guid roleId, CancellationToken cancellationToken)
+    {
+        var staffRole = await _context.StaffClubRoles.FirstOrDefaultAsync(x => x.StaffId == staffId && x.RoleId == roleId, cancellationToken);
+
+        if (staffRole == null)
+        {
+            throw new NotFoundException("Staff role not found");
+        }
+
+        var rolesCount = await _context.StaffClubRoles
+            .CountAsync(x =>
+                x.StaffId == staffId,
+                cancellationToken);
+        if (rolesCount <= 1)
+            throw new BadRequestException("Staff must have at least one role.");
+
+        _context.StaffClubRoles.Remove(staffRole);
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+
     public async Task<List<Role>> GetAll(Guid clubId, CancellationToken cancellationToken)
     {
-        var roleIds = await _context.StaffClubRoles
-            .Where(x => x.ClubId == clubId)
-            .Select(x => x.RoleId)
-            .Union(
-                _context.Roles.Where(x => x.IsSystem).Select(x => x.Id)
-            )
-            .Distinct()
-            .ToListAsync(cancellationToken);
-
         var roles = await _context.Roles
-            .Where(r => roleIds.Contains(r.Id))
             .AsNoTracking()
+            .Where(r => r.ClubId == null || r.ClubId == clubId)
+            .OrderBy(r => r.Name)
             .ToListAsync(cancellationToken);
 
         return roles;
