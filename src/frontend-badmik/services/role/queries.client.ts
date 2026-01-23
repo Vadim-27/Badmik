@@ -1,15 +1,10 @@
 // src/services/role/queries.client.ts
-
 'use client';
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { qk } from '../_shared/queryKeys';
 import { roleApiClient } from './api.client';
-import type {
-  AssignRoleForUserDto,
-  BindPermissionDto,
-  DeletePermissionDto,
-} from '../types/role.dto';
+import type { StaffRoleParams, RolePermissionParams } from '../types/role.dto';
 
 // Ролі клубу
 export function useRoleListByClub(clubId: string | null | undefined) {
@@ -33,34 +28,47 @@ export function useRolesByStaff(staffId: string | null | undefined) {
   });
 }
 
-export function useAssignRoleForUser() {
+export function useAssignRoleForStaff() {
   const qc = useQueryClient();
+
   return useMutation({
     mutationKey: ['role', 'assignToStaff'],
-    mutationFn: (dto: AssignRoleForUserDto) => roleApiClient.assignToStaff(dto),
+    
+    mutationFn: (p: StaffRoleParams) => {
+  console.log('mutationFn p =', p);
+  return roleApiClient.assignToStaff(p);
+},
     onSuccess: (_res, vars) => {
-      const v = vars as AssignRoleForUserDto;
-      if (v.staffId) {
-        qc.invalidateQueries({ queryKey: qk.role.listByStaff(v.staffId) });
-      }
+      qc.invalidateQueries({ queryKey: qk.role.listByStaff(vars.staffId) });
+      qc.invalidateQueries({ queryKey: qk.role.listByClub(vars.clubId) });
+    },
+  });
+}
+
+export function useRemoveRoleFromStaff() {
+  const qc = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['role', 'removeFromStaff'],
+    mutationFn: (p: StaffRoleParams) => roleApiClient.removeFromStaff(p),
+    onSuccess: (_res, vars) => {
+      qc.invalidateQueries({ queryKey: qk.role.listByStaff(vars.staffId) });
+      qc.invalidateQueries({ queryKey: qk.role.listByClub(vars.clubId) });
     },
   });
 }
 
 export function useBindPermission() {
-  const qc = useQueryClient();
   return useMutation({
     mutationKey: ['role', 'bindPermission'],
-    mutationFn: (dto: BindPermissionDto) => roleApiClient.bindPermission(dto),
-    onSuccess: () => qc.invalidateQueries({ queryKey: qk.role.listAll?.() ?? [] }),
+    mutationFn: (p: RolePermissionParams) => roleApiClient.bindPermission(p),
   });
 }
 
 export function useDeletePermission() {
-  const qc = useQueryClient();
   return useMutation({
     mutationKey: ['role', 'deletePermission'],
-    mutationFn: (dto: DeletePermissionDto) => roleApiClient.deletePermission(dto),
-    onSuccess: () => qc.invalidateQueries({ queryKey: qk.role.listAll?.() ?? [] }),
+    mutationFn: (p: RolePermissionParams) => roleApiClient.deletePermission(p),
   });
 }
+

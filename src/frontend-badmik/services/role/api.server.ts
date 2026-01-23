@@ -1,57 +1,11 @@
-// // src/services/role/api.server.ts
-// import 'server-only';
-// import { serverFetch } from '@/lib/http/serverFetch';
-// import { ENDPOINTS } from '@/lib/endpoints';
-// import type {
-//   Role,
-//   AssignRoleForUserDto,
-//   BindPermissionDto,
-//   DeletePermissionDto,
-// } from '../types/role.dto';
-
-// export const roleApiServer = {
-//   async list(): Promise<Role[]> {
-//     const res = await serverFetch(ENDPOINTS.role.getAll, {}, { revalidate: 60, tags: ['role'] });
-//     return res.json();
-//   },
-
-//   async assignToUser(dto: AssignRoleForUserDto): Promise<void> {
-//     await serverFetch(ENDPOINTS.role.assignToUser, {
-//       method: 'POST',
-//       body: JSON.stringify(dto),
-//     });
-//   },
-
-//   async bindPermission(dto: BindPermissionDto): Promise<void> {
-//     await serverFetch(ENDPOINTS.role.bindPermission, {
-//       method: 'PUT',
-//       body: JSON.stringify(dto),
-//     });
-//   },
-
-//   async deletePermission(dto: DeletePermissionDto): Promise<void> {
-//     await serverFetch(ENDPOINTS.role.deletePermission, {
-//       method: 'DELETE',
-//       body: JSON.stringify(dto),
-//     });
-//   },
-// } as const;
-
-
-//==========================
-
+// src/services/role/api.server.ts
 import 'server-only';
 import { serverFetch } from '@/lib/http/serverFetch';
 import { ENDPOINTS } from '@/lib/endpoints';
-import type {
-  Role,
-  AssignRoleForUserDto,
-  BindPermissionDto,
-  DeletePermissionDto,
-} from '../types/role.dto';
+import type { Role, StaffRoleParams, RolePermissionParams } from '../types/role.dto';
 
 export const roleApiServer = {
-  // GET /api/roles/club/{id}
+  // GET /api/clubs/{clubId}/roles
   async listByClub(clubId: string): Promise<Role[]> {
     const res = await serverFetch(
       ENDPOINTS.role.getByClub(clubId),
@@ -61,7 +15,7 @@ export const roleApiServer = {
     return res.json();
   },
 
-  // GET /api/roles/GetRolesByStaffId
+  // GET /api/staff/{staffId}/roles
   async listByStaff(staffId: string): Promise<Role[]> {
     const res = await serverFetch(
       ENDPOINTS.role.getByStaffId(staffId),
@@ -71,25 +25,32 @@ export const roleApiServer = {
     return res.json();
   },
 
-  // POST /api/roles/AssignRoleForStaff
-  async assignToStaff(dto: AssignRoleForUserDto): Promise<void> {
-    await serverFetch(ENDPOINTS.role.assignToStaff, {
+  // POST /api/clubs/{clubId}/staff/{staffId}/roles/{roleId}
+  async assignToStaff(p: StaffRoleParams): Promise<void> {
+    await serverFetch(ENDPOINTS.role.assignToStaff(p.clubId, p.staffId, p.roleId), {
       method: 'POST',
-      body: JSON.stringify(dto),
     });
   },
 
-  async bindPermission(dto: BindPermissionDto): Promise<void> {
-    await serverFetch(ENDPOINTS.role.bindPermission, {
-      method: 'PUT',
-      body: JSON.stringify(dto),
-    });
-  },
-
-  async deletePermission(dto: DeletePermissionDto): Promise<void> {
-    await serverFetch(ENDPOINTS.role.deletePermission, {
+  // DELETE /api/clubs/{clubId}/staff/{staffId}/roles/{roleId}
+  async removeFromStaff(p: StaffRoleParams): Promise<void> {
+    await serverFetch(ENDPOINTS.role.removeFromStaff(p.clubId, p.staffId, p.roleId), {
       method: 'DELETE',
-      body: JSON.stringify(dto),
+    });
+  },
+
+  // POST /api/roles/{roleId}/permissions/{permissionId}
+  async bindPermission(p: RolePermissionParams): Promise<void> {
+    await serverFetch(ENDPOINTS.role.bindPermission(p.roleId, p.permissionId), {
+      method: 'POST',
+    });
+  },
+
+  // DELETE /api/roles/{roleId}/permissions/{permissionId}
+  async deletePermission(p: RolePermissionParams): Promise<void> {
+    await serverFetch(ENDPOINTS.role.deletePermission(p.roleId, p.permissionId), {
+      method: 'DELETE',
     });
   },
 } as const;
+

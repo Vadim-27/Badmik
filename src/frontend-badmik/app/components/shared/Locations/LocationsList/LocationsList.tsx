@@ -55,21 +55,24 @@ const LocationsList = ({ clubId }: LocationsListProps) => {
 
   const deleteLocation = useDeleteLocation();
   const locations: Location[] = locationsData ?? [];
+  
 
   const { data: clubsData = [] } = useClubsList(undefined, {
+    enabled: !isClubScoped,
     staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
   });
   const clubs: Club[] = clubsData ?? [];
 
   const clubNameById = useMemo(() => {
+    if (!isClubScoped) return {};  
     const map: Record<string, string> = {};
     clubs.forEach((c) => {
       if (!c?.id) return;
       map[c.id] = c.name || 'Клуб без назви';
     });
     return map;
-  }, [clubs]);
+  }, [clubs, isClubScoped]);
 
   const filtered = useMemo(() => {
     if (!locations.length) return [];
@@ -119,7 +122,7 @@ const LocationsList = ({ clubId }: LocationsListProps) => {
     <div className={styles.wrapper}>
       {/* Фільтри: Клуб + Статус + Пошук */}
       <div className={styles.filterBar}>
-        <div className={styles.filterGroup}>
+       {!isClubScoped && <div className={styles.filterGroup}>
           <span className={styles.filterLabelUpper}>КЛУБ</span>
           <select
             className={styles.filterSelect}
@@ -133,7 +136,7 @@ const LocationsList = ({ clubId }: LocationsListProps) => {
               </option>
             ))}
           </select>
-        </div>
+        </div>}
 
         <div className={styles.filterGroup}>
           <span className={styles.filterLabelUpper}>СТАТУС</span>
@@ -166,7 +169,7 @@ const LocationsList = ({ clubId }: LocationsListProps) => {
               <tr>
                 <th className={styles.colLocation}>Локація</th>
                 <th className={styles.colAddress}>Адреса</th>
-                <th className={styles.colClub}>Клуб</th>
+               { !isClubScoped && <th className={styles.colClub}>Клуб</th>}
                 <th className={styles.colSports}>Види спорту</th>
                 <th className={styles.colStatus}>Статус</th>
                 <th className={styles.colLabel}>Мітка</th>
@@ -211,7 +214,7 @@ const LocationsList = ({ clubId }: LocationsListProps) => {
                       </td>
 
                       {/* Клуб */}
-                      <td>{clubName}</td>
+                      {!isClubScoped && <td>{clubName}</td>}
 
                       {/* Види спорту */}
                       <td>
