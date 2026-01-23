@@ -478,6 +478,10 @@ import Tooltip from '@/app/components/ui/Tooltip/Tooltip';
 import { useTranslations } from 'next-intl';
 import type { _Translator } from 'next-intl';
 
+import AppModal from '@/app/components/ui/Modal/AppModal';
+import StaffRolesManager from '@/app/components/shared/Staff/StaffRolesManager/StaffRolesManager';
+import RolesIcon from '@/app/assets/icons/Roles.svg';
+
 type TranslateFn = _Translator<Record<string, never>>;
 
 // type TranslateFn = (key: string, values?: Record<string, unknown>) => string;
@@ -641,6 +645,20 @@ export default function StaffTable({ clubId }: Props) {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
+  const [rolesOpen, setRolesOpen] = useState(false);
+const [rolesStaffId, setRolesStaffId] = useState<string | null>(null);
+const [rolesClubId, setRolesClubId] = useState<string | null>(null);
+
+const openRoles = (id: string, clubId: string ) => {
+  setRolesStaffId(id);
+  setRolesClubId(clubId);
+  setRolesOpen(true);
+};
+const closeRoles = () => {
+  setRolesOpen(false);
+  setRolesStaffId(null);
+};
+
   useEffect(() => {
     const id = setTimeout(() => setDebouncedSearch(search.trim()), 800);
     return () => clearTimeout(id);
@@ -754,10 +772,10 @@ export default function StaffTable({ clubId }: Props) {
                 <th className={styles.colPhone}>{t('columns.phone')}</th>
                 <th className={styles.colTitle}>{t('columns.position')}</th>
                 <th className={styles.colStatus}>{t('columns.status')}</th>
-                <th className={styles.colEmployment}>{t('columns.employment')}</th>
-                <th className={styles.colSalaryType}>{t('columns.salaryType')}</th>
-                <th className={styles.colSum}>{t('columns.sum')}</th>
-                <th className={styles.colCurrency}>{t('columns.currency')}</th>
+                {/* <th className={styles.colEmployment}>{t('columns.employment')}</th> */}
+                {/* <th className={styles.colSalaryType}>{t('columns.salaryType')}</th> */}
+                {/* <th className={styles.colSum}>{t('columns.sum')}</th> */}
+                {/* <th className={styles.colCurrency}>{t('columns.currency')}</th> */}
                 <th className={styles.colActions}>{t('columns.actions')}</th>
               </tr>
             </thead>
@@ -816,19 +834,19 @@ export default function StaffTable({ clubId }: Props) {
                       </td>
 
                       {/* ✅ EmploymentType.* */}
-                      <td className={styles.muted}>
+                      {/* <td className={styles.muted}>
                         {safeEnumT(tEmp, u.employmentType as StaffEmploymentType)}
-                      </td>
+                      </td> */}
 
                       {/* ✅ SalaryField.types.* */}
-                      <td className={styles.muted}>
+                      {/* <td className={styles.muted}>
                         {safeSalaryType(tSalary, u.salaryType as SalaryType)}
-                      </td>
+                      </td> */}
 
-                      <td className={styles.muted}>{sum == null ? DASH : String(sum)}</td>
+                      {/* <td className={styles.muted}>{sum == null ? DASH : String(sum)}</td> */}
 
                       {/* ✅ SalaryField.currency.* */}
-                      <td className={styles.muted}>{safeCurrency(tSalary, u.currency ?? null)}</td>
+                      {/* <td className={styles.muted}>{safeCurrency(tSalary, u.currency ?? null)}</td> */}
 
                       <td>
                         <div className={styles.actionsWrapper}>
@@ -853,6 +871,17 @@ export default function StaffTable({ clubId }: Props) {
                               <EditIcon className={styles.icon} aria-hidden />
                             </Link>
                           </Tooltip>
+                          <Tooltip content="Roles">
+  <button
+    type="button"
+    className={styles.iconBtn}
+    title="Roles"
+    aria-label="Roles"
+    onClick={() => openRoles(String(u.id), String(u.clubId))}
+  >
+    <RolesIcon className={styles.icon} aria-hidden />
+  </button>
+</Tooltip>
 
                           <Tooltip content={t('actions.delete')}>
                             <button
@@ -964,6 +993,20 @@ export default function StaffTable({ clubId }: Props) {
         onCancel={handleCancelDelete}
         isLoading={false}
       />
+      <AppModal open={rolesOpen} onClose={closeRoles} title="Assign role">
+  {rolesStaffId ? (
+    <StaffRolesManager
+      staffId={rolesStaffId}
+      clubId={rolesClubId ?? null}
+      onSaved={() => {
+        // можна не закривати, але якщо хочеш — закрий:
+        // closeRoles();
+
+        // якщо треба оновити таблицю/дані — кажи, я підкажу invalidate query
+      }}
+    />
+  ) : null}
+</AppModal>
     </div>
   );
 }

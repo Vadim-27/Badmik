@@ -329,6 +329,11 @@
     "weekdayButton": "Mon–Fri",
     "clearAll": "Clear All",
     "dash": "–",
+    "off": "Off",
+    "toggle": {
+      "show": "Show Schedule",
+      "hide": "Hide Schedule"
+    },
     "days": {
       "monday": "Monday",
       "tuesday": "Tuesday",
@@ -505,5 +510,11 @@
     "errors": {
       "nonNegative": "Rate cannot be negative."
     }
+  },
+  "StaffDetails": {
+  "fields": {
+    "created": "Created",
+    "updated": "Updated"
   }
+}
 }

@@ -12,21 +12,26 @@ export const ENDPOINTS = {
     update: (id: string) => `/staffs/${id}`,
     changePassword: '/staffs/ChangePassword', 
   },
-  //  role: {
-  //   getAll: '/role/GetAll',                      // GET
-  //   assignToUser: '/role/AssignRoleForUser',     // POST
-  //   bindPermission: '/role/BindPermission',      // PUT
-  //   deletePermission: '/role/DeletePermission',  // DELETE
-  // },
-  role: {
-    getByClub: (clubId: string) => `/roles/club/${clubId}`,
 
-    assignToStaff: '/roles/AssignRoleForStaff',
+ role: {
+   
+    getByClub: (clubId: string) => `/clubs/${clubId}/roles`,
 
-    bindPermission: '/roles/BindPermission',
 
-    deletePermission: '/roles/DeletePermission',
-    getByStaffId: (staffId: string) => `/roles/staff/${staffId}`,
+    getByStaffId: (staffId: string) => `/staff/${staffId}/roles`,
+
+    
+    assignToStaff: (clubId: string, staffId: string, roleId: string) =>
+      `/clubs/${clubId}/staff/${staffId}/roles/${roleId}`,
+
+    removeFromStaff: (clubId: string, staffId: string, roleId: string) =>
+      `/clubs/${clubId}/staff/${staffId}/roles/${roleId}`,
+
+    bindPermission: (roleId: string, permissionId: string) =>
+      `/roles/${roleId}/permissions/${permissionId}`,
+
+    deletePermission: (roleId: string, permissionId: string) =>
+      `/roles/${roleId}/permissions/${permissionId}`,
   },
    clubs: {
     getAll: '/clubs',                         

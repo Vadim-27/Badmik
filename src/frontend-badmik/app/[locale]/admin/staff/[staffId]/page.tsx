@@ -30,9 +30,11 @@ export default async function StaffPage({ params }: { params: Params }) {
   const club = qc.getQueryData(clubsServerQueries.byId(clubId).queryKey) as any;
 
   return (
-    <HydrationBoundary state={state}>
-      <StaffDetails staff={staff} club={club} />
-    </HydrationBoundary>
+    <div className='pt-0 p-4 bg-gray-100'>
+      <HydrationBoundary state={state}>
+        <StaffDetails staff={staff} club={club} />
+      </HydrationBoundary>
+    </div>
   );
 }
 

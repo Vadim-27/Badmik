@@ -79,6 +79,7 @@ type Props = {
   busy?: boolean;
   scopedClubId?: string; 
   isClubScoped?: boolean;
+  roleForbidden?: boolean;
   // canManageRoles?: boolean;
 };
 
@@ -117,6 +118,7 @@ const StaffFormNew = forwardRef<StaffFormHandle, Props>(function EmployeeForm(
     busy,
     scopedClubId,
     isClubScoped,
+    roleForbidden,
     // canManageRoles,
   }: Props,
   ref
@@ -368,7 +370,7 @@ const clubId = useWatch({ control, name: 'clubId' });
               )}
               
               {/* Role */}
-              {mode === 'edit' && 
+              {/* {mode === 'edit' && 
               // canManageRoles &&
                (
   <div>
@@ -377,6 +379,7 @@ const clubId = useWatch({ control, name: 'clubId' });
       control={control}
       name="roleId"
       clubId={clubId as string | null}
+      staffRoleForbidden={roleForbidden}
       rootClassName={styles.comboRoot}
       inputClassName={`${styles.input} ${styles.inputChevron}`}
       optionsClassName={styles.options}
@@ -386,38 +389,8 @@ const clubId = useWatch({ control, name: 'clubId' });
       placeholder={t('placeholders.role')}
     />
   </div>
-)}
-{/* {mode === 'edit' && (
-  <div>
-    <label className={styles.label}>Роль</label>
-
-    <RoleSelectField<FormValues>
-      control={control}
-      name="roleId"
-      clubId={clubId}
-      rootClassName={styles.comboRoot}
-      inputClassName={`${styles.input} ${styles.inputChevron}`}
-      optionsClassName={styles.options}
-      optionClassName={styles.option}
-      optionActiveClassName={styles.optionActive}
-      chevronClassName={styles.comboChevron}
-      placeholder="Оберіть роль…"
-    />
-  </div>
 )} */}
 
-{/* {mode === 'edit' && !canManageRoles && (
-  <div>
-    <label className={styles.label}>Роль</label>
-    <input
-      className={styles.input}
-      value={getValues('roleId') ?? ''}
-      placeholder="—"
-      disabled
-      readOnly
-    />
-  </div>
-)} */}
 
 
               {/*Change Password */}
@@ -438,33 +411,7 @@ const clubId = useWatch({ control, name: 'clubId' });
                 </div>
               )}
 
-              {/* {isPasswordChangeEnabled && (
-                <div>
-                  <label className={styles.label}>Зміна паролю</label>
-                  <input
-                    className={`${styles.input} ${errors.password ? styles.errorInput : ''}`}
-                    type="password"
-                    autoComplete="new-password"
-                    {...register('password', {
-                      // !!! для зміни паролю він НЕ має бути required
-                      validate: {
-                        isEmptyOrValid: (v: string) => {
-                          if (!v) return true; // нічого не ввели -> ок
-                          if (v.length < 8) return 'Min 8 symbols';
-                          if (v.length > 64) return 'Max 64 symbols';
-                          if (!noWhitespace.test(v)) return 'Без пробілів';
-                          if (!hasDigit.test(v)) return 'Має бути цифра';
-                          if (!hasUpper.test(v)) return 'Має бути велика літера';
-                          if (!hasLower.test(v)) return 'Має бути мала літера';
-                          if (!hasSpecial.test(v)) return 'Має бути спецсимвол';
-                          return true;
-                        },
-                      },
-                    })}
-                  />
-                  {errors.password && <p className={styles.errorText}>{errors.password.message}</p>}
-                </div>
-              )} */}
+           
 
               {/* Title */}
               <div>

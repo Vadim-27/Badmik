@@ -329,6 +329,11 @@
     "weekdayButton": "Пн–Пт",
     "clearAll": "Очистити все",
     "dash": "–",
+    "off": "Вихідний",
+    "toggle": {
+    "show": "Показати графік",
+    "hide": "Сховати графік"
+  },
     "days": {
       "monday": "Понеділок",
       "tuesday": "Вівторок",
@@ -500,5 +505,11 @@
     "errors": {
       "nonNegative": "Ставка не може бути відʼємною."
     }
+  },
+  "StaffDetails": {
+  "fields": {
+    "created": "Створено",
+    "updated": "Оновлено"
   }
+}
 }
