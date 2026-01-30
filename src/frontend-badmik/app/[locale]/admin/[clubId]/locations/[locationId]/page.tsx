@@ -43,7 +43,7 @@ export default async function LocationPage({ params }: { params: Params }) {
   }
 
   return (
-    <main className="p-6 bg-gray-100 min-h-screen">
+    <main className="pt-0 p-4 bg-gray-100">
       <ActionHeader>
         <BackButton label="buttons.back" />
         <h1 className="text-lg font-semibold">

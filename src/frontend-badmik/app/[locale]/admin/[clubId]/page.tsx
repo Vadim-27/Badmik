@@ -9,6 +9,7 @@ type Params = {
 };
 
 export default async function ClubAdminPage({ params }: { params: Params }) {
+ 
   const { clubId } = await params;
 
   let club: Club | null = null;

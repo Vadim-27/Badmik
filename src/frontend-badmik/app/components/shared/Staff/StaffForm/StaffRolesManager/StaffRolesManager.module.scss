@@ -1,0 +1,121 @@
+// .root {
+//   display: flex;
+//   flex-direction: column;
+//   gap: 12px;
+// }
+
+// .row {
+//   display: grid;
+//   grid-template-columns: 90px 1fr;
+//   gap: 12px;
+//   align-items: start;
+// }
+
+// .label {
+//   font-weight: 600;
+//   color: var(--muted);
+//   padding-top: 10px;
+// }
+
+// .forbidden {
+//   padding: 10px 12px;
+//   border-radius: 12px;
+//   border: 1px solid #fecaca;
+//   background: #fff1f2;
+//   color: #b91c1c;
+//   font-weight: 600;
+// }
+
+// .selectRoot {}
+
+// .input {
+//   width: 100%;
+//   padding: 10px 12px;
+//   border-radius: 12px;
+//   border: 1px solid var(--border);
+//   background: #fff;
+//   color: #0f172a;
+// }
+
+// .chevron {
+//   position: absolute;
+//   right: 8px;
+//   top: 50%;
+//   transform: translateY(-50%);
+//   width: 34px;
+//   height: 34px;
+//   border-radius: 10px;
+//   border: 1px solid transparent;
+//   background: transparent;
+//   color: #64748b;
+
+//   &:hover {
+//     background: #f1f5f9;
+//   }
+// }
+
+// .options {
+//   position: absolute;
+//   z-index: 50;
+//   width: 100%;
+//   margin-top: 8px;
+//   border-radius: 12px;
+//   border: 1px solid var(--border);
+//   background: #fff;
+//   box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+//   overflow: hidden;
+// }
+
+// .option {
+//   padding: 10px 12px;
+//   cursor: pointer;
+//   color: #0f172a;
+// }
+
+// .optionActive {
+//   background: #e5edff;
+// }
+
+// .actions {
+//   display: flex;
+//   justify-content: flex-end;
+// }
+
+// .saveBtn {
+//   padding: 10px 14px;
+//   border-radius: 12px;
+//   border: 1px solid var(--border);
+//   background: #0b3b8c;
+//   color: #fff;
+//   font-weight: 700;
+//   cursor: pointer;
+
+//   &:disabled {
+//     opacity: 0.6;
+//     cursor: not-allowed;
+//   }
+// }
+
+// .ok {
+//   padding: 10px 12px;
+//   border-radius: 12px;
+//   border: 1px solid #bbf7d0;
+//   background: #dcfce7;
+//   color: #15803d;
+//   font-weight: 600;
+// }
+
+// .err {
+//   padding: 10px 12px;
+//   border-radius: 12px;
+//   border: 1px solid #fecaca;
+//   background: #fee2e2;
+//   color: #b91c1c;
+//   font-weight: 600;
+// }
+// .errorText {
+//   color: #e63946;
+//   font-size: 12px;
+//   margin-top: 4px;
+//   font-weight: 500;
+// }

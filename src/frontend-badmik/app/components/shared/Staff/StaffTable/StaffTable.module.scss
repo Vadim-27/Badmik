@@ -1,7 +1,7 @@
 @use '../../../../styles/mixins' as *;
 
 .wrapper {
-  padding: 24px;
+  padding: 24px 0;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -70,7 +70,6 @@
 
 .tableWrapper {
   position: relative;
-  min-width: 980px;
   background: var(--card);
   border-radius: var(--radius);
   border: 1px solid var(--border);
@@ -113,16 +112,16 @@
 }
 
 /* columns */
-.colFio { width: 260px; }
-.colEmail { width: 240px; }
-.colPhone { width: 160px; }
-.colTitle { width: 160px; }
-.colStatus { width: 140px; }
-.colEmployment { width: 170px; }
-.colSalaryType { width: 160px; }
-.colSum { width: 110px; }
-.colCurrency { width: 110px; }
-.colActions { width: 96px; }
+.colFio { width: 170px; }
+.colEmail { width: 170px; }
+.colPhone { width: 140px; }
+.colTitle { width: 130px; }
+.colStatus { width: 100px; }
+// .colEmployment { width: 170px; }
+// .colSalaryType { width: 160px; }
+// .colSum { width: 110px; }
+// .colCurrency { width: 110px; }
+.colActions { width: 86px; }
 
 /* cells */
 .fioLink {

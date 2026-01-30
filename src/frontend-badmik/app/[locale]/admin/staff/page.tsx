@@ -19,6 +19,7 @@ const StaffPage = async ({
 }) => {
   const {  locale } = await params;
   const t = await getTranslations({locale, namespace: 'ActionHeader.title'});
+  const tSB = await getTranslations({locale, namespace: 'staffBreadcrumbs'});
 
     const state = await prefetch([
     // roleServerQueries.list(),
@@ -38,8 +39,8 @@ const StaffPage = async ({
         </ActionHeader>
         <AppBreadcrumbs 
       items={[
-        { label: 'Admin', href: '/admin/staff' },
-        { label: 'Staff' },
+        { label: tSB('Admin'), href: '/admin/staff' },
+        { label: tSB('Staff') },
       ]}
     />
         <StaffTable />

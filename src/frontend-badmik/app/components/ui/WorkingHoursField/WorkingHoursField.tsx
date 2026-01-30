@@ -1,44 +1,197 @@
+// 'use client';
+
+// import { Controller, type Control, type FieldValues, type Path } from 'react-hook-form';
+// import type { WorkingHoursDto, TimeRangeDto } from '@/services/types/working-hours.dto';
+// import { useState } from 'react';
+// import styles from './WorkingHoursField.module.scss';
+
+// const DAYS = [
+//   { key: 'monday',    label: 'Понеділок'  },
+//   { key: 'tuesday',   label: 'Вівторок'   },
+//   { key: 'wednesday', label: 'Середа'     },
+//   { key: 'thursday',  label: 'Четвер'     },
+//   { key: 'friday',    label: "П'ятниця"   },
+//   { key: 'saturday',  label: 'Субота'     },
+//   { key: 'sunday',    label: 'Неділя'     },
+// ] as const;
+
+// type DayKey = typeof DAYS[number]['key'];
+
+// // export type TimeRangeDto = { from: string | null; to: string | null };
+// // export type WorkingHourDto = Record<DayKey, TimeRangeDto>;
+
+// type Props<TFieldValues extends FieldValues> = {
+//   control: Control<TFieldValues>;
+
+//   name: Path<TFieldValues>;
+  
+//   onSerializedChangeAction?: (json: string) => void;
+
+// };
+
+// export default function WorkingHoursField<TFieldValues extends FieldValues>({
+//   control,
+//   name,
+//   onSerializedChangeAction,
+// }: Props<TFieldValues>) {
+//   const [bulkFrom, setBulkFrom] = useState('09:00');
+//   const [bulkTo, setBulkTo] = useState('18:00');
+
+//   const isValidRange = (from: string | null, to: string | null) =>
+//     Boolean(from && to && from < to);
+
+// const EMPTY: WorkingHoursDto = {
+//   monday: { from: null, to: null },
+//   tuesday: { from: null, to: null },
+//   wednesday: { from: null, to: null },
+//   thursday: { from: null, to: null },
+//   friday: { from: null, to: null },
+//   saturday: { from: null, to: null },
+//   sunday: { from: null, to: null },
+// };
+
+//   return (
+//     <Controller
+//       control={control}
+//       name={name}
+//       defaultValue={EMPTY as any}
+//       render={({ field: { value, onChange }, fieldState }) => {
+//         const hours: WorkingHoursDto = (value as WorkingHoursDto) ?? EMPTY;
+
+//         const emit = (next: WorkingHoursDto) => {
+//           onChange(next as any);
+//           onSerializedChangeAction?.(JSON.stringify(next));
+//         };
+
+//         const setDay = (day: DayKey, patch: Partial<TimeRangeDto>) => {
+//           const prev = hours[day] ?? { from: null, to: null };
+//           const next: WorkingHoursDto = { ...hours, [day]: { ...prev, ...patch } };
+//           emit(next);
+//         };
+
+//         const applyWeekdays = () => {
+//           const next: WorkingHoursDto = { ...hours };
+//           for (const d of ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'] as const) {
+//             next[d] = { from: bulkFrom, to: bulkTo };
+//           }
+//           emit(next);
+//         };
+
+//         const clearAll = () => emit(EMPTY);
+
+//         return (
+//           <div className={styles.wrapper}>
+//             <label className={styles.label}>Робочі години</label>
+
+//             {/* верхній бар: масове заповнення Пн–Пт + очистити */}
+//             <div className={styles.bulkBar}>
+//               <div className={styles.bulkInputs}>
+//                 <input
+//                   type="time"
+//                   value={bulkFrom}
+//                   onChange={(e) => setBulkFrom(e.target.value)}
+//                   className={styles.input}
+//                 />
+//                 <span>–</span>
+//                 <input
+//                   type="time"
+//                   value={bulkTo}
+//                   onChange={(e) => setBulkTo(e.target.value)}
+//                   className={styles.input}
+//                 />
+//               </div>
+//               <div className={styles.bulkButtons}>
+//                 <button type="button" className={styles.button} onClick={applyWeekdays}>
+//                   Пн–Пт
+//                 </button>
+//                 <button type="button" className={styles.buttonGhost} onClick={clearAll}>
+//                   Очистити все
+//                 </button>
+//               </div>
+//             </div>
+
+//             {/* таблиця днів */}
+//             <div className={styles.table}>
+//               {DAYS.map(({ key, label }) => {
+//                 const from = hours[key]?.from ?? null;
+//                 const to = hours[key]?.to ?? null;
+//                 const active = Boolean(from && to);
+//                 const bad = active && !isValidRange(from, to);
+
+//                 return (
+//                   <div key={key} className={styles.row}>
+//                     <div className={styles.dayCell}>
+//                       <input
+//                         type="checkbox"
+//                         checked={active}
+//                         onChange={(e) =>
+//                           e.target.checked
+//                             ? setDay(key, { from: bulkFrom, to: bulkTo })
+//                             : setDay(key, { from: null, to: null })
+//                         }
+//                       />
+//                       <span className={styles.dayLabel}>{label}</span>
+//                     </div>
+
+//                     <div className={styles.timeCell}>
+//                       <input
+//                         type="time"
+//                         value={from ?? ''}               
+//                         onChange={(e) => setDay(key, { from: e.target.value || null })}
+//                         disabled={!active}
+//                         className={`${styles.input} ${bad ? styles.errorInput : ''}`}
+//                       />
+//                       <span>–</span>
+//                       <input
+//                         type="time"
+//                         value={to ?? ''}
+//                         onChange={(e) => setDay(key, { to: e.target.value || null })}
+//                         disabled={!active}
+//                         className={`${styles.input} ${bad ? styles.errorInput : ''}`}
+//                       />
+//                     </div>
+//                   </div>
+//                 );
+//               })}
+//             </div>
+
+//             {fieldState.error && <p className={styles.errorText}>{fieldState.error.message}</p>}
+//           </div>
+//         );
+//       }}
+//     />
+//   );
+// }
+
+
+
+//========================================
+
 'use client';
 
 import { Controller, type Control, type FieldValues, type Path } from 'react-hook-form';
 import type { WorkingHoursDto, TimeRangeDto } from '@/services/types/working-hours.dto';
 import { useState } from 'react';
 import styles from './WorkingHoursField.module.scss';
+import { useTranslations } from 'next-intl';
 
 const DAYS = [
-  { key: 'monday',    label: 'Понеділок'  },
-  { key: 'tuesday',   label: 'Вівторок'   },
-  { key: 'wednesday', label: 'Середа'     },
-  { key: 'thursday',  label: 'Четвер'     },
-  { key: 'friday',    label: "П'ятниця"   },
-  { key: 'saturday',  label: 'Субота'     },
-  { key: 'sunday',    label: 'Неділя'     },
+  { key: 'monday' },
+  { key: 'tuesday' },
+  { key: 'wednesday' },
+  { key: 'thursday' },
+  { key: 'friday' },
+  { key: 'saturday' },
+  { key: 'sunday' },
 ] as const;
 
 type DayKey = typeof DAYS[number]['key'];
 
-// export type TimeRangeDto = { from: string | null; to: string | null };
-// export type WorkingHourDto = Record<DayKey, TimeRangeDto>;
-
 type Props<TFieldValues extends FieldValues> = {
   control: Control<TFieldValues>;
-
   name: Path<TFieldValues>;
-  
   onSerializedChangeAction?: (json: string) => void;
-
 };
-
-export default function WorkingHoursField<TFieldValues extends FieldValues>({
-  control,
-  name,
-  onSerializedChangeAction,
-}: Props<TFieldValues>) {
-  const [bulkFrom, setBulkFrom] = useState('09:00');
-  const [bulkTo, setBulkTo] = useState('18:00');
-
-  const isValidRange = (from: string | null, to: string | null) =>
-    Boolean(from && to && from < to);
 
 const EMPTY: WorkingHoursDto = {
   monday: { from: null, to: null },
@@ -49,6 +202,26 @@ const EMPTY: WorkingHoursDto = {
   saturday: { from: null, to: null },
   sunday: { from: null, to: null },
 };
+
+export default function WorkingHoursField<TFieldValues extends FieldValues>({
+  control,
+  name,
+  onSerializedChangeAction,
+}: Props<TFieldValues>) {
+  const t = useTranslations('WorkingHoursField');
+
+  const [bulkFrom, setBulkFrom] = useState('09:00');
+  const [bulkTo, setBulkTo] = useState('18:00');
+
+  const isValidRange = (from: string | null, to: string | null) => Boolean(from && to && from < to);
+
+  const safeDayLabel = (day: DayKey) => {
+    try {
+      return t(`days.${day}`);
+    } catch {
+      return day; // fallback, якщо немає перекладу
+    }
+  };
 
   return (
     <Controller
@@ -81,9 +254,8 @@ const EMPTY: WorkingHoursDto = {
 
         return (
           <div className={styles.wrapper}>
-            <label className={styles.label}>Робочі години</label>
+            <label className={styles.label}>{t('label')}</label>
 
-            {/* верхній бар: масове заповнення Пн–Пт + очистити */}
             <div className={styles.bulkBar}>
               <div className={styles.bulkInputs}>
                 <input
@@ -91,28 +263,30 @@ const EMPTY: WorkingHoursDto = {
                   value={bulkFrom}
                   onChange={(e) => setBulkFrom(e.target.value)}
                   className={styles.input}
+                  aria-label="from"
                 />
-                <span>–</span>
+                <span>{t('dash')}</span>
                 <input
                   type="time"
                   value={bulkTo}
                   onChange={(e) => setBulkTo(e.target.value)}
                   className={styles.input}
+                  aria-label="to"
                 />
               </div>
+
               <div className={styles.bulkButtons}>
                 <button type="button" className={styles.button} onClick={applyWeekdays}>
-                  Пн–Пт
+                  {t('weekdayButton')}
                 </button>
                 <button type="button" className={styles.buttonGhost} onClick={clearAll}>
-                  Очистити все
+                  {t('clearAll')}
                 </button>
               </div>
             </div>
 
-            {/* таблиця днів */}
             <div className={styles.table}>
-              {DAYS.map(({ key, label }) => {
+              {DAYS.map(({ key }) => {
                 const from = hours[key]?.from ?? null;
                 const to = hours[key]?.to ?? null;
                 const active = Boolean(from && to);
@@ -129,19 +303,20 @@ const EMPTY: WorkingHoursDto = {
                             ? setDay(key, { from: bulkFrom, to: bulkTo })
                             : setDay(key, { from: null, to: null })
                         }
+                        aria-label={safeDayLabel(key)}
                       />
-                      <span className={styles.dayLabel}>{label}</span>
+                      <span className={styles.dayLabel}>{safeDayLabel(key)}</span>
                     </div>
 
                     <div className={styles.timeCell}>
                       <input
                         type="time"
-                        value={from ?? ''}               
+                        value={from ?? ''}
                         onChange={(e) => setDay(key, { from: e.target.value || null })}
                         disabled={!active}
                         className={`${styles.input} ${bad ? styles.errorInput : ''}`}
                       />
-                      <span>–</span>
+                      <span>{t('dash')}</span>
                       <input
                         type="time"
                         value={to ?? ''}
@@ -155,7 +330,7 @@ const EMPTY: WorkingHoursDto = {
               })}
             </div>
 
-            {fieldState.error && <p className={styles.errorText}>{fieldState.error.message}</p>}
+            {fieldState.error && <p className={styles.errorText}>{String(fieldState.error.message)}</p>}
           </div>
         );
       }}

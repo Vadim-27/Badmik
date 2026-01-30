@@ -145,7 +145,7 @@ const ClubDetails: React.FC<Props> = ({ club }) => {
         <AppBreadcrumbs
           items={[
             { label: 'Admin', href: '/admin/dashboard' },
-            { label: 'Clubs', href: '/admin/clubs' },
+            // { label: 'Clubs', href: '/admin/clubs' },
             { label: 'Club' },
           ]}
         />
