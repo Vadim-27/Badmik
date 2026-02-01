@@ -1,14 +1,17 @@
-﻿using BadmintonApp.Domain.Core;
+﻿using BadmintonApp.Application.DTOs.Users;
+using BadmintonApp.Domain.Core;
+using BadmintonApp.Domain.Enums;
 using BadmintonApp.Domain.Enums.Player;
 using System;
+using System.Collections.Generic;
 
 namespace BadmintonApp.Application.DTOs.Player;
 
 public class PlayerDto
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
-    public Guid UserId { get; set; }
-    public string ImageUrl { get; set; }
-    public string PhoneNumber { get; set; }
-    public PlayerLevel Level { get; set; }
+    public Guid Id { get; set; }
+    public Guid ClubId { get; set; }
+    public string PhotoUrl { get; set; }
+    public UserResultDto User { get; set; } = null!;
+    public List<PlayerSportProfileDto> SportProfiles { get; set; }
 }

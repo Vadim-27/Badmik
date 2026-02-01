@@ -12,5 +12,7 @@ namespace BadmintonApp.Application.DTOs.Player
         public MembershipStatus Status { get; set; }
         public DateTime ValidFrom { get; set; }
         public DateTime? ValidUntil { get; set; }
+        public int TrainingsLeft { get; set; }
+        public int TrainingsTotalGranted { get; set; }
     }
 }

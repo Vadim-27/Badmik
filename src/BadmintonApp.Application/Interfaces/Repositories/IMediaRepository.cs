@@ -15,6 +15,7 @@ namespace BadmintonApp.Application.Interfaces.Repositories
         Task<Domain.Media.MediaItem> GetSingleAsync(EntityType ownerType, Guid ownerId, MediaKind kind, CancellationToken ct);
 
         Task<List<Domain.Media.MediaItem>> GetListAsync(EntityType ownerType, Guid ownerId, MediaKind kind, CancellationToken ct);
+        Task<List<MediaItem>> GetListAsync(EntityType ownerType, IReadOnlyCollection<Guid> ownerIds, MediaKind kind, CancellationToken ct);
 
         Task<int?> GetMaxSortOrderAsync(EntityType ownerType, Guid ownerId, MediaKind kind, CancellationToken ct);
 

@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
 using BadmintonApp.Application.DTOs.Common;
+using BadmintonApp.Application.DTOs.Logs;
 using BadmintonApp.Application.DTOs.Paginations;
 using BadmintonApp.Application.DTOs.Player;
 using BadmintonApp.Application.DTOs.Staff;
 using BadmintonApp.Application.Exceptions;
+using BadmintonApp.Application.Extension;
+using BadmintonApp.Application.Extesions;
 using BadmintonApp.Application.Interfaces.Auth;
 using BadmintonApp.Application.Interfaces.Permissions;
 using BadmintonApp.Application.Interfaces.Players;
@@ -11,6 +14,8 @@ using BadmintonApp.Application.Interfaces.Repositories;
 using BadmintonApp.Application.Interfaces.Transactions;
 using BadmintonApp.Application.Interfaces.Users;
 using BadmintonApp.Domain.Core;
+using BadmintonApp.Domain.Enums;
+using BadmintonApp.Domain.Enums.Media;
 using BadmintonApp.Domain.Enums.Permission;
 using BadmintonApp.Domain.Players;
 using FluentValidation;
@@ -18,6 +23,7 @@ using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -34,8 +40,9 @@ public class PlayerService : IPlayerService
     private readonly IValidator<CreatePlayerDto> _playerRegisterValidation;
     private readonly IPermissionService _permissionService;
     private readonly ICurrentUserContext _current;
+    private readonly IMediaRepository _mediaRepository;
 
-    public PlayerService(IPlayerRepository playerRepository, IMapper mapper, IUsersService usersService, ITransactionService transactionService, IUserRepository userRepository, IPasswordHasher<User> passwordHasher, IValidator<CreatePlayerDto> playerRegisterValidation, IPermissionService permissionService, ICurrentUserContext current)
+    public PlayerService(IPlayerRepository playerRepository, IMapper mapper, IUsersService usersService, ITransactionService transactionService, IUserRepository userRepository, IPasswordHasher<User> passwordHasher, IValidator<CreatePlayerDto> playerRegisterValidation, IPermissionService permissionService, ICurrentUserContext current, IMediaRepository mediaRepository)
     {
         _playerRepository = playerRepository;
         _mapper = mapper;
@@ -46,11 +53,15 @@ public class PlayerService : IPlayerService
         _playerRegisterValidation = playerRegisterValidation;
         _permissionService = permissionService;
         _current = current;
+        _mediaRepository = mediaRepository;
     }
 
     public async Task Create(CreatePlayerDto dto, CancellationToken cancellationToken)
     {
         await _playerRegisterValidation.ValidateAndThrowAsync(dto, cancellationToken);
+
+        await EnsureCanManagePlayerAsync(null, PermissionType.PlayersManage, cancellationToken);
+
         var user = new User
         {
             Id = Guid.NewGuid(),
@@ -61,6 +72,7 @@ public class PlayerService : IPlayerService
             DoB = dto.DoB,
             ClubId = dto.ClubId,
             CreatedAt = DateTime.UtcNow,
+            Gender = dto.Gender,
             IsActive = true
         };
         user.PasswordHash = _passwordHasher.HashPassword(user, dto.Password);
@@ -83,34 +95,45 @@ public class PlayerService : IPlayerService
 
     }
 
-    public async Task<PlayerDto> GetById(Guid Id, CancellationToken cancellationToken)
+    public async Task<PlayerDto> GetById(Guid id, CancellationToken cancellationToken)
     {
-        var player = await _playerRepository.GetById(Id, cancellationToken);
-        return _mapper.Map<PlayerDto>(player);
+        var player = await _playerRepository.GetById(id, cancellationToken);
+        var dto = _mapper.Map<PlayerDto>(player);
+
+        await AttachPlayerPhotosAsync(new List<Player> { player }, new List<PlayerDto> { dto }, cancellationToken);
+
+        return dto;
     }
 
-    public async Task<PlayerDto> GetByUserId(Guid Id, CancellationToken cancellationToken)
+    public async Task<PlayerDto> GetByUserId(Guid id, CancellationToken cancellationToken)
     {
-        var player = await _playerRepository.GetByUserId(Id, cancellationToken);
-        return _mapper.Map<PlayerDto>(player);
+        var player = await _playerRepository.GetByUserId(id, cancellationToken);
+        var dto = _mapper.Map<PlayerDto>(player);
+
+        await AttachPlayerPhotosAsync(new List<Player> { player }, new List<PlayerDto> { dto }, cancellationToken);
+
+        return dto;
     }
 
     public async Task Update(UpdatePlayerDto dto, CancellationToken cancellationToken)
     {       
-        var player = _mapper.Map<Player>(dto);       
         var playerRepo = await _playerRepository.GetById(dto.Id, cancellationToken);       
         var user = await _userRepository.GetByIdAsync(playerRepo.UserId, cancellationToken);
-        
+
+        await EnsureCanManagePlayerAsync(playerRepo, PermissionType.PlayersManage, cancellationToken);
+
+        user.Email = dto.Email;
         user.FirstName = dto.FirstName;
         user.LastName = dto.LastName;
-        user.Email = dto.Email;
-
+        user.PhoneNumber = dto.PhoneNumber;
+        user.DoB = dto.DoB;
 
         await _transactionService.Begin(cancellationToken);
         try
         {           
-            await _userRepository.UpdateAsync(user, cancellationToken);            
-            await _playerRepository.Update(player, cancellationToken);            
+            await _userRepository.UpdateAsync(user, cancellationToken);
+            var sportProfilesDto = new UpdatePlayerSportProfilesDto { SportProfiles = dto.SportProfiles };
+            await this.UpdateSportProfilesAsync(playerRepo.Id, sportProfilesDto, cancellationToken);
             await _transactionService.Commit(cancellationToken);
         }
         catch (Exception)
@@ -123,17 +146,13 @@ public class PlayerService : IPlayerService
 
     public async Task<PaginationListDto<PlayerDto>> GetAll(ClubPaginationFilterDto paginationFilterDto, CancellationToken cancellationToken)
     {
-        var players = await _playerRepository.GetAll(paginationFilterDto, cancellationToken);
+        var page = await _playerRepository.GetAll(paginationFilterDto, cancellationToken);
 
-        var mapped = _mapper.Map<List<PlayerDto>>(players.List);
+        var dtoPage = page.AsPagination<Player, PlayerDto>(_mapper);
 
-        return new PaginationListDto<PlayerDto>
-        {
-            List = mapped,
-            TotalCount = players.TotalCount,
-            Page = players.Page,
-            PageSize = players.PageSize
-        };
+        await AttachPlayerPhotosAsync(page.List, dtoPage.List, cancellationToken);
+
+        return dtoPage;
     }
 
     public async Task ChangePassword(PlayerUpdatePasswordDto playerUpdateDto, CancellationToken cancellationToken)
@@ -147,7 +166,9 @@ public class PlayerService : IPlayerService
         if (user == null)
         {
             throw new KeyNotFoundException("User not found");
-        }   
+        }
+
+        await EnsureCanManagePlayerAsync(player, PermissionType.PlayersManage, cancellationToken);
 
         var passwordHash = _passwordHasher.HashPassword(user, playerUpdateDto.Password);
         await _userRepository.UpdatePasswordAsync(user.Id, passwordHash, cancellationToken);
@@ -160,22 +181,7 @@ public class PlayerService : IPlayerService
         var player = await _playerRepository.GetById(playerId, ct)
             ?? throw new NotFoundException($"Player '{playerId}' not found.");
 
-        var actorUserId = _current.UserId;
-        var actorClubId = _current.ClubId;
-
-        var isSelf = player.UserId == actorUserId;
-
-        if (!isSelf)
-        {
-            var allowed = await _permissionService.HasPermission(
-                actorUserId, actorClubId, PermissionType.PlayersManage, ct);
-
-            if (!allowed)
-                throw new ForbiddenException("Missing permission to manage players.");
-
-            if (player.ClubId != actorClubId)
-                throw new ForbiddenException("Cannot manage players from another club.");
-        }
+        await EnsureCanManagePlayerAsync(player, PermissionType.PlayersManage, ct);
 
         var newProfiles = dto.SportProfiles
             .Select(x => new PlayerSportProfile
@@ -188,4 +194,74 @@ public class PlayerService : IPlayerService
 
         await _playerRepository.UpdateSportProfilesAsync(playerId, newProfiles, ct);
     }
+
+    public async Task<List<PlayerDto>> GetByIdsAsync(List<Guid> ids, CancellationToken ct)
+    {
+        if (ids == null || ids.Count == 0)
+            return new List<PlayerDto>();
+
+        // optional guard
+        if (ids.Count > 2000)
+            throw new ArgumentException("Too many ids.");
+
+        // IMPORTANT: keep the original order (followers often depend on it)
+        // Also keep duplicates? Usually no => distinct.
+        var orderedDistinctIds = ids.Distinct().ToList();
+
+        var players = await _playerRepository.GetByIdsAsync(orderedDistinctIds, ct);
+
+        // Fast lookup
+        var map = players.ToDictionary(p => p.Id, p => p);
+
+        var result = new List<PlayerDto>(orderedDistinctIds.Count);
+        foreach (var id in orderedDistinctIds)
+        {
+            if (!map.TryGetValue(id, out var p)) continue;
+
+            result.Add(_mapper.Map<PlayerDto>(p));
+        }
+        await AttachPlayerPhotosAsync(players, result, ct);
+        return result;
+    }
+
+    #region "helpers"
+    private async Task AttachPlayerPhotosAsync(List<Player> players, List<PlayerDto> dtos, CancellationToken ct) 
+    {
+        if (players.Count == 0 || dtos.Count == 0)
+            return;
+
+        var playerIds = players.Select(p => p.Id).Distinct().ToList();
+
+        // bulk load media by PLAYER ids
+        var media = await _mediaRepository.GetListAsync(EntityType.Player, playerIds, MediaKind.Avatar, ct);
+
+        // playerId -> primary media (OwnerId == playerId)
+        var primaryByPlayerId = media.PickPrimaryPerOwner();
+
+        foreach (var dto in dtos)
+        {
+            if (primaryByPlayerId.TryGetValue(dto.Id, out var mediaItem))
+            {
+                dto.PhotoUrl = mediaItem.Url; //mediaItem.ThumbUrl;
+            }
+        }
+    }
+
+    private async Task EnsureCanManagePlayerAsync(Player player, PermissionType permissionIfNotSelf, CancellationToken ct)
+    {
+        var actorUserId = _current.UserId;
+        var actorClubId = _current.ClubId;
+
+        if (player != null && player.UserId == actorUserId)
+            return; // self allowed
+
+        var allowed = await _permissionService.HasPermission(actorUserId, actorClubId, permissionIfNotSelf, ct);
+
+        if (!allowed)
+            throw new ForbiddenException($"Missing permission '{permissionIfNotSelf}'.");
+
+        if (player.ClubId != actorClubId)
+            throw new ForbiddenException("Cannot manage players from another club.");
+    }
+    #endregion
 }

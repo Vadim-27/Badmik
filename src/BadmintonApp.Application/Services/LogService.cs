@@ -27,7 +27,6 @@ public class LogService : ILogService
     public async Task<PaginationListDto<LogDto>> GetLogsByFilters(
         GetLogsFilterDto getLogsFilterDto,
         CancellationToken cancellationToken)
-
     {
         await Task.Yield();
         return _logRepository.GetLogsByFilters(getLogsFilterDto, cancellationToken)

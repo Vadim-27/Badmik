@@ -146,17 +146,21 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-using (var scope = app.Services.CreateScope())
+
+if (!app.Environment.IsDevelopment())
 {
-    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    var retries = 5;
-    while (retries-- > 0)
+    using (var scope = app.Services.CreateScope())
     {
-        try { db.Database.Migrate(); break; }
-        catch (Exception ex)
+        var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var retries = 5;
+        while (retries-- > 0)
         {
-            Console.WriteLine($"Migration failed: {ex.Message}. Retrying...");
-            await Task.Delay(2000);
+            try { db.Database.Migrate(); break; }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Migration failed: {ex.Message}. Retrying...");
+                await Task.Delay(2000);
+            }
         }
     }
 }
