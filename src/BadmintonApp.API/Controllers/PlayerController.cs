@@ -33,6 +33,7 @@ namespace BadmintonApp.API.Controllers
         {
             _usersService = usersService;
             _playerService = playerService;
+            _media  = media;
         }
 
         // POST: /api/auth/register
@@ -118,6 +119,16 @@ namespace BadmintonApp.API.Controllers
         {
             await _playerService.UpdateSportProfilesAsync(playerId, dto, cancellationToken);
             return NoContent();
+        }
+
+        [HttpPost("query")]
+        public async Task<ActionResult<List<PlayerDto>>> Query([FromBody] List<Guid> ids, CancellationToken ct)
+        {
+            if (ids == null || ids.Count == 0)
+                return Ok(new List<PlayerDto>());
+
+            var players = await _playerService.GetByIdsAsync(ids, ct);
+            return Ok(players);
         }
     }
 }

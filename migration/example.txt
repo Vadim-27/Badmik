@@ -1,0 +1,1 @@
+.\create-migration.ps1 -Name AddPlayerMemberships

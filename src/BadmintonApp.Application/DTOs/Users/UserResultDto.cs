@@ -1,4 +1,5 @@
 ﻿using BadmintonApp.Application.DTOs.WorkingHourDtos;
+using BadmintonApp.Domain.Enums;
 using System;
 
 namespace BadmintonApp.Application.DTOs.Users
@@ -11,5 +12,6 @@ namespace BadmintonApp.Application.DTOs.Users
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime  DoB { get; set; }
+        public GenderType Gender { get; set; }
     }
 }

@@ -59,8 +59,8 @@ namespace BadmintonApp.Application.Services
                 Status = MembershipStatus.Active,
                 ValidFrom = dto.ValidFrom,
                 ValidUntil = dto.ValidUntil,
-                TrainingsLeft = dto.TrainingsGranted,
-                TrainingsTotalGranted = dto.TrainingsGranted
+                TrainingsLeft = dto.TrainingsTotalGranted,
+                TrainingsTotalGranted = dto.TrainingsTotalGranted
             };
 
             await _repo.CreateAsync(membership, ct);
@@ -80,6 +80,7 @@ namespace BadmintonApp.Application.Services
             membership.Status = dto.Status;
             membership.ValidFrom = dto.ValidFrom;
             membership.ValidUntil = dto.ValidUntil;
+            membership.TrainingsLeft = dto.TrainingsLeft;
 
             await _repo.UpdateAsync(membership, ct);
         }

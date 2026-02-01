@@ -110,6 +110,15 @@ namespace BadmintonApp.Infrastructure.Persistence
                     .WithMany(p => p.Followers)
                     .HasForeignKey(x => x.FollowingPlayerId)
                     .OnDelete(DeleteBehavior.Cascade);
+
+                b.HasIndex(x => x.FollowingPlayerId);
+                b.HasIndex(x => x.FollowerPlayerId);
+            });
+
+            modelBuilder.Entity<PlayerFavoriteLocation>(b =>
+            {
+                b.HasKey(x => x.Id);
+                b.HasIndex(x => new { x.PlayerId, x.LocationId }).IsUnique();
             });
 
 

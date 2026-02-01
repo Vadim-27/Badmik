@@ -9,6 +9,7 @@ namespace BadmintonApp.Domain.Players
 {
     public class PlayerFavoriteLocation
     {
+        public Guid Id { get; set; } = Guid.NewGuid();
         public Guid PlayerId { get; set; }
         public Player Player { get; set; } = null!;
 

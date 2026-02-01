@@ -1,4 +1,5 @@
 ﻿using BadmintonApp.Domain.Enums.Player;
+using BadmintonApp.Domain.Enums.Training;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,5 +17,6 @@ namespace BadmintonApp.Application.DTOs.Player
         public DateTime? ValidUntil { get; set; }
         public int TrainingsLeft { get; set; }
         public int TrainingsTotalGranted { get; set; }
+        public TrainingType TrainingType { get; set; }
     }
 }

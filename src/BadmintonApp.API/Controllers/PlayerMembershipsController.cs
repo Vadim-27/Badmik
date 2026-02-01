@@ -43,10 +43,7 @@ namespace BadmintonApp.API.Controllers
         {
             var membershipId = await _membershipService.CreateAsync(playerId, dto, ct);
 
-            return CreatedAtAction(
-                nameof(GetById),
-                new { playerId, membershipId },
-                null);
+            return CreatedAtAction(nameof(GetById), new { playerId, membershipId }, null);
         }
 
         // PUT /players/{playerId}/memberships/{membershipId}
@@ -63,14 +60,6 @@ namespace BadmintonApp.API.Controllers
         {
             await _membershipService.DeleteAsync(playerId, membershipId, ct);
             return NoContent();
-        }
-
-        // GET /players/{playerId}/memberships?clubId=...
-        [HttpGet]
-        public async Task<ActionResult<List<MembershipDto>>> GetByPlayerId(Guid playerId, [FromQuery] Guid? clubId, CancellationToken ct) 
-        {
-            var result = await _membershipService.GetAllAsync(playerId, clubId, ct);
-            return Ok(result);
         }
     }
 }

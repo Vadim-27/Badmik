@@ -146,13 +146,13 @@ public class PlayerRepository : IPlayerRepository
             .ToListAsync(ct);
     }
 
-    public async Task<PaginationListDto<Player>> GetAll(
-    ClubPaginationFilterDto paginationFilterDto,
-    CancellationToken cancellationToken)
+
+    public async Task<PaginationListDto<Player>> GetAll(ClubPaginationFilterDto paginationFilterDto, CancellationToken cancellationToken)
     {
         var query = _dbContext.Players
             .AsNoTracking()
             .Include(x => x.User)
+            .Include(p => p.SportProfiles)
             .OrderBy(x => x.User.LastName)
             .AsQueryable();
 
@@ -175,5 +175,18 @@ public class PlayerRepository : IPlayerRepository
             Page = paginationFilterDto.Page,
             PageSize = paginationFilterDto.PageSize
         };
+    }
+
+    public async Task<List<Player>> GetByIdsAsync(List<Guid> ids, CancellationToken ct)
+    {
+        if (ids == null || ids.Count == 0)
+            return new List<Player>();
+
+        return await _dbContext.Players
+            .Where(p => ids.Contains(p.Id))
+            .Include(p => p.User)
+            .Include(p => p.SportProfiles)
+            .AsNoTracking()
+            .ToListAsync(ct);
     }
 }

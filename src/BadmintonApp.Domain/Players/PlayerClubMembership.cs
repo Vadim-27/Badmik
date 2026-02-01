@@ -1,5 +1,6 @@
 ﻿using BadmintonApp.Domain.Clubs;
 using BadmintonApp.Domain.Enums.Player;
+using BadmintonApp.Domain.Enums.Training;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,7 @@ namespace BadmintonApp.Domain.Players
         public Club Club { get; set; } = null!;
 
         public MembershipStatus Status { get; set; } // Active, Pending, Suspended, Left
+        public TrainingType TrainingType { get; set; }
         public DateTime ValidFrom { get; set; }
         public DateTime? ValidUntil { get; set; }
 

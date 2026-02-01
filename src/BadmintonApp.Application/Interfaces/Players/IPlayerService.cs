@@ -3,6 +3,7 @@ using BadmintonApp.Application.DTOs.Paginations;
 using BadmintonApp.Application.DTOs.Player;
 using BadmintonApp.Application.DTOs.Staff;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,4 +18,5 @@ public interface IPlayerService
     Task<PaginationListDto<PlayerDto>> GetAll(ClubPaginationFilterDto paginationFilterDto, CancellationToken cancellationToken);
     Task ChangePassword(PlayerUpdatePasswordDto staffUpdateDto, CancellationToken cancellationToken);
     Task UpdateSportProfilesAsync(Guid Id, UpdatePlayerSportProfilesDto dto, CancellationToken ct);
+    Task<List<PlayerDto>> GetByIdsAsync(List<Guid> ids, CancellationToken ct);
 }

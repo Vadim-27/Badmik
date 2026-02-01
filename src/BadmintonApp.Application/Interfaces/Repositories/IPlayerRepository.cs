@@ -27,5 +27,6 @@ public interface IPlayerRepository
     Task RemoveSubscription(Guid followerPlayerId, Guid followingPlayerId, CancellationToken ct);
     Task<List<Guid>> GetFollowerIds(Guid playerId, CancellationToken ct);
     Task<List<Guid>> GetFollowingIds(Guid playerId, CancellationToken ct);
+    Task<List<Player>> GetByIdsAsync(List<Guid> ids, CancellationToken ct);
 }
     

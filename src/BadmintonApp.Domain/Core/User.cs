@@ -1,6 +1,8 @@
-﻿using BadmintonApp.Domain.WorkingHours;
+﻿using BadmintonApp.Domain.Enums;
+using BadmintonApp.Domain.WorkingHours;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace BadmintonApp.Domain.Core
 {
@@ -12,7 +14,7 @@ namespace BadmintonApp.Domain.Core
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string PhoneNumber { get; set; }
-
+        public GenderType Gender { get; set; }
         public DateTime DoB { get; set; }
         public bool IsActive { get; set; }
         public DateTime CreatedAt { get; set; }

@@ -22,9 +22,29 @@ public class MediaRepository : IMediaRepository
         => _dbContext.Media.FirstOrDefaultAsync(m => m.OwnerType == ownerType && m.OwnerId == ownerId && m.Kind == kind, ct);
 
     public Task<List<Domain.Media.MediaItem>> GetListAsync(EntityType ownerType, Guid ownerId, MediaKind kind, CancellationToken ct)
-        => _dbContext.Media
-            .Where(m => m.OwnerType == ownerType && m.OwnerId == ownerId && m.Kind == kind)
+    => _dbContext.Media
+        .AsNoTracking()
+        .Where(m => m.OwnerType == ownerType && m.OwnerId == ownerId && m.Kind == kind)
+        .OrderBy(m => m.SortOrder)
+        .ThenByDescending(m => m.CreatedAt)
+        .ToListAsync(ct);
+
+    public Task<List<Domain.Media.MediaItem>> GetListAsync(EntityType ownerType, IReadOnlyCollection<Guid> ownerIds, MediaKind kind, CancellationToken ct)
+    {
+        if (ownerIds == null || ownerIds.Count == 0)
+            return Task.FromResult(new List<Domain.Media.MediaItem>());
+
+        return _dbContext.Media
+            .AsNoTracking()
+            .Where(m => m.OwnerType == ownerType
+                        && m.Kind == kind
+                        && ownerIds.Contains(m.OwnerId))
+            // deterministic order: grouped by owner, then priority
+            .OrderBy(m => m.OwnerId)
+            .ThenBy(m => m.SortOrder)
+            .ThenByDescending(m => m.CreatedAt)
             .ToListAsync(ct);
+    }
 
     public Task<int?> GetMaxSortOrderAsync(EntityType ownerType, Guid ownerId, MediaKind kind, CancellationToken ct)
         => _dbContext.Media
