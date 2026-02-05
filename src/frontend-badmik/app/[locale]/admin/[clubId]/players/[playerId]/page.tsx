@@ -7,6 +7,7 @@ import { prefetch } from '@/services/_shared/prefetch';
 
 type Params = {
   playerId: string;
+  clubId: string;
 };
 
 const PlayerPage = async ({
@@ -14,8 +15,7 @@ const PlayerPage = async ({
 }: {
   params: Promise<Params>;
 }) => {
-  const { playerId } = await params;
-;
+  const { playerId, clubId } = await params;
 
 const state = await prefetch([ playersServerQueries.byId(playerId) ]);
 
@@ -28,7 +28,7 @@ const state = await prefetch([ playersServerQueries.byId(playerId) ]);
   <RQHydrate state={state}>
     <div className="p-6 bg-gray-100 min-h-screen">
   {/* <UserDetail player={player} /> */}
-  <UserDetail playerId={playerId} />
+  <UserDetail playerId={playerId} clubIdParams={clubId} />
   </div>
   </RQHydrate>
 );

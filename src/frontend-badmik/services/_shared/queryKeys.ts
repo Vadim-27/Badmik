@@ -4,6 +4,11 @@ type StaffListParams = {
   page?: number;
   pageSize?: number;
 };
+type PlayersListParams = {
+  clubId?: string;
+  page?: number;
+  pageSize?: number;
+};
 
 
 export const qk = {
@@ -39,9 +44,14 @@ export const qk = {
     byId: (id: string) => ['locations', 'byId', id] as const,
     byClub: (clubId: string) => ['locations', 'byClub', clubId] as const,
   },
-  players: {
-    list: () => ['players', 'list'] as const,
+   players: {
+    list: (params: PlayersListParams = {}) =>
+      ['players', 'list', params.clubId ?? 'all', params.page ?? 1, params.pageSize ?? 10] as const,
     byId: (id: string) => ['players', 'byId', id] as const,
+    create: () => ['players', 'create'] as const, 
+    update: (id: string) => ['players', 'update', id] as const,
+     photo: (id: string) => ['players', 'photo', id] as const,
+    logo: (id: string) => ['players', 'logo', id] as const,
   },
    trainings: {
     list: () => ['trainings', 'list'] as const,
