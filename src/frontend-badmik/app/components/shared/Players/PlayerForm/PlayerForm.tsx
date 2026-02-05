@@ -1,40 +1,33 @@
-
-
-// UserForm.tsx
 'use client';
 
-import { forwardRef, useImperativeHandle, useCallback, useEffect } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle } from 'react';
 import { useForm } from 'react-hook-form';
 import styles from './PlayerForm.module.scss';
+import ScrollArea from '@/app/components/ui/Scroll/ScrollArea';
+import { useTranslations } from 'next-intl';
+
 import ClubSelectFieldAdd from '@/app/components/ui/InputSelectClubs/ClubSelectAdd/ClubSelectFieldAdd';
-import CircularProgress from "@mui/material/CircularProgress";
+import ClubReadonlyField from '@/app/components/ui/InputSelectClubs/ClubReadonlyField/ClubReadonlyField';
 
-export type FormValues = {
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  clubId: string;
-  doB: string; // yyyy-mm-dd з <input type="date" />
-};
+import type {
+  Gender,
+  Player,
+  PlayerSportProfile,
+  CreatePlayerDto,
+  UpdatePlayerDto,
+} from '@/services/types/players.dto';
 
-type Props = {
-  mode: 'create' | 'edit';
-  adminId?: string;
-  defaultValues?: Partial<FormValues>;
-  onSubmitCreate?: (data: FormValues) => Promise<void>;
-  onSubmitUpdate?: (adminId: string, data: FormValues) => Promise<void>;
-  isChanged?: boolean;
-  setIsChanged?: (v: boolean) => void;
-  busy?: boolean; 
-};
+import PlayersSportsSelector from './PlayersSportsSelector/PlayersSportsSelector';
+import GenderSelector from './GenderSelector/GenderSelector';
+import AvatarUploader from '@/app/components/ui/AvatarUploader/AvatarUploader';
+import { useUploadPlayerPhoto, useDeletePlayerPhoto } from '@/services/players/queries.client';
 
-export type PlayerFormHandle = {
-  submit: () => void;
-  isValid: () => boolean;
-  getValues?: () => FormValues;
-  setFieldError?: (name: keyof FormValues, message: string) => void; 
-};
+const nameOnlyLetters = /^[\p{L}'’-]+$/u;
+const noWhitespace = /^\S+$/;
+const hasDigit = /\d/;
+const hasUpper = /[A-Z]/;
+const hasLower = /[a-z]/;
+const hasSpecial = /[!@#$%^&*()_+\-=[\]{}|;':",.<>?/`~]/;
 
 function isAtLeast8Years(oldDateStr: string) {
   if (!oldDateStr) return false;
@@ -44,17 +37,94 @@ function isAtLeast8Years(oldDateStr: string) {
   return d <= eightYearsAgo;
 }
 
-const nameOnlyLetters = /^[\p{L}'’-]+$/u;
-const hasDigit = /\d/;
-const hasUpper = /[A-Z]/;
-const hasLower = /[a-z]/;
-const hasSpecial = /[!@#$%^&*()_+\-=[\]{}|;':",.<>?/`~]/;
-const noWhitespace = /^\S+$/;
+/** yyyy-mm-dd -> ISO string */
+const toDateTimeISO = (d: string) => new Date(`${d}T00:00:00.000Z`).toISOString();
 
-const PlayerForm = forwardRef<PlayerFormHandle, Props>(function UserForm(
-  { mode, adminId, defaultValues, onSubmitCreate, onSubmitUpdate, setIsChanged, busy },
+export type SportType = 'Badminton' | 'Squash' | 'Padel' | 'Pickleball' | 'Tennis' | 'TableTennis';
+export type PlayerLevel = 'D' | 'C' | 'B' | 'A' | 'Master';
+
+export type FormValues = {
+  email: string;
+  password: string; // тільки create
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  clubId: string;
+  doB: string; // yyyy-mm-dd
+  gender: Gender;
+  sportProfiles: { sport: SportType; level: PlayerLevel }[];
+
+  // sports: SportType[];
+  // level: PlayerLevel;
+};
+
+type Props = {
+  mode: 'create' | 'edit';
+  playerId?: string;
+
+  defaultValues?: Partial<FormValues>;
+  initialPlayer?: Player;
+
+  onSubmitCreate?: (values: FormValues) => Promise<void>;
+  onSubmitUpdate?: (playerId: string, values: FormValues) => Promise<void>;
+
+  busy?: boolean;
+  setIsChanged?: (v: boolean) => void;
+
+  scopedClubId?: string;
+  isClubScoped?: boolean;
+};
+
+export type PlayerFormHandle = {
+  submit: () => void;
+  isValid: () => boolean;
+  getValues?: () => FormValues;
+  setFieldError?: (name: keyof FormValues, message: string) => void;
+};
+
+function mapPlayerToForm(p?: Player | null): Partial<FormValues> {
+  if (!p) return {};
+  const u = p.user ?? null;
+
+  const doB = u?.doB ? String(u.doB).slice(0, 10) : '';
+
+  const sportProfiles: { sport: SportType; level: PlayerLevel }[] = (p.sportProfiles ?? [])
+    .filter((sp): sp is PlayerSportProfile => Boolean(sp?.sport))
+    .map((sp) => ({
+      sport: sp.sport as SportType,
+      level: (sp.level ?? 'D') as PlayerLevel,
+    }));
+
+  return {
+    email: u?.email ?? '',
+    firstName: u?.firstName ?? '',
+    lastName: u?.lastName ?? '',
+    phoneNumber: u?.phoneNumber ?? '',
+    clubId: p.clubId ?? '',
+    doB,
+    gender: (u?.gender ?? 'NotSet') as Gender,
+    sportProfiles, 
+  };
+}
+
+const PlayerFormNew = forwardRef<PlayerFormHandle, Props>(function PlayerFormNew(
+  {
+    mode,
+    playerId,
+    defaultValues,
+    initialPlayer,
+    onSubmitCreate,
+    onSubmitUpdate,
+    busy,
+    setIsChanged,
+    scopedClubId,
+    isClubScoped,
+  },
   ref
 ) {
+  const t = useTranslations('PlayerForm');
+  const tErr = useTranslations('PlayerErrors');
+
   const {
     register,
     handleSubmit,
@@ -70,194 +140,313 @@ const PlayerForm = forwardRef<PlayerFormHandle, Props>(function UserForm(
       password: '',
       firstName: '',
       lastName: '',
-      clubId: '',
+      phoneNumber: '',
+      clubId: scopedClubId ?? '',
       doB: '',
+      gender: 'NotSet',
+      sportProfiles: [], 
+      ...mapPlayerToForm(initialPlayer),
       ...defaultValues,
     },
   });
 
   useEffect(() => {
-    setIsChanged?.(Boolean(isDirty && isValid));
+    setIsChanged?.(isDirty && isValid);
   }, [isDirty, isValid, setIsChanged]);
+  useEffect(() => {
+    // ✅ щоб не затирати те, що юзер вже встиг змінити
+    if (isDirty) return;
+
+    const nextDefaults: FormValues = {
+      email: '',
+      password: '',
+      firstName: '',
+      lastName: '',
+      phoneNumber: '',
+      clubId: scopedClubId ?? '',
+      doB: '',
+      gender: 'NotSet',
+      sportProfiles: [], 
+      ...mapPlayerToForm(initialPlayer),
+      ...defaultValues,
+    };
+
+    reset(nextDefaults, { keepDirty: false, keepErrors: true });
+  }, [initialPlayer, defaultValues, scopedClubId, reset, isDirty]);
+
+  const errText = (msg?: unknown) => {
+    if (!msg) return '';
+    const key = String(msg);
+    try {
+      return tErr(key);
+    } catch {
+      return key;
+    }
+  };
+
+  //======================================
+  const uploadPhoto = useUploadPlayerPhoto();
+  const deletePhoto = useDeletePlayerPhoto();
+
+  const playerPhotoUrlRaw = (initialPlayer as any)?.photoUrl ?? '';
+  const API_ORIGIN = process.env.NEXT_PUBLIC_API_ORIGIN ?? 'https://staging.api.badmik.com.ua';
+
+  const playerPhotoUrl =
+    playerPhotoUrlRaw && playerPhotoUrlRaw.startsWith('http')
+      ? playerPhotoUrlRaw
+      : playerPhotoUrlRaw
+        ? `${API_ORIGIN}${playerPhotoUrlRaw}`
+        : '';
+
+  //========================================
 
   const submitHandler = useCallback(
     async (raw: FormValues) => {
-      // НІЯКИХ API тут. Тільки проброс даних нагору:
-        try {
-        // лише проброс у батька; тут НІЯКИХ API
-        if (adminId && onSubmitUpdate) await onSubmitUpdate(adminId, raw);
-        else if (onSubmitCreate) await onSubmitCreate(raw);
+      // if (mode === 'create') {
+      //   await onSubmitCreate?.(raw);
+      //   reset();
+      // } else {
+      //   if (playerId) await onSubmitUpdate?.(playerId, raw);
+      //   reset({ ...raw, password: '' });
+      // }
 
-        // ⬅️ скидаємо форму ТІЛЬКИ якщо вище не кинуто помилку
-        if (mode === 'create') reset();
-        else reset({ ...raw, password: '' });
+      if (mode === 'create') {
+  await onSubmitCreate?.(raw);
+  reset();
+} else {
+  if (playerId) await onSubmitUpdate?.(playerId, raw);
+  // ✅ НЕ reset(raw) — хай прийдуть дані з usePlayerById після refetch
+  reset({ ...getValues(), password: '' }, { keepDirty: false });
+}
 
-        setIsChanged?.(false);
-      } catch {
-        // на помилці форму НЕ чіпаємо
-      }
+      setIsChanged?.(false);
     },
-    [adminId, mode, onSubmitCreate, onSubmitUpdate, reset, setIsChanged]
+    [mode, playerId, onSubmitCreate, onSubmitUpdate, reset, setIsChanged]
   );
 
   useImperativeHandle(
     ref,
     () => ({
-      submit: () => handleSubmit(submitHandler)(),
+      submit: () =>
+        handleSubmit(submitHandler, (errs) => {
+          console.error('❌ RHF validation errors:', errs);
+          console.error('🧪 RHF current values:', getValues());
+        })(),
       isValid: () => Boolean(isValid),
-      getValues: () => getValues() as FormValues,
+      getValues: () => getValues(),
       setFieldError: (name, message) => setError(name, { type: 'server', message }),
     }),
     [handleSubmit, submitHandler, isValid, getValues, setError]
   );
 
-  const isBusy = Boolean(busy);
-
   return (
     <div className={styles.wrapper}>
       <div className={styles.formBox}>
-        <form onSubmit={handleSubmit(submitHandler)} className={styles.form} noValidate>
-          {/* First name */}
-          <div>
-            <label className={styles.label}>
-              Імʼя <span style={{ color: '#e63946' }}>*</span>
-            </label>
-            <input
-              className={`${styles.input} ${errors.firstName ? styles.errorInput : ''}`}
-              {...register('firstName', {
-                required: 'First name is required.',
-                minLength: { value: 2, message: 'First name is too short.' },
-                maxLength: { value: 60, message: 'First name is too long.' },
-                pattern: {
-                  value: nameOnlyLetters,
-                  message: 'First name contains invalid characters.',
-                },
-              })}
-            />
-            {errors.firstName && <p className={styles.errorText}>{errors.firstName.message}</p>}
-          </div>
+        <ScrollArea className={styles.formScroll}>
+          <form onSubmit={handleSubmit(submitHandler)} className={styles.form} noValidate>
+            {mode === 'edit' && playerId && (
+              <AvatarUploader
+                value={playerPhotoUrl}
+                onUpload={async (file) => {
+                  const res = await uploadPhoto.mutateAsync({ id: playerId, file });
+                  const raw = res.url ?? '';
+                  return raw.startsWith('http') ? raw : `${API_ORIGIN}${raw}`;
+                }}
+                onRemove={async () => {
+                  await deletePhoto.mutateAsync({ id: playerId });
+                }}
+              />
+            )}
+            <div className={styles.formGrid}>
+              {/* First name */}
+              <div>
+                <label className={styles.label}>
+                  {t('fields.firstName')} <span style={{ color: '#e63946' }}>*</span>
+                </label>
+                <input
+                  className={`${styles.input} ${errors.firstName ? styles.errorInput : ''}`}
+                  {...register('firstName', {
+                    required: mode === 'create' ? 'firstName.required' : false,
+                    minLength: { value: 2, message: 'firstName.min' },
+                    maxLength: { value: 60, message: 'firstName.max' },
+                    pattern: { value: nameOnlyLetters, message: 'firstName.pattern' },
+                  })}
+                />
+                {errors.firstName && (
+                  <p className={styles.errorText}>{errText(errors.firstName.message)}</p>
+                )}
+              </div>
 
-          {/* Last name */}
-          <div>
-            <label className={styles.label}>
-              Прізвище <span style={{ color: '#e63946' }}>*</span>
-            </label>
-            <input
-              className={`${styles.input} ${errors.lastName ? styles.errorInput : ''}`}
-              {...register('lastName', {
-                required: 'Last name is required.',
-                minLength: { value: 2, message: 'Last name is too short.' },
-                maxLength: { value: 50, message: 'Last name is too long.' },
-                pattern: {
-                  value: nameOnlyLetters,
-                  message: 'Last name contains invalid characters.',
-                },
-              })}
-            />
-            {errors.lastName && <p className={styles.errorText}>{errors.lastName.message}</p>}
-          </div>
+              {/* Last name */}
+              <div>
+                <label className={styles.label}>
+                  {t('fields.lastName')} <span style={{ color: '#e63946' }}>*</span>
+                </label>
+                <input
+                  className={`${styles.input} ${errors.lastName ? styles.errorInput : ''}`}
+                  {...register('lastName', {
+                    required: mode === 'create' ? 'lastName.required' : false,
+                    minLength: { value: 2, message: 'lastName.min' },
+                    maxLength: { value: 60, message: 'lastName.max' },
+                    pattern: { value: nameOnlyLetters, message: 'lastName.pattern' },
+                  })}
+                />
+                {errors.lastName && (
+                  <p className={styles.errorText}>{errText(errors.lastName.message)}</p>
+                )}
+              </div>
 
-          {/* Email */}
-          <div>
-            <label className={styles.label}>
-              Email <span style={{ color: '#e63946' }}>*</span>
-            </label>
-            <input
-              className={`${styles.input} ${errors.email ? styles.errorInput : ''}`}
-              type="email"
-              {...register('email', {
-                required: 'Email is required.',
-                minLength: { value: 5, message: 'Email is too short.' },
-                maxLength: { value: 254, message: 'Email is too long.' },
-                pattern: {
-                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: 'Email format is invalid.',
-                },
-              })}
-            />
-            {errors.email && <p className={styles.errorText}>{errors.email.message}</p>}
-          </div>
+              {/* Email */}
+              <div>
+                <label className={styles.label}>
+                  {t('fields.email')} <span style={{ color: '#e63946' }}>*</span>
+                </label>
+                <input
+                  className={`${styles.input} ${errors.email ? styles.errorInput : ''}`}
+                  type="email"
+                  {...register('email', {
+                    required: mode === 'create' ? 'email.required' : false,
+                    minLength: { value: 5, message: 'email.min' },
+                    maxLength: { value: 254, message: 'email.max' },
+                    pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: 'email.pattern' },
+                  })}
+                />
+                {errors.email && (
+                  <p className={styles.errorText}>{errText(errors.email.message)}</p>
+                )}
+              </div>
 
-          {/* Password */}
-          <div>
-            <label className={styles.label}>
-              Пароль <span style={{ color: '#e63946' }}>*</span>
-            </label>
-            <input
-              className={`${styles.input} ${errors.password ? styles.errorInput : ''}`}
-              type="password"
-              autoComplete="new-password"
-              {...register('password', {
-                required: 'Password is required.',
-                minLength: { value: 8, message: 'Password must be at least 8 characters.' },
-                maxLength: { value: 64, message: 'Password must be at most 64 characters.' },
-                validate: {
-                  noSpace: (v) => noWhitespace.test(v) || 'Password cannot contain whitespace.',
-                  hasDigit: (v) => hasDigit.test(v) || 'Password must contain at least one digit.',
-                  hasUpper: (v) =>
-                    hasUpper.test(v) || 'Password must contain at least one uppercase letter.',
-                  hasLower: (v) =>
-                    hasLower.test(v) || 'Password must contain at least one lowercase letter.',
-                  hasSpecial: (v) =>
-                    hasSpecial.test(v) || 'Password must contain at least one special character.',
-                },
-              })}
-            />
-            {errors.password && <p className={styles.errorText}>{errors.password.message}</p>}
-          </div>
+              {/* Password only create */}
+              {mode === 'create' && (
+                <div>
+                  <label className={styles.label}>
+                    {t('fields.password')} <span style={{ color: '#e63946' }}>*</span>
+                  </label>
+                  <input
+                    className={`${styles.input} ${errors.password ? styles.errorInput : ''}`}
+                    type="password"
+                    autoComplete="new-password"
+                    {...register('password', {
+                      required: 'password.required',
+                      minLength: { value: 8, message: 'password.min' },
+                      maxLength: { value: 64, message: 'password.max' },
+                      validate: {
+                        noSpace: (v) => noWhitespace.test(v) || 'password.noSpace',
+                        hasDigit: (v) => hasDigit.test(v) || 'password.hasDigit',
+                        hasUpper: (v) => hasUpper.test(v) || 'password.hasUpper',
+                        hasLower: (v) => hasLower.test(v) || 'password.hasLower',
+                        hasSpecial: (v) => hasSpecial.test(v) || 'password.hasSpecial',
+                      },
+                    })}
+                  />
+                  {errors.password && (
+                    <p className={styles.errorText}>{errText(errors.password.message)}</p>
+                  )}
+                </div>
+              )}
 
-          {/* Club ID */}
-          <div>
-            <label className={styles.label}>
-              Клуб <span style={{ color: '#e63946' }}>*</span>
-            </label>
-            <ClubSelectFieldAdd
+              {/* Phone */}
+              <div>
+                <label className={styles.label}>
+                  {t('fields.phoneNumber')} <span style={{ color: '#e63946' }}>*</span>
+                </label>
+                <input
+                  className={`${styles.input} ${errors.phoneNumber ? styles.errorInput : ''}`}
+                  type="tel"
+                  placeholder="+380XXXXXXXXX"
+                  {...register('phoneNumber', {
+                    required: mode === 'create' ? 'phone.required' : false,
+                    pattern: { value: /^\+?380\d{9}$/, message: 'phone.pattern' },
+                  })}
+                />
+                {errors.phoneNumber && (
+                  <p className={styles.errorText}>{errText(errors.phoneNumber.message)}</p>
+                )}
+              </div>
+
+              {/* Club */}
+              <div>
+                <label className={styles.label}>
+                  {t('fields.club')} <span style={{ color: '#e63946' }}>*</span>
+                </label>
+
+                {isClubScoped ? (
+                  <ClubReadonlyField
+                    control={control}
+                    name="clubId"
+                    rootClassName={styles.comboRoot}
+                    inputClassName={`${styles.input} ${styles.inputChevron} ${errors.clubId ? styles.errorInput : ''}`}
+                    forcedClubId={scopedClubId}
+                  />
+                ) : (
+                  <ClubSelectFieldAdd
+                    control={control}
+                    name="clubId"
+                    rootClassName={styles.comboRoot}
+                    inputClassName={`${styles.input} ${styles.inputChevron} ${errors.clubId ? styles.errorInput : ''}`}
+                    optionsClassName={styles.options}
+                    optionClassName={styles.option}
+                    optionActiveClassName={styles.optionActive}
+                    chevronClassName={styles.comboChevron}
+                  />
+                )}
+              </div>
+
+              {/* DOB */}
+              <div>
+                <label className={styles.label}>
+                  {t('fields.dob')} <span style={{ color: '#e63946' }}>*</span>
+                </label>
+                <input
+                  className={`${styles.input} ${errors.doB ? styles.errorInput : ''}`}
+                  type="date"
+                  {...register('doB', {
+                    required: mode === 'create' ? 'dob.required' : false,
+                    validate: (v) => isAtLeast8Years(v) || 'dob.validate',
+                  })}
+                />
+                {errors.doB && <p className={styles.errorText}>{errText(errors.doB.message)}</p>}
+              </div>
+
+              {/* Gender (custom buttons) */}
+              <div>
+                <GenderSelector
+                  control={control}
+                  label={t('fields.gender')}
+                  maleLabel={t('gender.Male')}
+                  femaleLabel={t('gender.Female')}
+                />
+              </div>
+            </div>
+
+            {/* Sports + Level (custom like Locations) */}
+            <PlayersSportsSelector
               control={control}
-              name="clubId"
-              rootClassName={styles.comboRoot}
-              inputClassName={`${styles.input} ${styles.inputChevron} ${errors.clubId ? styles.errorInput : ''}`}
-              optionsClassName={styles.options}
-              optionClassName={styles.option}
-              optionActiveClassName={styles.optionActive}
-              chevronClassName={styles.comboChevron}
+              labelClassName={styles.label}
+              helpClassName={styles.help}
             />
-          </div>
-
-          {/* Date of Birth */}
-          <div>
-            <label className={styles.label}>
-              Дата народження <span style={{ color: '#e63946' }}>*</span>
-            </label>
-            <input
-              className={`${styles.input} ${errors.doB ? styles.errorInput : ''}`}
-              type="date"
-              {...register('doB', {
-                required: 'Date of birth is required.',
-                validate: (v) => isAtLeast8Years(v) || 'You must be at least 8 years old.',
-              })}
-            />
-            {errors.doB && <p className={styles.errorText}>{errors.doB.message}</p>}
-          </div>
-        </form>
+          </form>
+        </ScrollArea>
       </div>
-      {isBusy && (
+
+      {Boolean(busy) && (
         <div
           style={{
-            position: "absolute",
+            position: 'fixed',
             inset: 0,
-            background: "rgba(255,255,255,0.6)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: "12px",
-            zIndex: 10,
+            background: 'rgba(255,255,255,0.6)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 1000,
           }}
         >
-          <CircularProgress size="3rem" />
+          <div className="spinner" />
         </div>
       )}
     </div>
   );
 });
+export type PlayerFormValues = FormValues;
+export default PlayerFormNew;
 
-export default PlayerForm;

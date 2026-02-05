@@ -2,206 +2,282 @@
 
 'use client';
 
-import * as React from 'react';
-import {
-  DataGrid,
-  GridColDef,
-  GridPaginationModel,
-  GridSortModel,
-  GridFilterModel,
-  
-} from '@mui/x-data-grid';
-import { Box, Typography } from '@mui/material';
-import { useRouter } from 'next/navigation';
-import { ukUA, enUS } from '@mui/x-data-grid/locales';
-import { useTranslations, useLocale } from 'next-intl';
-// import { usePlayers } from '@/features/players/hooks/usePlayers';
+import { useEffect, useMemo, useState } from 'react';
+import styles from './PlayersTable.module.scss';
+import { Link } from '@/i18n/navigation';
 import { usePlayersList } from '@/services/players/queries.client';
 import type { Player } from '@/services/types/players.dto';
+import SpinnerOverlay from '@/app/components/ui/SpinnerOverlay/SpinnerOverlay';
+import Tooltip from '@/app/components/ui/Tooltip/Tooltip';
+import EyeIcon from '@/app/assets/icons/Eye.svg';
+import EditIcon from '@/app/assets/icons/Edit.svg';
+import TrashIcon from '@/app/assets/icons/Trash.svg';
+import { useTranslations } from 'next-intl';
 
+type UnknownRecord = Record<string, unknown>;
 
-function getAge(doB?: string | null): number | null {
-  if (!doB) return null;
-  const d = new Date(doB);
-  if (Number.isNaN(d.getTime())) return null;
+const isRecord = (v: unknown): v is UnknownRecord => typeof v === 'object' && v !== null;
+const isPlayerArray = (v: unknown): v is Player[] => Array.isArray(v);
 
-  const now = new Date();
-  let age = now.getFullYear() - d.getFullYear();
-  const m = now.getMonth() - d.getMonth();
-  if (m < 0 || (m === 0 && now.getDate() < d.getDate())) age--;
+function extractPlayersList(data: unknown): { items: Player[]; total: number } {
+  // 1) масив
+  if (isPlayerArray(data)) return { items: data, total: data.length };
 
-  return age >= 0 ? age : null;
+  // 2) обʼєкт з items/list/data + totalCount
+  if (isRecord(data)) {
+    const dataField = data['data'];
+    const itemsField = data['items'];
+    const listField = data['list'];
+
+    const items =
+      (isPlayerArray(dataField) && dataField) ||
+      (isPlayerArray(itemsField) && itemsField) ||
+      (isPlayerArray(listField) && listField) ||
+      [];
+
+    const totalCount = data['totalCount'];
+    const total = typeof totalCount === 'number' ? totalCount : items.length;
+
+    return { items, total };
+  }
+
+  // 3) все інше
+  return { items: [], total: 0 };
 }
 
-type PlayersApiResponse =
-  | Player[]                                     // [ ... ]
-  | { items: Player[]; total?: number }          // { items: [...] }
-  | { data: Player[]; totalCount?: number }; 
-
-type Row = {
-  id: string;
-  fullName: string;
-  email: string;
-  age: number | null;
-  role: string;
-  level: string;
-  club: string; 
+const display = (v: unknown) => {
+  const s = String(v ?? '').trim();
+  return s ? s : '—';
 };
 
-const PlayerTable: React.FC = () => {
-  const router = useRouter();
-  const locale = useLocale();
-  const t = useTranslations('UserTable');
-
-
-  const [paginationModel, setPaginationModel] = React.useState<GridPaginationModel>({
-    page: 0,
-    pageSize: 10,
-  });
-  const [sortModel, setSortModel] = React.useState<GridSortModel>([]);
-  const [filterModel, setFilterModel] = React.useState<GridFilterModel>({ items: [] });
-  const [mounted, setMounted] = React.useState(false);
-
-  React.useEffect(() => setMounted(true), []);
-
-const { data, isLoading, isError, error } = usePlayersList();
-  // const { data, isLoading, isError, error } = usePlayers();
-console.log(" 🚀 PlayerTable data =", data);
-
-const items: Player[] = React.useMemo(() => {
-  const d = data as PlayersApiResponse | undefined;
-  if (!d) return [];
-  if (Array.isArray(d)) return d;
-  if (Array.isArray((d as any).items)) return (d as any).items as Player[];
-  if (Array.isArray((d as any).data))  return (d as any).data  as Player[];
-  return [];
-}, [data]);
-
-const rows = React.useMemo<Row[]>(() => {
-  return items.map((u) => {
-    const age = getAge(
-      (u as any).doB ?? (u as any).dateOfBirth ?? (u as any).dob ?? null
-    );
-
-    const fullName =
-      (u as any).fullName ??
-      `${(u as any).firstName ?? ''} ${(u as any).lastName ?? ''}`.trim();
-
-    return {
-      id: String((u as any).id),
-      fullName,
-      email: (u as any).email ?? '',
-      age,
-      role: (u as any).role ?? '',
-      level: (u as any).level ?? '',
-      club: '', // поки порожньо, як просив
-    };
-  });
-}, [items]);
-
+function pickUser(p: Player) {
+  // ✅ якщо є user — беремо звідти, інакше з кореня
+  const u = p.user ?? null;
 
   
-//  const rows = React.useMemo<Row[]>(() => {
-//   const list = (data ?? []).map((u: any) => {
-//     const age = getAge(u.doB ?? u.dateOfBirth);
-  
-//     return {
-//       id: u.id,
-//       fullName: u.fullName ?? `${u.firstName ?? ''} ${u.lastName ?? ''}`.trim(),
-//       email: u.email,
-//       age,
-//       role: u.role ?? '',
-//       level: u.level ?? '',
-//       club: '',
-//     };
-//   });
-//   return list;
-// }, [data]);
 
-  const rowCount = rows.length;
-
-  const handleRowClick = (params: any) => {
-    const playerId = params.id as string;
-    console.log(" playerId Table =", playerId);
-    router.push(`/${locale}/admin/players/${playerId}`);
+  return {
+    email: u?.email ?? p.email ?? null,
+    fullName: u?.fullName ?? p.fullName ?? null,
+    firstName: u?.firstName ?? p.firstName ?? null,
+    lastName: u?.lastName ?? p.lastName ?? null,
+    doB: u?.doB ?? p.doB ?? null,
+    gender: (u?.gender ?? p.gender)!,
+    phoneNumber: u?.phoneNumber ?? p.phoneNumber ?? null,
   };
+}
 
-  const displayOrDefault = (v: unknown) =>
-  v === null || v === undefined || v === '' ? 'не обрано' : String(v);
+function fullName(p: Player) {
+  const u = pickUser(p);
 
-const columns: GridColDef[] = [
-  
-  { field: 'fullName', headerName: t('fullName'), flex: 0.8, minWidth: 140 },
-  { field: 'email', headerName: 'Email', flex: 1, minWidth: 180 },
-  {
-    field: 'age',
-    headerName: t('age') ?? 'Age',
-    flex: 0.3,
-    minWidth: 70,
-    headerAlign: 'left',   
-    align: 'left', 
-    type: 'number',
-    sortable: false,
-    renderCell: (params) => (params.row.age == null ? '' : `${params.row.age} років`),
-  },
-  { field: 'role', headerName: t('role'), flex: 0.4, minWidth: 90, renderCell: (params) => displayOrDefault(params.row.role), },
-  { field: 'level', headerName: t('level'), flex: 0.4, minWidth: 90, renderCell: (params) => displayOrDefault(params.row.level), },
-  { field: 'club', headerName: t('club'), flex: 0.4, minWidth: 90 },
-];
+  const fn = String(u.firstName ?? '').trim();
+  const ln = String(u.lastName ?? '').trim();
+  const fromParts = `${fn}${fn && ln ? ' ' : ''}${ln}`.trim();
+
+  return fromParts || String(u.fullName ?? '').trim() || '—';
+}
+
+function formatDate(v: unknown) {
+  const s = String(v ?? '').trim();
+  if (!s) return '—';
+  return s.length >= 10 ? s.slice(0, 10) : s;
+}
+
+type Props = { clubId?: string };
+const COLS = 6;
+
+export default function PlayersTable({ clubId }: Props) {
+  const t = useTranslations('PlayerTable');
+  const tGender = useTranslations('PlayerCard.genderType');
+
+  const [search, setSearch] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+
+  useEffect(() => {
+    const id = window.setTimeout(() => setDebouncedSearch(search.trim()), 600);
+    return () => window.clearTimeout(id);
+  }, [search]);
+
+  useEffect(() => setPage(1), [clubId, pageSize]);
+
+  const q = usePlayersList({ clubId, page, pageSize });
+  const busy = q.isLoading || q.isFetching;
+
+  const extracted = useMemo(() => extractPlayersList(q.data), [q.data]);
+  const items = extracted.items;
+  const totalCount = extracted.total;
+
+  const filtered = useMemo(() => {
+    if (!items.length) return [];
+    if (!debouncedSearch) return items;
+
+    const needle = debouncedSearch.toLowerCase();
+    return items.filter((p) => {
+      const u = pickUser(p);
+      const hay = `${fullName(p)} ${u.email ?? ''} ${u.phoneNumber ?? ''}`.toLowerCase();
+      return hay.includes(needle);
+    });
+  }, [items, debouncedSearch]);
+
+  const totalPages = Math.max(1, Math.ceil((totalCount || 0) / pageSize));
+  const from = totalCount ? (page - 1) * pageSize + 1 : 0;
+  const to = Math.min(page * pageSize, totalCount || 0);
 
 
-
-  const localeText =
-    locale === 'uk'
-      ? ukUA.components.MuiDataGrid.defaultProps.localeText
-      : enUS.components.MuiDataGrid.defaultProps.localeText;
-
-  if (!mounted) return null;
 
   return (
-    <Box
-      sx={{
-        height: 600,
-        width: '99%',
-        minWidth: 180,
-        position: 'relative',
-        '& .MuiDataGrid-root': { fontFamily: 'var(--font-geist-sans)' },
-        '& [class*="MuiDataGridVariables"]': { '--DataGrid-t-header-background-base': '#D1D5DB' },
-        '& .MuiDataGrid-columnHeaders': { color: '#000', fontWeight: 'bold', fontSize: '1rem' },
-        '& .MuiDataGrid-row:hover': { cursor: 'pointer' },
-      }}
-    >
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        pageSizeOptions={[5, 10, 20]}
-        pagination
-        paginationMode="client"       
-        // rowCount={rowCount}
-        paginationModel={paginationModel}
-        onPaginationModelChange={setPaginationModel}
-        sortModel={sortModel}
-        onSortModelChange={setSortModel}
-        filterModel={filterModel}
-        onFilterModelChange={setFilterModel}
-        onRowClick={handleRowClick}
-        localeText={localeText}
-        loading={isLoading}           
-        disableRowSelectionOnClick
-      />
+    <div className={styles.wrapper}>
+      <div className={styles.filterBar}>
+        <input
+          className={styles.searchInput}
+          placeholder={t('filters.search.placeholder')}
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
 
-      {isError && (
-        <Typography
-          variant="body2"
-          color="error"
-          sx={{ position: 'absolute', top: 8, right: 12 }}
-          title={String((error as any)?.message ?? error)}
-        >
-          {t('loadError') ?? 'Помилка завантаження користувачів'}
-        </Typography>
-      )}
-    </Box>
+      <div className={styles.tableOuter}>
+        <div className={styles.tableWrapper}>
+          {busy && <SpinnerOverlay fullscreen={false} />}
+
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th className={styles.colName}>{t('columns.name')}</th>
+                <th className={styles.colEmail}>{t('columns.email')}</th>
+                <th className={styles.colPhone}>{t('columns.phone')}</th>
+                <th className={styles.colDob}>{t('columns.dob')}</th>
+                <th className={styles.colGender}>{t('columns.gender')}</th>
+                <th className={styles.colActions}>{t('columns.actions')}</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {filtered.length === 0 ? (
+                <tr>
+                  <td colSpan={COLS} className={styles.emptyState}>
+                    {t('empty')}
+                  </td>
+                </tr>
+              ) : (
+                filtered.map((p) => {
+                  const u = pickUser(p);
+                  
+                  const resolvedClubId = clubId ?? String(p.clubId ?? '');
+                  const viewHref = `/admin/${resolvedClubId}/players/${p.id}`;
+                  const editHref = `/admin/${resolvedClubId}/players/${p.id}/edit-player`;
+
+                  return (
+                    <tr key={p.id}>
+                      <td>
+                        <Link href={viewHref} className={styles.nameLink}>
+                          <div className={styles.nameMain}>{fullName(p)}</div>
+                        </Link>
+                      </td>
+
+                      <td className={styles.muted}>{display(u.email)}</td>
+                      <td className={styles.muted}>{display(u.phoneNumber)}</td>
+                      <td className={styles.muted}>{formatDate(u.doB)}</td>
+                      <td className={styles.muted}>{tGender(u.gender)}</td>
+
+                      <td>
+                        <div className={styles.actionsWrapper}>
+                          <Tooltip content={t('actions.view')}>
+                            <Link className={styles.iconBtn} href={viewHref} aria-label={t('actions.view')}>
+                              <EyeIcon className={styles.icon} />
+                            </Link>
+                          </Tooltip>
+
+                          <Tooltip content={t('actions.edit')}>
+                            <Link className={styles.iconBtn} href={editHref} aria-label={t('actions.edit')}>
+                              <EditIcon className={styles.icon} />
+                            </Link>
+                          </Tooltip>
+
+                          <Tooltip content={t('actions.delete')}>
+                            <button
+                              className={styles.iconBtn}
+                              type="button"
+                              aria-label={t('actions.delete')}
+                              onClick={() => console.warn('TODO delete player')}
+                            >
+                              <TrashIcon className={styles.icon} />
+                            </button>
+                          </Tooltip>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
+
+          <div className={styles.pagination}>
+            <div className={styles.pageSummary}>
+              {t('pagination.summary', { from, to, total: totalCount })}
+            </div>
+
+            <div className={styles.pageControls}>
+              <Tooltip content={t('pagination.first')}>
+                <button className={styles.pageBtn} onClick={() => setPage(1)} disabled={page <= 1}>
+                  «
+                </button>
+              </Tooltip>
+
+              <Tooltip content={t('pagination.prev')}>
+                <button
+                  className={styles.pageBtn}
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  disabled={page <= 1}
+                >
+                  ←
+                </button>
+              </Tooltip>
+
+              <span className={styles.pageInfo}>
+                {page} / {totalPages}
+              </span>
+
+              <Tooltip content={t('pagination.next')}>
+                <button
+                  className={styles.pageBtn}
+                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                  disabled={page >= totalPages}
+                >
+                  →
+                </button>
+              </Tooltip>
+
+              <Tooltip content={t('pagination.last')}>
+                <button className={styles.pageBtn} onClick={() => setPage(totalPages)} disabled={page >= totalPages}>
+                  »
+                </button>
+              </Tooltip>
+
+              <Tooltip content={t('pagination.rows')}>
+                <select
+                  className={styles.pageSizeSelect}
+                  value={pageSize}
+                  onChange={(e) => setPageSize(Number(e.target.value) || 10)}
+                >
+                  {[10, 20, 50].map((n) => (
+                    <option key={n} value={n}>
+                      {t('pagination.perPage', { n })}
+                    </option>
+                  ))}
+                </select>
+              </Tooltip>
+            </div>
+          </div>
+
+          {q.isError && <div className={styles.errorNote}>{t('error')}</div>}
+        </div>
+      </div>
+    </div>
   );
-};
+}
 
-export default PlayerTable;
