@@ -9,8 +9,6 @@ namespace BadmintonApp.Application.DTOs.Media
 {
     public sealed class StoredMediaRequest
     {
-        public required string PublicBasePath { get; init; } // "/media"
-        public required string RootPath { get; init; }       // "/storage"
         public required string RelativeFolder { get; init; } // "locations/{id}/gallery"
         public required Guid MediaId { get; init; }
         public required IFormFile File { get; init; }

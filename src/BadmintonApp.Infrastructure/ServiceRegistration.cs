@@ -48,6 +48,7 @@ namespace BadmintonApp.Infrastructure
             services.AddScoped<IMediaRepository, MediaRepository>();
             services.AddScoped<IMediaStorage, FileSystemMediaStorage>();
             services.AddScoped<IPlayerMembershipRepository, PlayerMembershipRepository>();
+            services.Configure<BadmintonApp.Infrastructure.Media.MediaOptions>(configuration.GetSection("Media"));
 
             return services;
         }

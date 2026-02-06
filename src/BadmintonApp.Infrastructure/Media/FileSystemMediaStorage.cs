@@ -1,8 +1,11 @@
 ﻿using BadmintonApp.Application.DTOs.Media;
 using BadmintonApp.Application.Interfaces.Media;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using System;
 using System.IO;
+using System.Linq;
+using System.Net.NetworkInformation;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,20 +13,27 @@ namespace BadmintonApp.Infrastructure.Media
 {
     public class FileSystemMediaStorage : IMediaStorage
     {
+        private readonly MediaOptions _options;
+
+        public FileSystemMediaStorage(IOptions<MediaOptions> options)
+        {
+            _options = options.Value;
+        }
+
         public async Task<StoredMediaResult> SaveAsync(StoredMediaRequest request, CancellationToken ct)
         {
-            Directory.CreateDirectory(Path.Combine(request.RootPath, request.RelativeFolder));
+            Directory.CreateDirectory(Path.Combine(_options.RootPath, request.RelativeFolder));
 
             var ext = GuessExtension(request.File.ContentType, request.File.FileName);
             var fileName = $"{request.MediaId}{ext}";
 
-            var diskPath = Path.Combine(request.RootPath, request.RelativeFolder, fileName);
+            var diskPath = Path.Combine(_options.RootPath, request.RelativeFolder, fileName);
             await using (var fs = new FileStream(diskPath, FileMode.Create, FileAccess.Write, FileShare.None, 64 * 1024, useAsync: true))
             {
                 await request.File.CopyToAsync(fs, ct);
             }
 
-            var url = CombineUrl(request.PublicBasePath, request.RelativeFolder, fileName);
+            var url = CombineUrl(_options.PublicBasePath, request.RelativeFolder, fileName);
 
             return new StoredMediaResult
             {
@@ -36,7 +46,11 @@ namespace BadmintonApp.Infrastructure.Media
 
         public Task DeleteAsync(string publicUrl, CancellationToken ct)
         {
-            throw new NotSupportedException("Use DeleteAsync overload with rootPath+publicBasePath or delete by resolved disk path.");
+            if (string.IsNullOrWhiteSpace(publicUrl))
+                return Task.CompletedTask;
+
+            var diskPath = ResolveDiskPath(_options.RootPath, _options.PublicBasePath, publicUrl);
+            return DeleteByResolvedPathAsync(diskPath, ct);
         }
 
         public Task DeleteByResolvedPathAsync(string diskPath, CancellationToken ct)
@@ -71,5 +85,6 @@ namespace BadmintonApp.Infrastructure.Media
                 _ => Path.GetExtension(originalFileName) is { Length: > 1 } ext ? ext : ".bin"
             };
         }
+
     }
 }

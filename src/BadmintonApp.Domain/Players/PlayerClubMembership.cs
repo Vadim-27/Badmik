@@ -1,4 +1,5 @@
 ﻿using BadmintonApp.Domain.Clubs;
+using BadmintonApp.Domain.Enums;
 using BadmintonApp.Domain.Enums.Player;
 using BadmintonApp.Domain.Enums.Training;
 using System;
@@ -20,6 +21,7 @@ namespace BadmintonApp.Domain.Players
 
         public MembershipStatus Status { get; set; } // Active, Pending, Suspended, Left
         public TrainingType TrainingType { get; set; }
+        public SportType SportType { get; set; }
         public DateTime ValidFrom { get; set; }
         public DateTime? ValidUntil { get; set; }
 

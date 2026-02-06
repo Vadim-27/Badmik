@@ -127,6 +127,7 @@ public class PlayerService : IPlayerService
         user.LastName = dto.LastName;
         user.PhoneNumber = dto.PhoneNumber;
         user.DoB = dto.DoB;
+        user.Gender = dto.Gender;
 
         await _transactionService.Begin(cancellationToken);
         try
@@ -249,18 +250,19 @@ public class PlayerService : IPlayerService
 
     private async Task EnsureCanManagePlayerAsync(Player player, PermissionType permissionIfNotSelf, CancellationToken ct)
     {
+        
         var actorUserId = _current.UserId;
         var actorClubId = _current.ClubId;
 
         if (player != null && player.UserId == actorUserId)
             return; // self allowed
 
-        var allowed = await _permissionService.HasPermission(actorUserId, actorClubId, permissionIfNotSelf, ct);
+        var allowed = await _permissionService.HasPermissionByUserId(actorUserId, actorClubId, permissionIfNotSelf, ct);
 
         if (!allowed)
             throw new ForbiddenException($"Missing permission '{permissionIfNotSelf}'.");
 
-        if (player.ClubId != actorClubId)
+        if (player != null && player.ClubId != actorClubId)
             throw new ForbiddenException("Cannot manage players from another club.");
     }
     #endregion

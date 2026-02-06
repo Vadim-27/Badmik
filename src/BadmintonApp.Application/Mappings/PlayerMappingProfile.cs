@@ -18,6 +18,8 @@ public class PlayerMappingProfile : Profile
 
         CreateMap<User, UserResultDto>();
 
+        CreateMap<PlayerSportProfile, PlayerSportProfileDto>();
+
         CreateMap<Player, PlayerDto>()
             .ForMember(d => d.User, opt => opt.MapFrom(s => s.User))
             .ForMember(d => d.SportProfiles, opt => opt.MapFrom(s => s.SportProfiles))
