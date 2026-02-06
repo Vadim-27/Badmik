@@ -88,6 +88,8 @@ public class PlayerRepository : IPlayerRepository
         var toAdd = sportProfiles.Where(x => !existingSports.Contains(x.Sport)).ToList();
         if (toAdd.Count > 0)
             await _dbContext.PlayerSportProfiles.AddRangeAsync(toAdd, ct);
+
+        await _dbContext.SaveChangesAsync(ct);
     }
 
     public async Task<bool> SubscriptionExists(Guid followerPlayerId, Guid followingPlayerId, CancellationToken ct)

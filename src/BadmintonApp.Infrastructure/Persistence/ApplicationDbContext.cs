@@ -121,6 +121,14 @@ namespace BadmintonApp.Infrastructure.Persistence
                 b.HasIndex(x => new { x.PlayerId, x.LocationId }).IsUnique();
             });
 
+            modelBuilder.Entity<ClubSettings>()
+                .HasKey(x => x.ClubId);
+
+            modelBuilder.Entity<ClubSettings>()
+                .HasOne(x => x.Club)
+                .WithOne() 
+                .HasForeignKey<ClubSettings>(x => x.ClubId);
+
 
             SeedData(modelBuilder);            
 
@@ -149,6 +157,7 @@ namespace BadmintonApp.Infrastructure.Persistence
         public DbSet<PlayerSportProfile> PlayerSportProfiles => Set<PlayerSportProfile>();
         public DbSet<PlayerSubscription> PlayerSubscriptions => Set<PlayerSubscription>();
         public DbSet<PlayerClubMembership> PlayerClubMemberships => Set<PlayerClubMembership>();
+        public DbSet<ClubSettings> ClubSettings => Set<ClubSettings>();
 
 
         private void SeedData(ModelBuilder modelBuilder)

@@ -55,6 +55,35 @@ namespace BadmintonApp.Application.Services
             }
             return  true;
         }
+
+        public async Task<bool> HasPermissionByUserId(Guid userId, Guid clubId, PermissionType permission, CancellationToken cancellationToken)
+        {
+            var staff = await _staffRepository.GetByUserAndClubId(userId, clubId, cancellationToken);
+            if (staff == null)
+            {
+                return false;
+            }
+            if (staff.User.IsActive == false)
+            {
+                return false;
+            }
+            if (staff.User.IsAdmin == true)
+            {
+                return true;
+            }
+            var role = await _staffRoleRepository.GetStaffRoleForClubAsync(staff.Id, clubId, cancellationToken);
+            if (role == null || !role.Any())
+            {
+                return false;
+            }
+            var permissions = role.SelectMany(r => r.RolePermissions).Select(rp => rp.Permission.Type);
+            if (!permissions.Contains(permission))
+            {
+                return false;
+            }
+            return true;
+        }
+
         public async Task<List<PermissionDto>> GetAll(CancellationToken cancellationToken)
         {
             List<Permission> result = await _permissionRepository.GetAll(cancellationToken);

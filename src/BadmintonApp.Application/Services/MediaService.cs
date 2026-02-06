@@ -48,8 +48,6 @@ public class MediaService : IMediaService
 
         var stored = await _mediaStorage.SaveAsync(new StoredMediaRequest
         {
-            RootPath = RootPath,
-            PublicBasePath = PublicBasePath,
             RelativeFolder = folder,
             MediaId = mediaId,
             File = file,
@@ -106,8 +104,6 @@ public class MediaService : IMediaService
             var mediaId = Guid.NewGuid();
             var stored = await _mediaStorage.SaveAsync(new StoredMediaRequest
             {
-                RootPath = RootPath,
-                PublicBasePath = PublicBasePath,
                 RelativeFolder = folder,
                 MediaId = mediaId,
                 File = file

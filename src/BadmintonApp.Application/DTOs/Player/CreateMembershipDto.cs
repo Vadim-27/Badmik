@@ -1,4 +1,5 @@
-﻿using BadmintonApp.Domain.Enums.Training;
+﻿using BadmintonApp.Domain.Enums;
+using BadmintonApp.Domain.Enums.Training;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace BadmintonApp.Application.DTOs.Player
         public Guid ClubId { get; set; }          
         public DateTime ValidFrom { get; set; }
         public DateTime? ValidUntil { get; set; }
+        public SportType SportType { get; set; }
         public TrainingType TrainingType { get; set; }
         public int TrainingsTotalGranted { get; set; }   
     }

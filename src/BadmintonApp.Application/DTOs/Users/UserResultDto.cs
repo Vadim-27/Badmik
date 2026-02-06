@@ -11,6 +11,7 @@ namespace BadmintonApp.Application.DTOs.Users
         public string FullName => $"{FirstName} {LastName}";
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string PhoneNumber { get; set; }
         public DateTime  DoB { get; set; }
         public GenderType Gender { get; set; }
     }

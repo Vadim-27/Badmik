@@ -60,7 +60,8 @@ namespace BadmintonApp.Application.Services
                 ValidFrom = dto.ValidFrom,
                 ValidUntil = dto.ValidUntil,
                 TrainingsLeft = dto.TrainingsTotalGranted,
-                TrainingsTotalGranted = dto.TrainingsTotalGranted
+                TrainingsTotalGranted = dto.TrainingsTotalGranted,
+                SportType = dto.SportType
             };
 
             await _repo.CreateAsync(membership, ct);

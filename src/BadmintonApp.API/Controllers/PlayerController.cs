@@ -12,6 +12,7 @@ using BadmintonApp.Domain.Enums.Media;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -65,16 +66,16 @@ namespace BadmintonApp.API.Controllers
 
         [HttpGet("{id:guid}")]
         public async Task<ActionResult> GetById(Guid id, CancellationToken cancellationToken)
-        { 
-            await _playerService.GetById(id, cancellationToken);
-            return Ok();
+        {
+            var result = await _playerService.GetById(id, cancellationToken);
+            return Ok(result);
         }
 
         [HttpGet("user/{id:guid}")]
         public async Task<ActionResult> GetByUserId(Guid id, CancellationToken cancellationToken)
         {
-            await _playerService.GetByUserId(id, cancellationToken);
-            return Ok();
+            var result = await _playerService.GetByUserId(id, cancellationToken);
+            return Ok(result);
         }
 
         [HttpPut("{id}")]
