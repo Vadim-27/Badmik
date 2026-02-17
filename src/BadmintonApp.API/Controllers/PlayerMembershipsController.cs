@@ -1,4 +1,5 @@
-﻿using BadmintonApp.Application.DTOs.Player;
+﻿using BadmintonApp.Application.DTOs.Booking;
+using BadmintonApp.Application.DTOs.Player;
 using BadmintonApp.Application.Interfaces.Players;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 namespace BadmintonApp.API.Controllers
 {
     [ApiController]
-    [Route("players/{playerId:guid}/memberships")]
+    [Route("api/players/{playerId:guid}/memberships")]
     [Authorize]
     public class PlayerMembershipsController : Controller
     {
@@ -39,19 +40,19 @@ namespace BadmintonApp.API.Controllers
 
         // POST /players/{playerId}/memberships
         [HttpPost]
-        public async Task<IActionResult> Create(Guid playerId, [FromBody] CreateMembershipDto dto, CancellationToken ct)
+        public async Task<ActionResult<MembershipDto>> Create(Guid playerId, [FromBody] CreateMembershipDto dto, CancellationToken ct)
         {
-            var membershipId = await _membershipService.CreateAsync(playerId, dto, ct);
-
-            return CreatedAtAction(nameof(GetById), new { playerId, membershipId }, null);
+            var membership = await _membershipService.CreateAsync(playerId, dto, ct);
+            
+            return CreatedAtAction(nameof(GetById), new { playerId, membershipId = membership.Id }, membership);
         }
 
         // PUT /players/{playerId}/memberships/{membershipId}
         [HttpPut("{membershipId:guid}")]
-        public async Task<IActionResult> Update(Guid playerId, Guid membershipId, [FromBody] UpdateMembershipDto dto, CancellationToken ct)
+        public async Task<ActionResult<MembershipDto>> Update(Guid playerId, Guid membershipId, [FromBody] UpdateMembershipDto dto, CancellationToken ct)
         {
-            await _membershipService.UpdateAsync(playerId, membershipId, dto, ct);
-            return NoContent();
+            var membership = await _membershipService.UpdateAsync(playerId, membershipId, dto, ct);
+            return CreatedAtAction(nameof(GetById), new { playerId, membershipId = membership.Id }, membership);
         }
 
         // DELETE /players/{playerId}/memberships/{membershipId}
@@ -60,6 +61,24 @@ namespace BadmintonApp.API.Controllers
         {
             await _membershipService.DeleteAsync(playerId, membershipId, ct);
             return NoContent();
+        }
+
+        [HttpPost("renew")]
+        public async Task<ActionResult<MembershipDto>> Renew(Guid playerId, [FromBody] RenewMembershipDto dto, CancellationToken ct)
+        {
+            var membership = await _membershipService.RenewAsync(playerId, dto, ct);
+            return CreatedAtAction(nameof(GetById), new { playerId, membershipId = membership.Id }, membership);
+        }
+
+        [HttpPost("purchase")]
+        public async Task<ActionResult<MembershipDto>> Purchase(Guid playerId, [FromBody] CreateMembershipPurchaseDto dto, CancellationToken ct)
+        {
+            // enforce route playerId
+            dto.PlayerId = playerId;
+
+            var created = await _membershipService.PurchaseAsync(dto, ct);
+
+            return CreatedAtAction(nameof(GetById), new { playerId, membershipId = created.Id }, created);
         }
     }
 }

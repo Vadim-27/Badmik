@@ -69,6 +69,75 @@ namespace BadmintonApp.Infrastructure.Migrations
                     b.ToTable("Clubs");
                 });
 
+            modelBuilder.Entity("BadmintonApp.Domain.Clubs.ClubMembershipPlan", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ClubId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("DurationDays")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<int>("SportType")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TrainingType")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TrainingsGranted")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClubId", "IsActive");
+
+                    b.HasIndex("ClubId", "Name")
+                        .IsUnique();
+
+                    b.HasIndex("ClubId", "UpdatedAtUtc");
+
+                    b.ToTable("ClubMembershipPlans", (string)null);
+                });
+
+            modelBuilder.Entity("BadmintonApp.Domain.Clubs.ClubSettings", b =>
+                {
+                    b.Property<Guid>("ClubId")
+                        .HasColumnType("uuid");
+
+                    b.Property<TimeSpan>("BookingOpenBeforeDays")
+                        .HasColumnType("interval");
+
+                    b.Property<TimeSpan>("BookingOpenHour")
+                        .HasColumnType("interval");
+
+                    b.Property<TimeSpan>("UnsubscribeAllowBeforeHours")
+                        .HasColumnType("interval");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("ClubId");
+
+                    b.ToTable("ClubSettings");
+                });
+
             modelBuilder.Entity("BadmintonApp.Domain.Clubs.Court", b =>
                 {
                     b.Property<Guid>("Id")
@@ -780,6 +849,79 @@ namespace BadmintonApp.Infrastructure.Migrations
                     b.ToTable("Media", (string)null);
                 });
 
+            modelBuilder.Entity("BadmintonApp.Domain.Payments.Payment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("numeric(12,2)");
+
+                    b.Property<string>("CheckoutUrl")
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)");
+
+                    b.Property<Guid>("ClubId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
+
+                    b.Property<Guid?>("MembershipId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Method")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<DateTime?>("PaidAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("PlayerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Provider")
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<string>("ProviderPaymentId")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<int>("Purpose")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid?>("TrainingBookingId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MembershipId");
+
+                    b.HasIndex("TrainingBookingId");
+
+                    b.HasIndex("ClubId", "CreatedAtUtc");
+
+                    b.HasIndex("PlayerId", "CreatedAtUtc");
+
+                    b.ToTable("Payments", (string)null);
+                });
+
             modelBuilder.Entity("BadmintonApp.Domain.Players.Player", b =>
                 {
                     b.Property<Guid>("Id")
@@ -810,10 +952,25 @@ namespace BadmintonApp.Infrastructure.Migrations
                     b.Property<Guid>("ClubId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("PlanId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("PlayerId")
                         .HasColumnType("uuid");
 
+                    b.Property<decimal>("PriceAtPurchase")
+                        .HasColumnType("numeric");
+
+                    b.Property<DateTime>("PurchasedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("SportType")
+                        .HasColumnType("integer");
+
                     b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TrainingType")
                         .HasColumnType("integer");
 
                     b.Property<int>("TrainingsLeft")
@@ -821,6 +978,12 @@ namespace BadmintonApp.Infrastructure.Migrations
 
                     b.Property<int>("TrainingsTotalGranted")
                         .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("UpdatedByUserId")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("ValidFrom")
                         .HasColumnType("timestamp with time zone");
@@ -830,11 +993,15 @@ namespace BadmintonApp.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClubId");
+                    b.HasIndex("PlanId");
 
                     b.HasIndex("PlayerId");
 
-                    b.ToTable("PlayerClubMemberships");
+                    b.HasIndex("ClubId", "PlayerId")
+                        .IsUnique()
+                        .HasFilter("\"Status\" = 1");
+
+                    b.ToTable("PlayerClubMemberships", (string)null);
                 });
 
             modelBuilder.Entity("BadmintonApp.Domain.Players.PlayerFavoriteLocation", b =>
@@ -891,19 +1058,149 @@ namespace BadmintonApp.Infrastructure.Migrations
 
                     b.HasKey("FollowerPlayerId", "FollowingPlayerId");
 
+                    b.HasIndex("FollowerPlayerId");
+
                     b.HasIndex("FollowingPlayerId");
 
                     b.ToTable("PlayerSubscriptions");
                 });
 
-            modelBuilder.Entity("BadmintonApp.Domain.Trainings.Training", b =>
+            modelBuilder.Entity("BadmintonApp.Domain.Trainings.TrainingBooking", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.PrimitiveCollection<int[]>("AllowedLevels")
-                        .HasColumnType("integer[]");
+                    b.Property<DateTime?>("AttendanceConfirmedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("AttendanceConfirmedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("AttendanceStatus")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("BookedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ClubId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("ConfirmationStatus")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("ConfirmedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("CoverageStatus")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("CoveredAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CoveredByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsWaitlist")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid?>("MembershipIdUsed")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("PaymentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("PlayerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("RespondUntilUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("TrainingSessionId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MembershipIdUsed");
+
+                    b.HasIndex("PlayerId", "CreatedAtUtc");
+
+                    b.HasIndex("TrainingSessionId", "IsWaitlist");
+
+                    b.HasIndex("TrainingSessionId", "PlayerId")
+                        .IsUnique();
+
+                    b.ToTable("TrainingBookings", (string)null);
+                });
+
+            modelBuilder.Entity("BadmintonApp.Domain.Trainings.TrainingSchedule", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ClubId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("CourtsRequired")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("DayOfWeek")
+                        .HasColumnType("integer");
+
+                    b.Property<TimeOnly>("EndTime")
+                        .HasColumnType("time without time zone");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("LocationId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("MaxParticipants")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Sport")
+                        .HasColumnType("integer");
+
+                    b.Property<TimeOnly>("StartTime")
+                        .HasColumnType("time without time zone");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TrainingSchedules");
+                });
+
+            modelBuilder.Entity("BadmintonApp.Domain.Trainings.TrainingScheduleLevel", b =>
+                {
+                    b.Property<Guid>("TrainingScheduleId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("integer");
+
+                    b.HasKey("TrainingScheduleId", "Level");
+
+                    b.ToTable("TrainingScheduleLevel");
+                });
+
+            modelBuilder.Entity("BadmintonApp.Domain.Trainings.TrainingSession", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("ClubId")
                         .HasColumnType("uuid");
@@ -920,7 +1217,7 @@ namespace BadmintonApp.Infrastructure.Migrations
                     b.Property<bool>("IsRecurringWeekly")
                         .HasColumnType("boolean");
 
-                    b.Property<Guid?>("LocationId")
+                    b.Property<Guid>("LocationId")
                         .HasColumnType("uuid");
 
                     b.Property<int>("MaxPlayers")
@@ -937,51 +1234,20 @@ namespace BadmintonApp.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Trainings");
+                    b.ToTable("TrainingSessions");
                 });
 
-            modelBuilder.Entity("BadmintonApp.Domain.Trainings.TrainingParticipant", b =>
+            modelBuilder.Entity("BadmintonApp.Domain.Trainings.TrainingSessionLevel", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("TrainingSessionId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("RegisteredAt")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<int>("Level")
+                        .HasColumnType("integer");
 
-                    b.Property<Guid?>("TrainingId")
-                        .HasColumnType("uuid");
+                    b.HasKey("TrainingSessionId", "Level");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TrainingId");
-
-                    b.ToTable("TrainingParticipants");
-                });
-
-            modelBuilder.Entity("BadmintonApp.Domain.Trainings.TrainingQueueEntry", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("QueuedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("TrainingId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TrainingId");
-
-                    b.ToTable("TrainingQueueEntries");
+                    b.ToTable("TrainingSessionLevel");
                 });
 
             modelBuilder.Entity("BadmintonApp.Domain.WorkingHours.WorkingHour", b =>
@@ -1017,6 +1283,17 @@ namespace BadmintonApp.Infrastructure.Migrations
                     b.HasIndex("StaffId");
 
                     b.ToTable("WorkingHours");
+                });
+
+            modelBuilder.Entity("BadmintonApp.Domain.Clubs.ClubSettings", b =>
+                {
+                    b.HasOne("BadmintonApp.Domain.Clubs.Club", "Club")
+                        .WithOne()
+                        .HasForeignKey("BadmintonApp.Domain.Clubs.ClubSettings", "ClubId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Club");
                 });
 
             modelBuilder.Entity("BadmintonApp.Domain.Clubs.Court", b =>
@@ -1133,6 +1410,19 @@ namespace BadmintonApp.Infrastructure.Migrations
                     b.Navigation("Staff");
                 });
 
+            modelBuilder.Entity("BadmintonApp.Domain.Payments.Payment", b =>
+                {
+                    b.HasOne("BadmintonApp.Domain.Players.PlayerClubMembership", null)
+                        .WithMany()
+                        .HasForeignKey("MembershipId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("BadmintonApp.Domain.Trainings.TrainingBooking", null)
+                        .WithMany()
+                        .HasForeignKey("TrainingBookingId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
             modelBuilder.Entity("BadmintonApp.Domain.Players.Player", b =>
                 {
                     b.HasOne("BadmintonApp.Domain.Clubs.Club", "Club")
@@ -1160,6 +1450,12 @@ namespace BadmintonApp.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("BadmintonApp.Domain.Clubs.ClubMembershipPlan", "Plan")
+                        .WithMany()
+                        .HasForeignKey("PlanId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("BadmintonApp.Domain.Players.Player", "Player")
                         .WithMany("ClubMemberships")
                         .HasForeignKey("PlayerId")
@@ -1167,6 +1463,8 @@ namespace BadmintonApp.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Club");
+
+                    b.Navigation("Plan");
 
                     b.Navigation("Player");
                 });
@@ -1220,18 +1518,34 @@ namespace BadmintonApp.Infrastructure.Migrations
                     b.Navigation("FollowingPlayer");
                 });
 
-            modelBuilder.Entity("BadmintonApp.Domain.Trainings.TrainingParticipant", b =>
+            modelBuilder.Entity("BadmintonApp.Domain.Trainings.TrainingBooking", b =>
                 {
-                    b.HasOne("BadmintonApp.Domain.Trainings.Training", null)
-                        .WithMany("Participants")
-                        .HasForeignKey("TrainingId");
+                    b.HasOne("BadmintonApp.Domain.Players.PlayerClubMembership", null)
+                        .WithMany()
+                        .HasForeignKey("MembershipIdUsed")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("BadmintonApp.Domain.Trainings.TrainingQueueEntry", b =>
+            modelBuilder.Entity("BadmintonApp.Domain.Trainings.TrainingScheduleLevel", b =>
                 {
-                    b.HasOne("BadmintonApp.Domain.Trainings.Training", null)
-                        .WithMany("Queue")
-                        .HasForeignKey("TrainingId");
+                    b.HasOne("BadmintonApp.Domain.Trainings.TrainingSchedule", "TrainingSchedule")
+                        .WithMany("Levels")
+                        .HasForeignKey("TrainingScheduleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TrainingSchedule");
+                });
+
+            modelBuilder.Entity("BadmintonApp.Domain.Trainings.TrainingSessionLevel", b =>
+                {
+                    b.HasOne("BadmintonApp.Domain.Trainings.TrainingSession", "TrainingSession")
+                        .WithMany("Levels")
+                        .HasForeignKey("TrainingSessionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TrainingSession");
                 });
 
             modelBuilder.Entity("BadmintonApp.Domain.WorkingHours.WorkingHour", b =>
@@ -1299,11 +1613,14 @@ namespace BadmintonApp.Infrastructure.Migrations
                     b.Navigation("SportProfiles");
                 });
 
-            modelBuilder.Entity("BadmintonApp.Domain.Trainings.Training", b =>
+            modelBuilder.Entity("BadmintonApp.Domain.Trainings.TrainingSchedule", b =>
                 {
-                    b.Navigation("Participants");
+                    b.Navigation("Levels");
+                });
 
-                    b.Navigation("Queue");
+            modelBuilder.Entity("BadmintonApp.Domain.Trainings.TrainingSession", b =>
+                {
+                    b.Navigation("Levels");
                 });
 #pragma warning restore 612, 618
         }

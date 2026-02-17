@@ -1,4 +1,5 @@
-﻿using BadmintonApp.Application.DTOs.Player;
+﻿using BadmintonApp.Application.DTOs.Booking;
+using BadmintonApp.Application.DTOs.Player;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +14,10 @@ namespace BadmintonApp.Application.Interfaces.Players
         Task<List<MembershipDto>> GetAllAsync(Guid playerId, Guid? clubId, CancellationToken ct);
         Task<MembershipDto> GetByIdAsync(Guid playerId, Guid membershipId, CancellationToken ct);
 
-        Task<Guid> CreateAsync(Guid playerId, CreateMembershipDto dto, CancellationToken ct);
-        Task UpdateAsync(Guid playerId, Guid membershipId, UpdateMembershipDto dto, CancellationToken ct);
+        Task<MembershipDto> CreateAsync(Guid playerId, CreateMembershipDto dto, CancellationToken ct);
+        Task<MembershipDto> UpdateAsync(Guid playerId, Guid membershipId, UpdateMembershipDto dto, CancellationToken ct);
         Task DeleteAsync(Guid playerId, Guid membershipId, CancellationToken ct);
+        Task<MembershipDto> RenewAsync(Guid playerId, RenewMembershipDto dto, CancellationToken ct);
+        Task<MembershipDto> PurchaseAsync(CreateMembershipPurchaseDto dto, CancellationToken ct);
     }
 }

@@ -2,6 +2,7 @@
 using BadmintonApp.Domain.Core;
 using BadmintonApp.Domain.Enums.Permission;
 using BadmintonApp.Domain.Logs;
+using BadmintonApp.Domain.Payments;
 using BadmintonApp.Domain.Players;
 using BadmintonApp.Domain.Trainings;
 using BadmintonApp.Domain.WorkingHours;
@@ -46,6 +47,8 @@ namespace BadmintonApp.Infrastructure.Persistence
                 c.StaffId,
                 c.RoleId
             });
+            modelBuilder.Entity<TrainingScheduleLevel>().HasKey(x => new { x.TrainingScheduleId, x.Level });
+            modelBuilder.Entity<TrainingSessionLevel>().HasKey(x => new { x.TrainingSessionId, x.Level });
 
             modelBuilder.Entity<Location>(e =>
             {
@@ -134,6 +137,11 @@ namespace BadmintonApp.Infrastructure.Persistence
 
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new MediaConfiguration());
+            modelBuilder.ApplyConfiguration(new TrainingBookingConfiguration());
+            modelBuilder.ApplyConfiguration(new PaymentConfiguration());
+            modelBuilder.ApplyConfiguration(new PlayerClubMembershipConfiguration());
+            modelBuilder.ApplyConfiguration(new ClubMembershipPlanConfiguration());
+            
         }
 
         public DbSet<RolePermission> RolePermissions { get; set; }
@@ -141,9 +149,6 @@ namespace BadmintonApp.Infrastructure.Persistence
         public DbSet<Club> Clubs => Set<Club>();
         public DbSet<StaffClubRole> StaffClubRoles => Set<StaffClubRole>();
         public DbSet<WorkingHour> WorkingHours => Set<WorkingHour>();
-        public DbSet<Training> Trainings => Set<Training>();
-        public DbSet<TrainingParticipant> TrainingParticipants => Set<TrainingParticipant>();
-        public DbSet<TrainingQueueEntry> TrainingQueueEntries => Set<TrainingQueueEntry>();
         public DbSet<Permission> Permissions => Set<Permission>();
         public DbSet<Role> Roles => Set<Role>();
         public DbSet<Log> Logs => Set<Log>();
@@ -158,7 +163,11 @@ namespace BadmintonApp.Infrastructure.Persistence
         public DbSet<PlayerSubscription> PlayerSubscriptions => Set<PlayerSubscription>();
         public DbSet<PlayerClubMembership> PlayerClubMemberships => Set<PlayerClubMembership>();
         public DbSet<ClubSettings> ClubSettings => Set<ClubSettings>();
-
+        public DbSet<ClubMembershipPlan> ClubMembershipPlans => Set<ClubMembershipPlan>();
+        public DbSet<TrainingSession> TrainingSessions => Set<TrainingSession>();
+        public DbSet<TrainingSchedule> TrainingSchedules => Set<TrainingSchedule>();
+        public DbSet<TrainingBooking> TrainingBookings => Set<TrainingBooking>();
+        public DbSet<Payment> Payments => Set<Payment>();
 
         private void SeedData(ModelBuilder modelBuilder)
         {

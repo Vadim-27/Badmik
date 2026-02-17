@@ -35,11 +35,13 @@ public class PlayerMappingProfile : Profile
         CreateMap<PlayerClubMembership, MembershipDto>()
             .ForMember(d => d.Id, opt => opt.MapFrom(s => s.Id))
             .ForMember(d => d.ClubId, opt => opt.MapFrom(s => s.ClubId))
+            .ForMember(d => d.PlanId, opt => opt.MapFrom(s => s.PlanId))
             .ForMember(d => d.Status, opt => opt.MapFrom(s => s.Status))
             .ForMember(d => d.ValidFrom, opt => opt.MapFrom(s => s.ValidFrom))
             .ForMember(d => d.ValidUntil, opt => opt.MapFrom(s => s.ValidUntil))
             .ForMember(d => d.TrainingsLeft, opt => opt.MapFrom(s => s.TrainingsLeft))
             .ForMember(d => d.TrainingsTotalGranted, opt => opt.MapFrom(s => s.TrainingsTotalGranted))
+            .ForMember(d => d.SportType, opt => opt.MapFrom(s => s.SportType))
             .ForMember(d => d.TrainingType, opt => opt.MapFrom(s => s.TrainingType));
 
         CreateMap<CreateMembershipDto, PlayerClubMembership>()
@@ -51,6 +53,7 @@ public class PlayerMappingProfile : Profile
             .ForMember(d => d.ValidUntil, opt => opt.MapFrom(s => s.ValidUntil))
             .ForMember(d => d.TrainingsLeft, opt => opt.MapFrom(s => s.TrainingsTotalGranted))
             .ForMember(d => d.TrainingsTotalGranted, opt => opt.MapFrom(s => s.TrainingsTotalGranted))
+            .ForMember(d => d.PlanId, opt => opt.MapFrom(s => s.PlanId))
             .ForMember(d => d.TrainingType, opt => opt.MapFrom(s => s.TrainingType));
 
 

@@ -1,4 +1,7 @@
 ﻿using BadmintonApp.Application.Interfaces.Repositories;
+using BadmintonApp.Domain.Enums;
+using BadmintonApp.Domain.Enums.Player;
+using BadmintonApp.Domain.Enums.Training;
 using BadmintonApp.Domain.Players;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -56,6 +59,38 @@ namespace BadmintonApp.Infrastructure.Persistence.Repositories
         {
             _dbContext.PlayerClubMemberships.Remove(membership);
             await _dbContext.SaveChangesAsync(ct);
+        }
+
+        public async Task<bool> HasOverlapAsync(Guid playerId, Guid clubId, DateTime validFrom, DateTime validUntil, Guid? excludeMembershipId, CancellationToken ct)
+        {
+            var q = _dbContext.PlayerClubMemberships
+                .AsQueryable()
+                .Where(x =>
+                    x.PlayerId == playerId &&
+                    x.ClubId == clubId &&
+                    x.Status == MembershipStatus.Active);
+
+            if (excludeMembershipId.HasValue)
+                q = q.Where(x => x.Id != excludeMembershipId.Value);
+
+            return await q.AnyAsync(x =>
+                x.ValidFrom < validUntil &&
+                (x.ValidUntil ?? DateTime.MaxValue) > validFrom,
+                ct);
+        }
+
+        public async Task<PlayerClubMembership?> GetLatestAsync(Guid playerId, Guid clubId, CancellationToken ct)
+        {
+            return await _dbContext.PlayerClubMemberships
+                .AsNoTracking()
+                .Where(x => x.PlayerId == playerId && x.ClubId == clubId)
+                .OrderByDescending(x => x.ValidUntil ?? DateTime.MaxValue)
+                .FirstOrDefaultAsync(ct);
+        }
+
+        Task<PlayerClubMembership> IPlayerMembershipRepository.FindCoveringMembershipForUpdateAsync(Guid playerId, Guid clubId, SportType sport, TrainingType trainingType, DateTime dayUtcDate, CancellationToken ct)
+        {
+            throw new NotImplementedException();
         }
     }
 }
