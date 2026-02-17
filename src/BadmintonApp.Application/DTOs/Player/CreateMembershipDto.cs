@@ -15,6 +15,7 @@ namespace BadmintonApp.Application.DTOs.Player
         public DateTime? ValidUntil { get; set; }
         public SportType SportType { get; set; }
         public TrainingType TrainingType { get; set; }
-        public int TrainingsTotalGranted { get; set; }   
+        public int TrainingsTotalGranted { get; set; }
+        public Guid PlanId { get; set; }
     }
 }

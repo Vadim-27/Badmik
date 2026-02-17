@@ -1,4 +1,5 @@
-﻿using BadmintonApp.Application.Interfaces.Auth;
+﻿using BadmintonApp.Application.DTOs.Clubs;
+using BadmintonApp.Application.Interfaces.Auth;
 using BadmintonApp.Application.Interfaces.Clubs;
 using BadmintonApp.Application.Interfaces.Logs;
 using BadmintonApp.Application.Interfaces.Media;
@@ -11,6 +12,7 @@ using BadmintonApp.Application.Interfaces.Trainings;
 using BadmintonApp.Application.Interfaces.Users;
 using BadmintonApp.Application.Mappings;
 using BadmintonApp.Application.Services;
+using BadmintonApp.Application.Validation.Clubs;
 using BadmintonApp.Domain.Core;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
@@ -25,7 +27,6 @@ namespace BadmintonApp.Application
         {
             services.AddScoped<IUsersService, UserService>();
             services.AddScoped<IAuthService, AuthService>();
-            services.AddScoped<ITrainingsService, TrainingsService>();
             services.AddValidatorsFromAssemblyContaining<UserService>(includeInternalTypes: true);
             services.AddAutoMapper(conf => conf.AddMaps(Assembly.GetAssembly(typeof(TrainingMappingProfile))));
             services.AddScoped<IPermissionService, PermissionService>();
@@ -40,6 +41,15 @@ namespace BadmintonApp.Application
             services.AddScoped<ICourtsService, CourtsService>();
             services.AddScoped<IMediaService, MediaService>();
             services.AddScoped<IPlayerMembershipService, PlayerMembershipService>();
+            services.AddScoped<IClubSettingsService, ClubSettingsService>();
+            services.AddScoped<IClubMembershipPlanService, ClubMembershipPlanService>();
+            services.AddScoped<ITrainingSessionService, TrainingSessionService>();
+            //services.AddScoped<ITrainingScheduleService, TrainingBookingService>();
+            services.AddScoped<ITrainingBookingService, TrainingBookingService>();
+
+            // FluentValidation
+            services.AddScoped<IValidator<CreateClubMembershipPlanDto>, CreateClubMembershipPlanValidator>();
+            services.AddScoped<IValidator<UpdateClubMembershipPlanDto>, UpdateClubMembershipPlanValidator>();
 
 
             return services;

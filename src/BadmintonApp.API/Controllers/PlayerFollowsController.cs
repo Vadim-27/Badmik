@@ -11,7 +11,7 @@ namespace BadmintonApp.API.Controllers
 {
     [ApiController]
     [Authorize]
-    [Route("players/{playerId:guid}")]
+    [Route("api/players/{playerId:guid}")]
     public class PlayerFollowsController : ControllerBase
     {
         private readonly IPlayerFollowService _service;

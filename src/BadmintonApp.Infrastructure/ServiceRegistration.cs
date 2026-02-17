@@ -40,7 +40,6 @@ namespace BadmintonApp.Infrastructure
             services.AddScoped<IPermissionRepository, PermissionRepository>();
             services.AddScoped<IPlayerRepository, PlayerRepository>();
             services.AddScoped<IStaffRepository, StaffRepository>();
-            services.AddScoped<ITrainingsRepository, TrainingsRepository>();
             services.AddScoped<ITransactionService, TransactionService>();
             services.AddScoped<IWorkingHourRepository, WorkingHourRepository>();
             services.AddScoped<ILocationRepository, LocationRepository>();
@@ -49,6 +48,13 @@ namespace BadmintonApp.Infrastructure
             services.AddScoped<IMediaStorage, FileSystemMediaStorage>();
             services.AddScoped<IPlayerMembershipRepository, PlayerMembershipRepository>();
             services.Configure<BadmintonApp.Infrastructure.Media.MediaOptions>(configuration.GetSection("Media"));
+            services.AddScoped<IClubSettingsRepository, ClubSettingsRepository>();
+            services.AddScoped<IClubMembershipPlanRepository, ClubMembershipPlanRepository>();
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
+            services.AddScoped<ITrainingSessionRepository, TrainingSessionRepository>();
+            services.AddScoped<ITrainingScheduleRepository, TrainingScheduleRepository>();
+            services.AddScoped<ITrainingBookingRepository, TrainingBookingRepository>();
+
 
             return services;
         }

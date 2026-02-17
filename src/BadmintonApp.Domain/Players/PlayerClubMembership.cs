@@ -19,6 +19,12 @@ namespace BadmintonApp.Domain.Players
         public Guid ClubId { get; set; }
         public Club Club { get; set; } = null!;
 
+        public Guid PlanId { get; set; }
+        public ClubMembershipPlan Plan { get; set; } = null!;
+
+        public decimal PriceAtPurchase { get; set; } 
+        public DateTime PurchasedAt { get; set; }
+
         public MembershipStatus Status { get; set; } // Active, Pending, Suspended, Left
         public TrainingType TrainingType { get; set; }
         public SportType SportType { get; set; }
@@ -28,5 +34,8 @@ namespace BadmintonApp.Domain.Players
         // balance cache
         public int TrainingsLeft { get; set; }
         public int TrainingsTotalGranted { get; set; }
+
+        public DateTime UpdatedAtUtc { get; set; } = DateTime.UtcNow;
+        public Guid? UpdatedByUserId { get; set; }
     }
 }

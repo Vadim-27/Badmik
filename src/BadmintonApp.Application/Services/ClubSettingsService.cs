@@ -68,7 +68,7 @@ namespace BadmintonApp.Application.Services
         {
             var actorUserId = _current.UserId;
 
-            var allowed = await _permissionService.HasPermission(
+            var allowed = await _permissionService.HasPermissionByUserId(
                 actorUserId, clubId, PermissionType.ClubSettingsManage, ct);
 
             if (!allowed)

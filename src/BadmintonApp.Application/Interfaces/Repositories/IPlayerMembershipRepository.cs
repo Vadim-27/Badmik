@@ -1,4 +1,6 @@
-﻿using BadmintonApp.Domain.Players;
+﻿using BadmintonApp.Domain.Enums;
+using BadmintonApp.Domain.Enums.Training;
+using BadmintonApp.Domain.Players;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,5 +18,9 @@ namespace BadmintonApp.Application.Interfaces.Repositories
         Task CreateAsync(PlayerClubMembership membership, CancellationToken ct);
         Task UpdateAsync(PlayerClubMembership membership, CancellationToken ct);
         Task DeleteAsync(PlayerClubMembership membership, CancellationToken ct);
+        Task<bool> HasOverlapAsync(Guid playerId, Guid clubId, DateTime validFrom, DateTime validUntil, Guid? excludeMembershipId, CancellationToken ct);
+        Task<PlayerClubMembership?> GetLatestAsync(Guid playerId, Guid clubId, CancellationToken ct);
+        // Lock membership row for update when charging
+        Task<PlayerClubMembership?> FindCoveringMembershipForUpdateAsync(Guid playerId, Guid clubId, SportType sport, TrainingType trainingType, DateTime dayUtcDate, CancellationToken ct);
     }
 }

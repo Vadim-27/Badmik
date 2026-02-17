@@ -13,7 +13,7 @@ namespace BadmintonApp.Application.Validation.Players
                 .WithMessage("Invalid membership status.")
                 .WithErrorCode("Membership.Status.Invalid");
 
-            RuleFor(x => x.ValidFrom)
+           RuleFor(x => x.ValidFrom)
                 .NotEmpty()
                 .WithMessage("ValidFrom is required.")
                 .WithErrorCode("Membership.ValidFrom.Empty");
