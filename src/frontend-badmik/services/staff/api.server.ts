@@ -14,11 +14,7 @@ export type PagedResult<T> = {
 
 type ListParams = { clubId?: string; page?: number; pageSize?: number };
 
-// export const staffApiServer = {
-//   async list(): Promise<Staff[]> {
-//     const res = await serverFetch(ENDPOINTS.staff.getAll, {}, { revalidate: 60, tags: ['staff'] });
-//     return res.json();
-//   },
+
 export const staffApiServer = {
   async list(params: ListParams = {}): Promise<PagedResult<Staff>> {
     const url = withQuery(ENDPOINTS.staff.getAll, {

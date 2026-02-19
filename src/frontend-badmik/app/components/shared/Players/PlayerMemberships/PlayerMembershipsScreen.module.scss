@@ -1,0 +1,257 @@
+/* src/app/components/shared/Players/PlayerMemberships/PlayerMembershipsScreen.module.scss */
+
+@use '../../../../styles/mixins' as *;
+
+$focus-ring: rgba(147, 197, 253, 0.35);
+
+.wrapper {
+  width: 100%;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.previewBlock {
+  opacity: 1;
+}
+
+/* Card */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+}
+
+.cardDisabled {
+  opacity: 0.95;
+}
+
+.cardTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.titleBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* заголовки — як у формі */
+.title {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text);
+
+  @include media-rules(tablet) {
+    font-size: 20px;
+  }
+}
+
+.subTitle {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.muted {
+  opacity: 0.75;
+}
+
+/* Status pill — нейтральний під вашу гамму */
+.statusPill {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+
+  background: #fff;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+/* semantic стани — без вигаданої палітри */
+.statusActive,
+.statusFrozen,
+.statusCompleted,
+.statusCancelled {
+  background: #fff;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+/* Metrics row */
+.metricsRow {
+  margin-top: 14px;
+}
+
+.leftMetric {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.metricLine {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.metricLabel {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.metricRight {
+  font-size: 14px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.metricValue {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.progressTrack {
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.08);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--primary-button-hover);
+  transition: width 180ms ease;
+}
+
+/* Actions */
+.actions {
+  margin-top: 18px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* outline — повністю як у формі */
+.btnOutline {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--text);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    transform 0.02s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    background: rgba(15, 23, 42, 0.04);
+  }
+
+  &:focus {
+    border-color: var(--focus);
+    box-shadow: 0 0 0 4px $focus-ring;
+    outline: none;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+/* primary / danger — як кнопки в формі (через токени) */
+.btnDanger {
+  appearance: none;
+  border: 1px solid var(--btn-primary-border);
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    transform 0.02s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:focus {
+    border-color: var(--focus);
+    box-shadow: 0 0 0 4px $focus-ring;
+    outline: none;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+.btnOutline:disabled,
+.btnDanger:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* States */
+
+.errorBanner {
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--text);
+  font-weight: 700;
+}
+
+.emptyState {
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  background: #fff;
+}
+
+.emptyTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.emptyHint {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+/* Skeleton */
+
+.skeletonList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.skeletonCard {
+  height: 168px;
+  border-radius: var(--radius);
+  background: rgba(15, 23, 42, 0.06);
+}
+
+

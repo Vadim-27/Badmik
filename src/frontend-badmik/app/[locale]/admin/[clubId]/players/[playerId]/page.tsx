@@ -26,7 +26,7 @@ const state = await prefetch([ playersServerQueries.byId(playerId) ]);
 
   return (
   <RQHydrate state={state}>
-    <div className="p-6 bg-gray-100 min-h-screen">
+    <div className=" bg-gray-100 min-h-screen">
   {/* <UserDetail player={player} /> */}
   <UserDetail playerId={playerId} clubIdParams={clubId} />
   </div>

@@ -1,0 +1,66 @@
+@use '../../../../styles/mixins' as *;
+
+.wrapper {
+  width: 100%;
+}
+
+.wrapperBreadcrumbs {
+  padding: 0 16px;
+  margin-top: 10px;
+}
+
+.headerTitle {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.tabsBar {
+  margin: 12px 16px 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px;
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: rgba(15, 23, 42, 0.04);
+  color: var(--text);
+  font-weight: 700;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.tabActive {
+  background: #0b1220;
+  color: #fff;
+}
+
+.tabLabel {
+  font-size: 14px;
+}
+
+.badge {
+  display: inline-flex;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.18);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.tabContent {
+  padding: 12px 16px 16px;
+}
