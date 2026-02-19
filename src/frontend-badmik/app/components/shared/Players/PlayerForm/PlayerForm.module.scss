@@ -1,29 +1,65 @@
+// 
+
+
+//==========================
+
+
 @use '../../../../styles/mixins' as *;
 
 $focus-ring: rgba(147, 197, 253, 0.35);
 
 .wrapper {
-  position: relative;
-  // min-height: calc(100vh - 80px); 
+  // min-height: calc(100vh - 80px);
+   min-height: 70vh;  
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding: 24px;
+  padding-top: 24px;
+  // width: 80%;
+  overflow: hidden;
 }
 
 .formBox {
-  width: 30%;
-  min-width: 300px;
-  max-width: 560px;
+  width: 100%;
+//   min-width: 300px;
+//   max-width: 560px;
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 24px;
+  padding-left: 12px;
+  padding-right: 4px;
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  // max-height: calc(100vh - 420px - 24px * 2);
+  // max-height: 30%;
+  max-height: 70vh;
 
-  @include media-rules(mobile) {
-    width: 100%;
-  }
+   display: flex;
+  flex-direction: column;
+  /* дозволяємо дітям стискатися для скролу */
+  min-height: 0;
+  position: relative;
+
+  // @include media-rules(mobile) {
+  //   width: 80%;
+  // }
+}
+
+.formScroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable both-edges;
+  /* тут стилі скролу (як ти маєш у ScrollArea.module.scss) */
+}
+
+.topWrapperAvatarRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 54px;
 }
 
 .title {
@@ -38,6 +74,14 @@ $focus-ring: rgba(147, 197, 253, 0.35);
 
 .form {
   display: grid;
+  gap: 14px;
+   padding-right: 14px;
+   padding-left: 12px;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 14px;
 }
 
@@ -60,6 +104,7 @@ $focus-ring: rgba(147, 197, 253, 0.35);
   color: var(--text);
   outline: none;
   transition: border 0.2s, box-shadow 0.2s, background 0.2s;
+  line-height: 1.4;
 
   &:focus {
     border-color: var(--focus);
@@ -181,7 +226,32 @@ $focus-ring: rgba(147, 197, 253, 0.35);
 
 .optionActive { background: #eef3ff; }
 
-/* щоб дропдаун не обрізався */
+
 .wrapper, .formBox, .form { overflow: visible; }
 
 
+
+
+.inputButton {
+  @extend .input; 
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+}
+
+.inputButtonText {
+  color: inherit;
+}
+
+.inputButtonHint {
+  color: #9aa3af; 
+}
+
+.inputButtonIcon {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 8px;
+  opacity: 0.7;
+}

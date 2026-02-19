@@ -6,7 +6,8 @@
       "addClubHeader": "Adding a club",
       "addPlayerHeader": "Adding a Player",
       "addTrainingHeader": "Adding training",
-      "usersHeader": "Players club",
+      "playersHeader": "Players club",
+      "editPlayerHeader": "Editing the Player",
       "trainingsHeader": "Trainings",
       "editStaffHeader": "Editing the Staff",
       "addStaffHeader": "Adding a Staff",
@@ -188,32 +189,141 @@
     "address": "Address",
     "submit": "Create club"
   },
-  "UserCard": {
-    "email": "Email",
-    "firstName": "First name",
-    "lastName": "Last name",
-    "passwordHash": "Password hash",
-    "role": "Role",
-    "createdAt": "Created at",
-    "isActive": "Active",
-    "doB": "Date of update",
-    "rank": "Rank",
-    "level": "Level",
-    "club": "Club",
-    "ConfirmDialog": {
-      "title": "Confirmation",
-      "description": "Are you sure you want to delete this user?"
-    }
-  },
-  "UserTable": {
+  "PlayerCard": {
     "fullName": "Full Name",
-    "email": "Email",
-    "age": "Age",
     "firstName": "First Name",
     "lastName": "Last Name",
-    "level": "Level",
-    "role": "Role",
-    "club": "Club"
+    "email": "Email",
+    "phoneNumber": "Phone",
+    "doB": "Date of Birth",
+    "genderType": {
+      "NotSet": "Not specified",
+      "Male": "Male",
+      "Female": "Female"
+    },
+    "clubId": "Club",
+    "sportProfiles": "Sport Profiles",
+    "createdAt": "Created At",
+    "updatedAt": "Updated At",
+    "ConfirmDialog": {
+      "title": "Confirmation",
+      "description": "Are you sure you want to delete this player?"
+    }
+  },
+  "PlayerTable": {
+    "columns": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "dob": "Date of Birth",
+      "gender": "Gender",
+      "actions": "Actions"
+    },
+    "filters": {
+      "search": {
+        "placeholder": "Search by name / email / phone..."
+      }
+    },
+    "actions": {
+      "view": "View",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "pagination": {
+      "summary": "{from}-{to} of {total}",
+      "first": "First",
+      "prev": "Previous",
+      "next": "Next",
+      "last": "Last",
+      "rows": "Rows",
+      "perPage": "{n} / page"
+    },
+    "empty": "No players",
+    "error": "Failed to load players"
+  },
+  "PlayerForm": {
+    "fields": {
+      "firstName": "First name",
+      "lastName": "Last name",
+      "email": "Email",
+      "password": "Password",
+      "phoneNumber": "Phone",
+      "club": "Club",
+      "dob": "Date of birth",
+      "gender": "Gender",
+      "sport": "Sport",
+      "level": "Level"
+    },
+    "sports": {
+      "Badminton": "Badminton",
+      "Squash": "Squash",
+      "Padel": "Padel",
+      "Pickleball": "Pickleball",
+      "Tennis": "Tennis",
+      "TableTennis": "Table Tennis"
+},
+    "gender": {
+      "NotSet": "Not set",
+      "Male": "Male",
+      "Female": "Female"
+    }
+  },
+
+   "PlayerDetails": {
+    "tabs": {
+      "title": "Player Details",
+      "info": "Information",
+      "subscriptions": "Subscriptions",
+      "trainings": "Trainings",
+      "followers": "Followers",
+      "following": "Following",
+      "favoriteLocations": "Favorite Locations"
+    }
+    
+  },
+
+  "PlayerErrors": {
+    "firstName": {
+      "required": "First name is required",
+      "min": "First name must be at least 2 characters",
+      "max": "First name must be at most 60 characters",
+      "pattern": "First name can contain letters and apostrophe only"
+    },
+
+    "lastName": {
+      "required": "Last name is required",
+      "min": "Last name must be at least 2 characters",
+      "max": "Last name must be at most 60 characters",
+      "pattern": "Last name can contain letters and apostrophe only"
+    },
+
+    "email": {
+      "required": "Email is required",
+      "min": "Email is too short",
+      "max": "Email is too long",
+      "pattern": "Invalid email format"
+    },
+
+    "password": {
+      "required": "Password is required",
+      "min": "Password must be at least 8 characters",
+      "max": "Password must be at most 64 characters",
+      "noSpace": "Password cannot contain spaces",
+      "hasDigit": "Password must contain at least one digit",
+      "hasUpper": "Password must contain at least one uppercase letter",
+      "hasLower": "Password must contain at least one lowercase letter",
+      "hasSpecial": "Password must contain at least one special character"
+    },
+
+    "phone": {
+      "required": "Phone is required",
+      "pattern": "Phone must be in the format +380XXXXXXXXX"
+    },
+
+    "dob": {
+      "required": "Date of birth is required",
+      "validate": "Player must be at least 8 years old"
+    }
   },
   "UserMenu": {
     "profile": "My profile",
@@ -300,6 +410,12 @@
     "EditStaff": "Edit Staff",
     "AddStaff": "Add Staff",
     "StaffOne": "Staff Member"
+  },
+  "playersBreadcrumbs": {
+    "Admin": "Admin",
+    "Players": "Players",
+    "EditPlayer": "Edit Player",
+    "AddPlayer": "Add Player"
   },
   "RoleFormSelectField": {
     "ClubTrainer": "Club Trainer",

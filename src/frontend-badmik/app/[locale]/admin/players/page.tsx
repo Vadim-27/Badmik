@@ -1,37 +1,44 @@
-import UserTable from '@/app/components/shared/Players/PlayerTable/PlayerTable';
+// app/[locale]/admin/[clubId]/players/page.tsx
+import { getTranslations } from 'next-intl/server';
+import RQHydrate from '@/services/_shared/RQHydrate';
+import { prefetch } from '@/services/_shared/prefetch';
+import { playersServerQueries } from '@/services/players/queries.server';
+
 import ActionHeader from '@/app/components/ui/Layout/ActionHeader/ActionHeader';
 import BackButton from '@/app/components/ui/Buttons/BackButton/BackButton';
 import AddButton from '@/app/components/ui/Buttons/AddButton/AddButton';
 import AppBreadcrumbs from '@/app/components/ui/Breadcrumbs/AppBreadcrumbs';
+import PlayersTable from '@/app/components/shared/Players/PlayerTable/PlayerTable';
 
-import { getTranslations } from 'next-intl/server';
+export default async function PlayersPage({ params }: { params: { locale: string; clubId: string } }) {
+  const { locale } = await params;
 
-const UsersClub = async ({
-  params,
-}: {
-  params: { locale: string};
-}) => {
-  const {  locale } = await params;
-  const t = await getTranslations({locale, namespace: 'ActionHeader.title'});
-  
+  const tAH = await getTranslations({ locale, namespace: 'ActionHeader.title' });
+  const tBC = await getTranslations({ locale, namespace: 'playersBreadcrumbs' });
+
+  const state = await prefetch([
+    playersServerQueries.list({  page: 1, pageSize: 10 }),
+  ]);
 
   return (
-    <div className="pt-0 p-4 w-full h-screen">
-      <ActionHeader>
-        <BackButton label="buttons.back"/>
-        <h2 className="text-lg font-semibold">{t('usersHeader')}</h2>
-        <AddButton href={`/admin/players/add-player`} label="buttons.addPlayer" />
+    <RQHydrate state={state}>
+      <div className="pt-0 p-4 w-full">
+        <ActionHeader>
+          <BackButton label="buttons.back" />
+          <h2 className="text-lg font-semibold">{tAH('playersHeader')}</h2>
+          <AddButton href={`/admin/players/add-player`} label="buttons.addPlayer" />
         </ActionHeader>
 
-        <AppBreadcrumbs 
-                      items={[
-                        { label: 'Admin', href: '/admin/players' },
-                        { label: 'Players' },
-                      ]}
-                    />
-    
-      <UserTable />
-    </div>
+        <AppBreadcrumbs
+          items={[
+            { label: tBC('Admin'), href: `/admin/dashboard` },
+            { label: tBC('Players') },
+          ]}
+        />
+
+        <PlayersTable  />
+      </div>
+    </RQHydrate>
   );
-}   
-export default UsersClub;
+}
+

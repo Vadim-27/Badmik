@@ -2,32 +2,30 @@
 import 'server-only';
 import { serverFetch } from '@/lib/http/serverFetch';
 import { ENDPOINTS } from '@/lib/endpoints';
-import type { Player, CreatePlayerDto, UpdatePlayerDto } from '../types/players.dto';
+import { withQuery } from '@/lib/http/qs';
+
+type ListParams = { clubId?: string; page?: number; pageSize?: number };
 
 export const playersApiServer = {
-  async list(): Promise<Player[]> {
-    const res = await serverFetch(ENDPOINTS.player.getAll, {}, { revalidate: 60, tags: ['players'] });
-    return res.json();
-  },
-
-  async byId(id: string): Promise<Player> {
-    const res = await serverFetch(ENDPOINTS.player.getById(id), {}, { revalidate: 60, tags: [`players:${id}`] });
-    return res.json();
-  },
-
-  async register(dto: CreatePlayerDto): Promise<Player> {
-    const res = await serverFetch(ENDPOINTS.player.register, {
-      method: 'POST',
-      body: JSON.stringify(dto),
+  async list(params: ListParams = {}) {
+    const url = withQuery(ENDPOINTS.players.getAll, {
+      ClubId: params.clubId,
+      Page: params.page,
+      PageSize: params.pageSize,
     });
+
+    const res = await serverFetch(url, {}, { revalidate: 60, tags: ['players'] });
     return res.json();
   },
 
-  async update(id: string, dto: UpdatePlayerDto): Promise<Player> {
-    const res = await serverFetch(ENDPOINTS.player.update(id), {
-      method: 'PUT',
-      body: JSON.stringify(dto),
-    });
+  async byId(id: string) {
+    const res = await serverFetch(ENDPOINTS.players.getById(id), {}, { revalidate: 60, tags: ['players'] });
     return res.json();
   },
-} as const;
+  
+   async logo(id: string) {
+    const res = await serverFetch(ENDPOINTS.players.logo(id), {}, { revalidate: 60, tags: ['players'] });
+    return res.blob();
+  },
+};
+

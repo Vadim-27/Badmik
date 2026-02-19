@@ -1,7 +1,7 @@
 export const ENDPOINTS = {
   auth: { login: '/Auth/login', refresh: '/Auth/refresh' },
   // clubs: "/Clubs/GetAll",
-  players: '/Player/GetAll',
+ 
   usersRegister: '/Players/register',
   // staff: "/staff/GetAll",
   staff: {
@@ -46,16 +46,18 @@ export const ENDPOINTS = {
     getAll: '/locations',                               
     getById: (id: string) => `/locations/${id}`,        
     create: '/locations',                              
-    update: (id: string) => `/locations/${id}`,        
-    delete: (id: string) => `/locations/${id}`,      
+    update: (id: string) => `/locations/${id}/photo`,        
+    delete: (id: string) => `/locations/${id}/photo`,      
     byClub: (clubId: string) => `/locations/byclub/${clubId}`, 
   },
 
-  player: {
-    register: '/Player/Register', 
-    getAll: '/players', 
-    getById: (id: string) => `/Player/${id}/GetById`, 
-    update: (id: string) => `/Player/${id}/Update`, 
+  players: {
+    getAll: '/players',
+    getById: (id: string) => `/players/${id}`,
+    create: '/players',
+    update: (id: string) => `/players/${id}`,
+    photo: (id: string) => `/players/${id}/photo`,
+    logo: (id: string) => `/players/${id}/logo`,
   },
   trainings: {
     getAll: '/Trainings/GetAll',
