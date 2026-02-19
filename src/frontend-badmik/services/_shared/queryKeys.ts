@@ -10,6 +10,11 @@ type PlayersListParams = {
   pageSize?: number;
 };
 
+type PlayerMembershipsListParams = {
+  playerId: string;
+  clubId?: string;
+};
+
 
 export const qk = {
   staff: {
@@ -52,6 +57,23 @@ export const qk = {
     update: (id: string) => ['players', 'update', id] as const,
      photo: (id: string) => ['players', 'photo', id] as const,
     logo: (id: string) => ['players', 'logo', id] as const,
+  },
+  clubMembershipPlans: {
+    list: (clubId: string) => ['clubMembershipPlans', 'list', clubId] as const,
+    byId: (clubId: string, planId: string) => ['clubMembershipPlans', 'byId', clubId, planId] as const,
+  },
+  playerMemberships: {
+    list: (params: PlayerMembershipsListParams) =>
+      ['playerMemberships', 'list', params.playerId, params.clubId ?? 'all'] as const,
+
+    byId: (playerId: string, membershipId: string) =>
+      ['playerMemberships', 'byId', playerId, membershipId] as const,
+
+    create: (playerId: string) => ['playerMemberships', 'create', playerId] as const,
+    update: (playerId: string, membershipId: string) =>
+      ['playerMemberships', 'update', playerId, membershipId] as const,
+    delete: (playerId: string, membershipId: string) =>
+      ['playerMemberships', 'delete', playerId, membershipId] as const,
   },
    trainings: {
     list: () => ['trainings', 'list'] as const,

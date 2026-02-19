@@ -1,0 +1,148 @@
+@use '../../../../styles/mixins' as *;
+
+$focus-ring: rgba(147, 197, 253, 0.35);
+
+.wrapper {
+  width: 100%;
+  margin-top: 12px;
+}
+
+
+.filters {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 32px;
+
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.select,
+.search {
+  width: 100%;
+  padding: 14px;          // як у .input
+  border-radius: 12px;    // як у .input
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--text);
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s, background 0.2s;
+  line-height: 1.4;
+
+  &:focus {
+    border-color: var(--focus);
+    box-shadow: 0 0 0 4px $focus-ring; // як у формі
+  }
+}
+
+.search {
+  &::placeholder {
+    color: var(--muted);
+  }
+}
+
+.btnGhost {
+  padding: 14px 16px;     // щоб по висоті як інпути
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--text);
+  font-weight: 700;
+  cursor: pointer;
+
+  transition:
+    transform 0.02s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    background: rgba(15, 23, 42, 0.04);
+  }
+
+  &:focus {
+    border-color: var(--focus);
+    box-shadow: 0 0 0 4px $focus-ring;
+    outline: none;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+@media (min-width: 768px) {
+  .filters {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .search {
+    flex: 1 1 auto;
+    min-width: 60px;
+  }
+
+  .select {
+    width: auto;
+  }
+}
+
+/* ===== States ===== */
+.error {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--text);
+  font-weight: 700;
+}
+
+.skeleton {
+  margin-top: 12px;
+  height: 140px;
+  border-radius: var(--radius);
+  background: rgba(15, 23, 42, 0.06);
+}
+
+/* ===== Section headers ===== */
+.sectionHeader {
+  margin-top: 18px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.sectionTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.sectionCount {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+/* ===== Grid ===== */
+.grid {
+  margin-top: 12px;
+  display: grid;
+   grid-template-columns: 1fr;
+//  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+
+  @include media-rules(laptop) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

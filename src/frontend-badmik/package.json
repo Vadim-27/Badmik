@@ -31,6 +31,7 @@
     "react-dom": "19.1.0",
     "react-hook-form": "^7.62.0",
     "sass": "^1.89.2",
+    "sonner": "^2.0.7",
     "undici": "^7.16.0"
   },
   "devDependencies": {
@@ -42,6 +43,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "baseline-browser-mapping": "^2.9.19",
     "prettier": "^3.6.2",
     "tailwindcss": "^4.1.11",
     "typescript": "^5.9.2"

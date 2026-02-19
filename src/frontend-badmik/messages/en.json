@@ -11,9 +11,11 @@
       "trainingsHeader": "Trainings",
       "editStaffHeader": "Editing the Staff",
       "addStaffHeader": "Adding a Staff",
-      "employeeHeader": "Club employees",
+      "employeeHeader": "Staff",
       "editLocationHeader": "Editing location",
-      "addLocationHeader": "Adding location"
+      "addLocationHeader": "Adding location",
+      "playerMembershipsHeader": "Memberships",
+      "clubMembershipPlansHeader": "Club Membership Plans"
     }
   },
   "Sidebar": {
@@ -22,6 +24,7 @@
     "Clubs": "Clubs",
     "Workout": "Workout",
     "UsersClub": "Club players",
+    "ClubMembershipPlans": "Club Memberships",
     "Players": "Players",
     "Settings": "Settings",
     "Staff": "Staff",
@@ -153,9 +156,11 @@
     "buttons": {
       "addClub": "Add club",
       "addLocation": "Add location",
-      "addUser": "Add user",
+      "addUser": "Add staff",
       "addPlayer": "Add Player",
+      "addMembership": "Add membership",
       "addTraining": "Add training",
+      "addPlan": "Add plan",
       "update": "Update",
       "back": "Back",
       "save": "Save",
@@ -189,6 +194,72 @@
     "address": "Address",
     "submit": "Create club"
   },
+   "ClubMembershipPlans":{
+    "filters":{
+      "sportAll": "Sport: All",
+      "trainingTypeAll": "Training Type: All",
+      "searchPlaceholder": "Search by name...",
+      "reset": "Reset"
+    },
+    "activeTitle": "Active",
+    "inactiveTitle": "Inactive",
+    "trainingType": {
+    "Kids": "Kids",
+    "Individual": "Individual",
+    "Educational": "Educational",
+    "Group": "Group",
+    "CourtRental": "Court Rental"
+  },
+  "sportType": {
+    "Badminton": "Badminton",
+    "Squash": "Squash",
+    "Padel": "Padel",
+    "Pickleball": "Pickleball",
+    "Tennis": "Tennis",
+    "TableTennis": "Table Tennis"
+  },
+  "modal": {
+    "titleCreate": "Create Membership",
+    "titleEdit": "Edit Membership",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saving": "Saving..."
+  },
+  "form": {
+    "fields": {
+      "name": "Name",
+      "durationDays": "Duration (days)",
+      "trainingsGranted": "Number of trainings",
+      "sportType": "Sport",
+      "trainingType": "Training type",
+      "isActive": "Status"
+    },
+    "placeholders": {
+      "name": "Name",
+      "sportType": "Select sport",
+      "trainingType": "Select type",
+      "empty": "Nothing found"
+    },
+    "errors": {
+      "nameRequired": "Name is required",
+      "durationDays": "Minimum 1 day",
+      "trainingsGranted": "Minimum 1 training",
+      "sportType": "Select sport",
+      "trainingType": "Select type"
+    }
+  },
+  "cardButtons": {
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+  "trainings": "trainings",
+  "days": "days"
+},
+
   "PlayerCard": {
     "fullName": "Full Name",
     "firstName": "First Name",
@@ -261,7 +332,7 @@
       "Pickleball": "Pickleball",
       "Tennis": "Tennis",
       "TableTennis": "Table Tennis"
-},
+    },
     "gender": {
       "NotSet": "Not set",
       "Male": "Male",
@@ -269,7 +340,7 @@
     }
   },
 
-   "PlayerDetails": {
+  "PlayerDetails": {
     "tabs": {
       "title": "Player Details",
       "info": "Information",
@@ -279,7 +350,6 @@
       "following": "Following",
       "favoriteLocations": "Favorite Locations"
     }
-    
   },
 
   "PlayerErrors": {
@@ -325,6 +395,123 @@
       "validate": "Player must be at least 8 years old"
     }
   },
+
+  "PlayerMemberships": {
+    "membershipPrefix": "Membership",
+    "membership": "Membership",
+    "trainings": "trainings",
+
+    "left": "Left",
+    "used": "Used",
+
+    "details": "Details",
+    "extend":{
+      "cardBtn": "Extend",
+      "planLoadFailed": "Failed to load subscription plan.",
+      "planInactive": "Sorry, this plan is no longer active - cannot extend.",
+      "planIdMissing": "No planId found for this subscription.",
+      "noValidUntil": "Cannot extend: current subscription has no end date.",
+      "confirm": {
+        "title": "Confirmation",
+        "message": " New period: {from} — {until}.",
+        "confirm": "Yes, extend",
+        "cancel": "No"
+      }
+    },
+    "edit": "Edit",
+    "finish": "Finish",
+
+    "noDates": "No dates",
+    "statusDefault": "Active",
+
+    "loading": "Loading…",
+    "error": "Failed to load memberships",
+
+    "emptyTitle": "No memberships",
+    "emptyHint": "Create the first membership for this player.",
+    "titleMembershipCard": "Membership",
+    "trainingType": {
+      "Kids": "Kids",
+      "Individual": "Individual",
+      "Educational": "Educational",
+      "Group": "Group",
+      "CourtRental": "Court Rental"
+    },
+    "sportType": {
+      "Badminton": "Badminton",
+      "Squash": "Squash",
+      "Padel": "Padel",
+      "Pickleball": "Pickleball",
+      "Tennis": "Tennis",
+      "TableTennis": "Table Tennis"
+    },
+    "PlayerMembershipErrors": {
+  "clubId": {
+    "required": "Select a club"
+  },
+  "trainingsTotalGranted": {
+    "required": "Enter the number of trainings",
+    "min": "Minimum 1"
+  },
+  "trainingType": {
+    "required": "Select a training type"
+  },
+  "sportType": {
+    "required": "Select a sport type"
+  },
+    "status": {
+  "required": "Select a status"
+},
+"trainingsLeft": {
+  "required": "Enter the number of trainings",
+  "min": "Minimum 1"
+},
+  "validFrom": {
+    "required": "Enter the start date"
+  },
+  "validUntil": {
+    "required": "Enter the end date",
+    "afterFrom": "End date must be after start date"
+  }
+},
+
+    "PlayerMembershipModal": {
+      "titleCreate": "Create Membership",
+      "titleEdit": "Edit Membership",
+      "cancel": "Cancel",
+      "save": "Save",
+      "saving": "Saving…"
+    },
+
+    "PlayerMembershipForm": {
+       "placeholders":{
+      "trainingType": "Select training type",
+      "sportType": "Select sport type",
+      "status": "Select status",
+      "trainingsLeft": "Select trainings left",
+      "empty": "No trainings left",
+      "planClub": "Select club membership"
+    },
+      "fields": {
+        "club": "Club",
+        "planClub": "Club Membership",
+        "trainingsTotalGranted": "Number of Trainings",
+        "trainingType": "Training Type",
+        "sportType": "Sport Type",
+        "validFrom": "Start Date",
+        "validUntil": "End Date",
+        "status": "Status",
+    "trainingsLeft": "Trainings Left"
+      }
+    },
+     "confirmFinish": {
+      "title": "Confirmation",
+      "message": "Are you sure you want to finish the membership? This action cannot be undone.",
+      "confirm": "Yes, finish",
+      "cancel": "No"
+    }
+  },
+
   "UserMenu": {
     "profile": "My profile",
     "settings": "Settings",
@@ -411,11 +598,19 @@
     "AddStaff": "Add Staff",
     "StaffOne": "Staff Member"
   },
+   "clubsBreadcrumbs": {
+    "Admin": "Admin",
+    "ClubMembershipPlans": "Club Membership Plans",
+    "Clubs": "Clubs",
+    "EditClub": "Edit Club",
+    "AddClub": "Add Club"
+  },
   "playersBreadcrumbs": {
     "Admin": "Admin",
     "Players": "Players",
     "EditPlayer": "Edit Player",
-    "AddPlayer": "Add Player"
+    "AddPlayer": "Add Player",
+    "PlayerMemberships": "Memberships"
   },
   "RoleFormSelectField": {
     "ClubTrainer": "Club Trainer",
@@ -492,10 +687,16 @@
           "cancel": "Cancel",
           "save": "Save"
         },
-       
+
         "tooltip": {
           "title": "Password must contain:",
-          "items": ["8+ characters", "uppercase and lowercase letters", "digit", "special character", "no spaces"]
+          "items": [
+            "8+ characters",
+            "uppercase and lowercase letters",
+            "digit",
+            "special character",
+            "no spaces"
+          ]
         },
         "aria": {
           "show": "Show password",
@@ -552,7 +753,7 @@
       "pattern": "Invalid email format."
     },
 
-  "password": {
+    "password": {
       "required": "Password is required.",
       "min": "Password must be at least 8 characters.",
       "max": "Password must be no more than 64 characters.",
@@ -563,9 +764,6 @@
       "hasSpecial": "Password must contain at least one special character.",
       "confirmRequired": "Confirm password.",
       "mismatch": "Passwords do not match."
-
-       
-      
     },
 
     "title": {
@@ -603,7 +801,7 @@
       "validate": "Text is too long (max. 2000 characters)."
     }
   },
-   "SalaryField": {
+  "SalaryField": {
     "payTypeLabel": "Payment Type",
     "payTypeAria": "Payment Type",
     "types": {
@@ -628,9 +826,9 @@
     }
   },
   "StaffDetails": {
-  "fields": {
-    "created": "Created",
-    "updated": "Updated"
+    "fields": {
+      "created": "Created",
+      "updated": "Updated"
+    }
   }
-}
 }

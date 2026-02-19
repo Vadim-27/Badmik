@@ -59,6 +59,23 @@ export const ENDPOINTS = {
     photo: (id: string) => `/players/${id}/photo`,
     logo: (id: string) => `/players/${id}/logo`,
   },
+  clubMembershipPlans: {
+    list: (clubId: string) => `/clubs/${clubId}/membership-plans`,
+    create: (clubId: string) => `/clubs/${clubId}/membership-plans`,
+    byId: (clubId: string, planId: string) => `/clubs/${clubId}/membership-plans/${planId}`,
+    update: (clubId: string, planId: string) => `/clubs/${clubId}/membership-plans/${planId}`,
+    delete: (clubId: string, planId: string) => `/clubs/${clubId}/membership-plans/${planId}`,
+  },
+   playerMemberships: {
+    list: (playerId: string) => `/players/${playerId}/memberships`,
+    create: (playerId: string) => `/players/${playerId}/memberships`,
+    byId: (playerId: string, membershipId: string) =>
+      `/players/${playerId}/memberships/${membershipId}`,
+    update: (playerId: string, membershipId: string) =>
+      `/players/${playerId}/memberships/${membershipId}`,
+    delete: (playerId: string, membershipId: string) =>
+      `/players/${playerId}/memberships/${membershipId}`,
+  },
   trainings: {
     getAll: '/Trainings/GetAll',
     getById: (id: string) => `/Trainings/${id}/GetById`,

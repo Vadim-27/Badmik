@@ -10,10 +10,12 @@
       "editPlayerHeader": "Редагування гравця",
       "trainingsHeader": "Тренування",
       "editStaffHeader": "Редагування персоналу",
-      "addStaffHeader": "Додати персонал",
-      "employeeHeader": "Робітники клубів",
+      "addStaffHeader": "Додати працівника",
+      "employeeHeader": "Працівники",
       "editLocationHeader": "Редагування локації",
-      "addLocationHeader": "Додавання локації"
+      "addLocationHeader": "Додавання локації",
+      "playerMembershipsHeader": "Абонементи",
+      "clubMembershipPlansHeader": "Абонементи клубу"
     }
   },
   "Sidebar": {
@@ -22,6 +24,7 @@
     "Workout": "Тренування",
     "Clubs": "Клуби",
     "UsersClub": "Гравці клубу",
+    "ClubMembershipPlans": "Абонементи клубу",
     "Players": "Гравці",
     "Settings": "Налаштування",
     "Staff": "Співробітники",
@@ -154,9 +157,11 @@
     "buttons": {
       "addClub": "Додати клуб",
       "addLocation": "Додати локацію",
-      "addUser": "Додати користувача",
+      "addUser": "Додати працівникика",
       "addPlayer": "Додати гравця",
+      "addMembership": "Додати підписку",
       "addTraining": "Додати тренування",
+      "addPlan": "Додати план",
       "update": "Редагувати",
       "back": "Назад",
       "save": "Зберегти",
@@ -189,7 +194,73 @@
     "address": "Адреса",
     "submit": "Створити зал"
   },
- "PlayerCard": {
+  "ClubMembershipPlans": {
+    "filters": {
+      "sportAll": "Спорт: Усі",
+      "trainingTypeAll": "Тип тренування: Усі",
+      "searchPlaceholder": "Пошук за назвою...",
+      "reset": "Скинути"
+    },
+    "activeTitle": "Активний",
+    "inactiveTitle": "Неактивний",
+    "trainingType": {
+      "Kids": "Дитяче",
+      "Individual": "Індивідуальне",
+      "Educational": "Навчальне",
+      "Group": "Групове",
+      "CourtRental": "Оренда корту"
+    },
+    "sportType": {
+      "Badminton": "Бадмінтон",
+      "Squash": "Сквош",
+      "Padel": "Падел",
+      "Pickleball": "Піклбол",
+      "Tennis": "Теніс",
+      "TableTennis": "Настільний теніс"
+    },
+    "modal": {
+      "titleCreate": "Створити план",
+      "titleEdit": "Редагувати план",
+      "cancel": "Скасувати",
+      "save": "Зберегти",
+      "saving": "Збереження..."
+    },
+    "form": {
+      "fields": {
+        "name": "Назва",
+        "durationDays": "Тривалість (днів)",
+        "trainingsGranted": "Кількість тренувань",
+        "sportType": "Спорт",
+        "trainingType": "Тип тренувань",
+        "isActive": "Статус"
+      },
+      "placeholders": {
+        "name": "Назва",
+        "sportType": "Оберіть спорт",
+        "trainingType": "Оберіть тип",
+        "empty": "Нічого не знайдено"
+      },
+      "errors": {
+        "nameRequired": "Вкажіть назву",
+        "durationDays": "Мінімум 1 день",
+        "trainingsGranted": "Мінімум 1 тренування",
+        "sportType": "Оберіть спорт",
+        "trainingType": "Оберіть тип"
+      }
+    },
+    "status": {
+      "active": "Активний",
+      "inactive": "Неактивний"
+    },
+    "cardButtons": {
+      "edit": "Редагувати",
+      "delete": "Видалити"
+    },
+    "trainings": "тренувань",
+    "days": "днів"
+  },
+
+  "PlayerCard": {
     "fullName": "Повне ім'я",
     "firstName": "Ім'я",
     "lastName": "Прізвище",
@@ -242,7 +313,7 @@
     "empty": "Немає гравців",
     "error": "Не вдалося завантажити гравців"
   },
-   "PlayerForm": {
+  "PlayerForm": {
     "fields": {
       "firstName": "Імʼя",
       "lastName": "Прізвище",
@@ -256,13 +327,13 @@
       "level": "Рівень"
     },
     "sports": {
-  "Badminton": "Бадмінтон",
-  "Squash": "Сквош",
-  "Padel": "Падел",
-  "Pickleball": "Піклбол",
-  "Tennis": "Теніс",
-  "TableTennis": "Настільний теніс"
-},
+      "Badminton": "Бадмінтон",
+      "Squash": "Сквош",
+      "Padel": "Падел",
+      "Pickleball": "Піклбол",
+      "Tennis": "Теніс",
+      "TableTennis": "Настільний теніс"
+    },
     "gender": {
       "NotSet": "Не вказано",
       "Male": "Чоловіча",
@@ -280,7 +351,6 @@
       "following": "Передплатники",
       "favoriteLocations": "Улюблені локації"
     }
-    
   },
 
   "PlayerErrors": {
@@ -327,6 +397,122 @@
     }
   },
 
+  "PlayerMemberships": {
+    "membershipPrefix": "Абонемент",
+    "membership": "Абонемент",
+    "trainings": "тренувань",
+
+    "left": "Залишилось",
+    "used": "Використано",
+
+    "details": "Деталі",
+    "extend":{
+      "cardBtn": "Продовжити",
+      "planLoadFailed": "Не вдалося завантажити план абонемента.",
+      "planInactive": "Вибачте, даний план вже неактивний — продовжити неможливо.",
+      "planIdMissing": "Не знайдено planId для цього абонемента.",
+      "noValidUntil": "Неможливо продовжити: у поточного абонемента немає дати завершення.",
+      "confirm": {
+        "title": "Підтвердження",
+        "message": " Новий період: {from} — {until}.",
+        "confirm": "Так, продовжити",
+        "cancel": "Ні"
+      }
+    },
+    "edit": "Редагувати",
+    "finish": "Завершити",
+
+    "noDates": "Без дат",
+    "statusDefault": "Active",
+
+    "loading": "Завантаження…",
+    "error": "Не вдалося завантажити абонементи",
+
+    "emptyTitle": "Немає абонементів",
+    "emptyHint": "Створи перший абонемент для гравця.",
+    "titleMembershipCard": "Абонемент",
+    "trainingType": {
+      "Kids": "Дитяче",
+      "Individual": "Індивідуальне",
+      "Educational": "Навчальне",
+      "Group": "Групове",
+      "CourtRental": "Оренда корту"
+    },
+    "sportType": {
+      "Badminton": "Бадмінтон",
+      "Squash": "Сквош",
+      "Padel": "Падел",
+      "Pickleball": "Піклбол",
+      "Tennis": "Теніс",
+      "TableTennis": "Настільний теніс"
+    },
+    "PlayerMembershipErrors": {
+      "clubId": {
+        "required": "Вибір клубу"
+      },
+      "trainingsTotalGranted": {
+        "required": "Введіть кількість тренувань",
+        "min": "Мінімум 1"
+      },
+      "trainingType": {
+        "required": "Виберіть тип тренування"
+      },
+      "sportType": {
+        "required": "Виберіть вид спорту"
+      },
+      "status": {
+        "required": "Виберіть статус"
+      },
+      "trainingsLeft": {
+        "required": "Вкажіть залишок тренувань",
+        "min": "Мінімум 0"
+      },
+      "validFrom": {
+        "required": "Вкажіть дату початку"
+      },
+      "validUntil": {
+        "required": "Вкажіть дату закінчення",
+        "afterFrom": "Дата закінчення повинна бути після дати початку"
+      }
+    },
+
+    "PlayerMembershipModal": {
+      "titleCreate": "Створити абонемент",
+      "titleEdit": "Редагувати абонемент",
+      "cancel": "Скасувати",
+      "save": "Зберегти",
+      "saving": "Збереження…"
+    },
+
+    "PlayerMembershipForm": {
+      "placeholders": {
+        "trainingType": "Оберіть тип тренування",
+        "sportType": "Оберіть вид спорту",
+        "status": "Оберіть статус",
+        "trainingsLeft": "Оберіть залишок тренувань",
+        "empty": "Порожньо",
+        "planClub": "Оберіть абонемент клубу"
+      },
+      "fields": {
+        "club": "Клуб",
+        "planClub": "Абонент клубу",
+        "trainingsTotalGranted": "Кількість тренувань",
+        "trainingType": "Тип тренування",
+        "sportType": "Вид спорту",
+        "validFrom": "Початок дії",
+        "validUntil": "Кінець дії",
+        "status": "Статус",
+        "trainingsLeft": "Залишилось тренувань"
+      }
+    },
+     "confirmFinish": {
+      "title": "Підтвердження",
+      "message": "Завершити абонемент? Цю дію не можна скасувати.",
+      "confirm": "Так, завершити",
+      "cancel": "Ні"
+    }
+  },
+
   "UserMenu": {
     "profile": "Мій профіль",
     "settings": "Налаштування",
@@ -338,18 +524,26 @@
     "confirm": "Так",
     "cancel": "Ні"
   },
+  "clubsBreadcrumbs": {
+    "Admin": "Адмін",
+    "ClubMembershipPlans": "Абонементи клубу",
+    "Clubs": "Клуби",
+    "EditClub": "Редагувати клуб",
+    "AddClub": "Додати клуб"
+  },
   "staffBreadcrumbs": {
     "Admin": "Адмін",
-    "Staff": "Співробітники",
-    "EditStaff": "Редагувати співробітника",
-    "AddStaff": "Додати співробітника",
-    "StaffOne": "Співробітник"
+    "Staff": "Працівники",
+    "EditStaff": "Редагувати працівника",
+    "AddStaff": "Додати працівника",
+    "StaffOne": "Працівник"
   },
   "playersBreadcrumbs": {
     "Admin": "Адмін",
     "Players": "Гравці",
     "EditPlayer": "Редагувати гравця",
-    "AddPlayer": "Додати гравця"
+    "AddPlayer": "Додати гравця",
+    "PlayerMemberships": "Абонементи гравців"
   },
   "EmployeeForm": {
     "email": "Електронна пошта",
@@ -449,9 +643,9 @@
     "dash": "–",
     "off": "Вихідний",
     "toggle": {
-    "show": "Показати графік",
-    "hide": "Сховати графік"
-  },
+      "show": "Показати графік",
+      "hide": "Сховати графік"
+    },
     "days": {
       "monday": "Понеділок",
       "tuesday": "Вівторок",
@@ -463,7 +657,7 @@
     }
   },
   "StaffForm": {
-     "avatar": {
+    "avatar": {
       "placeholder": "Аватар",
       "alt": "Аватар",
       "upload": "Завантажити",
@@ -625,9 +819,9 @@
     }
   },
   "StaffDetails": {
-  "fields": {
-    "created": "Створено",
-    "updated": "Оновлено"
+    "fields": {
+      "created": "Створено",
+      "updated": "Оновлено"
+    }
   }
-}
 }
