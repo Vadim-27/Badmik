@@ -60,6 +60,7 @@ export interface Staff {
 
 
 
+
 export interface StaffRegisterDto {
   email?: string | null;
   password?: string | null;
@@ -149,3 +150,18 @@ export type ChangeStaffPasswordDto = {
   staffId: string;
   password: string;
 };
+
+
+
+export type StaffByUserIdResponse = Partial<{
+  id: string;
+  userId: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  imageUrl: string | null;
+  employmentType: StaffEmploymentType | null;
+  title: string | null;
+  staffStatus: StaffStatus | null;
+  clubId: string | null;
+}>;

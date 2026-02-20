@@ -2,100 +2,176 @@
 
 
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.75rem 1rem;
-  background-color: #1f2937; 
-  color: white;
+// .header {
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+//   padding: 0.75rem 1rem;
+//   background-color: #1f2937; 
+//   color: white;
 
-  @include media-rules(mobile) {
-    padding: 0.5rem 1rem;
-  }
+//   @include media-rules(mobile) {
+//     padding: 0.5rem 1rem;
+//   }
 
-  @include media-rules(tablet) {
-    padding: 0.75rem 1.5rem;
-  }
+//   @include media-rules(tablet) {
+//     padding: 0.75rem 1.5rem;
+//   }
 
-  @include media-rules(laptop) {
-    padding: 1rem 2rem;
-  }
+//   @include media-rules(laptop) {
+//     padding: 1rem 2rem;
+//   }
   
-  @include media-rules(desktop) {
-    padding: 1.25rem 3rem;
-  }
+//   @include media-rules(desktop) {
+//     padding: 1.25rem 3rem;
+//   }
+// }
+
+// .nav {
+//   display: flex;
+//   gap: 1rem; 
+//   align-items: center;
+
+//   a {
+//     color: white;
+//     text-decoration: none;
+//     transition: color 150ms ease-in-out;
+
+//     &:hover {
+//       text-decoration: underline;
+//       color: #93c5fd;
+//     }
+
+//     @include media-rules(mobile) {
+//       font-size: 0.875rem;
+//     }
+
+//     @include media-rules(tablet) {
+//       font-size: 1rem;
+//     }
+
+//     @include media-rules(laptop) {
+//       font-size: 1.125rem;
+//     }
+
+//     @include media-rules(desktop) {
+//       font-size: 1.5rem;
+//     }
+//   }
+// }
+
+// .actions{
+//   display: flex;
+//   gap: 2rem;
+// }
+
+// .authButton {
+//   background-color: #2563eb; // bg-blue-600
+//   color: #ffffff;
+//   border-radius: 0.375rem;
+//   padding: 0.5rem 1rem;
+//   font-size: 0.875rem;
+//   border: none;
+//   cursor: pointer;
+//   transition: background-color 150ms ease-in-out;
+
+//   &:hover {
+//     background-color: #1d4ed8; // hover:bg-blue-700
+//   }
+
+//   @include media-rules(mobile) {
+//     padding: 0.5rem 1rem;
+//     font-size: 0.875rem;
+//   }
+
+//   @include media-rules(tablet) {
+//     padding: 0.625rem 1.25rem;
+//     font-size: 1rem;
+//   }
+
+//   @include media-rules(laptop) {
+//     padding: 0.75rem 1.5rem;
+//     font-size: 1.125rem;
+//   }
+
+//   @include media-rules(desktop) {
+//     padding: 0.875rem 2rem;
+//     font-size: 1.5rem;
+//   }
+// }
+
+
+//========================
+
+// app/components/shared/Header/HeaderClient/Header.module.scss
+// @use '../../../../styles/mixins' as *;
+
+.header {
+  /* те, що було закоментоване — робимо нормальним стилем */
+  // background: var(--header-bg, #0b1220);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.nav {
+/* еквівалент bg-slate-700 */
+.bgSlate700 {
+  background-color: rgb(51 65 85 / 1);
+}
+
+/* еквівалент rounded-2xl */
+.rounded2xl {
+  border-radius: 1rem;
+}
+
+/* еквівалент shadow-lg */
+.shadowLg {
+  /* без tailwind CSS variables — напряму */
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+.inner {
   display: flex;
-  gap: 1rem; 
   align-items: center;
-
-  a {
-    color: white;
-    text-decoration: none;
-    transition: color 150ms ease-in-out;
-
-    &:hover {
-      text-decoration: underline;
-      color: #93c5fd;
-    }
-
-    @include media-rules(mobile) {
-      font-size: 0.875rem;
-    }
-
-    @include media-rules(tablet) {
-      font-size: 1rem;
-    }
-
-    @include media-rules(laptop) {
-      font-size: 1.125rem;
-    }
-
-    @include media-rules(desktop) {
-      font-size: 1.5rem;
-    }
-  }
-}
-
-.actions{
-  display: flex;
-  gap: 2rem;
-}
-
-.authButton {
-  background-color: #2563eb; // bg-blue-600
-  color: #ffffff;
-  border-radius: 0.375rem;
-  padding: 0.5rem 1rem;
-  font-size: 0.875rem;
-  border: none;
-  cursor: pointer;
-  transition: background-color 150ms ease-in-out;
-
-  &:hover {
-    background-color: #1d4ed8; // hover:bg-blue-700
-  }
+  justify-content: space-between;
+  padding: 18px 32px;
 
   @include media-rules(mobile) {
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
+    padding: 14px 16px;
   }
+}
 
-  @include media-rules(tablet) {
-    padding: 0.625rem 1.25rem;
-    font-size: 1rem;
-  }
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
 
-  @include media-rules(laptop) {
-    padding: 0.75rem 1.5rem;
-    font-size: 1.125rem;
-  }
+.logoIconWrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: rgba(99, 102, 241, 0.18); // під ваш індиго/primary
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  @include media-rules(desktop) {
-    padding: 0.875rem 2rem;
-    font-size: 1.5rem;
-  }
+.logoIcon {
+  width: 22px;
+  height: 22px;
+  color: rgba(226, 232, 240, 0.95);
+}
+
+.logoText {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }

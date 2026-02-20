@@ -11,6 +11,7 @@ export const ENDPOINTS = {
     // update: (id: string) => `/staff/${id}/Update`,
     update: (id: string) => `/staffs/${id}`,
     changePassword: '/staffs/ChangePassword', 
+    getByUserId: (userId: string) => `/staffs/user/${userId}`,
   },
 
  role: {
