@@ -27,6 +27,7 @@ export const qk = {
       params.pageSize ?? 10,
     ]  as const,
     byId: (id: string) => ['staff', 'byId', id] as const,
+    byUserId: (userId: string) => ['staff', 'byUserId', userId] as const,
   },
   role: {
   

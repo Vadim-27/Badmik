@@ -37,6 +37,12 @@
   }
 }
 
+.selected {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .chev {
   width: 10px;
   height: 10px;
@@ -55,12 +61,12 @@
   transform: translateX(-50%);
   min-width: 180px;
 
-  background: #ffffff;
-  color: #0f172a;
+ background: rgba(30, 41, 59, 0.92); // як мокап (slate)
+  color: #fff;
 
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 14px; 
-  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 14px;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.22);
 
   overflow: hidden;
   z-index: 50;
@@ -75,16 +81,128 @@
   border: 0;
   color: inherit;
 
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
   font-size: 14px;
   cursor: pointer;
 
-  &:hover {
-    background: #f1f5f9;
+&:hover {
+    background: rgba(255, 255, 255, 0.10);
   }
 }
 
 .active {
-  font-weight: 700;
-  background: #eef2ff;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.06);
 }
 
+//=================================
+
+// @use '../../../../../styles/mixins' as *;
+
+// .root {
+//   position: relative;
+//   display: inline-flex;
+//   align-items: center;
+// }
+
+// .trigger {
+//   display: inline-flex;
+//   align-items: center;
+//   gap: 10px;
+
+//   padding: 10px 14px;
+//   border-radius: 12px;
+//   border: 1px solid rgba(255, 255, 255, 0.14);
+
+//   background: rgba(255, 255, 255, 0.10);
+//   color: var(--text-on-dark, #f8fafc);
+
+//   font-size: 13px; // трохи менше як в мокапі
+//   font-weight: 700;
+//   cursor: pointer;
+
+//   transition: background 0.15s ease, border-color 0.15s ease, transform 0.05s;
+
+//   &:hover {
+//     background: rgba(255, 255, 255, 0.16);
+//     border-color: rgba(255, 255, 255, 0.22);
+//     transform: translateY(-1px);
+//   }
+
+//   &:focus {
+//     outline: none;
+//     border-color: rgba(199, 210, 254, 0.7);
+//     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+//   }
+// }
+
+// .selected {
+//   display: inline-flex;
+//   align-items: center;
+//   gap: 10px;
+// }
+
+// .flag {
+//   width: 20px;
+//   height: 14px;
+//   border-radius: 3px;
+//   object-fit: cover;
+//   border: 1px solid rgba(255, 255, 255, 0.22);
+// }
+
+// .chev {
+//   width: 10px;
+//   height: 10px;
+//   display: inline-block;
+//   border-right: 2px solid rgba(255, 255, 255, 0.9);
+//   border-bottom: 2px solid rgba(255, 255, 255, 0.9);
+//   transform: rotate(45deg);
+//   margin-top: -2px;
+// }
+
+// .menu {
+//   position: absolute;
+//   top: calc(100% + 10px);
+//   right: 0;
+
+//   min-width: 220px;
+
+//   background: rgba(30, 41, 59, 0.92); // як мокап (slate)
+//   color: #fff;
+
+//   border: 1px solid rgba(255, 255, 255, 0.10);
+//   border-radius: 14px;
+//   box-shadow: 0 12px 28px rgba(15, 23, 42, 0.22);
+
+//   overflow: hidden;
+//   z-index: 50;
+// }
+
+// .item {
+//   width: 100%;
+//   text-align: left;
+
+//   padding: 12px 14px;
+//   background: transparent;
+//   border: 0;
+//   color: inherit;
+
+//   font-size: 13px;
+//   cursor: pointer;
+
+//   display: flex;
+//   align-items: center;
+//   gap: 12px;
+
+//   &:hover {
+//     background: rgba(255, 255, 255, 0.10);
+//   }
+// }
+
+// .active {
+//   font-weight: 800;
+//   background: rgba(255, 255, 255, 0.06);
+// }

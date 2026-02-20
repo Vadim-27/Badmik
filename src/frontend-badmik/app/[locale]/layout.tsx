@@ -47,12 +47,14 @@ export default async function LocaleLayout({
   return (
     <html lang={locale}>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <div className="containerPage bg-f3f4f6">
         <Providers>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Header />
           {children}
         </NextIntlClientProvider>
         </Providers>
+        </div>
       </body>
     </html>
   );

@@ -5,7 +5,7 @@
 import { api } from '@/lib/http/api';
 import { ENDPOINTS } from '@/lib/endpoints';
 import { unwrap } from '@/lib/http/utils';
-import type { Staff, StaffRegisterDto, UpdateStaffDto, ChangeStaffPasswordDto } from '../types/staff.dto';
+import type { Staff, StaffRegisterDto, UpdateStaffDto, ChangeStaffPasswordDto, StaffByUserIdResponse, } from '../types/staff.dto';
 import { withQuery } from '@/lib/http/qs';
 
 type ListParams = { clubId?: string; page?: number; pageSize?: number };
@@ -65,6 +65,12 @@ export const staffApiClient = {
     unwrap<void>(
       api.put(ENDPOINTS.staff.changePassword, dto, { signal }),
     ),
+
+
+    byUserId: (userId: string, signal?: AbortSignal) =>
+  unwrap<StaffByUserIdResponse>(
+    api.get(ENDPOINTS.staff.getByUserId(userId), { signal })
+  ),
 
   
 

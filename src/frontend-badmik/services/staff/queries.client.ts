@@ -11,13 +11,17 @@ import {
 } from '@tanstack/react-query';
 import { qk } from '../_shared/queryKeys';
 import { staffApiClient } from './api.client';
-import type { Staff, StaffRegisterDto, UpdateStaffDto, ChangeStaffPasswordDto } from '../types/staff.dto';
+import type { Staff, StaffRegisterDto, UpdateStaffDto, ChangeStaffPasswordDto, StaffByUserIdResponse, } from '../types/staff.dto';
 
 export type StaffListParams = {
   clubId?: string;
   page?: number;
   pageSize?: number;
 };
+
+type UseStaffByUserIdOptions = Partial<
+  UseQueryOptions<StaffByUserIdResponse, unknown, StaffByUserIdResponse, QueryKey>
+>;
 
 
 
@@ -94,6 +98,15 @@ export function useChangeStaffPassword() {
   });
 }
 
+export function useStaffByUserId(userId: string, options?: UseStaffByUserIdOptions) {
+  return useQuery({
+    queryKey: qk.staff.byUserId(userId),
+    queryFn: ({ signal }) => staffApiClient.byUserId(userId, signal),
+    enabled: !!userId,
+    staleTime: 5 * 60 * 1000,
+    ...(options ?? {}),
+  });
+}
 
 //=======================================
 

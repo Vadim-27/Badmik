@@ -1,4 +1,19 @@
 {
+  "Auth": {
+    "email": "Електронна пошта",
+    "password": "Пароль",
+    "login": "Увійти",
+    "loggingIn": "Вхід...",
+    "error": "Невірный email или пароль",
+    "show": "Показати",
+    "hide": "Сховати"
+  },
+  "Header":{
+    "profile": "Мій профіль",
+    "employmentType": "Тип зайнятості",
+    "settings": "Налаштування",
+    "logout": "Вихід"
+  },
   "ActionHeader": {
     "title": {
       "adminHeader": "Клуби",
@@ -705,7 +720,7 @@
       "phone": "Номер телефону",
       "club": "Клуб",
       "activity": "Активність",
-      "positionType": "Оберіть посаду",
+      "positionType": "Посада",
       "dob": "Дата народження",
       "startDate": "Дата початку роботи",
       "endDate": "Дата завершення роботи",

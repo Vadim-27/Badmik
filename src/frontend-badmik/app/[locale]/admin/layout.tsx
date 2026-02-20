@@ -1,5 +1,6 @@
 
 
+import Header from '@/app/components/shared/Header/Header';
 import Sidebar from '@/app/components/shared/Sidebar/Sidebar';
 
 
@@ -13,7 +14,8 @@ export default async function  AdminLayout({ children }: { children: React.React
 
   const state = await prefetch([ clubsServerQueries.list() ]);
   return (
-    <div className="containerPage">
+    <div className="containerPage bg-f3f4f6">
+ 
     <div className=" flex ">
        
       {/* <ClientOnly> */}

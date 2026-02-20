@@ -1,4 +1,19 @@
 {
+    "Auth": {
+      "email": "Email",
+      "password": "Password",
+      "login": "Log In",
+      "loggingIn": "Logging in...",
+      "error": "Invalid email or password",
+      "show": "Show",
+      "hide": "Hide"
+    },
+     "Header":{
+    "profile": "My Profile",
+    "employmentType": "Employment Type",
+    "settings": "Settings",
+    "logout": "Log Out"
+  },
   "ActionHeader": {
     "title": {
       "adminHeader": "Clubs",
