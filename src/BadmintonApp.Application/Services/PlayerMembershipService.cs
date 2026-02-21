@@ -133,8 +133,9 @@ namespace BadmintonApp.Application.Services
 
             var now = DateTime.UtcNow;
 
-            // ✅ auto-shift
-            var membership = await _membershipRepository.GetLatestAsync(playerId, dto.ClubId, ct);
+            var membership = await _membershipRepository.GetLatestAsync(playerId, dto.ClubId, plan.SportType, plan.TrainingType, ct);
+            if (membership == null)
+                throw new BadRequestException("Player does not have an existing membership to renew.");
 
             var validFrom = membership.ValidUntil.HasValue
                 ? (membership.ValidUntil.Value == DateTime.MaxValue
@@ -182,7 +183,7 @@ namespace BadmintonApp.Application.Services
             var now = DateTime.UtcNow;
 
             // shift using GetLatestAsync (same logic as renew)
-            var latest = await _membershipRepository.GetLatestAsync(dto.PlayerId, dto.ClubId, ct);
+            var latest = await _membershipRepository.GetLatestAsync(dto.PlayerId, dto.ClubId, plan.SportType, plan.TrainingType, ct);
 
             DateTime validFrom;
 

@@ -45,11 +45,6 @@ namespace BadmintonApp.Infrastructure.Persistence.Configurations
             // Indexes
             b.HasIndex(x => new { x.ClubId, x.PlayerId });
             b.HasIndex(x => x.PlanId);
-
-            // Optional: only one active membership per player per club (Postgres filtered unique index)
-            b.HasIndex(x => new { x.ClubId, x.PlayerId })
-                .IsUnique()
-                .HasFilter("\"Status\" = 1"); // 1 == Active (MembershipStatus.Active)
         }
     }
 }
