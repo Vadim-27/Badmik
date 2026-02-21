@@ -79,11 +79,11 @@ namespace BadmintonApp.Infrastructure.Persistence.Repositories
                 ct);
         }
 
-        public async Task<PlayerClubMembership?> GetLatestAsync(Guid playerId, Guid clubId, CancellationToken ct)
+        public async Task<PlayerClubMembership?> GetLatestAsync(Guid playerId, Guid clubId, SportType sportType, TrainingType trainingType, CancellationToken ct)
         {
             return await _dbContext.PlayerClubMemberships
                 .AsNoTracking()
-                .Where(x => x.PlayerId == playerId && x.ClubId == clubId)
+                .Where(x => x.PlayerId == playerId && x.ClubId == clubId & x.SportType == sportType && x.TrainingType == trainingType)
                 .OrderByDescending(x => x.ValidUntil ?? DateTime.MaxValue)
                 .FirstOrDefaultAsync(ct);
         }
