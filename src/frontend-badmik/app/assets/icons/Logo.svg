@@ -1,0 +1,8 @@
+<svg viewBox="0 0 24 24" class="w-6 h-6 text-blue-200" fill="none" stroke="currentColor" stroke-width="1.8">
+          <!-- Racket head -->
+          <ellipse cx="12" cy="8" rx="4.5" ry="6"></ellipse>
+          <!-- Handle -->
+          <line x1="12" y1="14" x2="12" y2="22" stroke-linecap="round"></line>
+          <!-- Shuttle -->
+          <circle cx="12" cy="5" r="1.5"></circle>
+        </svg>

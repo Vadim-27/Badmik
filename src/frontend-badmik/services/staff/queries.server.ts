@@ -23,4 +23,11 @@ export const staffServerQueries = {
     queryFn: () => staffApiServer.byId(id),
   }),
 
+  byUserId: (userId: string) => ({
+  queryKey: qk.staff.byUserId(userId),
+  queryFn: () => staffApiServer.byUserId(userId),
+}),
+
 };
+
+

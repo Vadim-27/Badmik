@@ -1,0 +1,191 @@
+@use '../../../../../styles/mixins' as *;
+
+$focus-ring: rgba(147, 197, 253, 0.35);
+
+.wrapper {
+  // min-height: 70vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 12px;
+  overflow: hidden;
+}
+
+.formBox {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  // box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  position: relative;
+}
+
+.formScroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.form {
+  display: grid;
+  gap: 14px;
+  padding-right: 10px;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.comboRoot{
+  padding: 3px;
+}
+
+.label {
+  display: block;
+  font-size: 14px;
+  color: var(--muted);
+  margin: 0 0 8px;
+}
+
+.req {
+  color: #e63946;
+}
+
+.input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--text);
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s, background 0.2s;
+  line-height: 1.4;
+
+  &:focus {
+    border-color: var(--focus);
+    box-shadow: 0 0 0 4px $focus-ring;
+  }
+}
+
+.errorInput {
+  border: 1px solid #e63946 !important;
+  background-color: #fff5f5;
+
+  &:focus {
+    box-shadow: 0 0 0 4px rgba(230, 57, 70, 0.2);
+  }
+}
+
+
+
+.errorText {
+  color: #e63946;
+  font-size: 12px;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.comboRoot {
+  position: relative;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: var(--radius);
+}
+
+
+//============================
+
+
+//==============
+
+// combobox root
+.comboRoot {
+  position: relative;
+}
+
+// input має місце під шеврон
+.inputChevron {
+  padding-right: 40px;
+}
+
+// кнопка-стрілка праворуч
+.comboChevron {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: auto;
+  color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  width: 24px;
+  border-radius: 8px;
+
+  &:hover {
+    background: #f1f5f9;
+  }
+}
+
+// контейнер опцій (дропдаун)
+.options {
+  // position: absolute;
+  // top: calc(100% + 6px);
+  // left: 0;
+  // right: 0;
+  // z-index: 200000;
+
+  // max-height: 240px;
+  // overflow-y: auto;
+
+  // background: #fff;
+  // border: 1px solid var(--border);
+  // border-radius: 12px;
+  // box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
+   z-index: 999999;
+
+  max-height: 240px;
+  overflow-y: auto;
+
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
+}
+
+// опція
+.option {
+  padding: 10px 12px;
+  box-sizing: border-box;
+  cursor: pointer;
+  font-size: 14px;
+  background: #fff;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid #f1f5f9;
+  }
+}
+
+// активна (hover/keyboard)
+.optionActive {
+  background: #eef3ff;
+}

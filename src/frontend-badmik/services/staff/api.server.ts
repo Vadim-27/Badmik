@@ -3,7 +3,7 @@ import 'server-only';
 import { serverFetch } from '@/lib/http/serverFetch';
 import { ENDPOINTS } from '@/lib/endpoints';
 import { withQuery } from '@/lib/http/qs';
-import type { Staff, StaffRegisterDto, UpdateStaffDto } from '../types/staff.dto';
+import type { Staff, StaffRegisterDto, UpdateStaffDto, StaffByUserIdResponse  } from '../types/staff.dto';
 
 export type PagedResult<T> = {
   items: T[];
@@ -14,11 +14,7 @@ export type PagedResult<T> = {
 
 type ListParams = { clubId?: string; page?: number; pageSize?: number };
 
-// export const staffApiServer = {
-//   async list(): Promise<Staff[]> {
-//     const res = await serverFetch(ENDPOINTS.staff.getAll, {}, { revalidate: 60, tags: ['staff'] });
-//     return res.json();
-//   },
+
 export const staffApiServer = {
   async list(params: ListParams = {}): Promise<PagedResult<Staff>> {
     const url = withQuery(ENDPOINTS.staff.getAll, {
@@ -53,4 +49,13 @@ export const staffApiServer = {
     });
     return res.json();
   },
+
+  async byUserId(userId: string): Promise<StaffByUserIdResponse> {
+  const res = await serverFetch(
+    ENDPOINTS.staff.getByUserId(userId),
+    {},
+    { revalidate: 60, tags: [`staff:user:${userId}`] }
+  );
+  return res.json();
+},
 } as const;

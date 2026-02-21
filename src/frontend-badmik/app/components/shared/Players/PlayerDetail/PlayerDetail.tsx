@@ -78,7 +78,7 @@ export default function PlayerDetail({ playerId, clubIdParams }: Props) {
     {
       key: 'subscriptions',
       label: tTabs('subscriptions'),
-      href: `/admin/players/${playerId}/subscriptions`,
+      href: `/admin/${clubId}/players/${playerId}/player-memberships`,
       count: 2,
     },
     {
@@ -147,7 +147,7 @@ export default function PlayerDetail({ playerId, clubIdParams }: Props) {
 
   return (
     <section className={styles.wrapper}>
-      <ActionHeader>
+      {/* <ActionHeader>
         <BackButton label="buttons.back" />
         <div className="text-lg font-semibold">
           <h1 className={styles.title}>{headerTitle}</h1>
@@ -163,9 +163,9 @@ export default function PlayerDetail({ playerId, clubIdParams }: Props) {
             { label: fullName(player) },
           ]}
         />
-      </div>
+      </div> */}
 
-      <div className={styles.tabsBar}>
+      {/* <div className={styles.tabsBar}>
         {tabs.map((tab) => {
           const active = tab.key === activeKey;
 
@@ -181,7 +181,7 @@ export default function PlayerDetail({ playerId, clubIdParams }: Props) {
             </Link>
           );
         })}
-      </div>
+      </div> */}
 
       <div className={styles.card}>
         {busy && <SpinnerOverlay fullscreen={false} />}

@@ -200,6 +200,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import LoginForm from '@/app/components/shared/Auth/LoginForm/LoginForm';
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -255,28 +256,29 @@ const data = await r.json();
   }
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-sm mx-auto mt-10 flex flex-col gap-4">
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={e => setEmail(e.target.value)}
-        required
-        className="border p-2"
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={e => setPassword(e.target.value)}
-        required
-        className="border p-2"
-      />
-      {error && <p className="text-red-500">{error}</p>}
-      <button disabled={pending} type="submit" className="bg-blue-600 text-white p-2 rounded">
-        {pending ? "Вхід..." : "Login"}
-      </button>
-    </form>
+    <LoginForm />
+    // <form onSubmit={handleSubmit} className="max-w-sm mx-auto mt-10 flex flex-col gap-4">
+    //   <input
+    //     type="email"
+    //     placeholder="Email"
+    //     value={email}
+    //     onChange={e => setEmail(e.target.value)}
+    //     required
+    //     className="border p-2"
+    //   />
+    //   <input
+    //     type="password"
+    //     placeholder="Password"
+    //     value={password}
+    //     onChange={e => setPassword(e.target.value)}
+    //     required
+    //     className="border p-2"
+    //   />
+    //   {error && <p className="text-red-500">{error}</p>}
+    //   <button disabled={pending} type="submit" className="bg-blue-600 text-white p-2 rounded">
+    //     {pending ? "Вхід..." : "Login"}
+    //   </button>
+    // </form>
   );
 }
 

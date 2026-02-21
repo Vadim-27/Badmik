@@ -1,0 +1,195 @@
+@use '../../../../styles/mixins' as *;
+
+$focus-ring: rgba(147, 197, 253, 0.35);
+
+.wrapper {
+  position: relative;
+}
+
+.form {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.fieldWide {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  display: block;
+  font-size: 14px;
+  color: var(--muted);
+  margin: 0 0 8px;
+}
+
+.req {
+  color: #e63946;
+}
+
+.input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--text);
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s, background 0.2s;
+  line-height: 1.4;
+
+  &:focus {
+    border-color: var(--focus);
+    box-shadow: 0 0 0 4px $focus-ring;
+  }
+}
+
+.errorInput {
+  border: 1px solid #e63946 !important;
+  background-color: #fff5f5;
+
+  &:focus {
+    box-shadow: 0 0 0 4px rgba(230, 57, 70, 0.2);
+  }
+}
+
+.errorText {
+  color: #e63946;
+  font-size: 12px;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+/* Combobox styles (same approach as memberships) */
+.comboRoot {
+  position: relative;
+}
+
+.inputChevron {
+  padding-right: 40px;
+}
+
+.comboChevron {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: auto;
+  color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  width: 24px;
+  border-radius: 8px;
+
+  &:hover {
+    background: #f1f5f9;
+  }
+}
+
+.options {
+  z-index: 999999;
+  max-height: 240px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
+}
+
+.option {
+  padding: 10px 12px;
+  box-sizing: border-box;
+  cursor: pointer;
+  font-size: 14px;
+  background: #fff;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid #f1f5f9;
+  }
+}
+
+.optionActive {
+  background: #eef3ff;
+}
+
+/* Switch (checkbox) */
+.switchRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  user-select: none;
+  margin-top: 4px;
+}
+
+.switchInput {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.switchTrack {
+  width: 52px;
+  height: 30px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(15, 23, 42, 0.06);
+  position: relative;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.switchThumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--border);
+  position: absolute;
+  top: 50%;
+  left: 3px;
+  transform: translateY(-50%);
+  transition: left 0.2s ease;
+}
+
+/* checked */
+.switchInput:checked + .switchTrack {
+  background: rgba(99, 102, 241, 0.18);
+  border-color: var(--border);
+}
+.switchInput:checked + .switchTrack .switchThumb {
+  left: 25px;
+}
+
+.switchText {
+  color: var(--text);
+  font-weight: 700;
+}
+
+/* overlay while loading */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: var(--radius);
+}
