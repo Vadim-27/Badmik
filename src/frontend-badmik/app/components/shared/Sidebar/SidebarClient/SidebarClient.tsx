@@ -80,7 +80,7 @@ export default function SidebarClient({ role, userId, email, isAdmin, clubId }: 
        <button
         className={styles.collapseBtn}
         onClick={toggleDrawer}
-        aria-label={open ? 'Закрити меню' : 'Відкрити меню'}
+         aria-label={open ? t('aria.closeMenu') : t('aria.openMenu')}
       >
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
           <path d={open ? 'M15 18l-6-6 6-6' : 'M9 6l6 6-6 6'} />
@@ -89,7 +89,7 @@ export default function SidebarClient({ role, userId, email, isAdmin, clubId }: 
 
       <nav className={styles.side}
         style={{ width: open ? drawerWidthOpen : drawerWidthClosed }}
-        aria-label="Навігація" >
+        aria-label={t('aria.navigation')} >
         {/* приклади; додай свої пункти */}
         <div className={styles.sideHead}>
           <div className={styles.logo}>
@@ -109,7 +109,7 @@ export default function SidebarClient({ role, userId, email, isAdmin, clubId }: 
 
         {/* Navigation */}
         <div className={styles.sideSec}>
-          <div className={styles.secTitle}>{open && 'Основне'}</div>
+          <div className={styles.secTitle}>{open && t('sections.main')}</div>
           <nav className={styles.navList}>
             <SidebarLink 
             href={buildHref('dashboard')} 
@@ -160,7 +160,7 @@ export default function SidebarClient({ role, userId, email, isAdmin, clubId }: 
                 <rect x="14" y="15" width="7" height="7" />
                 <rect x="3" y="15" width="7" height="7" />
               </svg>
-              {open && (<span>Локації</span>
+              {open && (<span>{t('Locations')}</span>
               )}
             </SidebarLink>
 
@@ -272,14 +272,14 @@ export default function SidebarClient({ role, userId, email, isAdmin, clubId }: 
 
 
         {/* Footer */}
-        {open && (
+        {/* {open && (
           <div className={styles.sideFoot}>
             <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
               <path d="M12 20l9-16H3l9 16z" />
             </svg>
             <span>Документація</span>
           </div>
-        )}
+        )} */}
       </nav>
     </aside>
   );
