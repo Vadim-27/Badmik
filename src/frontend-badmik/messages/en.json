@@ -180,6 +180,7 @@
     "buttons": {
       "addClub": "Add club",
       "addLocation": "Add location",
+      "editLocation": "Edit location",
       "addUser": "Add staff",
       "addPlayer": "Add Player",
       "addMembership": "Add membership",
@@ -351,6 +352,13 @@
     "label": "Label",
     "actions": "Actions"
   },
+  "labels": {
+  "New": "New",
+  "Popular": "Popular",
+  "Recommended": "Recommended",
+  "Promotion": "Promotion",
+  "Verified": "Verified"
+},
   "empty": "No locations to display.",
   "clubFallback": "Club without a name",
   "locationFallback": "Unnamed",
@@ -908,6 +916,13 @@
     "Clubs": "Clubs",
     "EditClub": "Edit Club",
     "AddClub": "Add Club"
+  },
+  "locationsBreadcrumbs": {
+    "Admin": "Admin",
+    "Locations": "Locations",
+    "EditLocation": "Edit Location",
+    "AddLocation": "Add Location",
+    "LocationDetails": "Location Details"
   },
   "playersBreadcrumbs": {
     "Admin": "Admin",

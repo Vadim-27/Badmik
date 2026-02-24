@@ -181,6 +181,7 @@
     "buttons": {
       "addClub": "Додати клуб",
       "addLocation": "Додати локацію",
+      "editLocation": "Редагувати локацію",
       "addUser": "Додати працівникика",
       "addPlayer": "Додати гравця",
       "addMembership": "Додати підписку",
@@ -417,6 +418,13 @@
     "label": "Мітка",
     "actions": "Дії"
   },
+  "labels": {
+  "New": "Нова",
+  "Popular": "Популярна",
+  "Recommended": "Рекомендована",
+  "Promotion": "Акція",
+  "Verified": "Перевірена"
+},
   "empty": "Немає локацій для відображення.",
   "clubFallback": "Клуб без назви",
   "locationFallback": "Без назви",
@@ -837,6 +845,13 @@
     "Clubs": "Клуби",
     "EditClub": "Редагування клубу",
     "AddClub": "Додати клуб"
+  },
+  "locationsBreadcrumbs": {
+    "Admin": "Адмін",
+    "Locations": "Локації",
+    "EditLocation": "Редагування локації",
+    "AddLocation": "Додати локацію",
+    "LocationDetails": "Деталі локації"
   },
   "staffBreadcrumbs": {
     "Admin": "Адмін",

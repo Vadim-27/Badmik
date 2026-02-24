@@ -22,6 +22,7 @@ const LocationsPage = async ({
   const state = await prefetch([
     locationsServerQueries.list(/* clubId */ undefined),
   ]);
+  const tBreadcrumb = await getTranslations({ locale, namespace: 'locationsBreadcrumbs' });
 
   return (
     <RQHydrate state={state}>
@@ -37,8 +38,8 @@ const LocationsPage = async ({
         </ActionHeader>
         <AppBreadcrumbs 
                       items={[
-                        { label: 'Admin', href: '/admin/dashboard' },
-                        { label: 'Locations' },
+                        { label: tBreadcrumb('Admin'), href: '/admin/dashboard' },
+                        { label: tBreadcrumb('Locations') },
                       ]}
                     />
        

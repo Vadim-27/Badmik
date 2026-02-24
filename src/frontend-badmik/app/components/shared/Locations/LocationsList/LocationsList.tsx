@@ -17,6 +17,7 @@ import TrashIcon from '@/app/assets/icons/Trash.svg';
 import ConfirmDialog from '@/app/components/ui/DeleteModal/ConfirmDialog';
 import SportsBadges from '@/app/components/ui/SportsBadges/SportsBadges';
 import Tooltip from '@/app/components/ui/Tooltip/Tooltip';
+import { useTranslations } from 'next-intl';
 
 type LocationsListProps = {
   clubId?: string;
@@ -35,6 +36,8 @@ const LocationsList = ({ clubId }: LocationsListProps) => {
     name?: string | null;
   } | null>(null);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+
+  const t = useTranslations('locationsList');
 
   useEffect(() => {
     const id = setTimeout(() => {
@@ -69,7 +72,7 @@ const LocationsList = ({ clubId }: LocationsListProps) => {
     const map: Record<string, string> = {};
     clubs.forEach((c) => {
       if (!c?.id) return;
-      map[c.id] = c.name || 'Клуб без назви';
+      map[c.id] = c.name || t('clubFallback');
     });
     return map;
   }, [clubs, isClubScoped]);
@@ -123,38 +126,42 @@ const LocationsList = ({ clubId }: LocationsListProps) => {
       {/* Фільтри: Клуб + Статус + Пошук */}
       <div className={styles.filterBar}>
        {!isClubScoped && <div className={styles.filterGroup}>
-          <span className={styles.filterLabelUpper}>КЛУБ</span>
+          <span className={styles.filterLabelUpper}>{t('filters.club')}</span>
           <select
             className={styles.filterSelect}
             value={clubFilter}
             onChange={(e) => setClubFilter(e.target.value)}
           >
-            <option value="all">Усі клуби</option>
+            <option value="all">{t('filters.clubsAll')}</option>
             {clubs.map((club) => (
               <option key={club.id} value={club.id}>
-                {club.name || 'Клуб без назви'}
+                {club.name || t('clubFallback')}
               </option>
             ))}
           </select>
         </div>}
+        
+
+
+
 
         <div className={styles.filterGroup}>
-          <span className={styles.filterLabelUpper}>СТАТУС</span>
+          <span className={styles.filterLabelUpper}>{t('filters.status')}</span>
           <select
             className={styles.filterSelect}
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as any)}
           >
-            <option value="all">Усі</option>
-            <option value="active">Активні</option>
-            <option value="inactive">Неактивні</option>
+            <option value="all">{t('filters.statusAll')}</option>
+            <option value="active">{t('filters.statusActive')}</option>
+            <option value="inactive">{t('filters.statusInactive')}</option>
           </select>
         </div>
 
         <input
           className={styles.searchInput}
           type="text"
-          placeholder="Пошук за назвою або адресою..."
+          placeholder={t('filters.searchPlaceholder')}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
@@ -167,13 +174,24 @@ const LocationsList = ({ clubId }: LocationsListProps) => {
           <table className={styles.table}>
             <thead>
               <tr>
-                <th className={styles.colLocation}>Локація</th>
+                {/* <th className={styles.colLocation}>Локація</th>
                 <th className={styles.colAddress}>Адреса</th>
                { !isClubScoped && <th className={styles.colClub}>Клуб</th>}
                 <th className={styles.colSports}>Види спорту</th>
                 <th className={styles.colStatus}>Статус</th>
                 <th className={styles.colLabel}>Мітка</th>
-                <th className={styles.colActions}>Дії</th>
+                <th className={styles.colActions}>Дії</th> */}
+                <th className={styles.colLocation}>{t('table.location')}</th>
+<th className={styles.colAddress}>{t('table.address')}</th>
+
+{!isClubScoped && (
+  <th className={styles.colClub}>{t('table.club')}</th>
+)}
+
+<th className={styles.colSports}>{t('table.sports')}</th>
+<th className={styles.colStatus}>{t('table.status')}</th>
+<th className={styles.colLabel}>{t('table.label')}</th>
+<th className={styles.colActions}>{t('table.actions')}</th>
               </tr>
             </thead>
 
@@ -181,7 +199,7 @@ const LocationsList = ({ clubId }: LocationsListProps) => {
               {filtered.length === 0 ? (
                 <tr>
                   <td colSpan={7} className={styles.emptyState}>
-                    Немає локацій для відображення.
+                    {t('empty')}
                   </td>
                 </tr>
               ) : (
@@ -201,9 +219,9 @@ const LocationsList = ({ clubId }: LocationsListProps) => {
                     <tr key={loc.id}>
                       {/* Локація */}
                       <td>
-                        <div className={styles.locationName}>{loc.name || 'Без назви'}</div>
+                        <div className={styles.locationName}>{loc.name || t('locationFallback')}</div>
                         {loc.priceText && (
-                          <div className={styles.locationSub}>Ціна: {loc.priceText}</div>
+                          <div className={styles.locationSub}>{t('price.prefix')}: {loc.priceText}</div>
                         )}
                       </td>
 
@@ -228,14 +246,14 @@ const LocationsList = ({ clubId }: LocationsListProps) => {
                         <span
                           className={loc.isActive ? styles.statusActive : styles.statusInactive}
                         >
-                          {loc.isActive ? 'Активна' : 'Неактивна'}
+                           {loc.isActive ? t('status.active') : t('status.inactive')}
                         </span>
                       </td>
 
                       {/* Мітка */}
                       <td>
                         {loc.label && loc.label !== 'None' ? (
-                          <span className={styles.labelPill}>{loc.label}</span>
+                          <span className={styles.labelPill}>{t(`labels.${loc.label}`)}</span>
                         ) : (
                           '—'
                         )}
@@ -244,34 +262,34 @@ const LocationsList = ({ clubId }: LocationsListProps) => {
                       {/* Дії */}
                       <td>
                         <div className={styles.actionsWrapper}>
-                          <Tooltip content="Переглянути">
-                            <Link
-                              href={`/admin/${loc.clubId}/locations/${loc.id}`}
-                              className={styles.iconBtn}
-                              title="Переглянути"
-                              aria-label="Переглянути"
-                            >
+                          <Tooltip content={t('tooltips.view')}>
+  <Link
+    href={`/admin/${loc.clubId}/locations/${loc.id}`}
+    className={styles.iconBtn}
+    title={t('actionsAria.view')}
+    aria-label={t('actionsAria.view')}
+  >
                               <EyeIcon className={styles.icon} aria-hidden />
                             </Link>
                           </Tooltip>
 
-                          <Tooltip content="Редагувати">
+                          <Tooltip content={t('tooltips.edit')}>
                             <Link
                               href={`/admin/${loc.clubId}/locations/${loc.id}/edit-location`}
                               className={styles.iconBtn}
-                              title="Редагувати"
-                              aria-label="Редагувати"
+                              title={t('actionsAria.edit')}
+                              aria-label={t('actionsAria.edit')}
                             >
                               <EditIcon className={styles.icon} aria-hidden />
                             </Link>
                           </Tooltip>
 
-                          <Tooltip content="Видалити">
+                          <Tooltip content={t('tooltips.delete')}>
                             <button
                               type="button"
                               className={styles.iconBtn}
-                              title="Видалити"
-                              aria-label="Видалити"
+                              title={t('actionsAria.delete')}
+                              aria-label={t('actionsAria.delete')}
                               onClick={() => askDelete(loc.id, loc.name)}
                               disabled={deleteLocation.isPending}
                             >
@@ -290,17 +308,17 @@ const LocationsList = ({ clubId }: LocationsListProps) => {
       </div>
 
       <ConfirmDialog
-        open={isConfirmOpen}
-        title="Видалити локацію"
-        message={`Ви дійсно бажаєте видалити локацію "${
-          locationToDelete?.name || 'без назви'
-        }"? Дію не можна буде скасувати.`}
-        confirmLabel="Так, видалити"
-        cancelLabel="Ні"
-        onConfirm={handleConfirmDelete}
-        onCancel={handleCancelDelete}
-        isLoading={deleteLocation.isPending}
-      />
+  open={isConfirmOpen}
+  title={t('confirm.title')}
+  message={t('confirm.message', {
+    name: locationToDelete?.name || t('confirm.fallbackName'),
+  })}
+  confirmLabel={t('confirm.confirmLabel')}
+  cancelLabel={t('confirm.cancelLabel')}
+  onConfirm={handleConfirmDelete}
+  onCancel={handleCancelDelete}
+  isLoading={deleteLocation.isPending}
+/>
     </div>
   );
 };

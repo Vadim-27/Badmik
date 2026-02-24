@@ -81,6 +81,8 @@ const AddLocation = ({ clubIdParams }: { clubIdParams?: string }) => {
     const sports = buildSports(v);
     const amenities = buildAmenities(v);
 
+    
+
     const payload: CreateLocationDto = {
       clubId: v.clubId,
       name: v.name?.trim() || null,
@@ -127,6 +129,7 @@ const AddLocation = ({ clubIdParams }: { clubIdParams?: string }) => {
     formRef.current?.submit();
   };
   const isClubScoped = Boolean(clubIdParams);
+  const tBreadcrumb = useTranslations('locationsBreadcrumbs');
 
   return (
     <div className="font-geist-sans">
@@ -147,9 +150,9 @@ const AddLocation = ({ clubIdParams }: { clubIdParams?: string }) => {
       <div className={css.wrapperBreadcrumbs}>
         <AppBreadcrumbs
           items={[
-            { label: 'Admin', href: '/admin/dashboard' },
-            { label: 'Locations', href: '/admin/locations' },
-            { label: 'Add Location' },
+            { label: tBreadcrumb('Admin'), href: '/admin/dashboard' },
+            { label: tBreadcrumb('Locations'), href: '/admin/locations' },
+            { label: tBreadcrumb('AddLocation') },
           ]}
         />
       </div>

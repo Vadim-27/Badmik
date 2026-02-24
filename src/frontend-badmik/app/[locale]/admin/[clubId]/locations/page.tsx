@@ -26,6 +26,7 @@ const LocationsPage = async ({
 ) => {
     const {  locale, clubId } = await params;
   const t = await getTranslations({locale, namespace: 'ActionHeader.title'});
+  const tBreadcrumb = await getTranslations({ locale, namespace: 'locationsBreadcrumbs' });
  
 
   const state = await prefetch([
@@ -48,8 +49,8 @@ const LocationsPage = async ({
         </ActionHeader>
         <AppBreadcrumbs 
                       items={[
-                        { label: 'Admin', href: '/admin/dashboard' },
-                        { label: 'Locations' },
+                        { label: tBreadcrumb('Admin'), href: '/admin/dashboard' },
+                        { label: tBreadcrumb('Locations') },
                       ]}
                     />
        
