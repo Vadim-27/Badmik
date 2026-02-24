@@ -23,6 +23,7 @@ import type { WorkingHoursDto, TimeRangeDto } from '@/services/types/working-hou
 import SportsSelector from './SportsSelector/SportsSelector';
 import AmenitiesSelector from './AmenitiesSelector/AmenitiesSelector';
 import ClubReadonlyField from '@/app/components/ui/InputSelectClubs/ClubReadonlyField/ClubReadonlyField';
+import { useTranslations } from 'next-intl';
 
 export type LocationLabel =
   | 'None'
@@ -89,14 +90,24 @@ export type LocationFormHandle = {
   getValues?: () => LocationFormValues;
 };
 
-const LABEL_OPTIONS: { value: LocationLabel | ''; label: string }[] = [
-  { value: '',           label: 'None' },
-  { value: 'New',        label: 'New' },
-  { value: 'Popular',    label: 'Popular' },
-  { value: 'Recommended', label: 'Recommended' },
-  { value: 'Promotion',  label: 'Promotion' },
-  { value: 'Verified',   label: 'Verified' },
+// const LABEL_OPTIONS: { value: LocationLabel | ''; label: string }[] = [
+//   { value: '',           label: 'None' },
+//   { value: 'New',        label: 'New' },
+//   { value: 'Popular',    label: 'Popular' },
+//   { value: 'Recommended', label: 'Recommended' },
+//   { value: 'Promotion',  label: 'Promotion' },
+//   { value: 'Verified',   label: 'Verified' },
+// ];
+
+const LABEL_OPTIONS: { value: LocationLabel | ''; labelKey: string }[] = [
+  { value: '',             labelKey: 'None' },
+  { value: 'New',          labelKey: 'New' },
+  { value: 'Popular',      labelKey: 'Popular' },
+  { value: 'Recommended',  labelKey: 'Recommended' },
+  { value: 'Promotion',    labelKey: 'Promotion' },
+  { value: 'Verified',     labelKey: 'Verified' },
 ];
+
 
 const EMPTY_WORKING_HOURS: WorkingHoursDto = {
   monday:    { from: null, to: null },
@@ -140,6 +151,10 @@ const LocationForm = forwardRef<LocationFormHandle, Props>(function LocationForm
     isClubScoped, },
   ref
 ) {
+
+  const t = useTranslations('locationForm');
+const tLabels = useTranslations('locationLabels');
+
   const {
     register,
     handleSubmit,
@@ -281,7 +296,7 @@ const LocationForm = forwardRef<LocationFormHandle, Props>(function LocationForm
             <div className={styles.formGrid}>
               <div>
                 <label className={styles.label}>
-                  Клуб <span style={{ color: '#e63946' }}>*</span>
+                  {t('fields.club')} <span style={{ color: '#e63946' }}>*</span>
                 </label>
                   {isClubScoped ? (
                   // 🔹 Адмін КОНКРЕТНОГО клубу: клуб зафіксований, без вибору
@@ -311,17 +326,17 @@ const LocationForm = forwardRef<LocationFormHandle, Props>(function LocationForm
               </div>
 
               <div>
-                <label className={styles.label}>Мітка (label)</label>
-                <select
-                  className={`${styles.select} ${errors.label ? styles.errorInput : ''}`}
-                  {...register('label')}
-                >
-                  {LABEL_OPTIONS.map((opt) => (
-                    <option key={opt.value || 'none'} value={opt.value}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
+                <label className={styles.label}>{t('fields.label')}</label>
+<select
+  className={`${styles.select} ${errors.label ? styles.errorInput : ''}`}
+  {...register('label')}
+>
+  {LABEL_OPTIONS.map((opt) => (
+    <option key={opt.value || 'none'} value={opt.value}>
+      {tLabels(opt.labelKey)}
+    </option>
+  ))}
+</select>
                 {errors.label && (
                   <p className={styles.errorText}>{errors.label.message as string}</p>
                 )}
@@ -332,31 +347,31 @@ const LocationForm = forwardRef<LocationFormHandle, Props>(function LocationForm
             <div className={styles.formGrid}>
               <div>
                 <label className={styles.label}>
-                  Назва локації <span style={{ color: '#e63946' }}>*</span>
+                 {t('fields.name')} <span style={{ color: '#e63946' }}>*</span>
                 </label>
                 <input
                   className={`${styles.input} ${errors.name ? styles.errorInput : ''}`}
                   {...register('name', {
-                    required: 'Обовʼязково',
-                    minLength: { value: 2, message: 'Занадто коротка назва' },
-                    maxLength: { value: 120, message: 'Занадто довга назва' },
-                  })}
-                  placeholder="Badmik Оболонь"
+    required: t('validation.required'),
+    minLength: { value: 2, message: t('validation.name.min') },
+    maxLength: { value: 120, message: t('validation.name.max') },
+  })}
+  placeholder={t('placeholders.name')}
                 />
                 {errors.name && <p className={styles.errorText}>{errors.name.message}</p>}
               </div>
 
               <div>
                 <label className={styles.label}>
-                  Місто <span style={{ color: '#e63946' }}>*</span>
+                 {t('fields.city')} <span style={{ color: '#e63946' }}>*</span>
                 </label>
                 <input
                   className={`${styles.input} ${errors.city ? styles.errorInput : ''}`}
                   {...register('city', {
-                    required: 'Обовʼязково',
-                    maxLength: { value: 80, message: 'Занадто довга назва міста' },
-                  })}
-                  placeholder="Київ"
+    required: t('validation.required'),
+    maxLength: { value: 80, message: t('validation.city.max') },
+  })}
+  placeholder={t('placeholders.city')}
                 />
                 {errors.city && <p className={styles.errorText}>{errors.city.message}</p>}
               </div>
@@ -365,16 +380,16 @@ const LocationForm = forwardRef<LocationFormHandle, Props>(function LocationForm
             {/* Адреса — повна ширина */}
             <div>
               <label className={styles.label}>
-                Адреса <span style={{ color: '#e63946' }}>*</span>
+                {t('fields.address')} <span style={{ color: '#e63946' }}>*</span>
               </label>
               <input
                 className={`${styles.input} ${errors.address ? styles.errorInput : ''}`}
                 {...register('address', {
-                  required: 'Обовʼязково',
-                  minLength: { value: 5, message: 'Занадто коротка адреса' },
-                  maxLength: { value: 200, message: 'Занадто довга адреса' },
-                })}
-                placeholder="просп. Оболонський, 16-Б"
+    required: t('validation.required'),
+    minLength: { value: 5, message: t('validation.address.min') },
+    maxLength: { value: 200, message: t('validation.address.max') },
+  })}
+  placeholder={t('placeholders.address')}
               />
               {errors.address && <p className={styles.errorText}>{errors.address.message}</p>}
             </div>
@@ -382,34 +397,34 @@ const LocationForm = forwardRef<LocationFormHandle, Props>(function LocationForm
             {/* Ціна + Порядок + Активність */}
             <div className={styles.row3}>
               <div>
-                <label className={styles.label}>Ціна (текстова)</label>
+                <label className={styles.label}>{t('fields.priceText')}</label>
                 <input
                   className={`${styles.input} ${errors.priceText ? styles.errorInput : ''}`}
                   {...register('priceText', {
-                    maxLength: { value: 60, message: 'Занадто довгий текст' },
-                  })}
-                  placeholder="від 500 ₴"
+    maxLength: { value: 60, message: t('validation.priceText.max') },
+  })}
+  placeholder={t('placeholders.priceText')}
                 />
                 {errors.priceText && <p className={styles.errorText}>{errors.priceText.message}</p>}
               </div>
 
               <div>
-                <label className={styles.label}>Порядок</label>
+                <label className={styles.label}>{t('fields.order')}</label>
                 <input
                   type="number"
                   min={1}
                   className={`${styles.input} ${errors.order ? styles.errorInput : ''}`}
                   {...register('order', {
-                    valueAsNumber: true,
-                    min: { value: 1, message: 'Мінімум 1' },
-                  })}
+    valueAsNumber: true,
+    min: { value: 1, message: t('validation.order.min') },
+  })}
                   onWheel={(e) => e.currentTarget.blur()}
                 />
                 {errors.order && <p className={styles.errorText}>{errors.order.message}</p>}
               </div>
 
               <div className={styles.activeRow}>
-                <label className={styles.label}>Локація</label>
+                <label className={styles.label}>{t('fields.activity')}</label>
 
                 <div className={styles.radioGroup}>
                   <label
@@ -423,7 +438,7 @@ const LocationForm = forwardRef<LocationFormHandle, Props>(function LocationForm
                       checked={getValues('isActive') === true}
                       onChange={() => setValue('isActive', true, { shouldDirty: true })}
                     />
-                    Активна
+                    {t('statusRadio.active')}
                   </label>
 
                   <label
@@ -437,7 +452,7 @@ const LocationForm = forwardRef<LocationFormHandle, Props>(function LocationForm
                       checked={getValues('isActive') === false}
                       onChange={() => setValue('isActive', false, { shouldDirty: true })}
                     />
-                    Неактивна
+                    {t('statusRadio.inactive')}
                   </label>
                 </div>
               </div>
@@ -458,16 +473,16 @@ const LocationForm = forwardRef<LocationFormHandle, Props>(function LocationForm
 
             {/* Короткий опис */}
             <div>
-              <label className={styles.label}>Короткий опис</label>
+              <label className={styles.label}>{t('fields.shortDescription')}</label>
               <textarea
                 rows={4}
                 className={`${styles.textarea} ${
                   errors.shortDescription ? styles.errorInput : ''
                 }`}
-                placeholder="Короткий текст, який буде показано на картці локації…"
-                {...register('shortDescription', {
-                  maxLength: { value: 600, message: 'До 600 символів' },
-                })}
+                 placeholder={t('placeholders.shortDescription')}
+  {...register('shortDescription', {
+    maxLength: { value: 600, message: t('validation.shortDescription.max') },
+  })}
               />
               {errors.shortDescription && (
                 <p className={styles.errorText}>{errors.shortDescription.message as string}</p>

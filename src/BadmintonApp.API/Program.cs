@@ -1,5 +1,7 @@
-﻿using BadmintonApp.API.Middlewares;
+﻿using BadmintonApp.API.Auth;
+using BadmintonApp.API.Middlewares;
 using BadmintonApp.Application;
+using BadmintonApp.Application.Interfaces.Auth;
 using BadmintonApp.Domain.Logs;
 using BadmintonApp.Infrastructure;
 using BadmintonApp.Infrastructure.Logger;
@@ -13,6 +15,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -65,9 +68,10 @@ builder.Services.AddSwaggerGen(opt =>
     });
 });
 
-builder.Services
-    .AddControllers();
+builder.Services.AddControllers();
 
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUserContext, CurrentUserContext>();
 
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
@@ -118,9 +122,17 @@ builder.Services.AddCors(o =>
 
 var app = builder.Build();
 
+var mediaRoot = builder.Configuration["Media:RootPath"];
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(mediaRoot),
+    RequestPath = "/media"
+});
+
 app.UseMiddleware<ExceptionMiddleware>();
 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
@@ -134,17 +146,21 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-using (var scope = app.Services.CreateScope())
+
+if (!app.Environment.IsDevelopment())
 {
-    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    var retries = 5;
-    while (retries-- > 0)
+    using (var scope = app.Services.CreateScope())
     {
-        try { db.Database.Migrate(); break; }
-        catch (Exception ex)
+        var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var retries = 5;
+        while (retries-- > 0)
         {
-            Console.WriteLine($"Migration failed: {ex.Message}. Retrying...");
-            await Task.Delay(2000);
+            try { db.Database.Migrate(); break; }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Migration failed: {ex.Message}. Retrying...");
+                await Task.Delay(2000);
+            }
         }
     }
 }
@@ -155,8 +171,6 @@ app.MapPost("/__migrate", async (HttpContext ctx, IServiceScopeFactory scopeFact
 {
     var tokenHeader = ctx.Request.Headers["X-Migrate-Token"].ToString();
     var tokenConfig = cfg["MIGRATE_TOKEN"];
-    //if (string.IsNullOrEmpty(tokenConfig) || tokenHeader != tokenConfig)
-    //    return Results.Unauthorized();
 
     try
     {

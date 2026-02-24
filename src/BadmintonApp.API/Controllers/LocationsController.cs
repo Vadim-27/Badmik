@@ -70,5 +70,12 @@ namespace BadmintonApp.API.Controllers
             await _locationsService.DeleteAsync(id, cancellationToken);
             return NoContent();
         }
+
+        [HttpGet("")]
+        public async Task<ActionResult<List<LocationResultDto>>> GetAll(CancellationToken cancellationToken)
+        {
+            var result = await _locationsService.GetAllAsync(cancellationToken);
+            return Ok(result);
+        }
     }
 }

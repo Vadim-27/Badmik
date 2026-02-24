@@ -1,12 +1,14 @@
 ﻿using BadmintonApp.Application.Interfaces.Auth;
 using BadmintonApp.Application.Interfaces.Clubs;
 using BadmintonApp.Application.Interfaces.Logs;
+using BadmintonApp.Application.Interfaces.Media;
 using BadmintonApp.Application.Interfaces.Repositories;
 using BadmintonApp.Application.Interfaces.Transactions;
 using BadmintonApp.Application.Interfaces.Users;
 using BadmintonApp.Application.Services;
 using BadmintonApp.Domain.Core;
 using BadmintonApp.Infrastructure.Auth;
+using BadmintonApp.Infrastructure.Media;
 using BadmintonApp.Infrastructure.Persistence;
 using BadmintonApp.Infrastructure.Persistence.Repositories;
 using Microsoft.AspNetCore.Identity;
@@ -38,11 +40,21 @@ namespace BadmintonApp.Infrastructure
             services.AddScoped<IPermissionRepository, PermissionRepository>();
             services.AddScoped<IPlayerRepository, PlayerRepository>();
             services.AddScoped<IStaffRepository, StaffRepository>();
-            services.AddScoped<ITrainingsRepository, TrainingsRepository>();
             services.AddScoped<ITransactionService, TransactionService>();
             services.AddScoped<IWorkingHourRepository, WorkingHourRepository>();
             services.AddScoped<ILocationRepository, LocationRepository>();
             services.AddScoped<ICourtsRepository, CourtsRepository>();
+            services.AddScoped<IMediaRepository, MediaRepository>();
+            services.AddScoped<IMediaStorage, FileSystemMediaStorage>();
+            services.AddScoped<IPlayerMembershipRepository, PlayerMembershipRepository>();
+            services.Configure<BadmintonApp.Infrastructure.Media.MediaOptions>(configuration.GetSection("Media"));
+            services.AddScoped<IClubSettingsRepository, ClubSettingsRepository>();
+            services.AddScoped<IClubMembershipPlanRepository, ClubMembershipPlanRepository>();
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
+            services.AddScoped<ITrainingSessionRepository, TrainingSessionRepository>();
+            services.AddScoped<ITrainingScheduleRepository, TrainingScheduleRepository>();
+            services.AddScoped<ITrainingBookingRepository, TrainingBookingRepository>();
+
 
             return services;
         }

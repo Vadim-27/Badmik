@@ -42,10 +42,6 @@ namespace BadmintonApp.Infrastructure.Persistence.Configurations
 
             builder.Property(u => u.CreatedAt)
                 .IsRequired();
-
-            builder.Property(u => u.ImageUrl)
-                //.IsRequired()
-                .HasMaxLength(300);
         }
     }
 }

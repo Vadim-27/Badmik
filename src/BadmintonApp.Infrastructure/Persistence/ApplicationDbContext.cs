@@ -2,9 +2,11 @@
 using BadmintonApp.Domain.Core;
 using BadmintonApp.Domain.Enums.Permission;
 using BadmintonApp.Domain.Logs;
+using BadmintonApp.Domain.Payments;
 using BadmintonApp.Domain.Players;
 using BadmintonApp.Domain.Trainings;
 using BadmintonApp.Domain.WorkingHours;
+using BadmintonApp.Infrastructure.Persistence.Configurations;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -43,9 +45,10 @@ namespace BadmintonApp.Infrastructure.Persistence
             modelBuilder.Entity<StaffClubRole>().HasKey(c => new
             {
                 c.StaffId,
-                c.RoleId,
-                c.ClubId
+                c.RoleId
             });
+            modelBuilder.Entity<TrainingScheduleLevel>().HasKey(x => new { x.TrainingScheduleId, x.Level });
+            modelBuilder.Entity<TrainingSessionLevel>().HasKey(x => new { x.TrainingSessionId, x.Level });
 
             modelBuilder.Entity<Location>(e =>
             {
@@ -87,9 +90,58 @@ namespace BadmintonApp.Infrastructure.Persistence
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
+            modelBuilder.Entity<PlayerSportProfile>(b =>
+            {
+                b.HasKey(x => new { x.PlayerId, x.Sport });
+
+                b.HasOne(x => x.Player)
+                    .WithMany(p => p.SportProfiles)
+                    .HasForeignKey(x => x.PlayerId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<PlayerSubscription>(b =>
+            {
+                b.HasKey(x => new { x.FollowerPlayerId, x.FollowingPlayerId });
+
+                b.HasOne(x => x.FollowerPlayer)
+                    .WithMany(p => p.Following)
+                    .HasForeignKey(x => x.FollowerPlayerId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                b.HasOne(x => x.FollowingPlayer)
+                    .WithMany(p => p.Followers)
+                    .HasForeignKey(x => x.FollowingPlayerId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                b.HasIndex(x => x.FollowingPlayerId);
+                b.HasIndex(x => x.FollowerPlayerId);
+            });
+
+            modelBuilder.Entity<PlayerFavoriteLocation>(b =>
+            {
+                b.HasKey(x => x.Id);
+                b.HasIndex(x => new { x.PlayerId, x.LocationId }).IsUnique();
+            });
+
+            modelBuilder.Entity<ClubSettings>()
+                .HasKey(x => x.ClubId);
+
+            modelBuilder.Entity<ClubSettings>()
+                .HasOne(x => x.Club)
+                .WithOne() 
+                .HasForeignKey<ClubSettings>(x => x.ClubId);
+
+
             SeedData(modelBuilder);            
 
             base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfiguration(new MediaConfiguration());
+            modelBuilder.ApplyConfiguration(new TrainingBookingConfiguration());
+            modelBuilder.ApplyConfiguration(new PaymentConfiguration());
+            modelBuilder.ApplyConfiguration(new PlayerClubMembershipConfiguration());
+            modelBuilder.ApplyConfiguration(new ClubMembershipPlanConfiguration());
+            
         }
 
         public DbSet<RolePermission> RolePermissions { get; set; }
@@ -97,9 +149,6 @@ namespace BadmintonApp.Infrastructure.Persistence
         public DbSet<Club> Clubs => Set<Club>();
         public DbSet<StaffClubRole> StaffClubRoles => Set<StaffClubRole>();
         public DbSet<WorkingHour> WorkingHours => Set<WorkingHour>();
-        public DbSet<Training> Trainings => Set<Training>();
-        public DbSet<TrainingParticipant> TrainingParticipants => Set<TrainingParticipant>();
-        public DbSet<TrainingQueueEntry> TrainingQueueEntries => Set<TrainingQueueEntry>();
         public DbSet<Permission> Permissions => Set<Permission>();
         public DbSet<Role> Roles => Set<Role>();
         public DbSet<Log> Logs => Set<Log>();
@@ -109,7 +158,16 @@ namespace BadmintonApp.Infrastructure.Persistence
         public DbSet<Court> Courts => Set<Court>();
         public DbSet<LocationAmenity> LocationAmenities => Set<LocationAmenity>();
         public DbSet<LocationImage> LocationImages => Set<LocationImage>();
-
+        public DbSet<Domain.Media.MediaItem> Media => Set<Domain.Media.MediaItem>();
+        public DbSet<PlayerSportProfile> PlayerSportProfiles => Set<PlayerSportProfile>();
+        public DbSet<PlayerSubscription> PlayerSubscriptions => Set<PlayerSubscription>();
+        public DbSet<PlayerClubMembership> PlayerClubMemberships => Set<PlayerClubMembership>();
+        public DbSet<ClubSettings> ClubSettings => Set<ClubSettings>();
+        public DbSet<ClubMembershipPlan> ClubMembershipPlans => Set<ClubMembershipPlan>();
+        public DbSet<TrainingSession> TrainingSessions => Set<TrainingSession>();
+        public DbSet<TrainingSchedule> TrainingSchedules => Set<TrainingSchedule>();
+        public DbSet<TrainingBooking> TrainingBookings => Set<TrainingBooking>();
+        public DbSet<Payment> Payments => Set<Payment>();
 
         private void SeedData(ModelBuilder modelBuilder)
         {

@@ -31,9 +31,7 @@ namespace BadmintonApp.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ClubResultDto>> Create(
-        [FromBody] CreateClubDto dto,
-        CancellationToken cancellationToken)
+        public async Task<ActionResult<ClubResultDto>> Create([FromBody] CreateClubDto dto, CancellationToken cancellationToken)
         {
             // All validation is done inside the service (FluentValidation)
             var result = await _clubsService.CreateAsync(dto, cancellationToken);
@@ -43,19 +41,14 @@ namespace BadmintonApp.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ClubResultDto>>> GetAll(
-        [FromQuery] string? filter,
-        CancellationToken cancellationToken)
+        public async Task<ActionResult<List<ClubResultDto>>> GetAll([FromQuery] string? filter, CancellationToken cancellationToken)
         {
             var result = await _clubsService.GetAllAsync(filter, cancellationToken);
             return Ok(result);
         }
 
         [HttpPut("{id:guid}")]
-        public async Task<ActionResult<ClubResultDto>> Update(
-        Guid id,
-        [FromBody] UpdateClubDto dto,
-        CancellationToken cancellationToken)
+        public async Task<ActionResult<ClubResultDto>> Update(Guid id, [FromBody] UpdateClubDto dto, CancellationToken cancellationToken)
         {
             // Validation is done inside the service
             var result = await _clubsService.UpdateAsync(id, dto, cancellationToken);
@@ -63,9 +56,7 @@ namespace BadmintonApp.API.Controllers
         }
 
         [HttpGet("{id:guid}")]
-        public async Task<ActionResult<ClubResultDto>> GetById(
-        Guid id,
-        CancellationToken cancellationToken)
+        public async Task<ActionResult<ClubResultDto>> GetById(Guid id, CancellationToken cancellationToken)
         {
             var clubs = await _clubsService.GetAllAsync(null, cancellationToken);
             var club = clubs.FirstOrDefault(c => c.Id == id);
@@ -77,18 +68,14 @@ namespace BadmintonApp.API.Controllers
         }
 
         [HttpDelete("{id:guid}")]
-        public async Task<IActionResult> Delete(
-        Guid id,
-        CancellationToken cancellationToken)
+        public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
         {
             await _clubsService.DeleteAsync(id, cancellationToken);
             return NoContent(); // 204
         }
 
         [HttpPost("{id:guid}/deactivate")]
-        public async Task<IActionResult> Deactivate(
-        Guid id,
-        CancellationToken cancellationToken)
+        public async Task<IActionResult> Deactivate(Guid id, CancellationToken cancellationToken) 
         {
             await _clubsService.DeactivateAsync(id, cancellationToken);
             return NoContent();

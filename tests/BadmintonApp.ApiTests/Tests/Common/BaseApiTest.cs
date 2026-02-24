@@ -55,4 +55,31 @@ public abstract class BaseApiTest : IClassFixture<CustomWebApplicationFactory>, 
     }
 
     public virtual Task DisposeAsync() => Task.CompletedTask;
+
+    protected async Task<HttpClient> CreateBearerClientAsync(string email, string password)
+    {
+        var external = TestConfig.GetApiBaseUrl();
+
+        var client = external is null
+            ? Factory.CreateClientWithBasePath()
+            : new HttpClient { BaseAddress = external };
+
+        var cacheKey = $"token:{email}";
+        if (!TokenCache.TryGet(cacheKey, out var token))
+        {
+            token = await AuthClient.LoginAndGetTokenAsync(client, email, password);
+            TokenCache.Set(cacheKey, token);
+        }
+
+        client.WithBearer(token);
+        return client;
+    }
+
+    protected Task<HttpClient> CreateOtherClubAdminClientAsync()
+    {
+        var (email, pwd) = TestConfig.GetClub1AdminCreds(); 
+        return CreateBearerClientAsync(email, pwd);
+    }
+
+
 }

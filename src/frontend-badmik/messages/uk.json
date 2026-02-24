@@ -38,6 +38,7 @@
     "DashboardMain": "Дашбоард",
     "Workout": "Тренування",
     "Clubs": "Клуби",
+    "Locations": "Локації",
     "UsersClub": "Гравці клубу",
     "ClubMembershipPlans": "Абонементи клубу",
     "Players": "Гравці",
@@ -46,7 +47,15 @@
     "Messages": "Повідомлення",
     "News": "Новини",
     "Analytics": "Звіти",
-    "Log": "Логи"
+    "Log": "Логи",
+      "sections": {
+    "main": "Основне"
+  },
+  "aria": {
+    "navigation": "Навігація",
+    "openMenu": "Відкрити меню",
+    "closeMenu": "Закрити меню"
+  }
   },
   "AddTraining": {
     "Club": "Клуб",
@@ -172,6 +181,7 @@
     "buttons": {
       "addClub": "Додати клуб",
       "addLocation": "Додати локацію",
+      "editLocation": "Редагувати локацію",
       "addUser": "Додати працівникика",
       "addPlayer": "Додати гравця",
       "addMembership": "Додати підписку",
@@ -202,6 +212,120 @@
       "description": "Ви дійсно хочете видалити цей клуб?"
     }
   },
+  "clubsList": {
+  "filterLabel": "Фільтр",
+  "filters": {
+    "all": "Усі клуби",
+    "active": "Активні",
+    "inactive": "Неактивні"
+  },
+  "searchPlaceholder": "Пошук за назвою або містом...",
+  "table": {
+    "club": "Клуб",
+    "city": "Місто",
+    "alias": "Alias",
+    "contacts": "Контакти",
+    "locations": "Локації",
+    "order": "Порядок",
+    "status": "Статус",
+    "actions": "Дії"
+  },
+  "empty": "Немає клубів для відображення.",
+  "status": {
+    "active": "Активний",
+    "inactive": "Неактивний"
+  },
+  "tooltips": {
+    "viewClub": "Переглянути клуб",
+    "editClub": "Редагувати клуб",
+    "deleteClub": "Видалити клуб"
+  },
+  "actionsAria": {
+    "view": "Переглянути",
+    "edit": "Редагувати",
+    "delete": "Видалити"
+  },
+  "confirm": {
+    "title": "Видалити клуб",
+    "message": "Ви дійсно бажаєте видалити клуб \"{name}\"? Дію не можна буде скасувати.",
+    "fallbackName": "без назви",
+    "confirmLabel": "Так, видалити",
+    "cancelLabel": "Ні"
+  }
+},
+"clubDetails": {
+  "titleFallback": "Клуб без назви",
+  "status": {
+    "active": "Активний",
+    "inactive": "Неактивний"
+  },
+  "labels": {
+    "name": "Назва",
+    "alias": "Alias",
+    "city": "Місто",
+    "address": "Адреса",
+    "phone": "Телефон",
+    "email": "Email",
+    "website": "Сайт",
+    "description": "Опис",
+    "locations": "Локації"
+  },
+  "fallback": {
+    "dash": "—",
+    "noDescription": "Опис відсутній"
+  }
+},
+"clubForm": {
+  "labels": {
+    "name": "Назва клубу",
+    "alias": "Alias",
+    "city": "Місто",
+    "address": "Адреса",
+    "email": "Email",
+    "phone": "Телефон",
+    "website": "Website",
+    "description": "Опис",
+    "active": "Клуб активний",
+    "order": "Порядок"
+  },
+  "placeholders": {
+    "name": "Badmik Club Kyiv",
+    "alias": "badmik-kyiv",
+    "city": "Київ",
+    "address": "вул. Спортивна, 10",
+    "email": "info@badmik.ua",
+    "phone": "+380 67 000 00 00",
+    "website": "https://badmik.ua",
+    "description": "Короткий опис клубу…"
+  },
+  "validation": {
+    "required": "Обовʼязково",
+    "name": {
+      "min": "Мінімум 3 символи",
+      "max": "Занадто довга назва"
+    },
+    "alias": {
+      "pattern": "Тільки маленькі латинські літери, цифри та дефіс",
+      "max": "Занадто довгий alias"
+    },
+    "city": { "max": "Занадто довга назва міста" },
+    "address": { "max": "Занадто довга адреса" },
+    "email": {
+      "pattern": "Некоректний email",
+      "max": "Занадто довгий email"
+    },
+    "phone": { "max": "Занадто довгий номер" },
+    "website": {
+      "pattern": "Почни з http:// або https://",
+      "max": "Занадто довгий URL"
+    },
+    "description": { "max": "Максимум 1000 символів" },
+    "order": {
+      "min": "Мінімум 1"
+    }
+  }
+},
+
   "AddClubForm": {
     "name": "Назва залу",
     "courts": "Кількість кортів",
@@ -274,6 +398,182 @@
     "trainings": "тренувань",
     "days": "днів"
   },
+
+  "locationsList": {
+  "filters": {
+    "club": "Клуб",
+    "status": "Статус",
+    "searchPlaceholder": "Пошук за назвою або адресою...",
+    "clubsAll": "Усі клуби",
+    "statusAll": "Усі",
+    "statusActive": "Активні",
+    "statusInactive": "Неактивні"
+  },
+  "table": {
+    "location": "Локація",
+    "address": "Адреса",
+    "club": "Клуб",
+    "sports": "Види спорту",
+    "status": "Статус",
+    "label": "Мітка",
+    "actions": "Дії"
+  },
+  "labels": {
+  "New": "Нова",
+  "Popular": "Популярна",
+  "Recommended": "Рекомендована",
+  "Promotion": "Акція",
+  "Verified": "Перевірена"
+},
+  "empty": "Немає локацій для відображення.",
+  "clubFallback": "Клуб без назви",
+  "locationFallback": "Без назви",
+  "dash": "—",
+  "price": {
+    "prefix": "Ціна:"
+  },
+  "status": {
+    "active": "Активна",
+    "inactive": "Неактивна"
+  },
+  "tooltips": {
+    "view": "Переглянути",
+    "edit": "Редагувати",
+    "delete": "Видалити"
+  },
+  "actionsAria": {
+    "view": "Переглянути",
+    "edit": "Редагувати",
+    "delete": "Видалити"
+  },
+  "confirm": {
+    "title": "Видалити локацію",
+    "message": "Ви дійсно бажаєте видалити локацію \"{name}\"? Дію не можна буде скасувати.",
+    "fallbackName": "без назви",
+    "confirmLabel": "Так, видалити",
+    "cancelLabel": "Ні"
+  }
+},
+"locationForm": {
+  "fields": {
+    "club": "Клуб",
+    "label": "Мітка",
+    "name": "Назва локації",
+    "city": "Місто",
+    "address": "Адреса",
+    "priceText": "Ціна (текстова)",
+    "order": "Порядок",
+    "activity": "Локація",
+    "shortDescription": "Короткий опис"
+  },
+  "placeholders": {
+    "name": "Badmik Оболонь",
+    "city": "Київ",
+    "address": "просп. Оболонський, 16-Б",
+    "priceText": "від 500 ₴",
+    "shortDescription": "Короткий текст, який буде показано на картці локації…"
+  },
+  "statusRadio": {
+    "active": "Активна",
+    "inactive": "Неактивна"
+  },
+  "sports": {
+    "title": "Види спорту та кількість кортів",
+    "help": "Після збереження система автоматично синхронізує список кортів (створить/деактивує Court).",
+    "units": {
+      "courts": "Корти",
+      "tables": "Столи"
+    }
+  },
+  "amenities": {
+    "title": "Зручності"
+  },
+  "validation": {
+    "required": "Обовʼязково",
+    "name": {
+      "min": "Занадто коротка назва",
+      "max": "Занадто довга назва"
+    },
+    "city": {
+      "max": "Занадто довга назва міста"
+    },
+    "address": {
+      "min": "Занадто коротка адреса",
+      "max": "Занадто довга адреса"
+    },
+    "priceText": {
+      "max": "Занадто довгий текст"
+    },
+    "order": {
+      "min": "Мінімум 1"
+    },
+    "shortDescription": {
+      "max": "До 600 символів"
+    }
+  }
+},
+"locationDetails": {
+  "status": {
+    "active": "Активна",
+    "inactive": "Неактивна"
+  },
+  "labels": {
+    "name": "Назва",
+    "club": "Клуб",
+    "city": "Місто",
+    "address": "Адреса",
+    "label": "Мітка",
+    "order": "Порядок",
+    "price": "Ціна",
+    "sports": "Види спорту",
+    "amenities": "Зручності",
+    "description": "Опис",
+    "workingHours": "Робочі години",
+    "created": "Створено",
+    "updated": "Оновлено"
+  },
+  "fallback": {
+    "dash": "—",
+    "noDescription": "Опис відсутній"
+  },
+  "workingHoursToggle": {
+    "show": "Показати графік роботи",
+    "hide": "Сховати графік роботи"
+  }
+},
+"locationSports": {
+  "Badminton": "Бадмінтон",
+  "Squash": "Сквош",
+  "Padel": "Падел",
+  "Pickleball": "Піклбол",
+  "Tennis": "Теніс",
+  "TableTennis": "Настільний теніс"
+},
+"locationLabels": {
+  "None": "Без мітки",
+  "New": "Нова",
+  "Popular": "Популярна",
+  "Recommended": "Рекомендована",
+  "Promotion": "Акція",
+  "Verified": "Перевірена"
+},
+"locationAmenities": {
+  "Parking": "Парковка",
+  "Water": "Вода",
+  "AirConditioning": "Кондиціонер",
+  "Shower": "Душ",
+  "VinylFloor": "Вінілова підлога",
+  "ParquetFloor": "Паркет",
+  "RubberFloor": "Гумове покриття",
+  "ConcreteFloor": "Бетонна підлога",
+  "WiFi": "Wi-Fi",
+  "LockerRoom": "Роздягальня",
+  "Toilet": "Туалет",
+  "Cafe": "Кафе"
+},
+
+
+
 
   "PlayerCard": {
     "fullName": "Повне ім'я",
@@ -543,13 +843,20 @@
     "Admin": "Адмін",
     "ClubMembershipPlans": "Абонементи клубу",
     "Clubs": "Клуби",
-    "EditClub": "Редагувати клуб",
+    "EditClub": "Редагування клубу",
     "AddClub": "Додати клуб"
+  },
+  "locationsBreadcrumbs": {
+    "Admin": "Адмін",
+    "Locations": "Локації",
+    "EditLocation": "Редагування локації",
+    "AddLocation": "Додати локацію",
+    "LocationDetails": "Деталі локації"
   },
   "staffBreadcrumbs": {
     "Admin": "Адмін",
     "Staff": "Працівники",
-    "EditStaff": "Редагувати працівника",
+    "EditStaff": "Редагування профілю працівника",
     "AddStaff": "Додати працівника",
     "StaffOne": "Працівник"
   },

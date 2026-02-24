@@ -1,4 +1,5 @@
 ﻿using BadmintonApp.Application.DTOs.WorkingHourDtos;
+using BadmintonApp.Domain.Enums;
 using System;
 
 namespace BadmintonApp.Application.DTOs.Users
@@ -10,11 +11,8 @@ namespace BadmintonApp.Application.DTOs.Users
         public string FullName => $"{FirstName} {LastName}";
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string Role { get; set; }
+        public string PhoneNumber { get; set; }
         public DateTime  DoB { get; set; }
-        public string Rank { get; set; }
-        public string Level { get; set; }
-
-        public WorkingHourDto WorkingHours { get; set; } = new();
+        public GenderType Gender { get; set; }
     }
 }

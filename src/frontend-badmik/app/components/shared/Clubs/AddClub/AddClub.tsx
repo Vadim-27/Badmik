@@ -24,6 +24,7 @@ import css from './AddClub.module.scss';
 
 const AddClub = () => {
   const tHeader = useTranslations('ActionHeader');
+  const tBred = useTranslations('clubsBreadcrumbs');
 
   const formRef = useRef<ClubFormHandle | null>(null);
   const [isChanged, setIsChanged] = useState(false);
@@ -103,9 +104,9 @@ const AddClub = () => {
       <div className={css.wrapperBreadcrumbs}>
         <AppBreadcrumbs
           items={[
-            { label: 'Admin', href: '/admin/dashboard' },
-            { label: 'Clubs', href: '/admin/clubs' },
-            { label: 'Add Club' },
+            { label: tBred('Admin'), href: '/admin/dashboard' },
+            { label: tBred('Clubs'), href: '/admin/clubs' },
+            { label: tBred('AddClub') },
           ]}
         />
       </div>

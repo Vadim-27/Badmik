@@ -77,7 +77,6 @@ namespace BadmintonApp.Infrastructure.Persistence.Seed
                     DoB = DateTime.SpecifyKind(new DateTime(1995, 1, 1), DateTimeKind.Utc),
                     IsActive = true,
                     CreatedAt = DateTime.UtcNow,
-                    ImageUrl = "https://example.com/avatar.jpg",
                     ClubId = club.Id,
                     IsAdmin = isAdmin
                 };
@@ -117,15 +116,14 @@ namespace BadmintonApp.Infrastructure.Persistence.Seed
             }
 
             var existingRole = await context.StaffClubRoles
-                .FirstOrDefaultAsync(scr => scr.StaffId == staff.Id && scr.RoleId == role.Id && scr.ClubId == club.Id);
+                .FirstOrDefaultAsync(scr => scr.StaffId == staff.Id && scr.RoleId == role.Id );
 
             if (existingRole == null)
             {
                 context.StaffClubRoles.Add(new StaffClubRole
                 {
                     StaffId = staff.Id,
-                    RoleId = role.Id,
-                    ClubId = club.Id
+                    RoleId = role.Id
                 });
 
                 await context.SaveChangesAsync();

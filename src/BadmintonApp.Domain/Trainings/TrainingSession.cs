@@ -1,0 +1,23 @@
+﻿using BadmintonApp.Domain.Enums.Player;
+using BadmintonApp.Domain.Enums.Training;
+using System;
+using System.Collections.Generic;
+
+namespace BadmintonApp.Domain.Trainings;
+
+public class TrainingSession
+{
+    public Guid Id { get; set; }
+    public Guid ClubId { get; set; }
+    public Guid LocationId { get; set; }
+    public TrainingType Type { get; set; }
+    public DateTime Date { get; set; }
+    public TimeOnly StartTime { get; set; }
+    public TimeOnly EndTime { get; set; }
+    public bool IsRecurringWeekly { get; set; }
+    public int CourtsUsed { get; set; }
+    public int MaxPlayers { get; set; }
+    public Guid? TrainerId { get; set; }
+
+    public ICollection<TrainingSessionLevel> Levels { get; set; }
+}

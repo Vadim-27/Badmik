@@ -44,6 +44,17 @@ namespace BadmintonApp.Infrastructure.Persistence.Repositories
                 .ToListAsync(cancellationToken);
         }
 
+        public async Task<Location> GetByIdForUpdateAsync(Guid id, CancellationToken ct)
+        {
+            return await _context.Locations
+                .Include(l => l.Courts)
+                .Include(l => l.Amenities)
+                .Include(l => l.Images)
+                .Include(l => l.WorkingHours)
+                // No AsNoTracking
+                .FirstOrDefaultAsync(l => l.Id == id, ct);
+        }
+
         public async Task<Location> CreateAsync(Location location, CancellationToken cancellationToken)
         {
             if (location == null)
@@ -86,6 +97,19 @@ namespace BadmintonApp.Infrastructure.Persistence.Repositories
         {
             return await _context.Locations
                 .AnyAsync(l => l.Id == id, cancellationToken);
+        }
+
+        public async Task<List<Location>> GetAllAsync(CancellationToken cancellationToken)
+        {
+            return await _context.Locations
+                .Include(l => l.Courts)
+                .Include(l => l.Amenities)
+                .Include(l => l.Images)
+                .Include(l => l.WorkingHours)
+                .OrderBy(l => l.Order)
+                .ThenBy(l => l.Name)
+                .AsNoTracking()
+                .ToListAsync(cancellationToken);
         }
 
     }

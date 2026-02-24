@@ -10,6 +10,7 @@ namespace BadmintonApp.Application.Interfaces.Permissions
     public interface IPermissionService
     {
         Task<bool> HasPermission(Guid userId, Guid clubId, PermissionType permission, CancellationToken cancellationToken);
+        Task<bool> HasPermissionByUserId(Guid userId, Guid clubId, PermissionType permission, CancellationToken cancellationToken);
         Task<List<PermissionDto>> GetAll(CancellationToken cancellationToken);
         
     }

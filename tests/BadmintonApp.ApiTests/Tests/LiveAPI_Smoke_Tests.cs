@@ -56,7 +56,7 @@ public class LiveApi_Smoke_Tests
     public async Task Staff_List_Unauthorized()
     {
         using var http = NewAnonymousClient();
-        var resp = await http.GetAsync("/api/staff");
+        var resp = await http.GetAsync("/api/staffs");
         resp.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
 
@@ -66,7 +66,7 @@ public class LiveApi_Smoke_Tests
         var (email, pwd) = TestConfig.GetUserCreds();
         var userToken = await LoginAndGetTokenAsync(email, pwd);
         using var http = NewBearerClient(userToken);
-        var resp = await http.GetAsync("/api/staff");
+        var resp = await http.GetAsync("/api/staffs");
         resp.StatusCode.Should().Be(HttpStatusCode.Forbidden);
     }
 
@@ -77,7 +77,7 @@ public class LiveApi_Smoke_Tests
         var adminToken = await LoginAndGetTokenAsync(email, pwd);
         using var http = NewBearerClient(adminToken);
 
-        var resp = await http.GetAsync("/api/staff");
+        var resp = await http.GetAsync("/api/staffs");
         resp.StatusCode.Should().Be(HttpStatusCode.OK);
 
         // Список може бути порожнім — головне, щоб JSON масив
@@ -126,7 +126,7 @@ public class LiveApi_Smoke_Tests
             WorkingHours = new { } // мінімальний валідний об'єкт
         };
 
-        var resp = await http.PostAsJsonAsync("/api/staff", payload);
+        var resp = await http.PostAsJsonAsync("/api/staffs", payload);
         resp.StatusCode.Should().Be(HttpStatusCode.Created);
         resp.Headers.Location.Should().NotBeNull();
 
@@ -167,7 +167,7 @@ public class LiveApi_Smoke_Tests
             WorkingHours = new { }
         };
 
-        var resp = await http.PostAsJsonAsync("/api/staff", payload);
+        var resp = await http.PostAsJsonAsync("/api/staffs", payload);
         resp.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 }

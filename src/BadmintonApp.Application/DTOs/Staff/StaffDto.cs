@@ -47,4 +47,5 @@ public class StaffDto
     public WorkingHourDto WorkingHours { get; set; } = new();
 
     public string StatusReason { get; set; }
+    public StaffPositionType PositionType { get; set; }
 }

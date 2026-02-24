@@ -33,6 +33,14 @@ namespace BadmintonApp.Application.Mappings
             CreateMap<Club, ClubResultDto>()
                 .ForMember(d => d.LocationCount,
                     opt => opt.MapFrom(s => s.Locations.Count));
+
+            CreateMap<ClubSettings, ClubSettingsDto>()
+                .ForMember(d => d.BookingOpenBeforeDays,
+                    opt => opt.MapFrom(s => (int)s.BookingOpenBeforeDays.TotalDays))
+                .ForMember(d => d.UnsubscribeAllowBeforeHours,
+                    opt => opt.MapFrom(s => (int)s.UnsubscribeAllowBeforeHours.TotalHours))
+                .ForMember(d => d.BookingOpenHour,
+                    opt => opt.MapFrom(s => (int)s.BookingOpenHour.TotalHours));
         }
     }
 }
