@@ -5,7 +5,7 @@ import css from './SaveButton.module.scss';
 import { useTranslations } from 'next-intl';
 
 type SaveButtonProps = {
-  onClick: () => void;
+  onClick?: () => void;
   disabled?: boolean;
   label?: string;
   form?: string

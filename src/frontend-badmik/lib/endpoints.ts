@@ -43,6 +43,10 @@ export const ENDPOINTS = {
     activate: (id: string) => `/clubs/${id}/activate`,
     deactivate: (id: string) => `/clubs/${id}/deactivate`,
   },
+   clubSettings: {
+    get: (clubId: string) => `/clubs/${clubId}/settings`,
+    update: (clubId: string) => `/clubs/${clubId}/settings`,
+  },
    locations: {
     getAll: '/locations',                               
     getById: (id: string) => `/locations/${id}`,        

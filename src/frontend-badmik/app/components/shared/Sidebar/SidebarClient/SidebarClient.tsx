@@ -1,16 +1,15 @@
 // app/components/shared/Sidebar/SidebarClient.tsx  ← CLIENT component
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useParams } from "next/navigation";
-import { useTranslations } from "next-intl";
-import SidebarLink from "./SidebarLink/SidebarLink";
-import styles from "./Sidebar.module.scss";
+import { useState } from 'react';
+import { useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import SidebarLink from './SidebarLink/SidebarLink';
+import styles from './Sidebar.module.scss';
 
 //====
 
 import { useClubScope } from '@/lib/club-scope';
-
 
 //====
 
@@ -30,11 +29,11 @@ export default function SidebarClient({ role, userId, email, isAdmin, clubId }: 
   // const clubLink = (!isAdmin && clubIdByToken) ? `` : 'clubs';
   const [open, setOpen] = useState(true);
   const params = useParams();
-  const t = useTranslations("Sidebar");
-  
+  const t = useTranslations('Sidebar');
+
   // const { buildHref } = useClubScope();
 
-   // Локальний buildHref, більше не юзаємо useClubScope
+  // Локальний buildHref, більше не юзаємо useClubScope
   const buildHref = (path: string) => {
     const clean = path.startsWith('/') ? path.slice(1) : path;
     const base = '/admin';
@@ -51,10 +50,6 @@ export default function SidebarClient({ role, userId, email, isAdmin, clubId }: 
 
   // далі все як було, просто всі href через buildHref(...)
 
-
-
-  
-
   // якщо немає ролі — взагалі не рендеримо
   // if (!role) return null;
 
@@ -69,27 +64,26 @@ export default function SidebarClient({ role, userId, email, isAdmin, clubId }: 
   // const effectiveClubId = clubIdFromRoute;
   // console.log(" effectiveClubId:", effectiveClubId);
 
-
-  
-
   return (
     <aside
       className={styles.sideWrap}
       style={{ width: open ? drawerWidthOpen : drawerWidthClosed }}
     >
-       <button
+      <button
         className={styles.collapseBtn}
         onClick={toggleDrawer}
-         aria-label={open ? t('aria.closeMenu') : t('aria.openMenu')}
+        aria-label={open ? t('aria.closeMenu') : t('aria.openMenu')}
       >
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
           <path d={open ? 'M15 18l-6-6 6-6' : 'M9 6l6 6-6 6'} />
         </svg>
       </button>
 
-      <nav className={styles.side}
+      <nav
+        className={styles.side}
         style={{ width: open ? drawerWidthOpen : drawerWidthClosed }}
-        aria-label={t('aria.navigation')} >
+        aria-label={t('aria.navigation')}
+      >
         {/* приклади; додай свої пункти */}
         <div className={styles.sideHead}>
           <div className={styles.logo}>
@@ -111,29 +105,44 @@ export default function SidebarClient({ role, userId, email, isAdmin, clubId }: 
         <div className={styles.sideSec}>
           <div className={styles.secTitle}>{open && t('sections.main')}</div>
           <nav className={styles.navList}>
-            <SidebarLink 
-            href={buildHref('dashboard')} 
-            // href="/admin/dashboard/" 
-            open={open}>
-              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+            <SidebarLink
+              href={buildHref('dashboard')}
+              // href="/admin/dashboard/"
+              open={open}
+            >
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
                 <path d="M3 12h18M3 6h18M3 18h18" />
               </svg>
-              {open && (
-              <span>{t('DashboardMain')}</span>
-              )}
+              {open && <span>{t('DashboardMain')}</span>}
             </SidebarLink>
 
             {isAdmin && (
-  <SidebarLink href={buildHref('clubs')} open={open} count={6}>
-    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-      <rect x="3" y="4" width="7" height="7" />
-      <rect x="14" y="4" width="7" height="7" />
-      <rect x="14" y="15" width="7" height="7" />
-      <rect x="3" y="15" width="7" height="7" />
-    </svg>
-    {open && <span>{t('Clubs')}</span>}
-  </SidebarLink>
-)}
+              <SidebarLink href={buildHref('clubs')} open={open} count={6}>
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <rect x="3" y="4" width="7" height="7" />
+                  <rect x="14" y="4" width="7" height="7" />
+                  <rect x="14" y="15" width="7" height="7" />
+                  <rect x="3" y="15" width="7" height="7" />
+                </svg>
+                {open && <span>{t('Clubs')}</span>}
+              </SidebarLink>
+            )}
+
+          
+              
+          
 
             {/* <SidebarLink  href={buildHref(`${clubLink}`)} open={open} count={6}>
               <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
@@ -146,33 +155,67 @@ export default function SidebarClient({ role, userId, email, isAdmin, clubId }: 
               )}
             </SidebarLink> */}
             {!isAdmin && clubIdByToken && (
-  <SidebarLink href={buildHref('')} open={open} exact>
-    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-      <path d="M4 6h16M4 12h16M4 18h16" />
-    </svg>
-    {open && <span>Клуб</span>}
-  </SidebarLink>
-)}
-            <SidebarLink  href={buildHref(`locations`)} open={open} count={6}>
-              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+              <SidebarLink href={buildHref('')} open={open} exact>
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+                {open && <span>{t('Clubs')}</span>}
+              </SidebarLink>
+            )}
+
+            <SidebarLink href={buildHref('club-settings')} open={open} count={6}>
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <rect x="3" y="4" width="7" height="7" />
+                  <rect x="14" y="4" width="7" height="7" />
+                  <rect x="14" y="15" width="7" height="7" />
+                  <rect x="3" y="15" width="7" height="7" />
+                </svg>
+                {open && <span>{t('ClubSettings')}</span>}
+              </SidebarLink>
+
+              
+            <SidebarLink href={buildHref(`locations`)} open={open} count={6}>
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
                 <rect x="3" y="4" width="7" height="7" />
                 <rect x="14" y="4" width="7" height="7" />
                 <rect x="14" y="15" width="7" height="7" />
                 <rect x="3" y="15" width="7" height="7" />
               </svg>
-              {open && (<span>{t('Locations')}</span>
-              )}
+              {open && <span>{t('Locations')}</span>}
             </SidebarLink>
 
-            <SidebarLink  href={buildHref(`club-memberships`)} open={open} count={6}>
-              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+            <SidebarLink href={buildHref(`club-memberships`)} open={open} count={6}>
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
                 <rect x="3" y="4" width="7" height="7" />
                 <rect x="14" y="4" width="7" height="7" />
                 <rect x="14" y="15" width="7" height="7" />
                 <rect x="3" y="15" width="7" height="7" />
               </svg>
-              {open && (<span>{t('ClubMembershipPlans')}</span>
-              )}
+              {open && <span>{t('ClubMembershipPlans')}</span>}
             </SidebarLink>
 
             {/* <SidebarLink 
@@ -185,22 +228,25 @@ export default function SidebarClient({ role, userId, email, isAdmin, clubId }: 
               {open && (<span>{t('Workout')}</span>)}
               
             </SidebarLink> */}
-            <SidebarLink 
-            // href="/admin/players" 
-            href={buildHref('players')} 
-            open={open} count={512}>
-              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+            <SidebarLink
+              // href="/admin/players"
+              href={buildHref('players')}
+              open={open}
+              count={512}
+            >
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
                 <path d="M12 12c2.8 0 5-2.2 5-5s-2.2-5-5-5-5 2.2-5 5 2.2 5 5 5zM3 22c0-3.9 4.5-7 9-7s9 3.1 9 7" />
               </svg>
-              {open && (
-                
-              <span>{t('Players')}</span>
-             
-             
-            )}
+              {open && <span>{t('Players')}</span>}
             </SidebarLink>
-            
-           {/* <SidebarLink  href="/admin/settings/" open={open} >
+
+            {/* <SidebarLink  href="/admin/settings/" open={open} >
              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
             <circle cx="12" cy="12" r="3"/>
             <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06A2 2 0 1 1 3.22 17l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H2a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06A2 2 0 1 1 5.26 3.22l.06.06a1.65 1.65 0 0 0 1.82.33H7.15A1.65 1.65 0 0 0 8.66 2H8.75a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.09a1.65 1.65 0 0 0 1.82-.33l.06-.06A2 2 0 1 1 20.78 6l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09c.69.18 1.19.8 1.19 1.53s-.5 1.35-1.19 1.53z"/>
@@ -208,18 +254,24 @@ export default function SidebarClient({ role, userId, email, isAdmin, clubId }: 
               {open && (<span>{t('Settings')}</span>
               )}
             </SidebarLink> */}
-            <SidebarLink  
-            // href="/admin/access-control/"
-            href={buildHref('staff')} 
-            open={open} >
-              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+            <SidebarLink
+              // href="/admin/access-control/"
+              href={buildHref('staff')}
+              open={open}
+            >
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
                 <rect x="3" y="4" width="7" height="7" />
                 <rect x="14" y="4" width="7" height="7" />
                 <rect x="14" y="15" width="7" height="7" />
                 <rect x="3" y="15" width="7" height="7" />
               </svg>
-              {open && (<span>{t('Staff')}</span>
-              )}
+              {open && <span>{t('Staff')}</span>}
             </SidebarLink>
             {/* <SidebarLink  href="/admin/messages/" open={open} count={115}>
               <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
@@ -248,7 +300,7 @@ export default function SidebarClient({ role, userId, email, isAdmin, clubId }: 
               {open && (<span>{t('Analytics')}</span>
               )}
             </SidebarLink> */}
-        {/* <SidebarLink  href="/admin/logs/" open={open} >
+            {/* <SidebarLink  href="/admin/logs/" open={open} >
               <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                 <rect x="3" y="4" width="7" height="7" />
                 <rect x="14" y="4" width="7" height="7" />
@@ -259,17 +311,8 @@ export default function SidebarClient({ role, userId, email, isAdmin, clubId }: 
               )}
             </SidebarLink>
             */}
-     
           </nav>
         </div>
-
-
-
-
-
-
-
-
 
         {/* Footer */}
         {/* {open && (
