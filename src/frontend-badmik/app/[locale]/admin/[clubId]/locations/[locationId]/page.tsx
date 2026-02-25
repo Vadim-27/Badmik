@@ -11,16 +11,23 @@ import ActionHeader from '@/app/components/ui/Layout/ActionHeader/ActionHeader';
 import BackButton from '@/app/components/ui/Buttons/BackButton/BackButton';
 import EditButton from '@/app/components/ui/Buttons/EditButton/EditButton';
 import AppBreadcrumbs from '@/app/components/ui/Breadcrumbs/AppBreadcrumbs';
+import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 
 type Params = {
   locationId: string;
   clubId: string;
+  locale: string;
 };
 
 export default async function LocationPage({ params }: { params: Params }) {
   const { locationId, clubId } = await params;
+  const { locale } = await params;
 
   let location: Location | null = null;
+
+  const tHeader = await getTranslations({ locale, namespace: 'UI.buttons' });
+  const tBreadcrumb = await getTranslations({ locale, namespace: 'locationsBreadcrumbs' });
 
   try {
     location = await locationsApiServer.byId(locationId);
@@ -57,9 +64,9 @@ export default async function LocationPage({ params }: { params: Params }) {
       
         <AppBreadcrumbs
           items={[
-            { label: 'Admin', href: '/admin/dashboard' },
-            { label: 'Locations', href: `/admin/${clubId}/locations/` },
-            { label: 'Location' },
+            { label: tBreadcrumb('Admin'), href: '/admin/dashboard' },
+            { label: tBreadcrumb('Locations'), href: `/admin/${clubId}/locations/` },
+            { label: tBreadcrumb('LocationDetails') },
           ]}
         />
      

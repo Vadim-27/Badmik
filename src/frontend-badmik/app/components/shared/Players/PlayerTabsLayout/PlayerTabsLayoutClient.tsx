@@ -96,7 +96,7 @@ export default function PlayerTabsLayoutClient({ clubId, playerId, children }: P
           <BackButton label="buttons.back" />
           <div className={styles.headerTitle}>{headerTitle}</div>
 
-          {/* ✅ правий екшен приходить з активної таби */}
+       
           {headerAction ?? (activeKey === 'info' ? <EditButton href={editHref} label="buttons.update" /> : <div />)}
         </ActionHeader>
       </div>

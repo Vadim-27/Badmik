@@ -25,6 +25,8 @@ export default function ProfileMenu({ avatarUrl, fullName, position, userId, onL
 
   const { clubId } = useParams<{ clubId: string }>();
 
+ console.log("position", position)
+
   const fallbackAvatar =
     'data:image/svg+xml;utf8,' +
     encodeURIComponent(
@@ -48,7 +50,7 @@ export default function ProfileMenu({ avatarUrl, fullName, position, userId, onL
         <img className={styles.avatar} src={avatarUrl || fallbackAvatar} alt="" />
         <span className={styles.text}>
           <span className={styles.name}>{fullName}</span>
-          <span className={styles.role}>{tType(position)}</span>
+          { position !== null ? <span className={styles.role}>{tType(position)}</span> : null}
         </span>
         <span className={styles.chev} aria-hidden />
       </button>

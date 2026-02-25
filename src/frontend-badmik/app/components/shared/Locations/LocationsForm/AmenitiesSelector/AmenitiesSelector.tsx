@@ -10,13 +10,21 @@
 import { Control, useController } from 'react-hook-form';
 import type { LocationFormValues } from '../LocationsForm';
 import styles from './AmenitiesSelector.module.scss';
+import { useTranslations } from 'next-intl';
 
+// const AMENITIES = [
+//   { name: 'amenities.parking',     label: 'Парковка' },
+//   { name: 'amenities.water',       label: 'Вода' },
+//   { name: 'amenities.conditioner', label: 'Кондиціонер' },
+//   { name: 'amenities.shower',      label: 'Душ' },
+//   { name: 'amenities.wifi',        label: 'WiFi' },
+// ] as const;
 const AMENITIES = [
-  { name: 'amenities.parking',     label: 'Парковка' },
-  { name: 'amenities.water',       label: 'Вода' },
-  { name: 'amenities.conditioner', label: 'Кондиціонер' },
-  { name: 'amenities.shower',      label: 'Душ' },
-  { name: 'amenities.wifi',        label: 'WiFi' },
+  { name: 'amenities.parking',     amenityKey: 'Parking' },
+  { name: 'amenities.water',       amenityKey: 'Water' },
+  { name: 'amenities.conditioner', amenityKey: 'AirConditioning' },
+  { name: 'amenities.shower',      amenityKey: 'Shower' },
+  { name: 'amenities.wifi',        amenityKey: 'WiFi' },
 ] as const;
 
 type AmenityFieldName =
@@ -32,9 +40,11 @@ type Props = {
 };
 
 export default function AmenitiesSelector({ control, labelClassName }: Props) {
+  const t = useTranslations('locationForm');
+const tAmen = useTranslations('locationAmenities');
   return (
     <div>
-      <label className={labelClassName}>Зручності (amenities)</label>
+      <label className={labelClassName}>{t('amenities.title')}</label>
 
       <div className={styles.amenitiesRow}>
         {AMENITIES.map((a) => {
@@ -55,7 +65,7 @@ export default function AmenitiesSelector({ control, labelClassName }: Props) {
                 checked={checked}
                 onChange={(e) => field.onChange(e.target.checked)}
               />
-              <span>{a.label}</span>
+              <span>{tAmen(a.amenityKey)}</span>
             </label>
           );
         })}
