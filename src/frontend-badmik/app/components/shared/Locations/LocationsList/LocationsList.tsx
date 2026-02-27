@@ -264,7 +264,7 @@ const LocationsList = ({ clubId }: LocationsListProps) => {
                         <div className={styles.actionsWrapper}>
                           <Tooltip content={t('tooltips.view')}>
   <Link
-    href={`/admin/${loc.clubId}/locations/${loc.id}`}
+    href={`/admin/${loc.clubId}/locations/${loc.id}/info-location`}
     className={styles.iconBtn}
     title={t('actionsAria.view')}
     aria-label={t('actionsAria.view')}

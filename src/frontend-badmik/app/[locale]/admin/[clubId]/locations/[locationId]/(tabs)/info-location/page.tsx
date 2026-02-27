@@ -51,14 +51,14 @@ export default async function LocationPage({ params }: { params: Params }) {
 
   return (
     <main className="pt-0 p-4 bg-gray-100">
-      <ActionHeader>
+      {/* <ActionHeader>
         <BackButton label="buttons.back" />
         <h1 className="text-lg font-semibold">
           {location.name || 'Локація без назви'}
-        </h1>
+        </h1> */}
 
         {/* ✅ поправ шлях, якщо у тебе інша структура */}
-        <EditButton href={`/admin/${clubId}/locations/${locationId}/edit-location`} label="buttons.update" />
+        {/* <EditButton href={`/admin/${clubId}/locations/${locationId}/edit-location`} label="buttons.update" />
       </ActionHeader>
 
       
@@ -68,7 +68,7 @@ export default async function LocationPage({ params }: { params: Params }) {
             { label: tBreadcrumb('Locations'), href: `/admin/${clubId}/locations/` },
             { label: tBreadcrumb('LocationDetails') },
           ]}
-        />
+        /> */}
      
       <LocationDetails location={location} club={club} />
     </main>
