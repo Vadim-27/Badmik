@@ -21,6 +21,7 @@
       "addClubHeader": "Adding a club",
       "addPlayerHeader": "Adding a Player",
       "addTrainingHeader": "Adding training",
+      "clubSettingsHeader": "Club Settings",
       "playersHeader": "Players club",
       "editPlayerHeader": "Editing the Player",
       "trainingsHeader": "Trainings",
@@ -37,6 +38,7 @@
     "Admin": "Admin",
     "DashboardMain": "Dashboard",
     "Clubs": "Clubs",
+    "ClubSettings": "Club Settings",
     "Locations": "Locations",
     "Workout": "Workout",
     "UsersClub": "Club players",
@@ -187,6 +189,8 @@
       "addTraining": "Add training",
       "addPlan": "Add plan",
       "update": "Update",
+      "uploadLogo": "Upload logo",
+      "uploadImages": "Upload images",
       "back": "Back",
       "save": "Save",
       "saving": "Saving...",
@@ -473,7 +477,34 @@
   "workingHoursToggle": {
     "show": "Show working hours",
     "hide": "Hide working hours"
+  },
+  "tabs": {
+    "info": "Information",
+    "images": "Images"
   }
+},
+"locationImages": {
+  "title": "Location Images",
+  "subtitle": "Manage logo and gallery. Drag rows to reorder gallery images.",
+  "logo": {
+    "title": "Logo",
+    "hint": "Shown in lists, headers, cards."
+  },
+  "gallery": {
+    "title": "Gallery",
+    "empty": "Gallery is empty. Upload images.",
+    "fileFallback": "Image",
+    "position": "Position",
+    "count": "images"
+  },
+  "positionDialog": {
+      "title": "Change position",
+      "message": "",
+      "label": "New position",
+      "hint": "Enter a number from {min} to {max}",
+      "confirm": "Save",
+      "cancel": "Cancel"
+    }
 },
 "locationSports": {
   "Badminton": "Badminton",
@@ -917,6 +948,11 @@
     "EditClub": "Edit Club",
     "AddClub": "Add Club"
   },
+  "clubSettingsBreadcrumbs": {
+    "Admin": "Admin",
+    "Clubs": "Clubs",
+    "ClubSettings": "Club Settings"
+  },
   "locationsBreadcrumbs": {
     "Admin": "Admin",
     "Locations": "Locations",
@@ -1148,6 +1184,35 @@
     "fields": {
       "created": "Created",
       "updated": "Updated"
+    }
+  },
+  "clubSettings": {
+    "pageTitle": "Club Settings",
+    "title": "Booking Settings",
+    "description": "Manages when booking opens and when a player can cancel. Applies immediately to new bookings.",
+    "card": {
+      "rulesTitle": "Rules",
+      "rulesDesc": "Use simple values. Most clubs keep them the same for different sports."
+    },
+    "fields": {
+      "bookingOpenBeforeDays": {
+        "title": "Booking opens before (days)",
+        "hint": "How many days in advance can a player book a training session?",
+        "unit": "days",
+        "example": "Example: 7 → booking opens 1 week in advance."
+      },
+      "bookingOpenHour": {
+        "title": "Booking opens at (hour)",
+        "hint": "Local club time. Works together with “opens before (days)”.",
+        "unit": ":00",
+        "example": "Example: 9 → booking opens at 09:00."
+      },
+      "unsubscribeAllowBeforeHours": {
+        "title": "Unsubscribe allowed before (hours)",
+        "hint": "How many hours before the training start is cancellation allowed?",
+        "unit": "hours",
+        "example": "Example: 2–6 hours. 0 → allowed until start."
+      }
     }
   }
 }

@@ -45,10 +45,17 @@ export const qk = {
     list: (filter?: string) => ['clubs', 'list', filter ?? ''] as const,
     byId: (id: string) => ['clubs', 'byId', id] as const,
   },
+   clubSettings: {
+    byClubId: (clubId: string) => ['clubSettings', 'byClubId', clubId] as const,
+  },
    locations: {
     list: (clubId?: string) => ['locations', 'list', clubId ?? 'all'] as const,
     byId: (id: string) => ['locations', 'byId', id] as const,
     byClub: (clubId: string) => ['locations', 'byClub', clubId] as const,
+  },
+   locationMedia: {
+    logo: (locationId: string) => ['locationMedia', 'logo', locationId] as const,
+    images: (locationId: string) => ['locationMedia', 'images', locationId] as const,
   },
    players: {
     list: (params: PlayersListParams = {}) =>
