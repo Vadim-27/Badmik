@@ -53,6 +53,10 @@ export const qk = {
     byId: (id: string) => ['locations', 'byId', id] as const,
     byClub: (clubId: string) => ['locations', 'byClub', clubId] as const,
   },
+   locationMedia: {
+    logo: (locationId: string) => ['locationMedia', 'logo', locationId] as const,
+    images: (locationId: string) => ['locationMedia', 'images', locationId] as const,
+  },
    players: {
     list: (params: PlayersListParams = {}) =>
       ['players', 'list', params.clubId ?? 'all', params.page ?? 1, params.pageSize ?? 10] as const,

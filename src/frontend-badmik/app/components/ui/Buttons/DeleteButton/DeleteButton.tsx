@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 type DeleteButtonProps = {
   onClick: () => void;
   label?: string;
+  disabled?: boolean;
 };
 
 export default function DeleteButton({ onClick, label = 'Видалити' }: DeleteButtonProps) {

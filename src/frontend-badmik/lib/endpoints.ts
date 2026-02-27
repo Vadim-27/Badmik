@@ -55,6 +55,19 @@ export const ENDPOINTS = {
     delete: (id: string) => `/locations/${id}/photo`,      
     byClub: (clubId: string) => `/locations/byclub/${clubId}`, 
   },
+  locationMedia: {
+    logo: {
+      get: (locationId: string) => `/locations/${locationId}/logo`,
+      put: (locationId: string) => `/locations/${locationId}/logo`,
+      delete: (locationId: string) => `/locations/${locationId}/logo`,
+    },
+    images: {
+      list: (locationId: string) => `/locations/${locationId}/images`,
+      upload: (locationId: string) => `/locations/${locationId}/images`,
+      updateOrder: (locationId: string) => `/locations/${locationId}/images/order`,
+      delete: (locationId: string, mediaId: string) => `/locations/${locationId}/images/${mediaId}`,
+    },
+  },
 
   players: {
     getAll: '/players',
