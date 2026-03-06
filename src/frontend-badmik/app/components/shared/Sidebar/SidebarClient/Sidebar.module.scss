@@ -221,16 +221,16 @@
     border-color: #cbdcff
 }
 
-.navItem.active::before {
-    content: "";
-    position: absolute;
-    left: -1px;
-    top: 8px;
-    bottom: 8px;
-    width: 4px;
-    border-radius: 4px;
-    background: var(--blue-600)
-}
+// .navItem.active::before {
+//     content: "";
+//     position: absolute;
+//     left: -1px;
+//     top: 8px;
+//     bottom: 8px;
+//     width: 4px;
+//     border-radius: 4px;
+//     background: var(--blue-600)
+// }
 
 details.group {
     margin: 6px 6px 10px
@@ -315,3 +315,138 @@ details.group[open] summary {
 //         display: none
 //     }
 // }
+
+/* контейнер групи */
+.navGroup {
+  display: block;
+}
+
+/* верхній рядок (кнопка-toggle) */
+.navGroupHead {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 10px 12px;
+  border-radius: 10px;
+
+  background: transparent;
+  
+  border: 0;
+  cursor: pointer;
+
+  
+  transition: background 0.15s ease;
+
+//   &:hover {
+//     background: rgba(255, 255, 255, 0.06);
+//   }
+  
+    // background-color: var(--color-primary-button);
+//     display: block;
+//     padding-left: 1rem;
+//     padding-right: 1rem;
+//     padding-top: 0.5rem;
+//     padding-bottom: 0.5rem;
+//     border-radius: 0.25rem;
+//     cursor: pointer;
+//     font-size: 1.125rem; // 18px
+//   line-height: 1.75rem; // 28px
+//   font-weight: 600;
+//     color: var(--text);
+//     transition: all 0.2s;
+    &:hover {
+      background: var(--btn-primary-bg);
+    }
+
+  }
+
+//   .active {
+//   background-color: var(--btn-primary-bg); 
+//   color: #fff;
+
+// }
+
+/* іконка зліва */
+.navGroupIcon {
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+}
+.icon {
+  width: 20px;
+  height: 20px;
+  stroke: #0b2459;
+}
+
+/* назва */
+.navGroupTitle {
+  flex: 1;
+  text-align: left;
+   font-size: 16px; // 18px
+  line-height: 1.75rem; // 28px
+//   font-weight: 500;
+    color: #0b2459;
+}
+
+/* блок справа (chevron або spinner) */
+.navGroupRight {
+  display: flex;
+  align-items: center;
+}
+
+/* стрілка */
+.navGroupChevron {
+  width: 16px;
+  height: 16px;
+  opacity: 0.7;
+   stroke: #0b2459;
+  transition: transform 0.2s ease;
+}
+
+.rotated {
+  transform: rotate(180deg);
+}
+
+/* submenu контейнер */
+.navGroupMenu {
+  margin: 6px 8px 8px 42px;
+  padding: 6px;
+
+  border-radius: 12px;
+
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* маленька крапка перед назвою локації */
+.subDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.4);
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+/* spinner */
+.navGroupSpinner {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-top-color: rgba(255, 255, 255, 0.85);
+  animation: navSpin 0.8s linear infinite;
+}
+
+@keyframes navSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}

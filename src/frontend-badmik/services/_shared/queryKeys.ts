@@ -15,6 +15,21 @@ type PlayerMembershipsListParams = {
   clubId?: string;
 };
 
+type TrainingSchedulesListParams = {
+  clubId?: string;
+  locationId?: string;
+  isActive?: boolean;
+  dayOfWeek?: string;
+  sport?: string;
+  type?: string;
+  level?: string;
+  startFrom?: string;
+  startTo?: string;
+  date?: string;
+  page?: number;
+  pageSize?: number;
+};
+
 
 export const qk = {
   staff: {
@@ -89,5 +104,27 @@ export const qk = {
     participants: (id: string) => ['trainings', 'participants', id] as const,
     queue: (id: string) => ['trainings', 'queue', id] as const,
   },
-  
+    trainingSchedules: {
+    root: () => ['trainingSchedules'] as const,
+
+    byId: (id: string) => ['trainingSchedules', 'byId', id] as const,
+
+    list: (p: TrainingSchedulesListParams = {}) =>
+      [
+        'trainingSchedules',
+        'list',
+        p.clubId ?? 'all',
+        p.locationId ?? 'all',
+        p.isActive ?? 'all',
+        p.dayOfWeek ?? 'all',
+        p.sport ?? 'all',
+        p.type ?? 'all',
+        p.level ?? 'all',
+        p.startFrom ?? 'all',
+        p.startTo ?? 'all',
+        p.date ?? 'all',
+        p.page ?? 1,
+        p.pageSize ?? 10,
+      ] as const,
+  },
 };

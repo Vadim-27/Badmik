@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import styles from './LocationsList.module.scss';
-import {Link} from '@/i18n/navigation';
+import { Link } from '@/i18n/navigation';
 
 import { useLocationsList, useDeleteLocation } from '@/services/locations/queries.client';
 import { useClubsList } from '@/services/clubs/queries.client';
@@ -58,7 +58,6 @@ const LocationsList = ({ clubId }: LocationsListProps) => {
 
   const deleteLocation = useDeleteLocation();
   const locations: Location[] = locationsData ?? [];
-  
 
   const { data: clubsData = [] } = useClubsList(undefined, {
     enabled: !isClubScoped,
@@ -68,7 +67,7 @@ const LocationsList = ({ clubId }: LocationsListProps) => {
   const clubs: Club[] = clubsData ?? [];
 
   const clubNameById = useMemo(() => {
-    if (!isClubScoped) return {};  
+    if (!isClubScoped) return {};
     const map: Record<string, string> = {};
     clubs.forEach((c) => {
       if (!c?.id) return;
@@ -125,25 +124,23 @@ const LocationsList = ({ clubId }: LocationsListProps) => {
     <div className={styles.wrapper}>
       {/* Фільтри: Клуб + Статус + Пошук */}
       <div className={styles.filterBar}>
-       {!isClubScoped && <div className={styles.filterGroup}>
-          <span className={styles.filterLabelUpper}>{t('filters.club')}</span>
-          <select
-            className={styles.filterSelect}
-            value={clubFilter}
-            onChange={(e) => setClubFilter(e.target.value)}
-          >
-            <option value="all">{t('filters.clubsAll')}</option>
-            {clubs.map((club) => (
-              <option key={club.id} value={club.id}>
-                {club.name || t('clubFallback')}
-              </option>
-            ))}
-          </select>
-        </div>}
-        
-
-
-
+        {!isClubScoped && (
+          <div className={styles.filterGroup}>
+            <span className={styles.filterLabelUpper}>{t('filters.club')}</span>
+            <select
+              className={styles.filterSelect}
+              value={clubFilter}
+              onChange={(e) => setClubFilter(e.target.value)}
+            >
+              <option value="all">{t('filters.clubsAll')}</option>
+              {clubs.map((club) => (
+                <option key={club.id} value={club.id}>
+                  {club.name || t('clubFallback')}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
 
         <div className={styles.filterGroup}>
           <span className={styles.filterLabelUpper}>{t('filters.status')}</span>
@@ -182,16 +179,14 @@ const LocationsList = ({ clubId }: LocationsListProps) => {
                 <th className={styles.colLabel}>Мітка</th>
                 <th className={styles.colActions}>Дії</th> */}
                 <th className={styles.colLocation}>{t('table.location')}</th>
-<th className={styles.colAddress}>{t('table.address')}</th>
+                <th className={styles.colAddress}>{t('table.address')}</th>
 
-{!isClubScoped && (
-  <th className={styles.colClub}>{t('table.club')}</th>
-)}
+                {!isClubScoped && <th className={styles.colClub}>{t('table.club')}</th>}
 
-<th className={styles.colSports}>{t('table.sports')}</th>
-<th className={styles.colStatus}>{t('table.status')}</th>
-<th className={styles.colLabel}>{t('table.label')}</th>
-<th className={styles.colActions}>{t('table.actions')}</th>
+                <th className={styles.colSports}>{t('table.sports')}</th>
+                <th className={styles.colStatus}>{t('table.status')}</th>
+                <th className={styles.colLabel}>{t('table.label')}</th>
+                <th className={styles.colActions}>{t('table.actions')}</th>
               </tr>
             </thead>
 
@@ -219,9 +214,13 @@ const LocationsList = ({ clubId }: LocationsListProps) => {
                     <tr key={loc.id}>
                       {/* Локація */}
                       <td>
-                        <div className={styles.locationName}>{loc.name || t('locationFallback')}</div>
+                        <div className={styles.locationName}>
+                          {loc.name || t('locationFallback')}
+                        </div>
                         {loc.priceText && (
-                          <div className={styles.locationSub}>{t('price.prefix')}: {loc.priceText}</div>
+                          <div className={styles.locationSub}>
+                            {t('price.prefix')}: {loc.priceText}
+                          </div>
                         )}
                       </td>
 
@@ -246,7 +245,7 @@ const LocationsList = ({ clubId }: LocationsListProps) => {
                         <span
                           className={loc.isActive ? styles.statusActive : styles.statusInactive}
                         >
-                           {loc.isActive ? t('status.active') : t('status.inactive')}
+                          {loc.isActive ? t('status.active') : t('status.inactive')}
                         </span>
                       </td>
 
@@ -263,12 +262,12 @@ const LocationsList = ({ clubId }: LocationsListProps) => {
                       <td>
                         <div className={styles.actionsWrapper}>
                           <Tooltip content={t('tooltips.view')}>
-  <Link
-    href={`/admin/${loc.clubId}/locations/${loc.id}/info-location`}
-    className={styles.iconBtn}
-    title={t('actionsAria.view')}
-    aria-label={t('actionsAria.view')}
-  >
+                            <Link
+                              href={`/admin/${loc.clubId}/locations/${loc.id}/info-location`}
+                              className={styles.iconBtn}
+                              title={t('actionsAria.view')}
+                              aria-label={t('actionsAria.view')}
+                            >
                               <EyeIcon className={styles.icon} aria-hidden />
                             </Link>
                           </Tooltip>
@@ -308,17 +307,17 @@ const LocationsList = ({ clubId }: LocationsListProps) => {
       </div>
 
       <ConfirmDialog
-  open={isConfirmOpen}
-  title={t('confirm.title')}
-  message={t('confirm.message', {
-    name: locationToDelete?.name || t('confirm.fallbackName'),
-  })}
-  confirmLabel={t('confirm.confirmLabel')}
-  cancelLabel={t('confirm.cancelLabel')}
-  onConfirm={handleConfirmDelete}
-  onCancel={handleCancelDelete}
-  isLoading={deleteLocation.isPending}
-/>
+        open={isConfirmOpen}
+        title={t('confirm.title')}
+        message={t('confirm.message', {
+          name: locationToDelete?.name || t('confirm.fallbackName'),
+        })}
+        confirmLabel={t('confirm.confirmLabel')}
+        cancelLabel={t('confirm.cancelLabel')}
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+        isLoading={deleteLocation.isPending}
+      />
     </div>
   );
 };

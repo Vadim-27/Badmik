@@ -1,0 +1,268 @@
+/* Buttons (взято 1:1 з твого файлу) */
+.btnPrimary {
+  border: 0;
+  cursor: pointer;
+  border-radius: 14px;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  background: #0f172a;
+
+  &:hover {
+    background: #111827;
+  }
+}
+
+.btnSecondary {
+  cursor: pointer;
+  border-radius: 14px;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  color: #0f172a;
+
+  &:hover {
+    background: #f8fafc;
+  }
+}
+
+/* Modal (взято 1:1 з твого файлу) */
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(15, 23, 42, 0.4);
+  border: 0;
+  cursor: pointer;
+}
+
+.modalWrap {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.modal {
+  width: 100%;
+  max-width: 560px;
+  border-radius: 18px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 25px 60px rgba(15, 23, 42, 0.18);
+}
+
+.modalHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 18px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.modalTitle {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.modalSubtitle {
+  margin-top: 4px;
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.modalBody {
+  padding: 16px 18px;
+}
+
+.selectionCard {
+  border-radius: 16px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 14px 14px;
+}
+
+.selectionTitle {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.selectionGrid {
+  margin-top: 10px;
+  display: grid;
+  gap: 10px;
+}
+
+.selectionRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.selectionKey {
+  color: #64748b;
+  font-weight: 600;
+}
+
+.selectionVal {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.formGrid {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+
+  @media (min-width: 640px) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.field {
+  display: block;
+}
+
+.fieldLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  margin-bottom: 6px;
+}
+
+.input {
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  padding: 10px 12px;
+  font-size: 14px;
+  outline: none;
+
+  &:focus {
+    border-color: #94a3b8;
+  }
+}
+
+.formGrid2 {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.modalActions {
+  margin-top: 14px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* ===== Select стилізація (без зміни font-weight) ===== */
+
+.inlineSelectBox {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  padding: 10px 12px;
+}
+
+.inlineSelectLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.selectWrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* сам select — як твій .select, але з padding-right під chevron */
+.select {
+  border: 0;
+  background: transparent;
+  outline: none;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+  padding-right: 20px;
+
+  /* для деяких браузерів */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+/* маленький chevron (тільки через CSS, щоб не тягнути svg) */
+.selectChevron {
+  position: absolute;
+  right: 4px;
+  width: 12px;
+  height: 12px;
+  pointer-events: none;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid #0f172a;
+    border-bottom: 2px solid #0f172a;
+    transform: rotate(45deg);
+  }
+}
+
+/* dropdown menu (опція): підняти відступ і радіус.
+   NB: повністю стилізувати option у всіх браузерах НЕ можна,
+   але хоча б відступ/радіус на popup у сучасних Chromium працює частково. */
+.select:focus {
+  outline: none;
+}
+
+/* levels pills — 1:1 з твого файлу */
+.levelsRow {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.levelPill {
+  cursor: pointer;
+  border-radius: 999px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 600;
+
+  &:hover {
+    background: #f8fafc;
+  }
+}
+
+.levelPillActive {
+  cursor: pointer;
+  border-radius: 999px;
+  border: 1px solid #0f172a;
+  background: #0f172a;
+  color: #fff;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 600;
+}

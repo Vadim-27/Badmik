@@ -94,16 +94,15 @@ export const ENDPOINTS = {
     delete: (playerId: string, membershipId: string) =>
       `/players/${playerId}/memberships/${membershipId}`,
   },
-  trainings: {
-    getAll: '/Trainings/GetAll',
-    getById: (id: string) => `/Trainings/${id}/GetById`,
-    create: '/Trainings/Create',
-    update: (id: string) => `/Trainings/${id}/Update`,
-    delete: (id: string) => `/Trainings/${id}/Delete`,
-    cancel: (id: string) => `/Trainings/${id}/Cancel`,
-    joinQueue: (id: string) => `/Trainings/${id}/JoinQueue`,
-    leaveQueue: (id: string) => `/Trainings/${id}/LeaveQueue`,
-    getParticipants: (id: string) => `/Trainings/${id}/GetParticipants`,
-    getQueue: (id: string) => `/Trainings/${id}/GetQueue`,
+  trainingSchedules: {
+    list: '/training-schedules',
+    byId: (id: string) => `/training-schedules/${id}`,
+
+    create: '/training-schedules',
+    update: (scheduleId: string) => `/training-schedules/${scheduleId}`,
+    deactivate: (scheduleId: string) => `/training-schedules/${scheduleId}/deactivate`,
+
+    generateByClub: (clubId: string) => `/clubs/${clubId}/training-schedules/generate`, // якщо так було — лишай
+    createSession: (scheduleId: string) => `/training-schedules/${scheduleId}/sessions`, // якщо так було — лишай
   },
 } as const;
