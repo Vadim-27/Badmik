@@ -46,6 +46,7 @@
     "Players": "Гравці",
     "Settings": "Налаштування",
     "Staff": "Співробітники",
+    "TrainingSchedules": "Тренування",
     "Messages": "Повідомлення",
     "News": "Новини",
     "Analytics": "Звіти",
@@ -59,6 +60,23 @@
     "closeMenu": "Закрити меню"
   }
   },
+   "sportType": {
+      "All": "Всі",
+      "Badminton": "Бадмінтон",
+      "Squash": "Сквош",
+      "Padel": "Падел",
+      "Pickleball": "Піклбол",
+      "Tennis": "Теніс",
+      "TableTennis": "Настільний теніс"
+    },
+    "trainingType": {
+      "All": "Всі",
+      "Kids": "Дитяче",
+      "Individual": "Індивідуальне",
+      "Educational": "Навчальне",
+      "Group": "Групове",
+      "CourtRental": "Оренда кортів"
+    },
   "AddTraining": {
     "Club": "Клуб",
     "Role": "Роль",
@@ -546,7 +564,8 @@
   },
   "tabs": {
     "info": "Інформація",
-    "images": "Зображення"
+    "images": "Зображення",
+    "trainings": "Тренування"
   }
 },
 "locationImages": {
@@ -1208,6 +1227,65 @@
         "hint": "За скільки годин до початку тренування дозволено скасування.",
         "unit": "години",
         "example": "Типово: 2–6 годин. 0 → дозволено до старту."
+      }
+    }
+  },
+  "TrainingSchedules": {
+    "pageTitle": "Розклад тренувань",
+    "courts": "Корт",
+
+    "filters": {
+      "sport": "Вид спорту",
+      "type": "Тип тренування",
+      "level": "Рівень"
+    },
+    "time": "Час",
+    "weekdays": {
+      "day": "День",
+      "Monday": "Пон",
+      "Tuesday": "Вівт",
+      "Wednesday": "Сер",
+      "Thursday": "Чет",
+      "Friday": "Пʼят",
+      "Saturday": "Суб",
+      "Sunday": "Нед"
+    },
+    "grid": {
+      "noData": "Немає доступних тренувань."
+    },
+     "modalEdit": {
+      "title": "Редагувати тренування",
+      "subtitle": "Оновіть вибране тренування.",
+      "buttons": {
+        "save": "Зберегти"
+      }
+    },
+    "modalCreate": {
+      "title": "Створити тренування",
+      "subtitle": "На основі вашого вибору",
+      "close": "Закрити",
+      "selection": {
+        "selection": "Вибір",
+        "courts": "Корт",
+        "courtsCount": "Кількість кортів",
+        "time": "Час"
+      },
+      "label":{
+        "name": "Назва",
+        "maxPlayers": "Макс. гравців",
+        "trainingType": "Тип тренування",
+        "level": "Рівень"
+      },
+      "placeholders": {
+        "name": "Назва тренування",
+        "maxPlayers": "Максимальна кількість гравців",
+        "trainingType": "Оберіть тип тренування",
+        "level": "Оберіть рівень"
+      },
+      "buttons": {
+        "cancel": "Скасувати",
+        "create": "Створити"
+        
       }
     }
   }

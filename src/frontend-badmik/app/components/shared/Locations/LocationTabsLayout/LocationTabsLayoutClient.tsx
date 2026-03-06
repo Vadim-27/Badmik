@@ -61,14 +61,21 @@ export default function LocationTabsLayoutClient({ clubId, locationId, children 
     () => [
       { key: 'info', label: tTabs('info'), href: `${base}/info-location` },
       { key: 'images', label: tTabs('images'), href: `${base}/images` },
+      { key: 'training-schedules', label: tTabs('trainings'), href: `${base}/training-schedules` },
     ],
     [base, tTabs],
   );
 
   const activeKey = useMemo(() => {
-    if (pathname?.includes('/images')) return 'images';
-    return 'info';
-  }, [pathname]);
+  const p = pathname ?? '';
+
+  if (p.includes('/training-schedules')) return 'training-schedules';
+  if (p.includes('/images')) return 'images';
+  if (p.includes('/info-location')) return 'info';
+
+  // fallback: якщо ми на /locations/:id (без підшляху) — хай буде info
+  return 'info';
+}, [pathname]);
 
   const location = qLocation.data ?? null;
   const headerTitle = location ? locationTitle(location) : DASH;

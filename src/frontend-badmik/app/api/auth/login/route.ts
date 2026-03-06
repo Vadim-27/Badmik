@@ -2,7 +2,7 @@
 
 import { NextResponse } from "next/server";
 
-const LOGIN_PATH = "/api/Auth/login"; 
+const LOGIN_PATH = "/api/v1/Auth/login";
 
 export async function POST(req: Request) {
   try {

@@ -46,6 +46,7 @@
     "Players": "Players",
     "Settings": "Settings",
     "Staff": "Staff",
+    "TrainingSchedules": "Trainings",
     "Messages": "Messages",
     "News": "News",
     "Analytics": "Reports",
@@ -59,6 +60,23 @@
     "closeMenu": "Close menu"
   }
   },
+   "sportType": {
+    "All": "All",
+    "Badminton": "Badminton",
+    "Squash": "Squash",
+    "Padel": "Padel",
+    "Pickleball": "Pickleball",
+    "Tennis": "Tennis",
+    "TableTennis": "Table Tennis"
+  },
+  "trainingType": {
+    "All": "All",
+    "Kids": "Kids",
+    "Individual": "Individual",
+    "Educational": "Educational",
+    "Group": "Group",
+    "CourtRental": "Court Rental"
+    },
   "AddTraining": {
     "Club": "Club",
     "Role": "Role",
@@ -480,7 +498,8 @@
   },
   "tabs": {
     "info": "Information",
-    "images": "Images"
+    "images": "Images",
+    "trainings": "Trainings"
   }
 },
 "locationImages": {
@@ -1212,6 +1231,65 @@
         "hint": "How many hours before the training start is cancellation allowed?",
         "unit": "hours",
         "example": "Example: 2–6 hours. 0 → allowed until start."
+      }
+    }
+  },
+   "TrainingSchedules": {
+    "pageTitle": "Training Schedules",
+    "courts": "Court",
+
+    "filters": {
+      "sport": "Sport",
+      "type": "Training Type",
+      "level": "Level"
+    },
+    "time": "Time",
+    "weekdays": {
+      "day": "Day",
+      "Monday": "Mon",
+      "Tuesday": "Tue",
+      "Wednesday": "Wed",
+      "Thursday": "Thu",
+      "Friday": "Fri",
+      "Saturday": "Sat",
+      "Sunday": "Sun"
+    },
+    "grid": {
+      "noData": "No available trainings."
+    },
+     "modalEdit": {
+      "title": "Edit Training Schedule",
+      "subtitle": "Update the selected training schedule.",
+      "buttons": {
+        "save": "Save"
+      }
+    },
+    "modalCreate": {
+      "title": "Create Training",
+      "subtitle": "Based on your selection",
+      "close": "Close",
+      "selection": {
+        "selection": "Selection",
+        "courts": "Courts",
+        "courtsCount": "Number of Courts",
+        "time": "Time"
+      },
+        "label":{
+        "name": "Name",
+        "maxPlayers": "Max Players",
+        "trainingType": "Training Type",
+        "level": "Level"
+      },
+      "placeholders": {
+        "name": "Training Name",
+        "maxPlayers": "Max Players",
+        "trainingType": "Select Training Type",
+        "level": "Select Level"
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "create": "Create"
+        
       }
     }
   }
